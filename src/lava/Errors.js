@@ -38,11 +38,11 @@ export class InvalidCallback extends LavaJsError
  *
  * @type {function}
  */
-export class InvalidLabel extends LavaJsError
+export class RenderableNotFound extends LavaJsError
 {
     constructor (label) {
-        super(`[lava.js] "${typeof label}" is not a valid label.`);
-        this.name = 'InvalidLabel';
+        super(`[lava.js] A renderable with the label "${label}" was not found.`);
+        this.name = 'RenderableNotFound';
     }
 }
 
