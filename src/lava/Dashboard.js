@@ -9,20 +9,6 @@
  */
 import Renderable from './Renderable';
 
-/**
- * Dashboard class
- *
- * @typedef {Function}  Dashboard
- * @property {string}   label     - Label for the Dashboard.
- * @property {string}   type      - Type of visualization (Dashboard).
- * @property {Object}   element   - Html element in which to render the chart.
- * @property {string}   package   - Type of visualization package to load.
- * @property {Object}   data      - Datatable for the Dashboard.
- * @property {Object}   options   - Configuration options.
- * @property {Array}    bindings  - Chart and Control bindings.
- * @property {Function} render    - Renders the Dashboard.
- * @property {Function} uuid      - Unique identifier for the Dashboard.
- */
 export default class Dashboard extends Renderable
 {
     constructor(json) {
@@ -33,7 +19,7 @@ export default class Dashboard extends Renderable
         this.bindings = json.bindings;
 
         /**
-         * Any dependency on window.google must be in the render scope.
+         * Any dependency on "google" must be within the _setRenderer scope.
          */
         this.render = () => {
             this.setData(json.datatable);
@@ -47,6 +33,8 @@ export default class Dashboard extends Renderable
             }
 
             this.draw();
+
+            this.on('ready', resolve);
         };
     }
 

@@ -1,7 +1,8 @@
 /* jshint browser:true */
-/* globals google:true */
+/* globals google */
+
 /**
- * lava.js module
+ * Lava.js module
  *
  * @module    lava/Lava
  * @author    Kevin Hill <kevinkhill@gmail.com>
@@ -15,21 +16,11 @@ import Chart from './Chart';
 import Dashboard from './Dashboard';
 import Renderable from './Renderable';
 import defaultOptions from './Options';
-import {addEvent, getType, noop} from './Utils';
+import {addEvent, getType} from './Utils';
 import {InvalidCallback, RenderableNotFound} from './Errors'
 
-/**
- * @property {string}             VERSION
- * @property {string}             GOOGLE_API_VERSION
- * @property {string}             GOOGLE_LOADER_URL
- * @property {Chart}              Chart
- * @property {Dashboard}          Dashboard
- * @property {object}             options
- * @property {function}           _readyCallback
- * @property {Array.<string>}     _packages
- * @property {Array.<Renderable>} _volcano
- */
-export default class LavaJs extends EventEmitter {
+export default class LavaJs extends EventEmitter
+{
     /**
      * Create a new LavaJs object
      *
@@ -43,7 +34,7 @@ export default class LavaJs extends EventEmitter {
          * Version of the Lava.js module.
          *
          * @public
-         * @type {string}
+         * @type {string} Lava.js module version
          */
         this.VERSION = '__VERSION__';
 
@@ -169,6 +160,8 @@ export default class LavaJs extends EventEmitter {
      * @public
      */
     run() {
+        const renderPromises = [];
+
         console.log('[lava.js] Running...');
         console.log('[lava.js] Loading options:', this.options);
 
@@ -186,10 +179,12 @@ export default class LavaJs extends EventEmitter {
             });
 
             console.log('[lava.js] Firing "ready" event.');
+
             this.emit('ready');
 
             if (this._readyCallback) {
                 console.log('[lava.js] Executing lava.ready(callback)');
+
                 this._readyCallback();
             }
         });
@@ -212,6 +207,7 @@ export default class LavaJs extends EventEmitter {
         this._readyCallback = callback.bind(this);
     }
 
+    //noinspection JSUnusedGlobalSymbols
     /**
      * Loads new data into the chart and redraws.
      *
@@ -224,28 +220,23 @@ export default class LavaJs extends EventEmitter {
      * @param {string} json
      * @param {Function} callback
      */
-    loadData(label, json, callback) {
-        if (typeof callback === 'undefined') {
-            callback = noop;
+    loadData(label, json, callback) { //TODO: test this with formats
+        const chart = this.get(label);
+
+        chart.setData(json);
+
+        if (typeof json.formats !== 'undefined') {
+            chart.applyFormats(json.formats);
         }
 
-        if (typeof callback !== 'function') {
-            throw new InvalidCallback(callback);
+        chart.draw();
+
+        if (typeof callback === 'function') {
+            callback(chart.gchart, chart.data);
         }
-
-        this.get(label, function (chart) {
-            chart.setData(json);
-
-            if (typeof json.formats !== 'undefined') {
-                chart.applyFormats(json.formats);
-            }
-
-            chart.draw();
-
-            callback(chart);
-        });
     }
 
+    //noinspection JSUnusedGlobalSymbols
     /**
      * Loads new options into a chart and redraws.
      *
@@ -258,21 +249,15 @@ export default class LavaJs extends EventEmitter {
      * @param {string} json
      * @param {Function} callback
      */
-    loadOptions(label, json, callback) {
-        if (typeof callback === 'undefined') {
-            callback = callback || noop;
+    loadOptions(label, json, callback) { //TODO: test this
+        const chart = this.get(label);
+
+        chart.setOptions(json);
+        chart.draw();
+
+        if (typeof callback === 'function') {
+            callback(chart.gchart, chart.data);
         }
-
-        if (typeof callback !== 'function') {
-            throw new InvalidCallback(callback);
-        }
-
-        this.get(label, function (chart) {
-            chart.setOptions(json);
-            chart.draw();
-
-            callback(chart);
-        });
     }
 
     /**
@@ -305,7 +290,7 @@ export default class LavaJs extends EventEmitter {
      * Adds to the list of packages that Google needs to load.
      *
      * @private
-     * @param {Array} packages
+     * @param {String|Array} packages
      * @return {Array}
      */
     _addPackages(packages) {

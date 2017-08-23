@@ -10,23 +10,6 @@
 import forIn from 'lodash/forIn';
 import Renderable from './Renderable';
 
-/**
- * Chart class used for storing all the needed configuration for rendering.
- *
- * @typedef {Function}  Chart
- * @property {string}   label     - Label for the chart.
- * @property {string}   type      - Type of chart.
- * @property {Object}   element   - Html element in which to render the chart.
- * @property {Object}   chart     - Google chart object.
- * @property {string}   package   - Type of Google chart package to load.
- * @property {boolean}  pngOutput - Should the chart be displayed as a PNG.
- * @property {Object}   data      - Datatable for the chart.
- * @property {Object}   options   - Configuration options for the chart.
- * @property {Object}   events    - Events and callbacks to apply to the chart.
- * @property {Array}    formats   - Formatters to apply to the chart data.
- * @property {Function} render    - Renders the chart.
- * @property {Function} uuid      - Creates identification string for the chart.
- */
 export default class Chart extends Renderable
 {
     /**
@@ -41,22 +24,21 @@ export default class Chart extends Renderable
     constructor (json) {
         super(json);
 
-        this.formats = json.formats;
-
-        //this.events    = typeof json.events === 'object' ? json.events : null;
-        this.pngOutput = typeof json.pngOutput === 'undefined' ? false : Boolean(json.pngOutput);
+        //TODO: should php defined events be appendable to the std events?
+        //this.events  = typeof json.events === 'object' ? json.events : null;
+        this.pngOutput = Boolean(json.pngOutput);
 
         /**
-         * Any dependency on window.google must be in the render scope.
+         * Any dependency on "google" must be within the _setRenderer scope.
          */
         this.render = () => {
-            this.setData(json.datatable);
-
             this.gchart = new google.visualization[this.class](this.element);
+
+            this.setData(json.data || json.datatable);
 
             this._attachEventRelays();
 
-            if (this.formats) {
+            if (json.formats) {
                 this.applyFormats();
             }
 

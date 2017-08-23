@@ -1,0 +1,46 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "Schema for a Chart to be used with Lava.js",
+    "title": "Chart",
+    "type": "object",
+    "required": [
+        "type",
+        "class",
+        "label",
+        "packages",
+        "elementId",
+        "datatable"
+    ],
+    "properties": {
+        "class": {
+            "type": "string"
+        },
+        "datatable": {
+            "type": "object"
+        },
+        "elementId":  {
+            "type": "string"
+        },
+        "label": {
+            "type": "string"
+        },
+        "options": {
+            "type": "object"
+        },
+        "packages": {
+            "type": "array"
+        },
+        "pngOutput": {
+            "type": "boolean"
+        },
+        "type": {
+            "type": "string"
+        },
+        "events": {
+            "type": "array"
+        },
+        "formats": {
+            "type": "array"
+        }
+    }
+}

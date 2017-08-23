@@ -1,0 +1,19 @@
+{
+    "title": "Cell",
+    "type": "object",
+    "properties": {
+        "v": {
+            "oneOf": [
+                { "type": "integer" },
+                { "type": "string" }
+            ]
+        },
+        "f": {
+            "type": "string"
+        },
+        "p": {
+            "type": "array"
+        }
+    },
+    "required": ["v"]
+}

@@ -6,15 +6,12 @@
  * @copyright (c) 2017, KHill Designs
  * @license   MIT
  */
-class LavaJsError extends Error
+export function LavaJsError(message)
 {
-    constructor (message) {
-        super();
-
-        this.name    = 'LavaJsError';
-        this.message = (message || '');
-    };
+    this.name = 'LavaJsError';
+    this.message = (message || "");
 }
+LavaJsError.prototype = Error.prototype;
 
 /**
  * InvalidCallback Error
@@ -22,14 +19,12 @@ class LavaJsError extends Error
  * thrown when when anything but a function is given as a callback
  * @type {function}
  */
-export class InvalidCallback extends LavaJsError
+export function InvalidCallback(callback)
 {
-    constructor (callback) {
-        super(`[lava.js] "${typeof callback}" is not a valid callback.`);
-
-        this.name = 'InvalidCallback';
-    }
+    this.name = 'InvalidCallback';
+    this.message = `[lava.js] "${typeof callback}" is not a valid callback.`;
 }
+InvalidCallback.prototype = LavaJsError.prototype;
 
 /**
  * InvalidLabel Error
@@ -38,13 +33,12 @@ export class InvalidCallback extends LavaJsError
  *
  * @type {function}
  */
-export class RenderableNotFound extends LavaJsError
+export function RenderableNotFound()
 {
-    constructor (label) {
-        super(`[lava.js] A renderable with the label "${label}" was not found.`);
-        this.name = 'RenderableNotFound';
-    }
+    this.name = 'RenderableNotFound';
+    this.message = `[lava.js] A renderable with the label "${label}" was not found.`;
 }
+RenderableNotFound.prototype = LavaJsError.prototype;
 
 /**
  * ElementIdNotFound Error
@@ -53,11 +47,9 @@ export class RenderableNotFound extends LavaJsError
  *
  * @type {function}
  */
-export class ElementIdNotFound extends LavaJsError
+export function ElementIdNotFound()
 {
-    constructor (elemId) {
-        super(`[lava.js] DOM node where id="${elemId}" was not found.`);
-
-        this.name = 'ElementIdNotFound';
-    }
+    this.name = 'ElementIdNotFound';
+    this.message = `[lava.js] DOM node where id="${elemId}" was not found.`;
 }
+ElementIdNotFound.prototype = LavaJsError.prototype;
