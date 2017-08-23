@@ -2,10 +2,11 @@
 
 module.exports = function (config) {
     config.set({
-        frameworks: ['jasmine','sinon'],
+        frameworks: ['jasmine', 'sinon'],
         files: [
             './node_modules/jasmine-sinon/lib/jasmine-sinon.js',
-            './dist/lava.js',
+            './dist/lava.min.js',
+            './tests/testing-utils.js',
             './tests/lava.spec.js'
         ],
         singleRun: false,
@@ -14,6 +15,17 @@ module.exports = function (config) {
         colors: true,
         logLevel: config.LOG_ERROR,
         autoWatch: true,
-        browsers: [(process.env.TRAVIS ? 'PhantomJS' : 'Chrome')]
+        browsers: [(process.env.TRAVIS ? 'PhantomJS' : 'Chrome')],
+        plugins: [
+            'karma-jasmine',
+            'karma-sinon',
+            'karma-nightmare',
+            'karma-chrome-launcher'
+        ],
+        nightmareOptions: {
+            width: 800,
+            height: 600,
+            show: false,
+        }
     });
 };

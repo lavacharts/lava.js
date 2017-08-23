@@ -1,6 +1,6 @@
 {
   "name": "@lavacharts/lava.js",
-  "version": "4.0.0",
+  "version": "4.0.0_rc1",
   "description": "Wrapper library for the Google Chart API",
   "homepage": "http://lavacharts.com",
   "author": "Kevin Hill",
@@ -27,33 +27,32 @@
     "glob": "^7.1.2",
     "gulp": "^3.9.1",
     "gulp-babel": "^7.0.0",
-    "gulp-bump": "^0.3.0",
     "gulp-connect-php": "^1.0.1",
     "gulp-ext": "^1.0.0",
     "gulp-if": "^2.0.0",
-    "gulp-jshint": "^1.10.0",
     "gulp-notify": "^3.0.0",
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.6.1",
-    "gulp-spawn": "^0.3.0",
+    "gulp-sourcemaps": "^2.6.1",
     "gulp-streamify": "^1.0.2",
-    "gulp-tap": "^1.0.1",
     "gulp-uglify": "^1.5.3",
     "gulp-util": "^3.0.8",
-    "jasmine-core": "^2.6.4",
+    "jasmine-core": "^2.7.0",
     "jasmine-sinon": "^0.4.0",
     "jsdoc": "^3.4.0",
-    "jshint-stylish": "^2.1.0",
-    "karma": "^0.13.0",
-    "karma-jasmine": "^0.3.5",
-    "karma-sinon": "^1.0.4",
+    "karma": "^1.7.0",
+    "karma-browserify": "^5.1.1",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-jasmine": "^1.1.0",
+    "karma-nightmare": "^0.4.10",
+    "karma-sinon": "^1.0.5",
     "nightmare": "^2.10.0",
     "node-notifier": "^5.1.2",
-    "node-resemble-js": "^0.2.0",
     "portfinder": "^1.0.13",
     "rxjs": "^5.1.0",
     "sinon": "^1.17.3",
-    "stripify": "^4.0.0",
+    "stripify": "^6.0.0",
+    "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.7.0",
     "yargs": "^3.6.0",
@@ -61,14 +60,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kevinkhill/lavacharts.git"
+    "url": "https://github.com/lavacharts/lava.js.git"
   },
   "bugs": {
-    "url": "https://github.com/kevinkhill/lavacharts/issues"
+    "url": "https://github.com/lavacharts/lava.js/issues"
   },
   "scripts": {
     "gulp": "./node_modules/.bin/gulp",
     "test": "./node_modules/.bin/karma start --singleRun",
-    "jsdoc": "./node_modules/.bin/jsdoc -d build/jsdoc --package package.json javascript/src/lava/Lava.js"
+    "jsdoc": "./node_modules/.bin/jsdoc -d ./docs --package package.json ./src/lava/Lava.js"
   }
 }

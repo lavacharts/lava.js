@@ -1,230 +1,258 @@
 /* jshint undef: true, unused: true */
 /* globals sinon, jasmine, describe, it, expect, beforeEach */
 
-function nope () {
-    return 'nope';
-}
+describe('Lava.js Test Suite', function () {
+    beforeEach(function () {
+        var div = document.createElement('div');
+        div.id = 'test-chart';
 
-function getTestChart () {
-    return LavaJs.createChart('LineChart', 'TestChart');
-}
+        document.body.appendChild(div);
+    });
 
-function getData () {
-    return {
-        "cols": [
-            {"type": "string", "label": "Stuff"},
-            {"type": "number", "label": "Age"}
-        ],
-        "rows": [
-            {"c": [{"v": "things"}, {"v": 37}]},
-            {"c": [{"v": "thengs"}, {"v": 72}]}
-        ]
-    };
-}
+    afterEach(function () {
+        document.body.removeChild(
+            document.getElementById('test-chart')
+        );
+    });
 
-function getOptions () {
-    return {
-        "title": "Company Finances",
-        "legend": "none",
-        "colorAxis": {"colors": ["black", "green"]}
-    };
-}
+    describe('lava#create', function () {
+        it('Should create a new Chart from a JSON payload.', function () {
+            const chart = lava.create(utils.getPieChartJson());
 
-describe('lava#EventEmitter', function () {
-    it('Should emit and listen to events', function () {
-        lava.on('test', function (val) {
-            expect(val).toBe('taco');
+            expect(chart.label).toEqual('My Cool Chart');
+            expect(chart.type).toEqual('PieChart');
+            expect(chart.class).toEqual('PieChart');
+            expect(chart.uuid).toEqual('PieChart::My Cool Chart');
+            expect(chart.packages).toEqual('corechart');
+            expect(chart.element).toEqual(jasmine.any(HTMLElement));
+            expect(chart.data).toBeNull();
+            expect(chart.gchart).toBeNull();
+            expect(typeof chart.render).toEqual('function');
+            expect(typeof chart.draw).toEqual('function');
+            expect(typeof chart.setData).toEqual('function');
+            expect(typeof chart.setOptions).toEqual('function');
         });
 
-        lava.emit('test', 'taco');
-    })
-});
+        it('Should have a Google Chart and DataTable after lava.run().', function () {
+            const chart = lava.create(utils.getPieChartJson());
+            const renderSpy = sinon.spy(chart, 'render');
 
-describe('lava#ready()', function () {
-    it('Should accept a function to use as a callback.', function () {
-        var callback = sinon.spy(lava, 'ready');
+            lava.run();
 
-        lava.ready(callback);
-        lava.init();
-
-        expect(callback).toHaveBeenCalledOnce();
-    });
-
-    it('Should throw an "InvalidCallback" error if passed a non-function.', function () {
-        expect(function () {
-            lava.ready('marbles')
-        }).toThrowError(lava._errors.InvalidCallback);
-    });
-});
-
-describe('lava#event()', function () {
-    var event, chart;
-
-    beforeEach(function () {
-        event = jasmine.createSpy('Event');
-        chart = jasmine.createSpy('Chart');
-    });
-
-    it('Should accept an event, chart and callback and return said callback with event and chart as args.', function () {
-        function callback (event, chart) {
-            expect(event.and.identity()).toEqual('Event');
-            expect(chart.and.identity()).toEqual('Chart');
-        };
-
-        var lavaEvent = function () {
-            return lava.event(event, chart, callback);
-        };
-
-        lavaEvent(event, chart);
-    });
-
-    it('Should throw an "InvalidCallback" error if passed a non-function for the last param.', function () {
-        expect(function () {
-            lava.event('marbles');
-        }).toThrowError(lava._errors.InvalidCallback);
-    });
-});
-
-describe('lava#storeChart()', function () {
-    beforeEach(function () {
-        lava._charts = [];
-    });
-
-    it('Should store a chart in the "lava._charts" array.', function () {
-        lava.storeChart(getTestChart());
-
-        expect(lava._charts[0] instanceof lava.Chart).toBeTruthy();
-    })
-});
-
-describe('lava#getChart()', function () {
-    beforeEach(function () {
-        lava._charts = [];
-        lava._charts.push(getTestChart());
-    });
-
-    it('Should return a valid chart to the callback when given a valid chart label.', function () {
-        lava.getChart('TestChart', function (chart) {
-            expect(chart instanceof lava.Chart).toBeTruthy();
-        });
-    });
-
-    it('Should throw a "ChartNotFound" error if the chart is not found.', function () {
-        expect(function () {
-            lava.getChart('Bee Population', nope);
-        }).toThrowError(lava._errors.ChartNotFound);
-    });
-
-    it('Should throw an "InvalidLabel" error if a string chart label is not given.', function () {
-        expect(function () {
-            lava.getChart(1234, nope);
-        }).toThrowError(lava._errors.InvalidLabel);
-    });
-
-    it('Should throw an "InvalidCallback" error if a function callback is not given.', function () {
-        expect(function () {
-            lava.getChart('TestChart', {});
-        }).toThrowError(lava._errors.InvalidCallback);
-    });
-});
-
-describe('lava#loadData()', function () {
-    var chart, data, formats;
-
-    beforeEach(function () {
-        chart = getTestChart();
-        data = getData();
-        formats = [{format:""},{format:""}];
-
-        sinon.stub(chart, 'setData').withArgs(data);
-        sinon.stub(chart, 'redraw');
-        sinon.stub(chart, 'applyFormats').withArgs(formats);
-
-        lava._charts = [];
-        lava._charts.push(chart);
-    });
-
-    describe('Loading data into the chart from the DataTable->toJson() PHP method', function () {
-        it('should work with no formats', function () {
-            lava.loadData('TestChart', data, function (chart) {
-                expect(chart.setData).toHaveBeenCalledOnce();
-                expect(chart.setData).toHaveBeenCalledWithExactly(data);
-
-                expect(chart.redraw).toHaveBeenCalledOnce();
-                expect(chart.redraw).toHaveBeenCalledAfter(chart.setData);
-            });
-        });
-
-        describe('and when the DataTable has formats', function () {
-            var formatted;
-
-            beforeEach(function () {
-                formatted = {
-                    data: data,
-                    formats: formats
-                };
-            });
-
-            it('should still load data, but from the ".data" property', function () {
-                lava.loadData('TestChart', formatted, function (chart) {
-                    expect(chart.setData).toHaveBeenCalledOnce();
-                    expect(chart.setData).toHaveBeenCalledWithExactly(formatted.data);
-
-                    expect(chart.redraw).toHaveBeenCalledOnce();
-                    expect(chart.redraw).toHaveBeenCalledAfter(chart.setData);
-                });
-            });
-
-            it('should apply the formats', function () {
-                lava.loadData('TestChart', formatted, function (chart) {
-                    expect(chart.setData).toHaveBeenCalledOnce();
-                    expect(chart.setData).toHaveBeenCalledWithExactly(formatted.data);
-
-                    expect(chart.applyFormats).toHaveBeenCalledOnce();
-                    expect(chart.applyFormats).toHaveBeenCalledAfter(chart.setData);
-                    expect(chart.applyFormats).toHaveBeenCalledWithExactly(formatted.formats);
-
-                    expect(chart.redraw).toHaveBeenCalledOnce();
-                    expect(chart.redraw).toHaveBeenCalledAfter(chart.setData);
-                });
+            lava.ready(function () {
+                sinon.assert.calledOnce(renderSpy);
+                expect(chart.data).toBe(jasmine.any(google.visualization.DataTable));
+                expect(chart.gchart).toBe(jasmine.any(google.visualization.PieChart));
             });
         });
     });
-});
 
-describe('lava#loadOptions()', function () {
-    var chart, options;
 
-    beforeEach(function () {
-        chart = getTestChart();
-        options = getOptions();
+    describe('lava#EventEmitter', function () {
+        it('Should emit and listen to events', function () {
+            lava.on('test', (p1, p2) => {
+                expect(p1).toBe('taco');
+                expect(p2).toBe('bell');
+            });
 
-        sinon.stub(chart, 'setOptions').withArgs(options);
-        sinon.stub(chart, 'redraw');
-
-        lava._charts = [];
-        lava._charts.push(chart);
+            lava.emit('test', 'taco', 'bell');
+        })
     });
 
-    it('should load new options into the chart.', function () {
-        lava.loadOptions('TestChart', options, function (chart) {
-            expect(chart.setOptions).toHaveBeenCalledOnce();
-            expect(chart.setOptions).toHaveBeenCalledWithExactly(options);
 
-            expect(chart.redraw).toHaveBeenCalledOnce();
-            expect(chart.redraw).toHaveBeenCalledAfter(chart.setOptions);
+    describe('lava#run', function () {
+        it('Should emit a "ready" event.', function (done) {
+            var callback = sinon.spy();
+
+            lava.on('ready', callback);
+            lava.run();
+
+            utils.waitsForAndRuns(function () {
+                return callback.called;
+            }, function () {
+                expect(callback).toHaveBeenCalled();
+                done();
+            });
+        });
+
+        it('Should have loaded Google to the window when "ready"', function () {
+            lava.run();
+
+            lava.on('ready', function () {
+                expect(window.google).toBeDefined();
+            });
         });
     });
-});
 
-/*
-describe('lava#redrawCharts()', function () {
-    it('Should be called when the window is resized.', function () {
-        var resize = sinon.spy(lava, 'redrawCharts');
+    describe('lava#ready', function () {
+        it('Should call the callback once Google has been loaded.', function () {
+            var callback = sinon.spy();
 
-        window.dispatchEvent(new Event('resize'));
+            lava.run();
+            lava.ready(callback);
 
-        expect(resize).toHaveBeenCalledOnce();
+            lava.on('ready', function () {
+                sinon.assert.calledOnce(callback);
+            });
+        });
     });
+
+
+    describe('lava#ready()', function () {
+        it('Should accept a function to use as a callback.', function () {
+            const callback = sinon.spy(lava, 'ready');
+
+            lava.ready(callback);
+            lava.run();
+
+            expect(callback).toHaveBeenCalledOnce();
+        });
+
+        it('Should throw an "InvalidCallback" error if passed a non-function.', function () {
+            expect(function () {
+                lava.ready('marbles');
+            }).toThrowError();
+        });
+    });
+
+
+    describe('lava#store()', function () {
+        beforeEach(function () {
+            lava._volcano = [];
+        });
+
+        it('Should create a new chart and store it when given a JSON payload.', function () {
+            lava.store(utils.getPieChartJson());
+
+            expect(Object.keys(lava._volcano).length).toBe(1);
+        })
+    });
+
+
+    describe('lava#get()', function () {
+        beforeEach(function () {
+            lava._volcano = [];
+            lava.store(utils.getPieChartJson());
+        });
+
+        it('Should return a valid Renderable when given a valid label.', function () {
+            const chart = lava.get('My Cool Chart');
+
+            expect(chart.uuid).toEqual('PieChart::My Cool Chart');
+        });
+
+        it('Should throw "RenderableNotFound" if the renderable is not found.', function () {
+            expect(function () {
+                lava.get('Pizza!');
+            }).toThrowError();
+        });
+
+        it('Should throw "RenderableNotFound" if a string label is not given.', function () {
+            expect(function () {
+                lava.get(1234);
+            }).toThrowError();
+        });
+    });
+
+
+    describe('lava#loadData()', function () {
+        var chart, data, formats;
+
+        beforeEach(function () {
+            chart = lava.create(utils.getPieChartJson());
+            data = utils.getDataTableJson();
+            //formats = [{format:""},{format:""}];
+
+            sinon.stub(chart, 'setData').withArgs(data);
+            sinon.stub(chart, 'draw');
+            sinon.stub(chart, 'applyFormats').withArgs(formats);
+
+            lava.store(chart);
+            lava.run();
+        });
+
+        it('should work with JSON and no formats', function () {
+            lava.loadData('My Cool Chart', data);
+
+            expect(chart.setData).toHaveBeenCalledOnce();
+            expect(chart.setData).toHaveBeenCalledWithExactly(data);
+
+            expect(chart.draw).toHaveBeenCalledOnce();
+            expect(chart.draw).toHaveBeenCalledAfter(chart.setData);
+        });
+
+        //describe('Loading data into the chart from the DataTable->toJson() PHP method', function() {
+        //    it('should work with JSON and formats', function() {
+        //        lava.loadData('My Cool Chart', data);
+        //
+        //        expect(chart.setData).toHaveBeenCalledOnce();
+        //        expect(chart.setData).toHaveBeenCalledWithExactly(data);
+        //
+        //        expect(chart.redraw).toHaveBeenCalledOnce();
+        //        expect(chart.redraw).toHaveBeenCalledAfter(chart.setData);
+        //    });
+
+        //describe('and when the DataTable has formats', function() =>        //    var formatted;
+        //
+        //    beforeEach(function() =>        //        formatted = {
+        //            data: data,
+        //            formats: formats
+        //        };
+        //    });
+        //
+        //    it('should still load data, but from the ".data" property', function() =>        //        lava.loadData('My Cool Chart', formatted, chart => {
+        //            expect(chart.setData).toHaveBeenCalledOnce();
+        //            expect(chart.setData).toHaveBeenCalledWithExactly(formatted.data);
+        //
+        //            expect(chart.redraw).toHaveBeenCalledOnce();
+        //            expect(chart.redraw).toHaveBeenCalledAfter(chart.setData);
+        //        });
+        //    });
+        //
+        //    it('should apply the formats', function() =>        //        lava.loadData('My Cool Chart', formatted, chart => {
+        //            expect(chart.setData).toHaveBeenCalledOnce();
+        //            expect(chart.setData).toHaveBeenCalledWithExactly(formatted.data);
+        //
+        //            expect(chart.applyFormats).toHaveBeenCalledOnce();
+        //            expect(chart.applyFormats).toHaveBeenCalledAfter(chart.setData);
+        //            expect(chart.applyFormats).toHaveBeenCalledWithExactly(formatted.formats);
+        //
+        //            expect(chart.redraw).toHaveBeenCalledOnce();
+        //            expect(chart.redraw).toHaveBeenCalledAfter(chart.setData);
+        //        });
+        //    });
+        //});
+        //});
+    });
+
+
+    //describe('lava#loadOptions()', function() => /    var chart, options;
+    //
+    //    beforeEach(function() => /        chart = getMy Cool Chart();
+    //        options = getOptions();
+    //
+    //        sinon.stub(chart, 'setOptions').withArgs(options);
+    //        sinon.stub(chart, 'redraw');
+    //
+    //        lava._volcano = [];
+    //        lava._volcano.push(chart);
+    //    });
+    //
+    //    it('should load new options into the chart.', function() => /        lava.loadOptions('My Cool Chart', options, chart => {
+    //            expect(chart.setOptions).toHaveBeenCalledOnce();
+    //            expect(chart.setOptions).toHaveBeenCalledWithExactly(options);
+    //
+    //            expect(chart.redraw).toHaveBeenCalledOnce();
+    //            expect(chart.redraw).toHaveBeenCalledAfter(chart.setOptions);
+    //        });
+    //    });
+    //});
+
+    //describe('lava#redrawCharts()', function() => /    it('Should be called when the window is resized.', function() => /        var resize = sinon.spy(lava, 'redrawCharts');
+    //
+    //        window.dispatchEvent(new Event('resize'));
+    //
+    //        expect(resize).toHaveBeenCalledOnce();
+    //    });
+    //});
 });
-*/
