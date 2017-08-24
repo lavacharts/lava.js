@@ -4,14 +4,17 @@
 import forIn from 'lodash/forIn';
 import uniq from 'lodash/uniq';
 import EventEmitter from 'events';
-import Chart from './Chart';
-import Dashboard from './Dashboard';
-import Renderable from './Renderable';
-import {addEvent, getType} from './Utils';
-import {InvalidCallback, RenderableNotFound} from './Errors'
+import Utils from './Utils';
+import Errors from './Errors'
+import Chart from './Renderables/Chart';
+import Dashboard from './Renderables/Dashboard';
+import Renderable from './Renderables/Renderable';
 
 /**
- * LavaJs Class
+ * Google Chart API wrapper library
+ *
+ * This module can be used as a standalone, browser based library, or in
+ * conjunction with the PHP library, <a href="https://github.com/kevinkhill/lavacharts">Lavacharts</a>.
  *
  * @class
  * @author    Kevin Hill <kevinkhill@gmail.com>
@@ -21,7 +24,67 @@ import {InvalidCallback, RenderableNotFound} from './Errors'
 export default class LavaJs extends EventEmitter
 {
     /**
-     * Create a new LavaJs object
+     * Version of the LavaJs.js module
+     *
+     * @public
+     * @type {String}
+     */
+    static get VERSION() {
+        return '__VERSION__';
+    }
+
+    /**
+     * Version of the Google charts API to load
+     *
+     * @public
+     * @type {String}
+     */
+    static get GOOGLE_API_VERSION() {
+        return 'current';
+    }
+
+    /**
+     * Urls to Google's static loader
+     *
+     * @public
+     * @type {String}
+     */
+    static get GOOGLE_LOADER_URL() {
+        return 'https://www.gstatic.com/charts/loader.js';
+    }
+
+    /**
+     * Throwable errors for the LavaJs module
+     *
+     * @class
+     * @type {Errors}
+     */
+    static get Errors() {
+        return Errors;
+    }
+
+    /**
+     * Static accessor for the {@link Chart} class
+     *
+     * @class
+     * @type {Chart}
+     */
+    static get Chart() {
+        return Chart;
+    }
+
+    /**
+     * Static accessor for the {@link Dashboard} class
+     *
+     * @class
+     * @type {Dashboard}
+     */
+    static get Dashboard() {
+        return Dashboard;
+    }
+
+    /**
+     * Create a new instance of the LavaJs library
      *
      * @param {Object} newOptions
      */
@@ -29,56 +92,15 @@ export default class LavaJs extends EventEmitter
         super();
 
         /**
-         * Version of the LavaJs.js module.
-         *
-         * @public
-         * @type {String}
-         */
-        this.VERSION = '__VERSION__';
-
-
-        /**
-         * Attaching the chart class to LavaJs
-         *
-         * @class
-         * @type {Chart}
-         */
-        this.Chart = Chart;
-
-        /**
-         * Attaching the Dashboard class to LavaJs
-         *
-         * @class
-         * @type {Dashboard}
-         */
-        this.Dashboard = Dashboard;
-
-        /**
-         * Version of the Google charts API to load.
-         *
-         * @public
-         * @type {String}
-         */
-        this.GOOGLE_API_VERSION = 'current';
-
-        /**
-         * Urls to Google's static loader
-         *
-         * @public
-         * @type {String}
-         */
-        this.GOOGLE_LOADER_URL = 'https://www.gstatic.com/charts/loader.js';
-
-        /**
-         * JSON object of config items.
+         * JSON object of config items
          *
          * @public
          * @type {Object}
          */
-        this.options = newOptions || require('resources/options.json');
+        this.options = newOptions || require('./resources/options.json');
 
         /**
-         * Array of visualization packages for charts and dashboards.
+         * Array of visualization packages for charts and dashboards
          *
          * @private
          * @type {String[]}
@@ -86,7 +108,7 @@ export default class LavaJs extends EventEmitter
         this._packages = [];
 
         /**
-         * Array of charts and dashboards stored in the module.
+         * Array of charts and dashboards stored in the module
          *
          * @private
          * @type {Renderable[]}
@@ -97,9 +119,25 @@ export default class LavaJs extends EventEmitter
          * Ready callback to be called when the module is finished running.
          *
          * @private
-         * @callback _readyCallback
+         * @type {null|Function}
          */
-        this._readyCallback = undefined;
+        this._readyCallback = null;
+    }
+
+    /**
+     * Flag that will be true once Google's Static Loader is in page.
+     *
+     * @public
+     * @return {Boolean}
+     */
+    get googleIsLoaded() {
+        const scripts = document.getElementsByTagName('script');
+
+        for (let script of scripts) {
+            if (script.src === this.GOOGLE_LOADER_URL) {
+                return true;
+            }
+        }
     }
 
     /**
@@ -116,10 +154,10 @@ export default class LavaJs extends EventEmitter
         console.log(`Creating a new ${json.type}:`, json);
 
         if (json.type === 'Dashboard') {
-            return new this.Dashboard(json);
+            return new LavaJs.Dashboard(json);
         }
 
-        return new this.Chart(json);
+        return new LavaJs.Chart(json);
     }
 
     /**
@@ -127,7 +165,7 @@ export default class LavaJs extends EventEmitter
      *
      * @public
      * @param {Object|Renderable} renderable
-     * @return {Chart|Dashboard} The Chart / Dashboard that was just stored.
+     * @return {Chart|Dashboard} The {@link Chart} / {@link Dashboard} that was just stored.
      */
     store(renderable) {
         if (renderable instanceof Renderable === false) {
@@ -144,28 +182,27 @@ export default class LavaJs extends EventEmitter
     }
 
     /**
-     * Returns the LavaChart javascript objects
+     * Retrieve a {@link Chart} / {@link Dashboard} from storage.
      *
+     * The {@link Chart} object has the user defined properties such as data, options, formats, etc.
      *
-     * The LavaChart object holds all the user defined properties such as data, options, formats,
-     * the GoogleChart object, and relative methods for internal use.
-     *
-     * The GoogleChart object is available as ".gchart" from the returned LavaChart.
+     * The Google Chart object is available as ".gchart" from the returned LavaChart.
      * It can be used to access any of the available methods such as
      * getImageURI() or getChartLayoutInterface().
+     *
      * See https://google-developers.appspot.com/chart/interactive/docs/gallery/linechart#methods
      * for some examples relative to LineCharts.
      *
      * @public
      * @param  {String} label
-     * @throws {RenderableNotFound}
+     * @throws {LavaJs.Errors.RenderableNotFound}
      * @return {Chart|Dashboard}
      */
     get(label) {
         let renderable = this._volcano[label];
 
         if (! renderable) {
-            throw new RenderableNotFound(label);
+            throw new LavaJs.Errors.RenderableNotFound(label);
         }
 
         return renderable;
@@ -186,8 +223,6 @@ export default class LavaJs extends EventEmitter
 
         return this._loadGoogle().then(() => {
             console.log('[lava.js] Google is ready.');
-
-            this.visualization = google.visualization;
 
             forIn(this._volcano, renderable => {
                 console.log(`[lava.js] Rendering ${renderable.uuid}`);
@@ -215,10 +250,12 @@ export default class LavaJs extends EventEmitter
      *
      * @public
      * @param {Function} callback
+     * @throws {LavaJs.Errors.InvalidCallback}
+     * @return {void}
      */
     ready(callback) {
         if (typeof callback !== 'function') {
-            throw new InvalidCallback(callback);
+            throw new LavaJs.Errors.InvalidCallback(callback);
         }
 
         this._readyCallback = callback.bind(this);
@@ -235,7 +272,8 @@ export default class LavaJs extends EventEmitter
      * @public
      * @param {String} label
      * @param {String} json
-     * @param {Function} callback
+     * @param {?Function} callback
+     * @return {void}
      */
     loadData(label, json, callback) { //TODO: test this with formats
         const chart = this.get(label);
@@ -264,7 +302,8 @@ export default class LavaJs extends EventEmitter
      * @public
      * @param {String} label
      * @param {String} json
-     * @param {Function} callback
+     * @param {?Function} callback
+     * @return {void}
      */
     loadOptions(label, json, callback) { //TODO: test this
         const chart = this.get(label);
@@ -282,6 +321,8 @@ export default class LavaJs extends EventEmitter
      *
      * This method is attached to the window resize event with debouncing
      * to make the charts responsive to the browser resizing.
+     *
+     * @return {void}
      */
     redrawAll() {
         let renderableCount = Object.keys(this._volcano).length;
@@ -307,15 +348,15 @@ export default class LavaJs extends EventEmitter
      * Adds to the list of packages that Google needs to load.
      *
      * @private
-     * @param {String|Array} packages
-     * @return {Array}
+     * @param {String|String[]} packages Single or array of package names to add.
+     * @return {void}
      */
     _addPackages(packages) {
         if (typeof packages === 'string') {
             this._packages.push(packages);
         }
 
-        if (getType(packages) === 'Array') {
+        if (Utils.getType(packages) === 'Array') {
             this._packages = this._packages.concat(packages);
         }
     }
@@ -324,12 +365,13 @@ export default class LavaJs extends EventEmitter
      * Attach a listener to the window resize event for redrawing the charts.
      *
      * @private
+     * @return {void}
      */
     _attachRedrawHandler() {
         if (this.options.responsive === true) {
             let debounced = null;
 
-            addEvent(window, 'resize', () => {
+            Utils.addEvent(window, 'resize', () => {
                 // let redraw = this.redrawAll().bind(this);
 
                 clearTimeout(debounced);
@@ -348,50 +390,34 @@ export default class LavaJs extends EventEmitter
      * Load the Google Static Loader and resolve the promise when ready.
      *
      * @private
+     * @return {Promise}
      */
     _loadGoogle() {
-        const $lava = this;
-
         return new Promise(resolve => {
             console.log('[lava.js] Resolving Google...');
 
-            if (this._googleIsLoaded()) {
+            if (this.googleIsLoaded) {
                 console.log('[lava.js] Static loader found, initializing window.google');
 
-                $lava._googleChartLoader(resolve);
+                this._googleChartLoader(resolve);
             } else {
                 console.log('[lava.js] Static loader not found, appending to head');
 
-                $lava._addGoogleScriptToHead(resolve);
-                // This will call $lava._googleChartLoader(resolve);
+                // This will call this._googleChartLoader(resolve);
+                this._addGoogleScriptToHead(resolve);
             }
         });
     }
 
     /**
-     * Check if Google's Static Loader is in page.
+     * Runs the Google Chart Loader uses the passed Promise resolver as
+     * the setOnLoadCallback
      *
      * @private
-     * @returns {boolean}
-     */
-    _googleIsLoaded() {
-        const scripts = document.getElementsByTagName('script');
-
-        for (let script of scripts) {
-            if (script.src === this.GOOGLE_LOADER_URL) {
-                return true;
-            }
-        }
-    }
-
-    /**
-     * Runs the Google chart loader and resolves the promise.
-     *
-     * @private
-     * @param {Promise.resolve} resolve
+     * @param {Promise.resolve} resolve Promise resolver.
      */
     _googleChartLoader(resolve) {
-        let config = {
+        const config = {
             packages: uniq(this._packages),
             language: this.options.locale
         };
@@ -402,7 +428,7 @@ export default class LavaJs extends EventEmitter
 
         console.log('[lava.js] Loading Google with config:', config);
 
-        google.charts.load(this.GOOGLE_API_VERSION, config);
+        google.charts.load(LavaJs.GOOGLE_API_VERSION, config);
 
         google.charts.setOnLoadCallback(resolve);
     }
@@ -411,32 +437,25 @@ export default class LavaJs extends EventEmitter
      * Create a new script tag for the Google Static Loader.
      *
      * @private
-     * @param {Promise.resolve} resolve
-     * @returns {Element}
+     * @param {Promise.resolve} resolve Promise resolver.
+     * @returns {HTMLElement}
      */
     _addGoogleScriptToHead(resolve) {
-        let $lava  = this;
-        let script = document.createElement('script');
+        const script = document.createElement('script');
 
         script.type   = 'text/javascript';
         script.async  = true;
-        script.src    = this.GOOGLE_LOADER_URL;
-        script.onload = script.onreadystatechange = function (event) {
+        script.src    = LavaJs.GOOGLE_LOADER_URL;
+        script.onload = script.onreadystatechange = event => {
             event = event || window.event;
 
-            if (event.type === 'load' || (/loaded|complete/.test(this.readyState))) {
-                this.onload = this.onreadystatechange = null;
+            if (event.type === 'load' || (/loaded|complete/.test(script.readyState))) {
+                script.onload = script.onreadystatechange = null;
 
-                $lava._googleChartLoader(resolve);
+                this._googleChartLoader(resolve);
             }
         };
 
         document.head.appendChild(script);
     }
 }
-
-/**
- * Ready event.
- *
- * @event LavaJs#ready
- */

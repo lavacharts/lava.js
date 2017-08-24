@@ -5,12 +5,10 @@
  *
  * @type {Function}
  */
-export function LavaJsError(message)
-{
+function LavaJsError(message) {
     this.name = 'LavaJsError';
     this.message = (message || "");
 }
-LavaJsError.prototype = Error.prototype;
 
 /**
  * InvalidCallback Error
@@ -19,12 +17,10 @@ LavaJsError.prototype = Error.prototype;
  *
  * @type {Function}
  */
-export function InvalidCallback(callback)
-{
+function InvalidCallback(callback) {
     this.name = 'InvalidCallback';
     this.message = `[lava.js] "${typeof callback}" is not a valid callback.`;
 }
-InvalidCallback.prototype = LavaJsError.prototype;
 
 /**
  * InvalidLabel Error
@@ -33,12 +29,10 @@ InvalidCallback.prototype = LavaJsError.prototype;
  *
  * @type {Function}
  */
-export function RenderableNotFound()
-{
+function RenderableNotFound(label) {
     this.name = 'RenderableNotFound';
     this.message = `[lava.js] A renderable with the label "${label}" was not found.`;
 }
-RenderableNotFound.prototype = LavaJsError.prototype;
 
 /**
  * ElementIdNotFound Error
@@ -47,9 +41,18 @@ RenderableNotFound.prototype = LavaJsError.prototype;
  *
  * @type {Function}
  */
-export function ElementIdNotFound()
-{
+function ElementIdNotFound(elemId) {
     this.name = 'ElementIdNotFound';
     this.message = `[lava.js] DOM node where id="${elemId}" was not found.`;
 }
-ElementIdNotFound.prototype = LavaJsError.prototype;
+
+LavaJsError.prototype        = Error.prototype;
+InvalidCallback.prototype    = LavaJsError.prototype;
+RenderableNotFound.prototype = LavaJsError.prototype;
+ElementIdNotFound.prototype  = LavaJsError.prototype;
+
+export default {
+    InvalidCallback:    InvalidCallback,
+    RenderableNotFound: RenderableNotFound,
+    ElementIdNotFound:  ElementIdNotFound
+}

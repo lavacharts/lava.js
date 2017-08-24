@@ -16,15 +16,14 @@ const browserSync = createBrowserSync();
 
 let bundler = browserify({
     debug:        true,
-    entries:      ['./src/lava.entry.js'],
+    entries:      ['index.js'],
     cache:        {},
     packageCache: {},
     transform:    [
         'browserify-versionify',
-        [
-            'babelify',
-            {presets: ['es2015']}
-        ]
+        ['babelify', {
+            "presets": ['env', 'es2015']
+        }]
     ]
 });
 

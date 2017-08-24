@@ -1,12 +1,18 @@
 {
   "source": "./src",
   "destination": "./docs",
-  "excludes": [
-    "lava.entry.js"
-  ],
   "plugins": [
     {
-      "name": "esdoc-standard-plugin"
+      "name": "esdoc-standard-plugin",
+      "option": {
+        "accessor": {"access": ["public", "protected", "private"], "autoPrivate": true},
+        "brand": {
+          "title": "Lava.js",
+          "description": "Wrapper library for the Google Chart API",
+          "repository": "https://github.com/lavacharts/lava.js.git",
+          "author": "https://github.com/kevinkhill"
+        }
+      }
     }
   ]
 }
