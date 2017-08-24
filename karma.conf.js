@@ -20,6 +20,7 @@ module.exports = function (config) {
             'karma-jasmine',
             'karma-sinon',
             'karma-nightmare',
+            'karma-phantomjs-launcher',
             'karma-chrome-launcher'
         ],
         nightmareOptions: {
