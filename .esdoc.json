@@ -1,0 +1,12 @@
+{
+  "source": "./src",
+  "destination": "./docs",
+  "excludes": [
+    "lava.entry.js"
+  ],
+  "plugins": [
+    {
+      "name": "esdoc-standard-plugin"
+    }
+  ]
+}

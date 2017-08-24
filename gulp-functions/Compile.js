@@ -61,7 +61,7 @@ export default function compile(prod, watch, sync) {
         }
 
         bundler.on('update', () => {
-            const msg = 'Lava.js re-bundling...';
+            const msg = 'LavaJs.js re-bundling...';
 
             log(green(msg));
 

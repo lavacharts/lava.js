@@ -1,14 +1,11 @@
 {
   "name": "@lavacharts/lava.js",
-  "version": "4.0.0_rc1",
+  "version": "4.0.0rc1",
   "description": "Wrapper library for the Google Chart API",
   "homepage": "http://lavacharts.com",
   "author": "Kevin Hill",
   "license": "MIT",
   "private": true,
-  "engines": {
-    "node": "0.12.*"
-  },
   "dependencies": {
     "lodash": "^4.17.4"
   },
@@ -24,6 +21,8 @@
     "browserify": "^14.4.0",
     "browserify-replace": "^0.9.0",
     "browserify-versionify": "^1.0.6",
+    "esdoc": "^1.0.1",
+    "esdoc-standard-plugin": "^1.0.0",
     "glob": "^7.1.2",
     "gulp": "^3.9.1",
     "gulp-babel": "^7.0.0",
@@ -45,6 +44,7 @@
     "karma-chrome-launcher": "^2.2.0",
     "karma-jasmine": "^1.1.0",
     "karma-nightmare": "^0.4.10",
+    "karma-phantomjs-launcher": "^1.0.4",
     "karma-sinon": "^1.0.5",
     "nightmare": "^2.10.0",
     "node-notifier": "^5.1.2",
@@ -68,6 +68,6 @@
   "scripts": {
     "gulp": "./node_modules/.bin/gulp",
     "test": "./node_modules/.bin/karma start --singleRun",
-    "jsdoc": "./node_modules/.bin/jsdoc -d ./docs --package package.json ./src/lava/Lava.js"
+    "docs": "./node_modules/.bin/esdoc"
   }
 }
