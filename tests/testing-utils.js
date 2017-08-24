@@ -1,7 +1,11 @@
 // This is the equivalent of the old waitsFor/runs syntax
 // which was removed from Jasmine 2
 // @link https://gist.github.com/abreckner/110e28897d42126a3bb9#file-waitsforandruns-js
-function waitsForAndRuns(escapeFunction, runFunction, escapeTime=250) {
+function waitsForAndRuns(escapeFunction, runFunction, escapeTime) {
+    if (! escapeTime) {
+        escapeTime = 250;
+    }
+
     // check the escapeFunction every millisecond so as soon as it is met we can escape the function
     var interval = setInterval(function() {
         if (escapeFunction()) {
