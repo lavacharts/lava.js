@@ -1,16 +1,21 @@
-/**
- * Dashboard module
- *
- * @class     Dashboard
- * @module    lava/Dashboard
- * @author    Kevin Hill <kevinkhill@gmail.com>
- * @copyright (c) 2017, KHill Designs
- * @license   MIT
- */
 import Renderable from './Renderable';
 
+/**
+ * Dashboard Class
+ *
+ * @class
+ * @module    module:LavaJs/Dashboard
+ * @author    Kevin Hill <kevinkhill@gmail.com>
+ * @copyright (c) 2017, Kevin Hill
+ * @license   MIT
+ */
 export default class Dashboard extends Renderable
 {
+    /**
+     * Create a new Dashboard.
+     *
+     * @param {Object} json JSON object representing a Dashboard.
+     */
     constructor(json) {
         json.type = 'Dashboard';
 

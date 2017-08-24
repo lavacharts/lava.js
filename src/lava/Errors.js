@@ -1,10 +1,9 @@
 /**
- * Errors module
+ * LavaJsError Error
  *
- * @module    lava/Errors
- * @author    Kevin Hill <kevinkhill@gmail.com>
- * @copyright (c) 2017, KHill Designs
- * @license   MIT
+ * Base error that the specific errors extend.
+ *
+ * @type {Function}
  */
 export function LavaJsError(message)
 {
@@ -16,8 +15,9 @@ LavaJsError.prototype = Error.prototype;
 /**
  * InvalidCallback Error
  *
- * thrown when when anything but a function is given as a callback
- * @type {function}
+ * Thrown when anything but a function is given as a callback.
+ *
+ * @type {Function}
  */
 export function InvalidCallback(callback)
 {
@@ -29,9 +29,9 @@ InvalidCallback.prototype = LavaJsError.prototype;
 /**
  * InvalidLabel Error
  *
- * Thrown when when anything but a string is given as a label.
+ * Thrown when a {@link Renderable} is not found in the module.
  *
- * @type {function}
+ * @type {Function}
  */
 export function RenderableNotFound()
 {
@@ -43,9 +43,9 @@ RenderableNotFound.prototype = LavaJsError.prototype;
 /**
  * ElementIdNotFound Error
  *
- * Thrown when when anything but a string is given as a label.
+ * Thrown when the given ID for an HTMLElement is not found in the DOM.
  *
- * @type {function}
+ * @type {Function}
  */
 export function ElementIdNotFound()
 {

@@ -15,7 +15,7 @@ export class LavaJsService {
     }
 
     /**
-     * Returns the Lava.js instance attached to the window.
+     * Returns the LavaJs.js instance attached to the window.
      *
      * @return {LavaJs}
      */

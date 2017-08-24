@@ -1,7 +1,7 @@
 /* jshint undef: true, unused: true */
 /* globals sinon, jasmine, describe, it, expect, beforeEach */
 
-describe('Lava.js Test Suite', function () {
+describe('LavaJs.js Test Suite', function () {
     beforeEach(function () {
         var div = document.createElement('div');
         div.id = 'test-chart';

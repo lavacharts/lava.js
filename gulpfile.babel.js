@@ -14,7 +14,7 @@ import { red, green } from 'chalk';
 gulp.task('default', ['dev', 'prod']);
 
 /**
- * Lava.js compilation tasks.
+ * LavaJs.js compilation tasks.
  *
  * The compile method accepts three boolean flags for the following signature:
  *   compile(prod, watch, sync)

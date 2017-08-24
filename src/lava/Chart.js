@@ -1,25 +1,19 @@
-/**
- * Chart module
- *
- * @class     Chart
- * @module    lava/Chart
- * @author    Kevin Hill <kevinkhill@gmail.com>
- * @copyright (c) 2017, KHill Designs
- * @license   MIT
- */
 import forIn from 'lodash/forIn';
 import Renderable from './Renderable';
 
+/**
+ * Chart Class
+ *
+ * @author    Kevin Hill <kevinkhill@gmail.com>
+ * @copyright (c) 2017, Kevin Hill
+ * @license   MIT
+ */
 export default class Chart extends Renderable
 {
     /**
-     * Chart Class
+     * Create a new Chart.
      *
-     * This is the javascript version of a lavachart with methods for interacting with
-     * the google chart and the PHP lavachart output.
-     *
-     * @param {object} json
-     * @constructor
+     * @param {Object} json JSON object representing a Chart.
      */
     constructor (json) {
         super(json);
@@ -30,6 +24,8 @@ export default class Chart extends Renderable
 
         /**
          * Any dependency on "google" must be within the _setRenderer scope.
+         *
+         * @return {void}
          */
         this.render = () => {
             this.gchart = new google.visualization[this.class](this.element);
@@ -39,7 +35,7 @@ export default class Chart extends Renderable
             this._attachEventRelays();
 
             if (json.formats) {
-                this.applyFormats();
+                this._applyFormats();
             }
 
             // if (this.events) {
@@ -49,7 +45,7 @@ export default class Chart extends Renderable
             this.draw();
 
             if (this.pngOutput) {
-                this.drawPng();
+                this._drawPng();
             }
         };
     }
@@ -57,11 +53,11 @@ export default class Chart extends Renderable
     /**
      * Draws the chart as a PNG instead of the standard SVG
      *
-     * @public
-     * @external "chart.getImageURI"
-     * @see {@link https://developers.google.com/chart/interactive/docs/printing|Printing PNG Charts}
+     * @private
+     * @link https://developers.google.com/chart/interactive/docs/printing Printing PNG Charts
+     * @return {void}
      */
-    drawPng() {
+    _drawPng() {
         let img = document.createElement('img');
             img.src = this.gchart.getImageURI();
 
@@ -72,10 +68,11 @@ export default class Chart extends Renderable
     /**
      * Apply the formats to the DataTable
      *
-     * @param {Array} formats
-     * @public
+     * @private
+     * @param {Object[]} formats Array of format objects to apply.
+     * @return {void}
      */
-    applyFormats(formats) {
+    _applyFormats(formats) {
         if (! formats) {
             formats = this.formats;
         }
@@ -93,6 +90,7 @@ export default class Chart extends Renderable
      * Attach the defined chart event handlers.
      *
      * @private
+     * @return {void}
      */
     _attachEvents() {
         forIn(this.events, (callback, event) => {

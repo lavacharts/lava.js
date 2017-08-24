@@ -1,48 +1,63 @@
 /* jshint browser:true */
 /* globals google */
 
-/**
- * Lava.js module
- *
- * @module    lava/Lava
- * @author    Kevin Hill <kevinkhill@gmail.com>
- * @copyright (c) 2017, KHill Designs
- * @license   http://opensource.org/licenses/MIT MIT
- */
 import forIn from 'lodash/forIn';
 import uniq from 'lodash/uniq';
 import EventEmitter from 'events';
 import Chart from './Chart';
 import Dashboard from './Dashboard';
 import Renderable from './Renderable';
-import defaultOptions from './Options';
 import {addEvent, getType} from './Utils';
 import {InvalidCallback, RenderableNotFound} from './Errors'
 
+/**
+ * LavaJs Class
+ *
+ * @class
+ * @author    Kevin Hill <kevinkhill@gmail.com>
+ * @copyright (c) 2017, Kevin Hill
+ * @license   http://opensource.org/licenses/MIT MIT
+ */
 export default class LavaJs extends EventEmitter
 {
     /**
      * Create a new LavaJs object
      *
-     * @constructor
      * @param {Object} newOptions
      */
     constructor(newOptions) {
         super();
 
         /**
-         * Version of the Lava.js module.
+         * Version of the LavaJs.js module.
          *
          * @public
-         * @type {string} Lava.js module version
+         * @type {String}
          */
         this.VERSION = '__VERSION__';
+
+
+        /**
+         * Attaching the chart class to LavaJs
+         *
+         * @class
+         * @type {Chart}
+         */
+        this.Chart = Chart;
+
+        /**
+         * Attaching the Dashboard class to LavaJs
+         *
+         * @class
+         * @type {Dashboard}
+         */
+        this.Dashboard = Dashboard;
 
         /**
          * Version of the Google charts API to load.
          *
          * @public
-         * @type {string}
+         * @type {String}
          */
         this.GOOGLE_API_VERSION = 'current';
 
@@ -50,38 +65,38 @@ export default class LavaJs extends EventEmitter
          * Urls to Google's static loader
          *
          * @public
-         * @type {string}
+         * @type {String}
          */
         this.GOOGLE_LOADER_URL = 'https://www.gstatic.com/charts/loader.js';
 
         /**
          * JSON object of config items.
          *
-         * @type {Object}
          * @public
+         * @type {Object}
          */
-        this.options = newOptions || defaultOptions;
+        this.options = newOptions || require('resources/options.json');
 
         /**
          * Array of visualization packages for charts and dashboards.
          *
-         * @protected
-         * @type {Array.<string>}
+         * @private
+         * @type {String[]}
          */
         this._packages = [];
 
         /**
          * Array of charts and dashboards stored in the module.
          *
-         * @protected
-         * @type {Array.<Renderable>}
+         * @private
+         * @type {Renderable[]}
          */
         this._volcano = [];
 
         /**
          * Ready callback to be called when the module is finished running.
          *
-         * @protected
+         * @private
          * @callback _readyCallback
          */
         this._readyCallback = undefined;
@@ -94,24 +109,25 @@ export default class LavaJs extends EventEmitter
      * as an independent library.
      *
      * @public
-     * @param  {object} json
-     * @return {Renderable}
+     * @param  {Object} json object representing a Chart or Dashboard.
+     * @return {Chart|Dashboard}
      */
     create(json) {
         console.log(`Creating a new ${json.type}:`, json);
 
         if (json.type === 'Dashboard') {
-            return new Dashboard(json);
+            return new this.Dashboard(json);
         }
 
-        return new Chart(json);
+        return new this.Chart(json);
     }
 
     /**
-     * Stores a renderable lava object within the module.
+     * Stores or creates then stores a {@link Renderable} within the module.
      *
      * @public
-     * @param {Renderable} renderable
+     * @param {Object|Renderable} renderable
+     * @return {Chart|Dashboard} The Chart / Dashboard that was just stored.
      */
     store(renderable) {
         if (renderable instanceof Renderable === false) {
@@ -141,8 +157,9 @@ export default class LavaJs extends EventEmitter
      * for some examples relative to LineCharts.
      *
      * @public
-     * @param  {string} label
-     * @throws RenderableNotFound
+     * @param  {String} label
+     * @throws {RenderableNotFound}
+     * @return {Chart|Dashboard}
      */
     get(label) {
         let renderable = this._volcano[label];
@@ -155,19 +172,19 @@ export default class LavaJs extends EventEmitter
     }
 
     /**
-     * Runs the Lava.js module
+     * Runs the LavaJs.js module
      *
      * @public
+     * @emits {ready}
+     * @return {Promise}
      */
     run() {
-        const renderPromises = [];
-
         console.log('[lava.js] Running...');
         console.log('[lava.js] Loading options:', this.options);
 
         this._attachRedrawHandler();
 
-        this._loadGoogle().then(() => {
+        return this._loadGoogle().then(() => {
             console.log('[lava.js] Google is ready.');
 
             this.visualization = google.visualization;
@@ -197,7 +214,7 @@ export default class LavaJs extends EventEmitter
      * to protect against accessing charts that aren't loaded yet
      *
      * @public
-     * @param {function} callback
+     * @param {Function} callback
      */
     ready(callback) {
         if (typeof callback !== 'function') {
@@ -216,8 +233,8 @@ export default class LavaJs extends EventEmitter
      * a chart can be dynamically update in page, without reloads.
      *
      * @public
-     * @param {string} label
-     * @param {string} json
+     * @param {String} label
+     * @param {String} json
      * @param {Function} callback
      */
     loadData(label, json, callback) { //TODO: test this with formats
@@ -245,8 +262,8 @@ export default class LavaJs extends EventEmitter
      * This can be used to update a chart dynamically, without reloads.
      *
      * @public
-     * @param {string} label
-     * @param {string} json
+     * @param {String} label
+     * @param {String} json
      * @param {Function} callback
      */
     loadOptions(label, json, callback) { //TODO: test this
@@ -417,3 +434,9 @@ export default class LavaJs extends EventEmitter
         document.head.appendChild(script);
     }
 }
+
+/**
+ * Ready event.
+ *
+ * @event LavaJs#ready
+ */
