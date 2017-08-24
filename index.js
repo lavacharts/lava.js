@@ -1,8 +1,8 @@
 /* jshint browser:true */
 /* globals __OPTIONS__ */
 
-import LavaJs from './lava/LavaJs';
-import {domLoaded} from './lava/Utils';
+import Utils from './src/Utils';
+import LavaJs from './src/LavaJs';
 
 /**
  * Assign the LavaJs.js module to the window and
@@ -24,7 +24,7 @@ if (typeof __OPTIONS__ !== 'undefined') {
  * is ready, rendering will begin.
  */
 if (window.lava.options.auto_run === true) {
-    domLoaded().then(() => {
+    Utils.domLoaded().then(() => {
         window.lava.run();
     });
 }

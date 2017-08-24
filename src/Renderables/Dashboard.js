@@ -12,7 +12,7 @@ import Renderable from './Renderable';
 export default class Dashboard extends Renderable
 {
     /**
-     * Create a new Dashboard.
+     * Create a new Dashboard
      *
      * @param {Object} json JSON object representing a Dashboard.
      */
@@ -24,7 +24,9 @@ export default class Dashboard extends Renderable
         this.bindings = json.bindings;
 
         /**
-         * Any dependency on "google" must be within the _setRenderer scope.
+         * Any dependency on "google" must be within the render scope.
+         *
+         * @return {void}
          */
         this.render = () => {
             this.setData(json.datatable);
@@ -38,8 +40,6 @@ export default class Dashboard extends Renderable
             }
 
             this.draw();
-
-            this.on('ready', resolve);
         };
     }
 
@@ -49,6 +49,7 @@ export default class Dashboard extends Renderable
      * Process and attach the bindings to the dashboard.
      *
      * @private
+     * @return {void}
      */
     _attachBindings() {
         for (let binding of this.bindings) {
