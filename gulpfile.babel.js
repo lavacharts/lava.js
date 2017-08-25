@@ -115,7 +115,12 @@ gulp.task('docs', done => {
  *   gulp ghpages
  */
 gulp.task('ghpages', done => {
-    ghpages.publish('./examples', err => {
+    ghpages.publish('./examples', {
+        src: [
+            './*',
+            '../dist/lava.js'
+        ]
+    }, err => {
         log(red(err));
     });
 });
