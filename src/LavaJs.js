@@ -6,9 +6,10 @@ import uniq from 'lodash/uniq';
 import EventEmitter from 'events';
 import Utils from './Utils';
 import Errors from './Errors'
-import Chart from './Renderables/Chart';
-import Dashboard from './Renderables/Dashboard';
-import Renderable from './Renderables/Renderable';
+import Chart from './Chart';
+import Dashboard from './Dashboard';
+import DataQuery from './DataQuery';
+import Renderable from './Renderable';
 
 /**
  * Google Chart API wrapper library
@@ -59,8 +60,28 @@ export default class LavaJs extends EventEmitter
      * @class
      * @type {Errors}
      */
+    static get G() {
+        return this._google;
+    }
+
+    /**
+     * Throwable errors for the LavaJs module
+     *
+     * @class
+     * @type {Errors}
+     */
     static get Errors() {
         return Errors;
+    }
+
+    /**
+     * Static accessor for the {@link DataQuery} class
+     *
+     * @class
+     * @type {DataQuery}
+     */
+    static get DataQuery() {
+        return DataQuery;
     }
 
     /**
@@ -92,6 +113,13 @@ export default class LavaJs extends EventEmitter
         super();
 
         /**
+         * A flag that will be set once the library is ready.
+         *
+         * @type {Boolean}
+         */
+        this.isReady = false;
+
+        /**
          * JSON object of config items
          *
          * @public
@@ -119,9 +147,9 @@ export default class LavaJs extends EventEmitter
          * Ready callback to be called when the module is finished running.
          *
          * @private
-         * @type {null|Function}
+         * @type {Function}
          */
-        this._readyCallback = null;
+        this._readyCallback = undefined;
     }
 
     /**
@@ -138,6 +166,21 @@ export default class LavaJs extends EventEmitter
                 return true;
             }
         }
+    }
+
+    /**
+     * Create a new {@link DataQuery} for a {@link Renderable}
+     *
+     * @param {String|Object} url Corresponds to "dataSourceUrl" in Google's docs or a
+     * @param params
+     * @return {DataQuery}
+     */
+    query(url) {
+        if (typeof url === 'string') {
+            return new DataQuery(url);
+        }
+
+        return new DataQuery(url);
     }
 
     /**
@@ -163,6 +206,8 @@ export default class LavaJs extends EventEmitter
     /**
      * Stores or creates then stores a {@link Renderable} within the module.
      *
+     * @todo If the library has ran, and is ready, loading new charts will force a redraw of all the currently drawn charts.
+     *
      * @public
      * @param {Object|Renderable} renderable
      * @return {Chart|Dashboard} The {@link Chart} / {@link Dashboard} that was just stored.
@@ -177,6 +222,10 @@ export default class LavaJs extends EventEmitter
         this._addPackages(renderable.packages);
 
         this._volcano[renderable.label] = renderable;
+
+        //if (this.isReady) {
+        //    this.redrawAll();
+        //}
 
         return renderable;
     }
@@ -209,6 +258,17 @@ export default class LavaJs extends EventEmitter
     }
 
     /**
+     * Initializes the library by loading google to the window.
+     *
+     * @return {Promise}
+     */
+    init() {
+        return this._loadGoogle().then(() => {
+            console.log('[lava.js] Google is ready.');
+        });
+    }
+
+    /**
      * Runs the LavaJs.js module
      *
      * @public
@@ -221,25 +281,27 @@ export default class LavaJs extends EventEmitter
 
         this._attachRedrawHandler();
 
-        return this._loadGoogle().then(() => {
-            console.log('[lava.js] Google is ready.');
+        return this
+            .init()
+            .then(() => {
+                forIn(this._volcano, renderable => {
+                    console.log(`[lava.js] Rendering ${renderable.uuid}`);
 
-            forIn(this._volcano, renderable => {
-                console.log(`[lava.js] Rendering ${renderable.uuid}`);
+                    renderable.render();
+                });
+            }).then(() => {
+                console.log('[lava.js] Ready; Firing "ready" event.');
 
-                renderable.render();
+                this.isReady = true;
+
+                this.emit('ready');
+
+                if (typeof this._readyCallback === 'function') {
+                    console.log('[lava.js] Running lava.ready(callback);');
+
+                    this._readyCallback();
+                }
             });
-
-            console.log('[lava.js] Firing "ready" event.');
-
-            this.emit('ready');
-
-            if (this._readyCallback) {
-                console.log('[lava.js] Executing lava.ready(callback)');
-
-                this._readyCallback();
-            }
-        });
     }
 
     /**

@@ -46,13 +46,28 @@ function ElementIdNotFound(elemId) {
     this.message = `[lava.js] DOM node where id="${elemId}" was not found.`;
 }
 
+/**
+ * DataQueryError
+ *
+ * Thrown when the given ID for an HTMLElement is not found in the DOM.
+ *
+ * @type {Function}
+ */
+function DataQueryError(msg) {
+    this.name = 'DataQueryError';
+    this.message = msg;
+}
+
 LavaJsError.prototype        = Error.prototype;
 InvalidCallback.prototype    = LavaJsError.prototype;
 RenderableNotFound.prototype = LavaJsError.prototype;
 ElementIdNotFound.prototype  = LavaJsError.prototype;
+DataQueryError.prototype     = LavaJsError.prototype;
 
 export default {
+    LavaJsError:        LavaJsError,
     InvalidCallback:    InvalidCallback,
     RenderableNotFound: RenderableNotFound,
-    ElementIdNotFound:  ElementIdNotFound
+    ElementIdNotFound:  ElementIdNotFound,
+    DataQueryError:     DataQueryError
 }

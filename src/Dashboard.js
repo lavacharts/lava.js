@@ -22,32 +22,27 @@ export default class Dashboard extends Renderable
         super(json);
 
         this.bindings = json.bindings;
-
-        /**
-         * Any dependency on "google" must be within the render scope.
-         *
-         * @return {void}
-         */
-        this.render = () => {
-            this.setData(json.datatable);
-
-            this.gchart = new google.visualization.Dashboard(this.element);
-
-            this._attachBindings();
-
-            if (this.events) {
-                this._attachEvents();
-            }
-
-            this.draw();
-        };
     }
 
-    // @TODO: this needs to be modified for the other types of bindings.
+    /**
+     * Actions to perform before drawing the {@link Dashboard}
+     *
+     * This method will have access to window.google since it is called
+     * within the render method.
+     *
+     * @private
+     */
+    _setup() {
+        this.gchart = new google.visualization.Dashboard(this.element);
+
+        this._attachEventRelays();
+        this._attachBindings();
+    }
 
     /**
      * Process and attach the bindings to the dashboard.
      *
+     * @TODO: Needs to be modified and tested for the other types of bindings.
      * @private
      * @return {void}
      */
