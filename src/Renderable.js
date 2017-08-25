@@ -1,9 +1,11 @@
 import EventEmitter from 'events';
-import Utils from '../Utils'
-import LavaJs from '../LavaJs'
+import Utils from './Utils'
+import LavaJs from './LavaJs'
 
 /**
- * Renderable Class
+ * The {@link Renderable} class is the base for {@link Chart}s and {@link Dashboard}s
+ * to share common methods between the two types.
+ *
  *
  * @author    Kevin Hill <kevinkhill@gmail.com>
  * @copyright (c) 2017, Kevin Hill
@@ -22,25 +24,17 @@ export default class Renderable extends EventEmitter
         /**
          * DataTable for the {@link Chart} / {@link Dashboard}.
          *
-         * @type {null|DataTable}
+         * @type {DataTable}
          */
-        this.data = null;
+        this.data = undefined;
 
         /**
          * Google chart object created once the {@link Chart} / {@link Dashboard}
          * has been rendered.
          *
-         * @type {null|Object}
+         * @type {Object}
          */
-        this.gchart = null;
-
-        /**
-         * The render method sets up the {@link Chart} / {@link Dashboard} with
-         * it's data, options, and other specific configuration.
-         *
-         * @type {null|Function}
-         */
-        this.render = null;
+        this.gchart = undefined;
 
         /**
          * Type of {@link Renderable}.
@@ -82,6 +76,26 @@ export default class Renderable extends EventEmitter
         if (! this.element) {
             throw new LavaJs.Errors.ElementIdNotFound(this.elementId);
         }
+
+        /**
+         * Any dependency on "google" must be within the render scope.
+         *
+         * @return {void}
+         */
+        this.render = () => {
+            this._setup(json);
+
+            this.setData(json.data || json.datatable)
+                .then(() => {
+                    this.draw();
+                }).then(() => {
+                    if (typeof this._postDraw === 'function') {
+                        console.log(`[lava.js] Running ${this.uuid}#postDraw`);
+
+                        this._postDraw();
+                    }
+                });
+        };
     }
 
     /**
@@ -118,23 +132,37 @@ export default class Renderable extends EventEmitter
      * Draws the {@link Chart} / {@link Dashboard} with the predefined data and options.
      *
      * @public
-     * @return {void}
+     * @return {Promise}
      */
     draw() {
         this.gchart.draw(this.data, this.options);
+
+        return Promise.resolve();
     }
 
     /**
-     * Sets the data for the chart by creating a new DataTable
+     * Sets the data for the {@link Renderable}.
      *
      * @public
-     * @param {Object|Function|Array|DataTable} payload Json representation of a DataTable
-     * @return {self}
+     * @param {Object|Function|Array|DataQuery|DataTable} payload Source of data
+     * @return {Promise}
      */
     setData(payload) {
-        this.data = Utils.createDataTable(payload);
+        return new Promise(resolve => {
+            if (payload instanceof LavaJs.DataQuery) {
+                console.log(`[lava.js] Sending DataQuery for ${this.uuid}`);
 
-        return this;
+                payload.send().then(response => {
+                    console.log(`[lava.js] DataQuery for ${this.uuid} complete.`);
+
+                    resolve(response.getDataTable());
+                });
+            } else {
+                resolve(Utils.createDataTable(payload));
+            }
+        }).then(data => {
+            this.data = data;
+        });
     }
 
     /**

@@ -1,8 +1,14 @@
 /* globals document, google */
 
 /**
- * Utils Class
- *
+ * @ignore
+ * @typedef {Object} VizProps
+ * @property {String} class Visualization class.
+ * @property {String} package Visualization package.
+ * @property {Number} version Visualization version.
+ */
+
+/**
  * Collection of utility functions used throughout the modules.
  *
  * @class
@@ -107,7 +113,7 @@ export default class Utils
         if (Utils.getType(payload.data) === 'Object') {
             payload = payload.data;
 
-            // TODO: handle formats better...
+            // TODO: if the DataTable has formats, then handle them here.
             return;
         }
 

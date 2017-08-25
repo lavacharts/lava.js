@@ -52,25 +52,28 @@
             <div class="title">
                 LavaJs v4.0
             </div>
-            <p>The Google Chart API wrapper.</p>
+            <p>Seamlessly using <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vSaBRPszcwawoBNxw6yLNPDS-H7KP4bPX7tk1mzDzwVxpWEmhJ10Pd074Nft1ZEcYlVP4OiGkR1RCV7/pubhtml">
+                Querying Google Sheets
+            </a>.</p>
 
             <div>
                 <div class="align-left float">
                     <pre><code>
+var sheetRoot = 'https://docs.google.com/spreadsheets/d/';
+var id = '1NrwfHVE0qn3O8HcLDFd71_LepjSDIbrJMglkHZIEifI';
+var queryStr = '/gviz/tq?range=A1:B6';
+
 var chartJson = {
     label: 'Test',
     type: 'PieChart',
     elementId: 'chart_div',
-    datatable: [
-        ['Task', 'Hours per Day'],
-        ['Work',     11],
-        ['Eat',      2],
-        ['Commute',  2],
-        ['Watch TV', 2],
-        ['Sleep',    7]
-    ],
+    datatable: lava.query(
+        sheetRoot + id + queryStr
+    ),
     options: {
-        title: 'My Daily Activities'
+        width: 400,
+        height: 240,
+        is3D: true
     }
 };
 
@@ -80,29 +83,31 @@ lava.run();
                 </div>
                 <div class="float" style="width: 400px;">
                     <pre><code>
-&#x3C;div id=&#x22;chart_div&#x22;&#x3E;&#x3C;/div&#x3E;
+&#x3C;div id=&#x22;my-pie-chart&#x22;&#x3E;&#x3C;/div&#x3E;
                     </code></pre>
                     <div id="chart_div"></div>
                 </div>
             </div>
         </div>
+
     </div>
 
     <script type="text/javascript">
+        var sheetRoot = 'https://docs.google.com/spreadsheets/d/';
+        var id = '1NrwfHVE0qn3O8HcLDFd71_LepjSDIbrJMglkHZIEifI';
+        var queryStr = '/gviz/tq?range=A1:B6';
+
         var chartJson = {
             label: 'Test',
             type: 'PieChart',
             elementId: 'chart_div',
-            datatable: [
-                ['Task', 'Hours per Day'],
-                ['Work',     11],
-                ['Eat',      2],
-                ['Commute',  2],
-                ['Watch TV', 2],
-                ['Sleep',    7]
-            ],
+            datatable: lava.query(
+                sheetRoot + id + queryStr
+            ),
             options: {
-                title: 'My Daily Activities'
+                width: 400,
+                height: 240,
+                is3D: true
             }
         };
 

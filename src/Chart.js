@@ -14,48 +14,73 @@ export default class Chart extends Renderable
      * Create a new Chart.
      *
      * @param {Object} json JSON object representing a Chart.
+     * @example
+     * {
+     *     label: "Test",
+     *     type: "PieChart",
+     *     elementId: "my-pie-chart",
+     *     datatable: [
+     *         ['Task', 'Hours per Day'],
+     *         ['Work',     11],
+     *         ['Eat',      2],
+     *         ['Commute',  2],
+     *         ['Watch TV', 2],
+     *         ['Sleep',    7]
+     *     ],
+     *     options: {
+     *         title: 'My Daily Activities'
+     *     }
+     * }
      */
     constructor (json) {
         super(json);
 
-        //TODO: should php defined events be appendable to the std events?
-        //this.events  = typeof json.events === 'object' ? json.events : null;
-        this.pngOutput = Boolean(json.pngOutput);
-
         /**
-         * Any dependency on "google" must be within the _setRenderer scope.
+         * If this is set to true, then the {@link Chart} will be output as a PNG
          *
-         * @return {void}
+         * @type {boolean}
          */
-        this.render = () => {
-            this.gchart = new google.visualization[this.class](this.element);
+        this.pngOutput = Boolean(json.pngOutput);
+    }
 
-            this.setData(json.data || json.datatable);
+    /**
+     * Actions to perform before drawing the {@link Chart}
+     *
+     * This method will have access to window.google since it is called
+     * within the render method.
+     *
+     * @private
+     */
+    _setup() {
+        this.gchart = new google.visualization[this.class](this.element);
 
-            this._attachEventRelays();
+        this._attachEventRelays();
 
-            if (json.formats) {
-                this._applyFormats();
-            }
+        // TODO: append Lavachart defined events?
+        // if (this.events) {
+        //     this._attachEvents();
+        // }
+    }
 
-            // if (this.events) {
-            //     this._attachEvents();
-            // }
-
-            this.draw();
-
-            if (this.pngOutput) {
-                this._drawPng();
-            }
-        };
+    /**
+     * Actions to perform once the {@link Chart} has been drawn
+     *
+     * This method will have access to window.google since it is called
+     * within the render method.
+     *
+     * @private
+     */
+    _postDraw() {
+        if (this.pngOutput) {
+            this._drawPng();
+        }
     }
 
     /**
      * Draws the chart as a PNG instead of the standard SVG
      *
      * @private
-     * @link https://developers.google.com/chart/interactive/docs/printing Printing PNG Charts
-     * @return {void}
+     * @see https://developers.google.com/chart/interactive/docs/printing
      */
     _drawPng() {
         let img = document.createElement('img');
@@ -70,7 +95,6 @@ export default class Chart extends Renderable
      *
      * @private
      * @param {Object[]} formats Array of format objects to apply.
-     * @return {void}
      */
     _applyFormats(formats) {
         if (! formats) {

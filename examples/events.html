@@ -50,7 +50,7 @@
 <div class="flex-center position-ref">
     <div class="content">
         <div class="title">
-            Lava.js v4.0
+            LavaJs v4.0
         </div>
         <p>Event integration (click a slice!)</p>
 
@@ -58,9 +58,9 @@
             <div class="align-left float">
                     <pre><code>
 var chartJson = {
-    label: "Test",
-    type: "PieChart",
-    elementId: "my-pie-chart",
+    label: 'Test',
+    type: 'PieChart',
+    elementId: 'chart_div',
     datatable: function (data) {
         data.addColumn('string', 'Topping');
         data.addColumn('number', 'Slices');
@@ -73,10 +73,7 @@ var chartJson = {
         ]);
 
         return data;
-    },
-    options: {
-        title: 'My Daily Activities'
-    },
+    }
 };
 
 var chart = lava.store(chartJson);
@@ -98,9 +95,9 @@ lava.run();
             </div>
             <div class="float" style="width: 400px;">
                     <pre><code>
-&#x3C;div id=&#x22;my-pie-chart&#x22;&#x3E;&#x3C;/div&#x3E;
+&#x3C;div id=&#x22;chart_div&#x22;&#x3E;&#x3C;/div&#x3E;
                     </code></pre>
-                <div id="my-pie-chart"></div>
+                <div id="chart_div"></div>
             </div>
         </div>
     </div>
@@ -108,9 +105,9 @@ lava.run();
 
 <script type="text/javascript">
     var chartJson = {
-        label: "Test",
-        type: "PieChart",
-        elementId: "my-pie-chart",
+        label: 'Test',
+        type: 'PieChart',
+        elementId: 'chart_div',
         datatable: function (data) {
             data.addColumn('string', 'Topping');
             data.addColumn('number', 'Slices');
@@ -123,10 +120,7 @@ lava.run();
             ]);
 
             return data;
-        },
-        options: {
-            title: 'My Daily Activities'
-        },
+        }
     };
 
     var chart = lava.store(chartJson);
