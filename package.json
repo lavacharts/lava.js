@@ -23,6 +23,7 @@
     "browserify-versionify": "^1.0.6",
     "esdoc": "^1.0.1",
     "esdoc-standard-plugin": "^1.0.0",
+    "gh-pages": "^1.0.0",
     "glob": "^7.1.2",
     "gulp": "^3.9.1",
     "gulp-babel": "^7.0.0",

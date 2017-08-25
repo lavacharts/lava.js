@@ -4,14 +4,15 @@ import gulp from 'gulp';
 import yargs from 'yargs';
 import esdoc from 'gulp-esdoc';
 import watch from 'gulp-watch';
+import ghpages from 'gh-pages';
 import compile from './gulp-functions/Compile';
 import renderChart from './gulp-functions/Renderer';
 import getChartTypes from './gulp-functions/GetChartTypes';
 import {cpus} from 'os'
 import {map} from 'bluebird';
-import { log } from 'gulp-util';
+import {log} from 'gulp-util';
 import {readFileSync} from 'fs';
-import { red, green } from 'chalk';
+import {red, green} from 'chalk';
 
 const esdocConfig = JSON.parse(readFileSync('./.esdoc.json'));
 
@@ -104,5 +105,17 @@ gulp.task('docs', done => {
     watch('./src/**/*.js', () => {
         gulp.src('./src')
             .pipe(esdoc(esdocConfig));
+    });
+});
+
+/**
+ * Watch the source files and regen docs when needed
+ *
+ * Syntax:
+ *   gulp ghpages
+ */
+gulp.task('ghpages', done => {
+    ghpages.publish('./examples', err => {
+        log(red(err));
     });
 });
