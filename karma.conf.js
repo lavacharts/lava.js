@@ -2,13 +2,28 @@
 
 module.exports = function (config) {
     config.set({
-        frameworks: ['jasmine', 'sinon'],
+        frameworks: ['mocha', 'sinon-chai'],
         files: [
-            './node_modules/jasmine-sinon/lib/jasmine-sinon.js',
             './dist/lava.min.js',
-            './tests/testing-utils.js',
-            './tests/lava.spec.js'
+            './test/testing-utils.js',
+            './test/LavaJs.spec.js',
+            './test/DataQuery.spec.js'
         ],
+        client: {
+            chai: {
+                includeStack: true
+            },
+            mocha: {
+                // change Karma's debug.html to the mocha web reporter
+                reporter: 'html',
+
+                // require specific files after Mocha is initialized
+                //require: [require.resolve('mocha-sinon')],
+
+                // custom ui, defined in required file above
+                //ui: 'bdd-lazy-var/global',
+            }
+        },
         singleRun: false,
         reporters: ['dots'],
         port: 9876,
@@ -17,8 +32,9 @@ module.exports = function (config) {
         autoWatch: true,
         browsers: [(process.env.TRAVIS ? 'PhantomJS' : 'Chrome')],
         plugins: [
-            'karma-jasmine',
+            'karma-mocha',
             'karma-sinon',
+            'karma-sinon-chai',
             'karma-nightmare',
             'karma-phantomjs-launcher',
             'karma-chrome-launcher'

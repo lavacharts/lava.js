@@ -1,8 +1,6 @@
 /* jshint browser:true */
 /* globals google */
 
-import forIn from 'lodash/forIn';
-import uniq from 'lodash/uniq';
 import EventEmitter from 'events';
 import Utils from './Utils';
 import Errors from './Errors'
@@ -24,6 +22,7 @@ import Renderable from './Renderable';
  */
 export default class LavaJs extends EventEmitter
 {
+    //noinspection JSUnusedGlobalSymbols
     /**
      * Version of the LavaJs.js module
      *
@@ -55,36 +54,6 @@ export default class LavaJs extends EventEmitter
     }
 
     /**
-     * Throwable errors for the LavaJs module
-     *
-     * @class
-     * @type {Errors}
-     */
-    static get G() {
-        return this._google;
-    }
-
-    /**
-     * Throwable errors for the LavaJs module
-     *
-     * @class
-     * @type {Errors}
-     */
-    static get Errors() {
-        return Errors;
-    }
-
-    /**
-     * Static accessor for the {@link DataQuery} class
-     *
-     * @class
-     * @type {DataQuery}
-     */
-    static get DataQuery() {
-        return DataQuery;
-    }
-
-    /**
      * Static accessor for the {@link Chart} class
      *
      * @class
@@ -105,6 +74,26 @@ export default class LavaJs extends EventEmitter
     }
 
     /**
+     * Static accessor for the {@link DataQuery} class
+     *
+     * @class
+     * @type {DataQuery}
+     */
+    static get DataQuery() {
+        return DataQuery;
+    }
+
+    /**
+     * Throwable errors for the LavaJs module
+     *
+     * @class
+     * @type {Errors}
+     */
+    static get Errors() {
+        return Errors;
+    }
+
+    /**
      * Create a new instance of the LavaJs library
      *
      * @param {Object} newOptions
@@ -112,6 +101,7 @@ export default class LavaJs extends EventEmitter
     constructor(newOptions) {
         super();
 
+        //noinspection JSUnusedGlobalSymbols
         /**
          * A flag that will be set once the library is ready.
          *
@@ -128,20 +118,20 @@ export default class LavaJs extends EventEmitter
         this.options = newOptions || require('./resources/options.json');
 
         /**
-         * Array of visualization packages for charts and dashboards
+         * Set of visualization packages for {@link Chart}s and {@link Dashboard}s
          *
          * @private
-         * @type {String[]}
+         * @type {Set.<String>}
          */
-        this._packages = [];
+        this._packages = new Set();
 
         /**
          * Array of charts and dashboards stored in the module
          *
          * @private
-         * @type {Renderable[]}
+         * @type {Map.<Renderable>}
          */
-        this._volcano = [];
+        this._volcano = new Map();
 
         /**
          * Ready callback to be called when the module is finished running.
@@ -168,21 +158,21 @@ export default class LavaJs extends EventEmitter
         }
     }
 
+    //noinspection JSUnusedGlobalSymbols,JSMethodCanBeStatic
     /**
      * Create a new {@link DataQuery} for a {@link Renderable}
      *
-     * @param {String|Object} url Corresponds to "dataSourceUrl" in Google's docs or a
-     * @param params
+     * If a String is passed, then a new {@link DataQuery} is created with no options.
+     * If an Object is passed, then the query must be defined by the object.
+     *
+     * @param {String|Object} url
      * @return {DataQuery}
      */
     query(url) {
-        if (typeof url === 'string') {
-            return new DataQuery(url);
-        }
-
         return new DataQuery(url);
     }
 
+    //noinspection JSMethodCanBeStatic
     /**
      * Static method for creating new Charts and Dashboards from a JSON definition.
      *
@@ -221,7 +211,7 @@ export default class LavaJs extends EventEmitter
 
         this._addPackages(renderable.packages);
 
-        this._volcano[renderable.label] = renderable;
+        this._volcano.set(renderable.label, renderable);
 
         //if (this.isReady) {
         //    this.redrawAll();
@@ -248,13 +238,11 @@ export default class LavaJs extends EventEmitter
      * @return {Chart|Dashboard}
      */
     get(label) {
-        let renderable = this._volcano[label];
-
-        if (! renderable) {
+        if (this._volcano.has(label) === false) {
             throw new LavaJs.Errors.RenderableNotFound(label);
         }
 
-        return renderable;
+        return this._volcano.get(label);
     }
 
     /**
@@ -284,7 +272,7 @@ export default class LavaJs extends EventEmitter
         return this
             .init()
             .then(() => {
-                forIn(this._volcano, renderable => {
+                this._volcano.forEach(renderable => {
                     console.log(`[lava.js] Rendering ${renderable.uuid}`);
 
                     renderable.render();
@@ -387,17 +375,15 @@ export default class LavaJs extends EventEmitter
      * @return {void}
      */
     redrawAll() {
-        let renderableCount = Object.keys(this._volcano).length;
-
-        if (renderableCount === 0) {
+        if (this._volcano.size === 0) {
             console.log(`[lava.js] Nothing to redraw.`);
 
             return false;
         }
 
-        console.log(`[lava.js] Redrawing ${renderableCount} renderables.`);
+        console.log(`[lava.js] Redrawing ${this._volcano.size} renderables.`);
 
-        forIn(this._volcano, renderable => {
+        this._volcano.forEach(renderable => {
             console.log(`[lava.js] Redrawing ${renderable.uuid}`);
 
             renderable.draw();
@@ -415,11 +401,13 @@ export default class LavaJs extends EventEmitter
      */
     _addPackages(packages) {
         if (typeof packages === 'string') {
-            this._packages.push(packages);
+            this._packages.add(packages);
         }
 
         if (Utils.getType(packages) === 'Array') {
-            this._packages = this._packages.concat(packages);
+            packages = new Set(packages);
+
+            this._packages = new Set([this._packages, ...packages]);
         }
     }
 
@@ -461,28 +449,36 @@ export default class LavaJs extends EventEmitter
             if (this.googleIsLoaded) {
                 console.log('[lava.js] Static loader found, initializing window.google');
 
-                this._googleChartLoader(resolve);
-            } else {
-                console.log('[lava.js] Static loader not found, appending to head');
-
-                // This will call this._googleChartLoader(resolve);
-                this._addGoogleScriptToHead(resolve);
+                return this._googleChartLoader(resolve);
             }
+
+            console.log('[lava.js] Static loader not found, appending to head');
+
+            return this
+                ._addGoogleScriptToHead()
+                .then(() => {
+                    return this._googleChartLoader(resolve);
+                });
         });
     }
 
     /**
-     * Runs the Google Chart Loader uses the passed Promise resolver as
-     * the setOnLoadCallback
+     * Runs the Google Chart Loader using the passed Promise resolver as
+     * the setOnLoadCallback function.
      *
      * @private
      * @param {Promise.resolve} resolve Promise resolver.
      */
     _googleChartLoader(resolve) {
         const config = {
-            packages: uniq(this._packages),
             language: this.options.locale
         };
+
+        if (this._packages.size > 0) {
+            config.packages = [...this._packages];
+        } else {
+            config.packages = ['corechart'];
+        }
 
         if (this.options.maps_api_key !== '') {
             config.mapsApiKey = this.options.maps_api_key;
@@ -496,28 +492,29 @@ export default class LavaJs extends EventEmitter
     }
 
     /**
-     * Create a new script tag for the Google Static Loader.
+     * Create a new script tag for the Google Static Loader
      *
      * @private
-     * @param {Promise.resolve} resolve Promise resolver.
-     * @returns {HTMLElement}
+     * @returns {Promise}
      */
-    _addGoogleScriptToHead(resolve) {
-        const script = document.createElement('script');
+    _addGoogleScriptToHead() {
+        return new Promise(resolve => {
+            const script = document.createElement('script');
 
-        script.type   = 'text/javascript';
-        script.async  = true;
-        script.src    = LavaJs.GOOGLE_LOADER_URL;
-        script.onload = script.onreadystatechange = event => {
-            event = event || window.event;
+            script.type = 'text/javascript';
+            script.async = true;
+            script.src = LavaJs.GOOGLE_LOADER_URL;
+            script.onload = script.onreadystatechange = event => {
+                event = event || window.event;
 
-            if (event.type === 'load' || (/loaded|complete/.test(script.readyState))) {
-                script.onload = script.onreadystatechange = null;
+                if (event.type === 'load' || (/loaded|complete/.test(script.readyState))) {
+                    script.onload = script.onreadystatechange = null;
 
-                this._googleChartLoader(resolve);
-            }
-        };
+                    resolve();
+                }
+            };
 
-        document.head.appendChild(script);
+            document.head.appendChild(script);
+        });
     }
 }

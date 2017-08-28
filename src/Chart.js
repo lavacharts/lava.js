@@ -1,4 +1,3 @@
-import forIn from 'lodash/forIn';
 import Renderable from './Renderable';
 
 /**
@@ -117,7 +116,7 @@ export default class Chart extends Renderable
      * @return {void}
      */
     _attachEvents() {
-        forIn(this.events, (callback, event) => {
+        this.events.forEach((callback, event) => {
             let context = window;
             let func = callback;
 

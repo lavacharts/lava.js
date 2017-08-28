@@ -26,7 +26,7 @@ function waitsForAndRuns(escapeFunction, runFunction, escapeTime) {
         clearInterval(interval);
         clearTimeout(timeOut);
     }
-};
+}
 
 function getPieChartJson() {
     return {
