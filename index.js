@@ -4,11 +4,13 @@
 import Utils from './src/Utils';
 import LavaJs from './src/LavaJs';
 
+
 /**
- * Assign the LavaJs.js module to the window
- * and attach the console to the module.
+ * Attach the Lava.js module to the window
+ * and create a new instance.
  */
-window.lava = new LavaJs();
+window.LavaJs = LavaJs;
+window.lava = new window.LavaJs();
 
 /**
  * If LavaJs was loaded from Lavacharts, the __OPTIONS__
