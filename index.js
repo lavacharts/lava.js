@@ -5,7 +5,8 @@ import Utils from './src/Utils';
 import LavaJs from './src/LavaJs';
 
 /**
- * Assign the LavaJs.js module to the window.
+ * Assign the LavaJs.js module to the window
+ * and attach the console to the module.
  */
 window.lava = new LavaJs();
 

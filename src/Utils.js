@@ -77,7 +77,7 @@ export default class Utils
      * @return {VizProps}
      */
     static getVizProps(chartType) {
-        const propertyMap = require('./resources/visualization-map.json');
+        const propertyMap = require('../resources/visualization-map.json');
 
         return propertyMap[chartType];
     }
@@ -113,7 +113,6 @@ export default class Utils
         if (Utils.getType(payload.data) === 'Object') {
             payload = payload.data;
 
-            // TODO: if the DataTable has formats, then handle them here.
             return;
         }
 

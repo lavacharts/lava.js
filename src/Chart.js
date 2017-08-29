@@ -53,8 +53,6 @@ export default class Chart extends Renderable
     _setup() {
         this.gchart = new google.visualization[this.class](this.element);
 
-        this._attachEventRelays();
-
         // TODO: append Lavachart defined events?
         // if (this.events) {
         //     this._attachEvents();
@@ -65,7 +63,7 @@ export default class Chart extends Renderable
      * Actions to perform once the {@link Chart} has been drawn
      *
      * This method will have access to window.google since it is called
-     * within the render method.
+     * within the run method.
      *
      * @private
      */
@@ -87,26 +85,6 @@ export default class Chart extends Renderable
 
         this.element.innerHTML = '';
         this.element.appendChild(img);
-    }
-
-    /**
-     * Apply the formats to the DataTable
-     *
-     * @private
-     * @param {Object[]} formats Array of format objects to apply.
-     */
-    _applyFormats(formats) {
-        if (! formats) {
-            formats = this.formats;
-        }
-
-        for (let format of formats) {
-            let formatter = new google.visualization[format.type](format.options);
-
-            console.log(`[lava.js] Column index [${format.index}] formatted with:`, formatter);
-
-            formatter.format(this.data, format.index);
-        }
     }
 
     /**

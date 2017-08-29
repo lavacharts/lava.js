@@ -37,6 +37,13 @@ export default class Renderable extends EventEmitter
         this.gchart = undefined;
 
         /**
+         * Formatters for the DataTable
+         *
+         * @type {Array}
+         */
+        this.formats = json.formats || [];
+
+        /**
          * Type of {@link Renderable}.
          *
          * @type {String}
@@ -78,19 +85,28 @@ export default class Renderable extends EventEmitter
         }
 
         /**
-         * Any dependency on "google" must be within the render scope.
+         * Any dependency on "google" must be within the run() scope.
          *
-         * @return {void}
+         * This will be called after the static loaded has completed
+         * registering window.google
+         *
+         * @return {Promise}
          */
-        this.render = () => {
+        this.run = () => {
             this._setup(json);
 
-            this.setData(json.data || json.datatable)
+            this._attachEventRelays();
+
+            return this.setData(json.data || json.datatable)
                 .then(() => {
+                    if (this.formats) {
+                        this._applyFormats();
+                    }
+
                     this.draw();
                 }).then(() => {
                     if (typeof this._postDraw === 'function') {
-                        console.log(`[lava.js] Running ${this.uuid}#postDraw`);
+                        console.log(`[lava.js] Running ${this.uuid}.postDraw()`);
 
                         this._postDraw();
                     }
@@ -132,12 +148,9 @@ export default class Renderable extends EventEmitter
      * Draws the {@link Chart} / {@link Dashboard} with the predefined data and options.
      *
      * @public
-     * @return {Promise}
      */
     draw() {
         this.gchart.draw(this.data, this.options);
-
-        return Promise.resolve();
     }
 
     /**
@@ -166,26 +179,13 @@ export default class Renderable extends EventEmitter
     }
 
     /**
-     * Set the options for the {@link Renderable}.
-     *
-     * @public
-     * @param {Object} options
-     * @return {Renderable}
-     */
-    setOptions(options) {
-        this.options = options;
-
-        return this;
-    }
-
-    /**
      * Attach event emitters onto the google chart to relay the events
      * forward onto the lavachart.
      *
      * The Google Chart and DataTable objects will be passed to the listener
      * callback for interaction.
      *
-     * @private
+     * @protected
      * @return {void}
      */
     _attachEventRelays() {
@@ -202,5 +202,24 @@ export default class Renderable extends EventEmitter
                 this.gchart, event, () => this.emit(event, this.gchart, this.data)
             );
         });
+    }
+
+    /**
+     * Apply the formats to the DataTable
+     *
+     * @protected
+     */
+    _applyFormats() {
+        for (let format of this.formats) {
+            let formatter = new google.visualization[format.type](format.options);
+
+            console.log(
+                `[lava.js] Formatting ${this.uuid}.`,
+                `Column [${format.index}] now formatted with:`,
+                formatter
+            );
+
+            formatter.format(this.data, format.index);
+        }
     }
 }

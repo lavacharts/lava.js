@@ -26,7 +26,6 @@ export default class LavaJs extends EventEmitter
     /**
      * Version of the LavaJs.js module
      *
-     * @public
      * @type {String}
      */
     static get VERSION() {
@@ -36,7 +35,6 @@ export default class LavaJs extends EventEmitter
     /**
      * Version of the Google charts API to load
      *
-     * @public
      * @type {String}
      */
     static get GOOGLE_API_VERSION() {
@@ -46,7 +44,6 @@ export default class LavaJs extends EventEmitter
     /**
      * Urls to Google's static loader
      *
-     * @public
      * @type {String}
      */
     static get GOOGLE_LOADER_URL() {
@@ -54,9 +51,30 @@ export default class LavaJs extends EventEmitter
     }
 
     /**
-     * Static accessor for the {@link Chart} class
+     * Throwable errors for the LavaJs module
+     *
+     * @type {Errors}
+     */
+    get G() {
+        return {
+            c: this._google.charts,
+            v: this._google.visualization
+        };
+    }
+
+    /**
+     * Static accessor for the {@link Renderable} class
      *
      * @class
+     * @type {Renderable}
+     */
+    static get Renderable() {
+        return Renderable;
+    }
+
+    /**
+     * Static accessor for the {@link Chart} class
+     *
      * @type {Chart}
      */
     static get Chart() {
@@ -66,7 +84,6 @@ export default class LavaJs extends EventEmitter
     /**
      * Static accessor for the {@link Dashboard} class
      *
-     * @class
      * @type {Dashboard}
      */
     static get Dashboard() {
@@ -76,7 +93,6 @@ export default class LavaJs extends EventEmitter
     /**
      * Static accessor for the {@link DataQuery} class
      *
-     * @class
      * @type {DataQuery}
      */
     static get DataQuery() {
@@ -86,7 +102,6 @@ export default class LavaJs extends EventEmitter
     /**
      * Throwable errors for the LavaJs module
      *
-     * @class
      * @type {Errors}
      */
     static get Errors() {
@@ -101,21 +116,13 @@ export default class LavaJs extends EventEmitter
     constructor(newOptions) {
         super();
 
-        //noinspection JSUnusedGlobalSymbols
-        /**
-         * A flag that will be set once the library is ready.
-         *
-         * @type {Boolean}
-         */
-        this.isReady = false;
-
         /**
          * JSON object of config items
          *
          * @public
          * @type {Object}
          */
-        this.options = newOptions || require('./resources/options.json');
+        this.options = newOptions || require('../resources/options.json');
 
         /**
          * Set of visualization packages for {@link Chart}s and {@link Dashboard}s
@@ -142,20 +149,87 @@ export default class LavaJs extends EventEmitter
         this._readyCallback = undefined;
     }
 
+    //noinspection JSMethodCanBeStatic
+    /**
+     * Flag that will be true once window.google is available in page.
+     *
+     * @public
+     * @return {Boolean}
+     */
+    get googleIsLoaded() {
+        return typeof window.google !== 'undefined';
+    }
+
     /**
      * Flag that will be true once Google's Static Loader is in page.
      *
      * @public
      * @return {Boolean}
      */
-    get googleIsLoaded() {
+    get googleLoaderInPage() {
         const scripts = document.getElementsByTagName('script');
 
-        for (let script of scripts) {
+        for (const script of scripts) {
             if (script.src === this.GOOGLE_LOADER_URL) {
                 return true;
             }
         }
+    }
+
+    /**
+     * Initializes the library by loading google to the window.
+     *
+     * @public
+     * @return {Promise}
+     */
+    init() {
+        if (this.googleIsLoaded) {
+            return Promise.resolve();
+        }
+
+        return this
+            ._loadGoogle()
+            .then(() => {
+                console.log('[lava.js] Google is ready:');
+            });
+    }
+
+    /**
+     * Runs the LavaJs.js module
+     *
+     * @public
+     * @emits {ready}
+     * @return {Promise}
+     */
+    run() {
+        console.log(`[lava.js] v${LavaJs.VERSION} Running...`);
+        console.log('[lava.js] Loading options:', this.options);
+
+        this._attachRedrawHandler();
+
+        return this
+            .init()
+            .then(() => {
+                const runPromises = [];
+
+                this._volcano.forEach(renderable => {
+                    console.log(`[lava.js] Rendering ${renderable.uuid}`);
+
+                    runPromises.push(
+                        renderable.run()
+                    );
+                });
+
+                return Promise.all(runPromises);
+            }).then(() => {
+                console.log('[lava.js] Ready!');
+
+                this.emit('ready');
+
+                if (typeof this._readyCallback === 'function') {
+                    this._readyCallback();
+                }
+            });
     }
 
     //noinspection JSUnusedGlobalSymbols,JSMethodCanBeStatic
@@ -184,7 +258,7 @@ export default class LavaJs extends EventEmitter
      * @return {Chart|Dashboard}
      */
     create(json) {
-        console.log(`Creating a new ${json.type}:`, json);
+        console.log(`[lava.js] Creating a new ${json.type}:`, json);
 
         if (json.type === 'Dashboard') {
             return new LavaJs.Dashboard(json);
@@ -203,7 +277,7 @@ export default class LavaJs extends EventEmitter
      * @return {Chart|Dashboard} The {@link Chart} / {@link Dashboard} that was just stored.
      */
     store(renderable) {
-        if (renderable instanceof Renderable === false) {
+        if (renderable instanceof LavaJs.Renderable === false) {
             renderable = this.create(renderable);
         }
 
@@ -243,53 +317,6 @@ export default class LavaJs extends EventEmitter
         }
 
         return this._volcano.get(label);
-    }
-
-    /**
-     * Initializes the library by loading google to the window.
-     *
-     * @return {Promise}
-     */
-    init() {
-        return this._loadGoogle().then(() => {
-            console.log('[lava.js] Google is ready.');
-        });
-    }
-
-    /**
-     * Runs the LavaJs.js module
-     *
-     * @public
-     * @emits {ready}
-     * @return {Promise}
-     */
-    run() {
-        console.log('[lava.js] Running...');
-        console.log('[lava.js] Loading options:', this.options);
-
-        this._attachRedrawHandler();
-
-        return this
-            .init()
-            .then(() => {
-                this._volcano.forEach(renderable => {
-                    console.log(`[lava.js] Rendering ${renderable.uuid}`);
-
-                    renderable.render();
-                });
-            }).then(() => {
-                console.log('[lava.js] Ready; Firing "ready" event.');
-
-                this.isReady = true;
-
-                this.emit('ready');
-
-                if (typeof this._readyCallback === 'function') {
-                    console.log('[lava.js] Running lava.ready(callback);');
-
-                    this._readyCallback();
-                }
-            });
     }
 
     /**
@@ -358,7 +385,7 @@ export default class LavaJs extends EventEmitter
     loadOptions(label, json, callback) { //TODO: test this
         const chart = this.get(label);
 
-        chart.setOptions(json);
+        chart.options = json;
         chart.draw();
 
         if (typeof callback === 'function') {
@@ -412,54 +439,27 @@ export default class LavaJs extends EventEmitter
     }
 
     /**
-     * Attach a listener to the window resize event for redrawing the charts.
-     *
-     * @private
-     * @return {void}
-     */
-    _attachRedrawHandler() {
-        if (this.options.responsive === true) {
-            let debounced = null;
-
-            Utils.addEvent(window, 'resize', () => {
-                // let redraw = this.redrawAll().bind(this);
-
-                clearTimeout(debounced);
-
-                debounced = setTimeout(() => {
-                    console.log('[lava.js] Window re-sized, redrawing...');
-
-                    // redraw();
-                    this.redrawAll()
-                }, this.options.debounce_timeout);
-            });
-        }
-    }
-
-    /**
      * Load the Google Static Loader and resolve the promise when ready.
      *
      * @private
      * @return {Promise}
      */
     _loadGoogle() {
-        return new Promise(resolve => {
-            console.log('[lava.js] Resolving Google...');
+        console.log('[lava.js] Resolving Google...');
 
-            if (this.googleIsLoaded) {
-                console.log('[lava.js] Static loader found, initializing window.google');
+        if (this.googleLoaderInPage) {
+            console.log('[lava.js] Static loader found, initializing window.google');
 
-                return this._googleChartLoader(resolve);
-            }
+            return this._googleChartLoader();
+        }
 
-            console.log('[lava.js] Static loader not found, appending to head');
+        console.log('[lava.js] Static loader not found, appending to head');
 
-            return this
-                ._addGoogleScriptToHead()
-                .then(() => {
-                    return this._googleChartLoader(resolve);
-                });
-        });
+        return this
+            ._addGoogleScriptToHead()
+            .then(() => {
+                return this._googleChartLoader();
+            });
     }
 
     /**
@@ -467,28 +467,26 @@ export default class LavaJs extends EventEmitter
      * the setOnLoadCallback function.
      *
      * @private
-     * @param {Promise.resolve} resolve Promise resolver.
+     * @return {Promise}
      */
-    _googleChartLoader(resolve) {
-        const config = {
-            language: this.options.locale
-        };
+    _googleChartLoader() {
+        return new Promise(resolve => {
+            const config = {
+                language: this.options.locale
+            };
 
-        if (this._packages.size > 0) {
-            config.packages = [...this._packages];
-        } else {
-            config.packages = ['corechart'];
-        }
+            config.packages = this._packages.size > 0 ? [...this._packages] : ['corechart'];
 
-        if (this.options.maps_api_key !== '') {
-            config.mapsApiKey = this.options.maps_api_key;
-        }
+            if (this.options.maps_api_key !== '') {
+                config.mapsApiKey = this.options.maps_api_key;
+            }
 
-        console.log('[lava.js] Loading Google with config:', config);
+            console.log('[lava.js] Loading Google with config:', config);
 
-        google.charts.load(LavaJs.GOOGLE_API_VERSION, config);
+            google.charts.load(LavaJs.GOOGLE_API_VERSION, config);
 
-        google.charts.setOnLoadCallback(resolve);
+            google.charts.setOnLoadCallback(resolve);
+        });
     }
 
     /**
@@ -516,5 +514,30 @@ export default class LavaJs extends EventEmitter
 
             document.head.appendChild(script);
         });
+    }
+
+    /**
+     * Attach a listener to the window resize event for redrawing the charts.
+     *
+     * @private
+     * @return {void}
+     */
+    _attachRedrawHandler() {
+        if (this.options.responsive === true) {
+            let debounced = null;
+
+            Utils.addEvent(window, 'resize', () => {
+                // let redraw = this.redrawAll().bind(this);
+
+                clearTimeout(debounced);
+
+                debounced = setTimeout(() => {
+                    console.log('[lava.js] Window re-sized, redrawing...');
+
+                    // redraw();
+                    this.redrawAll()
+                }, this.options.debounce_timeout);
+            });
+        }
     }
 }
