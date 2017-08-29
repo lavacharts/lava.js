@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>Lava.js | DataQuery</title>
+    <title>Lava.js | Formats</title>
     <script type="text/javascript" src="../dist/lava.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <style rel="stylesheet" type="text/css">
@@ -53,30 +53,37 @@
                 LavaJs v4.0
             </div>
             <p>Google Charts, made simple.</p>
-            <p>Seamlessly using <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vSaBRPszcwawoBNxw6yLNPDS-H7KP4bPX7tk1mzDzwVxpWEmhJ10Pd074Nft1ZEcYlVP4OiGkR1RCV7/pubhtml">
-                Querying Google Sheets
-            </a>.</p>
-            <p><a href="index.html">Basic</a>, <a href="formats.html">Formats</a>, <a href="events.html">Events</a></p>
+            <p>(Hover over a data point.)</p>
+            <p><a href="index.html">Basic</a>, <a href="events.html">Events</a>, <a href="dataquery.html">Remote Data</a></p>
 
             <div>
                 <div class="align-left float">
                     <pre><code>
-var sheetRoot = 'https://docs.google.com/spreadsheets/d/';
-var id = '1DwWSti6L3KRyJC0Wi33X3i-6lsZ2iStrhK7sxw7uoek';
-var queryStr = '/gviz/tq?range=A1:B6';
-
 var chartJson = {
     label: 'Test',
-    type: 'PieChart',
+    type: 'ScatterChart',
     elementId: 'chart_div',
-    datatable: lava.query(
-        sheetRoot + id + queryStr
-    ),
+    datatable: [
+        ['Age', 'Cash'],
+        [12,  101],
+        [15,  240],
+        [18,  280],
+        [32,  324]
+    ],
     options: {
-        width: 400,
-        height: 240,
-        is3D: true
-    }
+        colors: ['green'],
+        chartArea: {width: '50%'}
+    },
+    formats: [
+        {
+            type: 'NumberFormat',
+            index: 1, // DataTable Column
+            options: {
+                prefix: '$',
+                suffix: ' BILLS!'
+            }
+        }
+    ]
 };
 
 lava.store(chartJson);
@@ -85,32 +92,40 @@ lava.run();
                 </div>
                 <div class="float" style="width: 400px;">
                     <pre><code>
-&#x3C;div id=&#x22;my-pie-chart&#x22;&#x3E;&#x3C;/div&#x3E;
+&#x3C;div id=&#x22;chart_div&#x22;&#x3E;&#x3C;/div&#x3E;
                     </code></pre>
                     <div id="chart_div"></div>
                 </div>
             </div>
         </div>
-
     </div>
 
     <script type="text/javascript">
-        var sheetRoot = 'https://docs.google.com/spreadsheets/d/';
-        var id = '1DwWSti6L3KRyJC0Wi33X3i-6lsZ2iStrhK7sxw7uoek';
-        var queryStr = '/gviz/tq?range=A1:B6';
-
         var chartJson = {
             label: 'Test',
-            type: 'PieChart',
+            type: 'ScatterChart',
             elementId: 'chart_div',
-            datatable: lava.query(
-                sheetRoot + id + queryStr
-            ),
+            datatable: [
+                ['Age', 'Cash'],
+                [12,  101],
+                [15,  240],
+                [18,  280],
+                [32,  324]
+            ],
             options: {
-                width: 400,
-                height: 240,
-                is3D: true
-            }
+                colors: ['green'],
+                chartArea: {width: '50%'}
+            },
+            formats: [
+                {
+                    type: 'NumberFormat',
+                    index: 1, // DataTable Column
+                    options: {
+                        prefix: '$',
+                        suffix: ' BILLS!'
+                    }
+                }
+            ]
         };
 
         lava.store(chartJson);

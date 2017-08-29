@@ -29,10 +29,9 @@ describe('LavaJs.js Test Suite', function () {
             expect(chart.element).to.be.instanceOf(HTMLElement);
             expect(chart.data).to.be.undefined;
             expect(chart.gchart).to.be.undefined;
-            expect(typeof chart.render).to.equal('function');
+            expect(typeof chart.run).to.equal('function');
             expect(typeof chart.draw).to.equal('function');
             expect(typeof chart.setData).to.equal('function');
-            expect(typeof chart.setOptions).to.equal('function');
         });
 
         it('Should have a Google Chart and DataTable after lava.run().', function () {
