@@ -24,7 +24,8 @@ let bundler = browserify({
         ['babelify', {
             "presets": ['env', 'es2015']
         }]
-    ]
+    ],
+    plugins: ["transform-runtime"]
 });
 
 function rebundle(prod = false) {
