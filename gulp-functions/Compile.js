@@ -1,12 +1,14 @@
 import args from 'yargs';
 import gulpif from 'gulp-if';
 import source from 'vinyl-source-stream';
+import buffer from 'vinyl-buffer';
 import notifier from 'node-notifier';
 import browserify from 'browserify';
 import uglify from 'gulp-uglify';
 import rename from 'gulp-rename';
 import watchify from 'watchify';
 import streamify from 'gulp-streamify';
+import sourcemaps from 'gulp-sourcemaps';
 import {dest} from 'gulp';
 import {log} from 'gulp-util';
 import {green, red} from 'chalk';
@@ -22,7 +24,8 @@ let bundler = browserify({
     transform:    [
         'browserify-versionify',
         ['babelify', {
-            "presets": ['env', 'es2015']
+            presets: ['env', 'es2015'],
+            sourceMapsAbsolute: true
         }]
     ],
     plugins: ["transform-runtime"]
@@ -41,8 +44,11 @@ function rebundle(prod = false) {
             }
         })
         .pipe(source('lava.js'))
-        .pipe(gulpif(prod, streamify(uglify())))
+        .pipe(buffer())
+        .pipe(gulpif(prod, sourcemaps.init({loadMaps: true})))
         .pipe(gulpif(prod, rename('lava.min.js')))
+        .pipe(gulpif(prod, streamify(uglify())))
+        .pipe(gulpif(prod, sourcemaps.write('./')))
         .pipe(dest('dist'));
 }
 
@@ -61,7 +67,7 @@ export default function compile(prod, watch, sync) {
         }
 
         bundler.on('update', () => {
-            const msg = 'LavaJs.js re-bundling...';
+            const msg = 'lava.js re-bundling...';
 
             log(green(msg));
 

@@ -22,6 +22,50 @@ export default class Renderable extends EventEmitter
         super();
 
         /**
+         * Unique label for the {@link Chart} / {@link Dashboard}.
+         *
+         * @type {String}
+         */
+        this.label = json.label;
+
+        /**
+         * Type of {@link Renderable}.
+         *
+         * @type {String}
+         */
+        this.type = json.type;
+
+        /**
+         * Configurable options.
+         *
+         * @type {Array}
+         */
+        this.options = json.options;
+
+        /**
+         * Formatters for the DataTable
+         *
+         * @type {Array}
+         */
+        this.formats = json.formats;
+
+        /**
+         * Element ID of the DOM node for the container.
+         *
+         * @private
+         * @type {String}
+         */
+        this._elementId = json.elementId || json.elemId || json.containerId;
+
+        /**
+         * The source of the DataTable, to be used in setData().
+         *
+         * @private
+         * @type {*}
+         */
+        this._dataSrc = json.data || json.datatable;
+
+        /**
          * DataTable for the {@link Chart} / {@link Dashboard}.
          *
          * @type {DataTable}
@@ -37,81 +81,12 @@ export default class Renderable extends EventEmitter
         this.gchart = undefined;
 
         /**
-         * Formatters for the DataTable
-         *
-         * @type {Array}
-         */
-        this.formats = json.formats || [];
-
-        /**
-         * Type of {@link Renderable}.
-         *
-         * @type {String}
-         */
-        this.type = json.type;
-
-        /**
-         * Unique label for the {@link Chart} / {@link Dashboard}.
-         *
-         * @type {String}
-         */
-        this.label = json.label;
-
-        /**
-         * Configurable options for the {@link Chart} / {@link Dashboard}.
-         *
-         * @type {Array}
-         */
-        this.options = json.options;
-
-        /**
-         * Element ID of the DOM node in which to render the {@link Chart} / {@link Dashboard}.
-         *
-         * @type {String}
-         */
-        this.elementId = json.elementId || json.elemId || json.containerId;
-
-        /**
-         * The Element in which the Renderable will be drawn.
+         * The HTMLElement in which the Renderable will be drawn.
          *
          * @public
          * @type {HTMLElement}
          */
-        this.element = document.getElementById(this.elementId);
-
-        // If the ID of the element was not found, throw an error.
-        if (! this.element) {
-            throw new LavaJs.Errors.ElementIdNotFound(this.elementId);
-        }
-
-        /**
-         * Any dependency on "google" must be within the run() scope.
-         *
-         * This will be called after the static loaded has completed
-         * registering window.google
-         *
-         * @return {Promise}
-         */
-        this.run = () => {
-            this._setup(json);
-
-            this._attachEventRelays();
-
-            return this.setData(json.data || json.datatable)
-                .then(() => {
-                    if (this.formats) {
-                        this._applyFormats();
-                    }
-
-                    this.draw();
-                }).then(() => {
-                    if (typeof this._postDraw === 'function') {
-                        console.log(`[lava.js] Running ${this.uuid}.postDraw()`);
-
-                        this._postDraw();
-                    }
-                });
-        };
+        this.container = document.getElementById(this._elementId);
     }
 
     /**
@@ -143,6 +118,42 @@ export default class Renderable extends EventEmitter
     get uuid() {
         return this.type + '::' + this.label;
     }
+
+    //noinspection JSUnusedGlobalSymbols
+    /**
+     * Run the setup and draw the chart.
+     *
+     * Any dependency on "google" must be within the run() scope.
+     *
+     * This will be called after the static loaded has completed
+     * registering window.google
+     *
+     * @return {Promise}
+     */
+    run() {
+        if (! this.container) {
+            throw new LavaJs.Errors.ElementIdNotFound(this._elementId);
+        }
+
+        this._setup();
+
+        this._attachEventRelays();
+
+        return this.setData(this._dataSrc)
+            .then(() => {
+                if (this.formats) {
+                    this.applyFormats();
+                }
+
+                this.draw();
+            }).then(() => {
+                if (typeof this._postDraw === 'function') {
+                    console.log(`[lava.js] Running ${this.uuid}.postDraw()`);
+
+                    this._postDraw();
+                }
+            });
+    };
 
     /**
      * Draws the {@link Chart} / {@link Dashboard} with the predefined data and options.
@@ -179,6 +190,30 @@ export default class Renderable extends EventEmitter
     }
 
     /**
+     * Apply the formats to the DataTable
+     *
+     * @public
+     * @param {?Array.<Object>} formats
+     */
+    applyFormats(formats) {
+        if (formats) {
+            this.formats = formats;
+        }
+
+        for (let format of this.formats) {
+            let formatter = new google.visualization[format.type](format.options);
+
+            console.log(
+                `[lava.js] Formatting ${this.uuid}.`,
+                `Column [${format.index}] now formatted with:`,
+                formatter
+            );
+
+            formatter.format(this.data, format.index);
+        }
+    }
+
+    /**
      * Attach event emitters onto the google chart to relay the events
      * forward onto the lavachart.
      *
@@ -202,24 +237,5 @@ export default class Renderable extends EventEmitter
                 this.gchart, event, () => this.emit(event, this.gchart, this.data)
             );
         });
-    }
-
-    /**
-     * Apply the formats to the DataTable
-     *
-     * @protected
-     */
-    _applyFormats() {
-        for (let format of this.formats) {
-            let formatter = new google.visualization[format.type](format.options);
-
-            console.log(
-                `[lava.js] Formatting ${this.uuid}.`,
-                `Column [${format.index}] now formatted with:`,
-                formatter
-            );
-
-            formatter.format(this.data, format.index);
-        }
     }
 }

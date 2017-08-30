@@ -33,7 +33,7 @@ export default class Dashboard extends Renderable
      * @private
      */
     _setup() {
-        this.gchart = new google.visualization.Dashboard(this.element);
+        this.gchart = new google.visualization.Dashboard(this.container);
 
         this._attachBindings();
     }

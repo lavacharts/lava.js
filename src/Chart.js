@@ -15,9 +15,9 @@ export default class Chart extends Renderable
      * @param {Object} json JSON object representing a Chart.
      * @example
      * {
-     *     label: "Test",
-     *     type: "PieChart",
-     *     elementId: "my-pie-chart",
+     *     label: 'Test',
+     *     type: 'PieChart',
+     *     elementId: 'my-pie-chart',
      *     datatable: [
      *         ['Task', 'Hours per Day'],
      *         ['Work',     11],
@@ -37,9 +37,9 @@ export default class Chart extends Renderable
         /**
          * If this is set to true, then the {@link Chart} will be output as a PNG
          *
-         * @type {boolean}
+         * @type {Boolean}
          */
-        this.pngOutput = Boolean(json.pngOutput);
+        this.png = Boolean(json.png);
     }
 
     /**
@@ -51,7 +51,7 @@ export default class Chart extends Renderable
      * @private
      */
     _setup() {
-        this.gchart = new google.visualization[this.class](this.element);
+        this.gchart = new google.visualization[this.class](this.container);
 
         // TODO: append Lavachart defined events?
         // if (this.events) {
@@ -68,7 +68,7 @@ export default class Chart extends Renderable
      * @private
      */
     _postDraw() {
-        if (this.pngOutput) {
+        if (this.png) {
             this._drawPng();
         }
     }
@@ -83,8 +83,8 @@ export default class Chart extends Renderable
         let img = document.createElement('img');
             img.src = this.gchart.getImageURI();
 
-        this.element.innerHTML = '';
-        this.element.appendChild(img);
+        this.container.innerHTML = '';
+        this.container.appendChild(img);
     }
 
     /**

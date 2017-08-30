@@ -4,8 +4,9 @@ module.exports = function (config) {
     config.set({
         frameworks: ['mocha', 'sinon-chai'],
         files: [
+            './node_modules/chai-shallow-deep-equal/chai-shallow-deep-equal.js',
+            './test/helpers.js',
             './dist/lava.min.js',
-            './test/testing-utils.js',
             './test/LavaJs.spec.js',
             './test/DataQuery.spec.js'
         ],
@@ -23,7 +24,8 @@ module.exports = function (config) {
         colors: true,
         logLevel: config.LOG_ERROR,
         autoWatch: true,
-        browsers: [(process.env.TRAVIS ? 'PhantomJS' : 'Chrome')],
+        //browsers: [(process.env.TRAVIS ? 'PhantomJS' : 'Chrome')],
+        browsers: ['PhantomJS'],
         plugins: [
             'karma-mocha',
             'karma-sinon',

@@ -1,8 +1,5 @@
-/* jshint undef: true, unused: true */
-/* globals sinon, jasmine, describe, it, expect, beforeEach */
-
 /** @test {DataQuery} */
-describe('DataQuery Test Suite', function () {
+describe('DataQuery', function () {
     var sheetRoot = 'https://docs.google.com/spreadsheets/d/';
     var id = '1NrwfHVE0qn3O8HcLDFd71_LepjSDIbrJMglkHZIEifI';
     var queryStr = '/gviz/tq?range=A1:B6';
@@ -10,9 +7,9 @@ describe('DataQuery Test Suite', function () {
     var dataUri = sheetRoot + id + queryStr;
 
     /** @test {DataQuery#constructor} */
-    describe('DataQuery#constructor', function () {
+    describe('constructor', function () {
         it('Should create a new DataQuery from a url.', function () {
-            var dataQuery = lava.query(dataUri);
+            var dataQuery = new lava.query(dataUri);
 
             expect(dataQuery.url).to.equal(dataUri);
             expect(dataQuery.opts).to.be.an('object').that.is.empty;
@@ -55,7 +52,7 @@ describe('DataQuery Test Suite', function () {
     });
 
     /** @test {DataQuery#send} */
-    describe('DataQuery#send', function () {
+    describe('send', function () {
         //it('Should receive a valid response.', function (done) {
         //    var dataQuery = lava.query(dataUri);
         //
