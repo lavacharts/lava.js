@@ -5,18 +5,13 @@
     "type": "object",
     "required": [
         "type",
-        "class",
         "label",
-        "packages",
         "elementId",
         "datatable"
     ],
     "properties": {
-        "class": {
+        "type": {
             "type": "string"
-        },
-        "datatable": {
-            "type": "object"
         },
         "elementId":  {
             "type": "string"
@@ -24,17 +19,14 @@
         "label": {
             "type": "string"
         },
+        "data": {
+            "type": "object"
+        },
         "options": {
             "type": "object"
         },
-        "packages": {
-            "type": "array"
-        },
-        "pngOutput": {
+        "png": {
             "type": "boolean"
-        },
-        "type": {
-            "type": "string"
         },
         "events": {
             "type": "array"

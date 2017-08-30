@@ -25,7 +25,7 @@ export default class LavaJs extends EventEmitter
 {
     //noinspection JSUnusedGlobalSymbols
     /**
-     * Version of the LavaJs.js module
+     * Version of the LavaJs module
      *
      * @type {String}
      */
@@ -49,18 +49,6 @@ export default class LavaJs extends EventEmitter
      */
     static get GOOGLE_LOADER_URL() {
         return 'https://www.gstatic.com/charts/loader.js';
-    }
-
-    /**
-     * Throwable errors for the LavaJs module
-     *
-     * @type {Errors}
-     */
-    get G() {
-        return {
-            c: this._google.charts,
-            v: this._google.visualization
-        };
     }
 
     /**
@@ -185,13 +173,15 @@ export default class LavaJs extends EventEmitter
      */
     init() {
         if (this.googleIsLoaded) {
-            return Promise.resolve();
+            return Promise.resolve(window.google);
         }
 
         return this
             ._loadGoogle()
             .then(() => {
                 console.log('[lava.js] Google is ready:');
+
+                return window.google;
             });
     }
 
@@ -230,6 +220,8 @@ export default class LavaJs extends EventEmitter
                 if (typeof this._readyCallback === 'function') {
                     this._readyCallback();
                 }
+
+                return this;
             });
     }
 
@@ -358,7 +350,7 @@ export default class LavaJs extends EventEmitter
 
         chart.setData(json);
 
-        if (typeof json.formats !== 'undefined') {
+        if (json.formats) {
             chart.applyFormats(json.formats);
         }
 

@@ -1,3 +1,18 @@
+before(function () {
+    window.testdiv = document.createElement('div');
+    testdiv.id = 'test-chart';
+
+    document.body.appendChild(window.testdiv);
+});
+
+beforeEach(function () {
+    window.lava = new LavaJs();
+});
+
+after(function () {
+    document.body.removeChild(window.testdiv);
+});
+
 function getPieChartJson() {
     return {
         label: 'MyCoolChart',
@@ -30,6 +45,17 @@ function getDataTableJson() {
     };
 }
 
+function getNumberFormat(index) {
+    return {
+        type: 'NumberFormat',
+            index: index,
+            options: {
+            prefix: '$',
+                suffix: ' BILLS!'
+        }
+    }
+}
+
 function getDataTableArray() {
     return [
         ['Task', 'Hours per Day'],
@@ -50,11 +76,3 @@ function getOptions() {
         }
     };
 }
-
-window.utils = {
-    getPieChartJson:   getPieChartJson,
-    getDataTableJson:  getDataTableJson,
-    getDataTableArray: getDataTableArray,
-    getOptions:        getOptions
-};
-

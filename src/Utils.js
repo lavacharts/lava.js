@@ -109,7 +109,7 @@ export default class Utils
         }
 
         // If a php DataTable->toJson() payload is received, with formatted columns,
-        // then payload.data will be defined, and used as the DataTable
+        // then payload.data will be defined. Use this as the DataTable.
         if (Utils.getType(payload.data) === 'Object') {
             payload = payload.data;
 
