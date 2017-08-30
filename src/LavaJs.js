@@ -1,7 +1,7 @@
 /* jshint browser:true */
 /* globals google */
 
-import 'babel-polyfill';
+//import 'babel-polyfill';
 import EventEmitter from 'events';
 import Utils from './Utils';
 import Errors from './Errors'

@@ -1,5 +1,4 @@
 /* jshint undef: true, unused: true */
-/* globals sinon, jasmine, describe, it, expect, beforeEach */
 
 /** @test {LavaJs} */
 describe('LavaJs.js Test Suite', function () {

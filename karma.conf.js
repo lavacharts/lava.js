@@ -14,14 +14,7 @@ module.exports = function (config) {
                 includeStack: true
             },
             mocha: {
-                // change Karma's debug.html to the mocha web reporter
-                reporter: 'html',
-
-                // require specific files after Mocha is initialized
-                //require: [require.resolve('mocha-sinon')],
-
-                // custom ui, defined in required file above
-                //ui: 'bdd-lazy-var/global',
+                reporter: 'html'
             }
         },
         singleRun: false,
