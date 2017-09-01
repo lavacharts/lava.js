@@ -186,6 +186,10 @@ export default class Renderable extends EventEmitter
             }
         }).then(data => {
             this.data = data;
+
+            if (payload.formats) {
+                this.applyFormats(payload.formats);
+            }
         });
     }
 

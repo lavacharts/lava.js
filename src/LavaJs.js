@@ -349,11 +349,6 @@ export default class LavaJs extends EventEmitter
         const chart = this.get(label);
 
         chart.setData(json);
-
-        if (json.formats) {
-            chart.applyFormats(json.formats);
-        }
-
         chart.draw();
 
         if (typeof callback === 'function') {
