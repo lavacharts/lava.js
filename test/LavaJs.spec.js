@@ -10,30 +10,6 @@ describe('LavaJs', function () {
         });
     });
 
-    /** @test {LavaJs#query} */
-    describe('query', function () {
-        var testUrl = 'http://not.a.real.url.com';
-
-        it('should create a new DataQuery from string URL.', function () {
-            var query = lava.query(testUrl);
-
-            expect(query).to.be.instanceOf(LavaJs.DataQuery);
-            expect(query.url).to.be.equal(testUrl);
-        });
-
-        it('should create a new DataQuery from an Object.', function () {
-            var dataQuery = lava.query({
-                url:   testUrl,
-                opts:  {option:'value'},
-                query: function(q){return q}
-            });
-
-            expect(dataQuery.url).to.equal(testUrl);
-            expect(dataQuery.opts).to.be.an('object').that.include({option:'value'});
-            expect(dataQuery.query).to.be.a('function');
-        });
-    });
-
     /** @test {LavaJs#create} */
     describe('create', function () {
         it('should create a new Chart from a JSON payload.', function () {
@@ -145,9 +121,33 @@ describe('LavaJs', function () {
         });
     });
 
+    /** @test {LavaJs#query} */
+    describe('query', function () {
+        var testUrl = 'http://not.a.real.url.com';
+
+        it('should create a new DataQuery from string URL.', function () {
+            var query = lava.query(testUrl);
+
+            expect(query).to.be.instanceOf(LavaJs.DataQuery);
+            expect(query.url).to.be.equal(testUrl);
+        });
+
+        it('should create a new DataQuery from an Object.', function () {
+            var dataQuery = lava.query({
+                url:   testUrl,
+                opts:  {option:'value'},
+                query: function(q){return q}
+            });
+
+            expect(dataQuery.url).to.equal(testUrl);
+            expect(dataQuery.opts).to.be.an('object').that.include({option:'value'});
+            expect(dataQuery.query).to.be.a('function');
+        });
+    });
+
     /** @test {LavaJs#loadData} */
     describe('loadData', function () {
-        var lavaRunSpy, chartSetDataSpy, chartDrawSpy, chartApplyFormatsSpy, chart;
+        var chart, lavaRunSpy, chartSetDataSpy, chartDrawSpy, chartApplyFormatsSpy;
 
         var data = getDataTableJson();
         var formattedData = {
@@ -171,44 +171,46 @@ describe('LavaJs', function () {
         describe('with JSON', function () {
             describe('and no formats', function () {
                 it('should update the DataTable.', function () {
-                    return lava.run().then(function () {
-                        assert(chartDrawSpy.calledAfter(lavaRunSpy));
+                    return lava
+                        .run()
+                        .then(function () {
+                            assert(chartDrawSpy.calledAfter(lavaRunSpy));
 
-                        lava.loadData('MyCoolChart', data);
+                            return lava.loadData('MyCoolChart', data, function (newData) {
+                                assert(chartDrawSpy.calledAfter(chartSetDataSpy));
 
-                        assert(chartDrawSpy.calledAfter(chartSetDataSpy));
+                                sinon.assert.calledWith(chartSetDataSpy, data);
 
-                        //sinon.assert.calledWith(chartSetDataSpy, data);
+                                sinon.assert.calledTwice(chartSetDataSpy);
+                                sinon.assert.calledTwice(chartDrawSpy);
 
-                        sinon.assert.calledTwice(chartSetDataSpy);
-                        sinon.assert.calledTwice(chartDrawSpy);
+                                //var chart = lava.get('MyCoolChart');
 
-                        var chart = lava.get('MyCoolChart');
-
-                        expect(chart.data).to.shallowDeepEqual(new google.visualization.DataTable());
-                    });
+                                expect(newData).to.shallowDeepEqual(new google.visualization.DataTable());
+                            });
+                        });
                 });
             });
 
             describe('and with formats', function () {
                 it('should apply the formats while updating the DataTable.', function () {
-                    return lava.run().then(function () {
-                        assert(chartDrawSpy.calledAfter(lavaRunSpy));
+                    return lava
+                        .run()
+                        .then(function () {
+                            assert(chartDrawSpy.calledAfter(lavaRunSpy));
 
-                        lava.loadData('MyCoolChart', formattedData);
+                            return lava.loadData('MyCoolChart', formattedData, function (newData) {
+                                sinon.assert.calledWith(chartSetDataSpy, formattedData);
 
-                        //sinon.assert.calledWith(chartSetDataSpy, formattedData);
+                                sinon.assert.calledOnce(chartApplyFormatsSpy);
 
-                        //sinon.assert.calledOnce(chartApplyFormatsSpy);
+                                assert(chartDrawSpy.calledAfter(chartSetDataSpy));
 
-                        assert(chartDrawSpy.calledAfter(chartSetDataSpy));
+                                sinon.assert.calledTwice(chartSetDataSpy);
+                                sinon.assert.calledTwice(chartDrawSpy);
 
-                        sinon.assert.calledTwice(chartSetDataSpy);
-                        sinon.assert.calledTwice(chartDrawSpy);
-
-                        var chart = lava.get('MyCoolChart');
-
-                        expect(chart.data).to.shallowDeepEqual(new google.visualization.DataTable());
+                                expect(newData).to.shallowDeepEqual(new google.visualization.DataTable());
+                            });
                     });
                 });
             });
@@ -227,54 +229,91 @@ describe('LavaJs', function () {
                 return lava.run().then(function () {
                     assert(chartDrawSpy.calledAfter(lavaRunSpy));
 
-                    lava.loadData('MyCoolChart', arrayData);
+                    lava.loadData('MyCoolChart', arrayData, function () {
+                        sinon.assert.calledWith(chartSetDataSpy, arrayData);
 
-                    sinon.assert.calledWith(chartSetDataSpy, arrayData);
+                        assert(chartDrawSpy.calledAfter(chartSetDataSpy));
 
-                    assert(chartDrawSpy.calledAfter(chartSetDataSpy));
+                        sinon.assert.calledTwice(chartSetDataSpy);
+                        sinon.assert.calledTwice(chartDrawSpy);
 
-                    sinon.assert.calledTwice(chartSetDataSpy);
+                        expect(chart.data).to.shallowDeepEqual(new google.visualization.DataTable());
+                    });
+                });
+            });
+        });
+
+        describe('with a Function', function () {
+            var callbackData = function (data) {
+                data.addColumn('string', 'Topping');
+                data.addColumn('number', 'Slices');
+                data.addRows([
+                    ['Mushrooms', 3],
+                    ['Onions', 1],
+                    ['Olives', 1],
+                    ['Zucchini', 1],
+                    ['Pepperoni', 2]
+                ]);
+            };
+
+            it('should update the DataTable.', function () {
+                return lava.run().then(function () {
+                    assert(chartDrawSpy.calledAfter(lavaRunSpy));
+
+                    lava.loadData('MyCoolChart', callbackData, function () {
+                        sinon.assert.calledWith(chartSetDataSpy, callbackData);
+
+                        assert(chartDrawSpy.calledAfter(chartSetDataSpy));
+
+                        sinon.assert.calledTwice(chartSetDataSpy);
+                        sinon.assert.calledTwice(chartDrawSpy);
+
+                        expect(chart.data).to.shallowDeepEqual(new google.visualization.DataTable());
+                    });
+                });
+            });
+        });
+
+    });
+
+    /** @test {LavaJs#loadOptions} */
+    describe('loadOptions', function() {
+        var chart, lavaRunSpy, chartDrawSpy;
+
+        beforeEach(function () {
+            chart = lava.create(getPieChartJson());
+            options = getOptions();
+
+            lavaRunSpy = sinon.spy(lava, 'run');
+            chartDrawSpy = sinon.spy(chart, 'draw');
+
+            lava.store(chart);
+        });
+
+        it('should load new options into the chart.', function() {
+            expect(chart.options.title).to.equal('My Daily Activities');
+
+            return lava.run().then(function () {
+                assert(chartDrawSpy.calledAfter(lavaRunSpy));
+
+                lava.loadOptions('MyCoolChart', options, function () {
+                    expect(chart.options.title).to.equal('Company Finances');
+
                     sinon.assert.calledTwice(chartDrawSpy);
-
-                    expect(chart.data).to.shallowDeepEqual(new google.visualization.DataTable());
                 });
             });
         });
     });
 
-    describe('loadOptions', function() {
-    //    var chart, options;
-    //
-    //    beforeEach(function()
-    //        chart = getMyCoolChart();
-    //        options = getOptions();
-    //
-    //        sinon.stub(chart, 'setOptions').withArgs(options);
-    //        sinon.stub(chart, 'redraw');
-    //
-    //        lava._volcano = [];
-    //        lava._volcano.push(chart);
-    //    });
-    //
-    //    it('should load new options into the chart.', function() {
-    //         lava.loadOptions('MyCoolChart', options, function (chart) {
-    //            expect(chart.setOptions).toHaveBeenCalledOnce();
-    //            expect(chart.setOptions).toHaveBeenCalledWithExactly(options);
-    //
-    //            expect(chart.redraw).toHaveBeenCalledOnce();
-    //            expect(chart.redraw).toHaveBeenCalledAfter(chart.setOptions);
-    //        });
-    //    });
-    });
+    /** @test {LavaJs#redrawCharts} */
+    describe('redrawAll', function() {
+        it('should be called when the window is resized.', function() {
+            var resizeSpy = sinon.spy(lava, 'redrawAll');
 
-    describe('redrawCharts()', function() {
-    //    it('should be called when the window is resized.', function() {
-    //        var resize = sinon.spy(lava, 'redrawCharts');
-    //
-    //        window.dispatchEvent(new Event('resize'));
-    //
-    //        expect(resize).toHaveBeenCalledOnce();
-    //    });
+            viewport.set(800,600);
+
+            sinon.assert.calledOnce(resizeSpy);
+        });
     });
 
     describe('events', function () {

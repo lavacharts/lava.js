@@ -119,6 +119,27 @@ export default class Renderable extends EventEmitter
         return this.type + '::' + this.label;
     }
 
+    /**
+     * Draws the {@link Chart} / {@link Dashboard} with the predefined data and options.
+     *
+     * @public
+     */
+    draw() {
+        if (typeof this._preDraw === 'function') {
+            console.log(`[lava.js] Running ${this.uuid}.preDraw()`);
+
+            this._preDraw();
+        }
+
+        this.gchart.draw(this.data, this.options);
+
+        if (typeof this._postDraw === 'function') {
+            console.log(`[lava.js] Running ${this.uuid}.postDraw()`);
+
+            this._postDraw();
+        }
+    }
+
     //noinspection JSUnusedGlobalSymbols
     /**
      * Run the setup and draw the chart.
@@ -130,7 +151,7 @@ export default class Renderable extends EventEmitter
      *
      * @return {Promise}
      */
-    run() {
+    async run() {
         if (! this.container) {
             throw new LavaJs.Errors.ElementIdNotFound(this._elementId);
         }
@@ -139,58 +160,40 @@ export default class Renderable extends EventEmitter
 
         this._attachEventRelays();
 
-        return this.setData(this._dataSrc)
-            .then(() => {
-                if (this.formats) {
-                    this.applyFormats();
-                }
+        await this.setData(this._dataSrc);
 
-                this.draw();
-            }).then(() => {
-                if (typeof this._postDraw === 'function') {
-                    console.log(`[lava.js] Running ${this.uuid}.postDraw()`);
+        if (this.formats) {
+            this.applyFormats();
+        }
 
-                    this._postDraw();
-                }
-            });
+        this.draw();
     };
 
     /**
-     * Draws the {@link Chart} / {@link Dashboard} with the predefined data and options.
-     *
-     * @public
-     */
-    draw() {
-        this.gchart.draw(this.data, this.options);
-    }
-
-    /**
-     * Sets the data for the {@link Renderable}.
+     * Sets the {@link DataTable} for the {@link Renderable}.
      *
      * @public
      * @param {Object|Function|Array|DataQuery|DataTable} payload Source of data
      * @return {Promise}
      */
-    setData(payload) {
-        return new Promise(resolve => {
-            if (payload instanceof LavaJs.DataQuery) {
-                console.log(`[lava.js] Sending DataQuery for ${this.uuid}`);
+    async setData(payload) {
+        if (payload instanceof LavaJs.DataQuery) {
+            console.log(`[lava.js] Sending DataQuery for ${this.uuid}`);
 
-                payload.send().then(response => {
-                    console.log(`[lava.js] DataQuery for ${this.uuid} complete.`);
+            const response = await payload.send();
 
-                    resolve(response.getDataTable());
-                });
-            } else {
-                resolve(Utils.createDataTable(payload));
-            }
-        }).then(data => {
-            this.data = data;
+            console.log(`[lava.js] Response received:`, response);
 
-            if (payload.formats) {
-                this.applyFormats(payload.formats);
-            }
-        });
+            this.data = response.getDataTable();
+        } else {
+            this.data = Utils.createDataTable(payload);
+        }
+
+        console.log(`[lava.js] Data set for ${this.uuid}`, this.data);
+
+        if (payload.formats) {
+            this.applyFormats(payload.formats);
+        }
     }
 
     /**
@@ -204,14 +207,11 @@ export default class Renderable extends EventEmitter
             this.formats = formats;
         }
 
-        for (let format of this.formats) {
+        for (const format of this.formats) {
             let formatter = new google.visualization[format.type](format.options);
 
-            console.log(
-                `[lava.js] Formatting ${this.uuid}.`,
-                `Column [${format.index}] now formatted with:`,
-                formatter
-            );
+            console.log(`[lava.js] Formatting data for ${this.uuid}.`);
+            console.log(`[lava.js] Formatting column [${format.index}] with:`, format);
 
             formatter.format(this.data, format.index);
         }

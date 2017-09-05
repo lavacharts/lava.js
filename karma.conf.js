@@ -2,7 +2,7 @@
 
 module.exports = function (config) {
     config.set({
-        frameworks: ['mocha', 'sinon-chai'],
+        frameworks: ['mocha', 'sinon-chai', 'viewport'],
         files: [
             './node_modules/chai-shallow-deep-equal/chai-shallow-deep-equal.js',
             './test/helpers.js',
@@ -30,7 +30,8 @@ module.exports = function (config) {
             'karma-mocha',
             'karma-sinon',
             'karma-sinon-chai',
-            'karma-nightmare',
+            'karma-viewport',
+            //'karma-nightmare',
             'karma-phantomjs-launcher',
             'karma-chrome-launcher'
         ],

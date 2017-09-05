@@ -108,14 +108,6 @@ export default class Utils
             return payload;
         }
 
-        // If a php DataTable->toJson() payload is received, with formatted columns,
-        // then payload.data will be defined. Use this as the DataTable.
-        if (Utils.getType(payload.data) === 'Object') {
-            payload = payload.data;
-
-            return;
-        }
-
         // If the payload is from the php class JoinedDataTable->toJson(), then create
         // two new DataTables and join them with the defined options.
         if (Utils.getType(payload.data) === 'Array') {
@@ -127,6 +119,12 @@ export default class Utils
                 payload.dt2Columns,
                 payload.dt2Columns
             );
+        }
+
+        // If a php DataTable->toJson() payload is received, with formatted columns,
+        // then payload.data will be defined. Use this to create the DataTable.
+        if (Utils.getType(payload.data) === 'Object') {
+            payload = payload.data;
         }
 
         // If we reach here, then it must be standard JSON for creating a DataTable.
