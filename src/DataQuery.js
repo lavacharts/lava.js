@@ -78,7 +78,7 @@ export default class DataQuery
      * @public
      * @return {Promise}
      */
-    send() {
+    async send() {
         let query = new google.visualization.Query(this.url, this.opts);
 
         if (this.query) {

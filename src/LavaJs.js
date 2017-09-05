@@ -171,18 +171,16 @@ export default class LavaJs extends EventEmitter
      * @public
      * @return {Promise}
      */
-    init() {
+    async init() {
         if (this.googleIsLoaded) {
             return Promise.resolve(window.google);
         }
 
-        return this
-            ._loadGoogle()
-            .then(() => {
-                console.log('[lava.js] Google is ready:');
+        await this._loadGoogle();
 
-                return window.google;
-            });
+        console.log('[lava.js] Google is ready:');
+
+        return window.google;
     }
 
     /**
@@ -192,37 +190,41 @@ export default class LavaJs extends EventEmitter
      * @emits {ready}
      * @return {Promise}
      */
-    run() {
+    async run() {
+        const runPromises = [];
+
         console.log(`[lava.js] v${LavaJs.VERSION} Running...`);
         console.log('[lava.js] Loading options:', this.options);
 
         this._attachRedrawHandler();
 
-        return this
-            .init()
-            .then(() => {
-                const runPromises = [];
+        try {
+            await this.init();
+        } catch (error) {
+            this.emit('error', error);
+        }
 
-                this._volcano.forEach(renderable => {
-                    console.log(`[lava.js] Rendering ${renderable.uuid}`);
+        this._volcano.forEach(renderable => {
+            console.log(`[lava.js] Rendering ${renderable.uuid}`);
 
-                    runPromises.push(
-                        renderable.run()
-                    );
-                });
+            runPromises.push(
+                renderable.run()
+            );
+        });
 
-                return Promise.all(runPromises);
-            }).then(() => {
-                console.log('[lava.js] Ready!');
+        try {
+            await Promise.all(runPromises);
+        } catch (error) {
+            this.emit('error', error);
+        }
 
-                this.emit('ready');
+        console.log('[lava.js] Ready!');
 
-                if (typeof this._readyCallback === 'function') {
-                    this._readyCallback();
-                }
+        this.emit('ready');
 
-                return this;
-            });
+        if (typeof this._readyCallback === 'function') {
+            this._readyCallback();
+        }
     }
 
     //noinspection JSUnusedGlobalSymbols,JSMethodCanBeStatic
@@ -263,7 +265,7 @@ export default class LavaJs extends EventEmitter
     /**
      * Stores or creates then stores a {@link Renderable} within the module.
      *
-     * @todo If the library has ran, and is ready, loading new charts will force a redraw of all the currently drawn charts.
+     * @todo If the library has ran, and is ready, loading new charts will force a redrawAll of all the currently drawn charts.
      *
      * @public
      * @param {Object|Renderable} renderable
@@ -345,14 +347,15 @@ export default class LavaJs extends EventEmitter
      * @param {?Function} callback
      * @return {void}
      */
-    loadData(label, json, callback) { //TODO: test this with formats
+    async loadData(label, json, callback) {
         const chart = this.get(label);
 
-        chart.setData(json);
+        await chart.setData(json);
+
         chart.draw();
 
         if (typeof callback === 'function') {
-            callback(chart.gchart, chart.data);
+            callback(chart.data, chart.gchart);
         }
     }
 
@@ -377,7 +380,7 @@ export default class LavaJs extends EventEmitter
         chart.draw();
 
         if (typeof callback === 'function') {
-            callback(chart.gchart, chart.data);
+            callback(chart.data, chart.gchart);
         }
     }
 
@@ -432,22 +435,18 @@ export default class LavaJs extends EventEmitter
      * @private
      * @return {Promise}
      */
-    _loadGoogle() {
+    async _loadGoogle() {
         console.log('[lava.js] Resolving Google...');
 
-        if (this.googleLoaderInPage) {
-            console.log('[lava.js] Static loader found, initializing window.google');
+        if (! this.googleLoaderInPage) {
+            console.log('[lava.js] Static loader not found, appending to head');
 
-            return this._googleChartLoader();
+            await this._addGoogleScriptToHead();
         }
 
-        console.log('[lava.js] Static loader not found, appending to head');
+        console.log('[lava.js] Static loader found, initializing window.google');
 
-        return this
-            ._addGoogleScriptToHead()
-            .then(() => {
-                return this._googleChartLoader();
-            });
+        return this._googleChartLoader();
     }
 
     /**
@@ -483,7 +482,7 @@ export default class LavaJs extends EventEmitter
      * @private
      * @returns {Promise}
      */
-    _addGoogleScriptToHead() {
+    async _addGoogleScriptToHead() {
         return new Promise(resolve => {
             const script = document.createElement('script');
 
@@ -515,15 +514,14 @@ export default class LavaJs extends EventEmitter
             let debounced = null;
 
             Utils.addEvent(window, 'resize', () => {
-                // let redraw = this.redrawAll().bind(this);
+                // let redrawAll = this.redrawAll().bind(this);
 
                 clearTimeout(debounced);
 
                 debounced = setTimeout(() => {
                     console.log('[lava.js] Window re-sized, redrawing...');
 
-                    // redraw();
-                    this.redrawAll()
+                    this.redrawAll();
                 }, this.options.debounce_timeout);
             });
         }
