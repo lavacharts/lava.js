@@ -6,7 +6,7 @@ module.exports = function (config) {
         files: [
             './node_modules/chai-shallow-deep-equal/chai-shallow-deep-equal.js',
             './test/helpers.js',
-            './dist/lava.js',
+            './dist/lava.min.js',
             './test/LavaJs.spec.js',
             './test/DataQuery.spec.js'
         ],
