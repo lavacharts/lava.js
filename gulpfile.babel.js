@@ -90,8 +90,7 @@ gulp.task('renderAll', done => {
  *   gulp charts
  */
 gulp.task('charts', done => {
-    console.log('Available charts for rendering:');
-    console.log(getChartTypes().join(', '));
+    console.log(getChartTypes());
     done();
 });
 

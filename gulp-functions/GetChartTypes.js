@@ -1,20 +1,8 @@
-import { map } from 'lodash';
-import { cwd } from 'process';
-import { resolve } from 'path';
-import { sync as globSync } from 'glob';
+import {readFileSync, realpathSync} from 'fs';
 
 export default function getChartTypes() {
-    let chartTypes = globSync('*.php', {
-        cwd: resolve(cwd(), '../src/Charts/'),
-        nomount: true,
-        ignore: [
-            'Chart.php',
-            'ChartBuilder.php',
-            'ChartFactory.php',
-        ]
-    });
+    const mapPath = realpathSync(__dirname+'/../resources/visualization-map.json');
+    const chartMap = JSON.parse(readFileSync(mapPath));
 
-    return map(chartTypes, chartType => {
-        return chartType.slice(0, -4);
-    });
+    return Object.getOwnPropertyNames(chartMap);
 }
