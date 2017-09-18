@@ -5,7 +5,7 @@
   "homepage": "http://lavacharts.com",
   "author": "Kevin Hill",
   "license": "MIT",
-  "private": true,
+  "private": false,
   "devDependencies": {
     "@angular/core": "^4.2.4",
     "babel-cli": "^6.26.0",
