@@ -24,7 +24,7 @@ let bundler = browserify({
     transform:    [
         'browserify-versionify',
         ['babelify', {
-            presets: ['env', 'es2015'],
+            presets: ['env'],
             sourceMapsAbsolute: true
         }]
     ],
