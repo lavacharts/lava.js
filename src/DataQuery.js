@@ -13,6 +13,8 @@ export default class DataQuery
 {
     /**
      * Create a new DataQuery for a DataTable
+     *
+     * @throws {DataError}
      */
     constructor(url) {
         /**
@@ -45,7 +47,7 @@ export default class DataQuery
 
         // If the this.url is still not a string after .configure(), error out.
         if (typeof this.url !== 'string') {
-            throw new LavaJs.Errors.DataQueryError(
+            throw new LavaJs.Errors.DataError(
                 '"url" is must be a string.'
             );
         }
@@ -58,10 +60,11 @@ export default class DataQuery
      * @param {String}   config.url   Corresponds to "dataSourceUrl" in Google's docs
      * @param {Object}   config.opts  Corresponds to "opt_options" in Google's docs
      * @param {Function} config.query The current query is passed for modification before sending
+     * @throws {DataError}
      */
     configure({url, opts={}, query}) {
         if (! url) {
-            throw new LavaJs.Errors.DataQueryError(
+            throw new LavaJs.Errors.DataError(
                 '"url" is a mandatory parameter for configuring a DataQuery.'
             );
         }

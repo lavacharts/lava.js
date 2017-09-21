@@ -377,7 +377,12 @@ export default class LavaJs extends EventEmitter
         const chart = this.get(label);
 
         chart.options = json;
-        chart.draw();
+
+        try {
+            chart.draw();
+        } catch (error) {
+            this.emit('error', error);
+        }
 
         if (typeof callback === 'function') {
             callback(chart.data, chart.gchart);
