@@ -292,7 +292,7 @@ describe('LavaJs', function () {
             return lava.run().then(function () {
                 assert(chartDrawSpy.calledAfter(lavaRunSpy));
 
-                lava.loadOptions('MyCoolChart', options, function () {
+                lava.loadOptions('MyCoolChart', options, function() {
                     expect(chart.options.title).to.equal('Company Finances');
 
                     sinon.assert.calledTwice(chartDrawSpy);
@@ -301,7 +301,7 @@ describe('LavaJs', function () {
         });
     });
 
-    /** @test {LavaJs#redrawCharts} */
+    /** @test {LavaJs#redrawAll} */
     describe('redrawAll', function() {
         // it('should be called when the window is resized.', function() {
         //     var resizeSpy = sinon.spy(lava, 'redrawAll');

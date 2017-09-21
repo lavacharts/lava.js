@@ -131,6 +131,12 @@ export default class Renderable extends EventEmitter
             this._preDraw();
         }
 
+        if (! this.data) {
+            throw new LavaJs.Errors.DataError(
+                `${this.uuid} Could not draw, data is ${this.data}`
+            );
+        }
+
         this.gchart.draw(this.data, this.options);
 
         if (typeof this._postDraw === 'function') {
@@ -187,6 +193,12 @@ export default class Renderable extends EventEmitter
             this.data = response.getDataTable();
         } else {
             this.data = Utils.createDataTable(payload);
+        }
+
+        if (! this.data) {
+            throw new LavaJs.Errors.DataError(
+                `There was a error setting the data for ${this.uuid}`
+            );
         }
 
         console.log(`[lava.js] Data set for ${this.uuid}`, this.data);
