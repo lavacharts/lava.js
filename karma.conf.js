@@ -1,6 +1,4 @@
-/* jshint node:true */
-
-module.exports = function (config) {
+module.exports = config => {
     config.set({
         frameworks: ['mocha', 'sinon-chai', 'viewport'],
         files: [

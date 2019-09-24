@@ -1,13 +1,29 @@
 {
   "name": "@lavacharts/lava.js",
-  "version": "4.0.0rc1",
+  "version": "4.0.0-beta2",
   "description": "Wrapper library for the Google Chart API",
   "homepage": "http://lavacharts.com",
   "author": "Kevin Hill",
   "license": "MIT",
   "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lavacharts/lava.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lavacharts/lava.js/issues"
+  },
+  "scripts": {
+    "test": "karma start --singleRun",
+    "dev": "yarn gulp dev",
+    "prod": "yarn gulp prod",
+    "watch": "yarn gulp watch"
+  },
   "devDependencies": {
     "@angular/core": "^4.2.4",
+    "@types/node": "^12.7.5",
+    "@typescript-eslint/eslint-plugin": "^2.3.1",
+    "@typescript-eslint/parser": "^2.3.1",
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.0",
@@ -16,16 +32,23 @@
     "babelify": "^7.3.0",
     "bluebird": "^3.5.0",
     "browser-sync": "^2.18.12",
-    "browserify": "^14.4.0",
+    "browserify": "^16.5.0",
     "browserify-replace": "^0.9.0",
     "browserify-versionify": "^1.0.6",
     "chai": "^4.1.1",
     "chai-shallow-deep-equal": "^1.4.6",
-    "esdoc": "^1.0.1",
+    "chalk": "^2.4.2",
+    "esdoc": "^1.1.0",
     "esdoc-standard-plugin": "^1.0.0",
+    "eslint": "^6.4.0",
+    "eslint-config-prettier": "^6.3.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-simple-import-sort": "^4.0.0",
+    "esm": "^3.2.25",
     "gh-pages": "^1.0.0",
     "glob": "^7.1.2",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-babel": "^7.0.0",
     "gulp-connect-php": "^1.0.1",
     "gulp-esdoc": "^0.4.1",
@@ -36,6 +59,7 @@
     "gulp-replace": "^0.6.1",
     "gulp-sourcemaps": "^2.6.1",
     "gulp-streamify": "^1.0.2",
+    "gulp-typescript": "^5.0.1",
     "gulp-uglify": "^1.5.3",
     "gulp-util": "^3.0.8",
     "gulp-watch": "^4.3.11",
@@ -58,26 +82,17 @@
     "nightmare": "^2.10.0",
     "node-notifier": "^5.1.2",
     "portfinder": "^1.0.13",
+    "prettier": "^1.18.2",
     "rxjs": "^5.1.0",
     "sinon": "^1.17.3",
     "sinon-chai": "^2.13.0",
     "stripify": "^6.0.0",
+    "tsify": "^4.0.1",
+    "typescript": "^3.6.3",
     "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0",
+    "vinyl-source-stream": "^2.0.0",
     "watchify": "^3.7.0",
     "yargs": "^3.6.0",
     "zone.js": "^0.8.12"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/lavacharts/lava.js.git"
-  },
-  "bugs": {
-    "url": "https://github.com/lavacharts/lava.js/issues"
-  },
-  "scripts": {
-    "gulp": "./node_modules/.bin/gulp",
-    "test": "./node_modules/.bin/karma start --singleRun",
-    "docs": "./node_modules/.bin/esdoc"
   }
 }
