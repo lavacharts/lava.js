@@ -3,10 +3,15 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>Hello World!</title>
+        <title>LavaJs</title>
     </head>
     <body>
-        <p id="greeting">Loading ...</p>
-        <script src="bundle.js"></script>
+        <p id="test">Loading ...</p>
+        <script src="../dist/lava.js"></script>
+        <script>
+            lava.ready(() => {
+                document.getElementById("test").innerText='lava.js ready';
+            });
+        </script>
     </body>
 </html>

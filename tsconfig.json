@@ -3,7 +3,6 @@
     "strict": true,
     "target": "es5",
     "sourceMap": true,
-    // "outFile": "dist/lava.js",
     "outDir": "./build",
     "allowJs": false,
     "declaration": true,
@@ -12,16 +11,16 @@
     "removeComments": true,
     "esModuleInterop": true,
     "lib": ["dom","es2015"],
-    "moduleResolution": "node",
-    "experimentalDecorators": true
-  },
-  "paths": {
-    "*": ["node_modules/*", "src/types/*"]
+    "resolveJsonModule": true,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "typeRoots": [ "./typings", "./node_modules/@types"]
   },
   "include": [
     "src/**/*"
   ],
   "exclude": [
+    "typings",
     "src/angular",
     "node_modules"
   ]

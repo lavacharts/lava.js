@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@angular/core": "^4.2.4",
+    "@types/lodash-es": "^4.17.3",
     "@types/node": "^12.7.5",
     "@typescript-eslint/eslint-plugin": "^2.3.1",
     "@typescript-eslint/parser": "^2.3.1",
@@ -46,6 +47,7 @@
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-simple-import-sort": "^4.0.0",
     "esm": "^3.2.25",
+    "events": "^3.0.0",
     "gh-pages": "^1.0.0",
     "glob": "^7.1.2",
     "gulp": "^4.0.2",

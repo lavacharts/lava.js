@@ -13,12 +13,24 @@ import Utils from "./Utils";
  * @license   MIT
  */
 export default class Renderable extends EventEmitter {
+  label: any;
+  type: any;
+  options: any;
+  formats: any;
+  _elementId: any;
+  _dataSrc: any;
+  data: undefined;
+  gchart: undefined;
+  container: HTMLElement | null;
+  _preDraw: any;
+  _postDraw: any;
+
   /**
    * Create a new Renderable
    *
    * @param {Object} json
    */
-  constructor(json) {
+  constructor(json: object) {
     super();
 
     /**
@@ -173,6 +185,9 @@ export default class Renderable extends EventEmitter {
     }
 
     this.draw();
+  }
+  _setup() {
+    throw new Error("Method not implemented.");
   }
 
   /**

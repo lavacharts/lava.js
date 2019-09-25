@@ -1,15 +1,13 @@
-/* jshint browser:true */
-/* globals __OPTIONS__ */
+/* eslint:globals __OPTIONS__ */
 
-import LavaJs from "./src/LavaJs";
+import lava from "./src";
 import Utils from "./src/Utils";
 
 /**
  * Attach the Lava.js module to the window
  * and create a new instance.
  */
-window.LavaJs = LavaJs;
-window.lava = new window.LavaJs();
+window.lava = new LavaJs();
 
 /**
  * If LavaJs was loaded from Lavacharts, the __OPTIONS__

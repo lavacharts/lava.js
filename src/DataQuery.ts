@@ -10,6 +10,10 @@ import LavaJs from "./LavaJs";
  * @license   http://opensource.org/licenses/MIT MIT
  */
 export default class DataQuery {
+  url: any;
+  opts: {};
+  query: undefined;
+
   /**
    * Create a new DataQuery for a DataTable
    *
@@ -59,7 +63,7 @@ export default class DataQuery {
    * @param {Function} config.query The current query is passed for modification before sending
    * @throws {DataError}
    */
-  configure({ url, opts = {}, query }) {
+  configure({ url, opts = {}, query }): any {
     if (!url) {
       throw new LavaJs.Errors.DataError(
         '"url" is a mandatory parameter for configuring a DataQuery.'

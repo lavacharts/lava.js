@@ -1,4 +1,5 @@
 import Renderable from "./Renderable";
+import { RenderableTmpl } from "./types";
 
 /**
  * Chart Class
@@ -14,7 +15,6 @@ export default class Chart extends Renderable {
   /**
    * Create a new Chart.
    *
-   * @param {Object} json JSON object representing a Chart.
    * @example
    * {
    *     label: 'Test',
@@ -33,15 +33,15 @@ export default class Chart extends Renderable {
    *     }
    * }
    */
-  constructor(json: any) {
-    super(json);
+  constructor(payload: RenderableTmpl) {
+    super(payload);
 
     /**
      * If this is set to true, then the {@link Chart} will be output as a PNG
      *
      * @type {Boolean}
      */
-    this.png = Boolean(json.png);
+    this.png = Boolean(payload.png);
   }
 
   /**
@@ -52,7 +52,7 @@ export default class Chart extends Renderable {
    *
    * @private
    */
-  _setup() {
+  private setup(): void {
     this.gchart = new google.visualization[this.class](this.container);
 
     // TODO: append Lavachart defined events?
@@ -69,9 +69,9 @@ export default class Chart extends Renderable {
    *
    * @private
    */
-  _postDraw() {
+  private postDraw(): void {
     if (this.png) {
-      this._drawPng();
+      this.drawPng();
     }
   }
 
@@ -81,12 +81,14 @@ export default class Chart extends Renderable {
    * @private
    * @see https://developers.google.com/chart/interactive/docs/printing
    */
-  _drawPng() {
+  private drawPng(): void {
     const img = document.createElement("img");
     img.src = this.gchart.getImageURI();
 
-    this.container.innerHTML = "";
-    this.container.appendChild(img);
+    if (this.container) {
+      this.container.innerHTML = "";
+      this.container.appendChild(img);
+    }
   }
 
   /**
@@ -95,8 +97,8 @@ export default class Chart extends Renderable {
    * @private
    * @return {void}
    */
-  _attachEvents() {
-    this.events.forEach((callback, event) => {
+  _attachEvents(): void {
+    this.events.forEach((callback: Function, event: any) => {
       let context = window;
       let func = callback;
 
