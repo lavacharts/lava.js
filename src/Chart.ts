@@ -53,7 +53,7 @@ export default class Chart extends Renderable {
    * @private
    */
   private setup(): void {
-    this.gchart = new google.visualization[this.class](this.container);
+    this.gchart = new window.google.visualization[this.class](this.container);
 
     // TODO: append Lavachart defined events?
     // if (this.events) {

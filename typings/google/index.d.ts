@@ -1,26 +1,44 @@
 declare namespace google {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   export interface GoogleChartConfig {
     language: string;
     packages: string[];
     mapsApiKey: string;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  export interface DataTable {
-    //
+  export class DataTable {
+    constructor(payload: any);
   }
 
   export interface Google {
     charts: {
-      load(version: string, config: any): any;
-      setOnLoadCallback(callback: Function): any;
+      load(version: string, config: any): void;
+      setOnLoadCallback(callback: Function): void;
     };
 
     visualization: {
+      data: {
+        join(
+          data1: DataTable,
+          data2: DataTable,
+          keys: any,
+          joinMethod: any,
+          dt1Columns: any,
+          dt2Columns: any
+        ): any;
+      };
+
+      events: {
+        addListener(chart: any, event: string, callback: Function): void;
+      };
+
       arrayToDataTable(payload: any): DataTable;
-      DataTable(): DataTable;
-      DataTable(payload: any[] | object): DataTable;
+
+      DataTable: {
+        new (): DataTable;
+        new (payload: any): DataTable;
+      };
+
+      Dashboard: any;
 
       AnnotationChart(container: HTMLElement): any;
       AreaChart(container: HTMLElement): any;

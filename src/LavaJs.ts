@@ -1,6 +1,6 @@
 import EventEmitter from "events";
 
-import { GOOGLE_LOADER_URL } from ".";
+import { GOOGLE_API_VERSION,GOOGLE_LOADER_URL } from ".";
 import Chart from "./Chart";
 import Dashboard from "./Dashboard";
 import DataQuery from "./DataQuery";
@@ -9,6 +9,7 @@ import { InvalidCallback, RenderableNotFound } from "./Errors";
 import Renderable from "./Renderable";
 import { LavaJsOptions, RenderableTmpl } from "./types";
 import * as Utils from "./Utils";
+import { getType } from "./Utils";
 
 /**
  * Google Chart API wrapper library
@@ -33,7 +34,7 @@ export default class LavaJs extends EventEmitter {
   static VERSION = "__VERSION__";
 
   /**
-   * Configurable options for the libraryz
+   * Configurable options for the library
    */
   private options: LavaJsOptions;
 
@@ -322,7 +323,7 @@ export default class LavaJs extends EventEmitter {
       this.packages.add(packages);
     }
 
-    if (Utils.getType(packages) === "Array") {
+    if (getType(packages) === "Array") {
       packages = new Set(packages);
 
       this.packages = new Set([this.packages, ...packages]);
@@ -365,7 +366,7 @@ export default class LavaJs extends EventEmitter {
 
       console.log("[lava.js] Loading Google with config:", config);
 
-      window.google.charts.load(LavaJs.GOOGLE_API_VERSION, config);
+      window.google.charts.load(GOOGLE_API_VERSION, config);
 
       window.google.charts.setOnLoadCallback(resolve);
     });
@@ -380,7 +381,7 @@ export default class LavaJs extends EventEmitter {
 
       script.type = "text/javascript";
       script.async = true;
-      script.src = LavaJs.GOOGLE_LOADER_URL;
+      script.src = GOOGLE_LOADER_URL;
       script.onload = script.onreadystatechange = event => {
         event = event || window.event;
 

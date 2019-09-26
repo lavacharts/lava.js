@@ -3,14 +3,9 @@ import { DataTable, VizProps, VizPropsCollection } from "./types/index.js";
 
 /**
  * Returns the type of object, with a capital first letter.
- *
- * @param {Object} object
- * @return {String} The type of the given object
  */
 export function getType(object: any): string {
-  const type = Object.prototype.toString.call(object);
-
-  return type.replace("[object ", "").replace("]", "");
+  return Object.prototype.toString.call(object).slice(8, -1);
 }
 
 /**
@@ -92,7 +87,7 @@ export function createDataTable(payload: any): DataTable {
       new window.google.visualization.DataTable(payload.data[1]),
       payload.keys,
       payload.joinMethod,
-      payload.dt2Columns,
+      payload.dt1Columns,
       payload.dt2Columns
     );
   }

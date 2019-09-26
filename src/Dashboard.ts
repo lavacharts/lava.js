@@ -10,6 +10,8 @@ import Renderable from "./Renderable";
  * @license   MIT
  */
 export default class Dashboard extends Renderable {
+  bindings: any;
+
   /**
    * Create a new Dashboard
    *
@@ -31,8 +33,8 @@ export default class Dashboard extends Renderable {
    *
    * @private
    */
-  _setup() {
-    this.gchart = new google.visualization.Dashboard(this.container);
+  private setup() {
+    this.gchart = new window.google.visualization.Dashboard(this.container);
 
     this._attachBindings();
   }

@@ -1,7 +1,9 @@
 import EventEmitter from "events";
 
+import { DataQuery, Utils } from ".";
 import LavaJs from "./LavaJs";
-import Utils from "./Utils";
+import { DataTable, Formatter, RenderableTmpl } from "./types";
+import { getVizProps } from "./Utils";
 
 /**
  * The {@link Renderable} class is the base for {@link Chart}s and {@link Dashboard}s
@@ -13,61 +15,52 @@ import Utils from "./Utils";
  * @license   MIT
  */
 export default class Renderable extends EventEmitter {
-  label: any;
-  type: any;
-  options: any;
-  formats: any;
-  _elementId: any;
-  _dataSrc: any;
-  data: undefined;
-  gchart: undefined;
-  container: HTMLElement | null;
-  _preDraw: any;
-  _postDraw: any;
+  protected container: HTMLElement;
+  protected data: DataTable | null = null;
+  protected _dataSrc: any;
+
+  /**
+   * Element ID of the DOM node for the container.
+   */
+  protected elementId: string;
+
+  /**
+   * Formatters for the DataTable
+   */
+  protected formats: Formatter[];
+  protected gchart: any;
+
+  /**
+   * Unique label for the {@link Chart} / {@link Dashboard}.
+   */
+  protected label: any;
+
+  /**
+   * Configurable options.
+   */
+  protected options: any;
+  protected _preDraw: any;
+  protected _postDraw: any;
+
+  /**
+   * Type of {@link Renderable}.
+   */
+  protected type: string;
 
   /**
    * Create a new Renderable
    *
    * @param {Object} json
    */
-  constructor(json: object) {
+  constructor(json: RenderableTmpl) {
     super();
 
-    /**
-     * Unique label for the {@link Chart} / {@link Dashboard}.
-     *
-     * @type {String}
-     */
-    this.label = json.label;
-
-    /**
-     * Type of {@link Renderable}.
-     *
-     * @type {String}
-     */
     this.type = json.type;
-
-    /**
-     * Configurable options.
-     *
-     * @type {Array}
-     */
+    this.label = json.label;
     this.options = json.options;
-
-    /**
-     * Formatters for the DataTable
-     *
-     * @type {Array}
-     */
     this.formats = json.formats;
 
-    /**
-     * Element ID of the DOM node for the container.
-     *
-     * @private
-     * @type {String}
-     */
-    this._elementId = json.elementId || json.elemId || json.containerId;
+    this.elementId = json.elementId;
 
     /**
      * The source of the DataTable, to be used in setData().
@@ -92,42 +85,27 @@ export default class Renderable extends EventEmitter {
      */
     this.gchart = undefined;
 
-    /**
-     * The HTMLElement in which the Renderable will be drawn.
-     *
-     * @public
-     * @type {HTMLElement}
-     */
-    this.container = document.getElementById(this._elementId);
+    this.container = document.getElementById(this.elementId);
   }
 
   /**
    * The google.visualization class needed for rendering.
-   *
-   * @public
-   * @return {String} Google visualization class name.
    */
-  get class() {
-    return Utils.getVizProps(this.type).class;
+  public get class(): string {
+    return getVizProps(this.type).class;
   }
 
   /**
    * The google.visualization package needed for rendering.
-   *
-   * @public
-   * @return {String} Google visualization package name.
    */
-  get packages() {
-    return Utils.getVizProps(this.type).package;
+  public get packages(): string {
+    return getVizProps(this.type).package;
   }
 
   /**
    * Unique identifier for the {@link Chart} / {@link Dashboard}.
-   *
-   * @public
-   * @return {String} Unique identifier of the {@link Renderable}.
    */
-  get uuid() {
+  public get uuid(): string {
     return this.type + "::" + this.label;
   }
 
@@ -171,7 +149,7 @@ export default class Renderable extends EventEmitter {
    */
   async run() {
     if (!this.container) {
-      throw new LavaJs.Errors.ElementIdNotFound(this._elementId);
+      throw new LavaJs.Errors.ElementIdNotFound(this.elementId);
     }
 
     this._setup();
@@ -186,6 +164,7 @@ export default class Renderable extends EventEmitter {
 
     this.draw();
   }
+
   _setup() {
     throw new Error("Method not implemented.");
   }
@@ -195,10 +174,9 @@ export default class Renderable extends EventEmitter {
    *
    * @public
    * @param {Object|Function|Array|DataQuery|DataTable} payload Source of data
-   * @return {Promise}
    */
-  async setData(payload) {
-    if (payload instanceof LavaJs.DataQuery) {
+  public async setData(payload: any): Promise<void> {
+    if (payload instanceof DataQuery) {
       console.log(`[lava.js] Sending DataQuery for ${this.uuid}`);
 
       const response = await payload.send();
@@ -211,7 +189,7 @@ export default class Renderable extends EventEmitter {
     }
 
     if (!this.data) {
-      throw new LavaJs.Errors.DataError(
+      throw new DataError(
         `There was a error setting the data for ${this.uuid}`
       );
     }
@@ -225,17 +203,16 @@ export default class Renderable extends EventEmitter {
 
   /**
    * Apply the formats to the DataTable
-   *
-   * @public
-   * @param {?Array.<Object>} formats
    */
-  applyFormats(formats) {
+  public applyFormats(formats: Formatter[]): void {
     if (formats) {
       this.formats = formats;
     }
 
     for (const format of this.formats) {
-      const formatter = new google.visualization[format.type](format.options);
+      const formatter = new window.google.visualization[format.type](
+        format.options
+      );
 
       console.log(`[lava.js] Formatting data for ${this.uuid}.`);
       console.log(
@@ -267,7 +244,7 @@ export default class Renderable extends EventEmitter {
     ];
 
     defaultEvents.forEach(event => {
-      google.visualization.events.addListener(this.gchart, event, () =>
+      window.google.visualization.events.addListener(this.gchart, event, () =>
         this.emit(event, this.gchart, this.data)
       );
     });

@@ -16,6 +16,12 @@ export interface LavaJsOptions {
   timezone: string;
 }
 
+export interface Formatter {
+  index: number;
+  options: object;
+  type: string;
+}
+
 export interface VizPropsCollection {
   [K: string]: VizProps;
 }
@@ -27,13 +33,14 @@ export interface VizProps {
 }
 
 export interface RenderableTmpl {
+  datatable: any;
+  elementId: string;
   label: any;
   options: any;
   packages: Set<string>;
-  datatable: any;
   png: boolean;
-  type: RenderableType;
   uuid: string;
+  type: RenderableType;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

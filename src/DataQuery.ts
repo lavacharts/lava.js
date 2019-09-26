@@ -50,7 +50,7 @@ export default class DataQuery {
 
     // If the this.url is still not a string after .configure(), error out.
     if (typeof this.url !== "string") {
-      throw new LavaJs.Errors.DataError('"url" is must be a string.');
+      throw new DataError('"url" is must be a string.');
     }
   }
 
@@ -65,7 +65,7 @@ export default class DataQuery {
    */
   configure({ url, opts = {}, query }): any {
     if (!url) {
-      throw new LavaJs.Errors.DataError(
+      throw new DataError(
         '"url" is a mandatory parameter for configuring a DataQuery.'
       );
     }

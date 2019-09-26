@@ -17,7 +17,7 @@
     "test": "karma start --singleRun",
     "dev": "yarn gulp dev",
     "prod": "yarn gulp prod",
-    "watch": "yarn gulp watch"
+    "watch": "yarn tsc --watch"
   },
   "devDependencies": {
     "@angular/core": "^4.2.4",
@@ -25,6 +25,7 @@
     "@types/node": "^12.7.5",
     "@typescript-eslint/eslint-plugin": "^2.3.1",
     "@typescript-eslint/parser": "^2.3.1",
+    "@webpack-cli/init": "^0.2.2",
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.0",
@@ -94,6 +95,8 @@
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^2.0.0",
     "watchify": "^3.7.0",
+    "webpack": "^4.41.0",
+    "webpack-cli": "^3.3.9",
     "yargs": "^3.6.0",
     "zone.js": "^0.8.12"
   }
