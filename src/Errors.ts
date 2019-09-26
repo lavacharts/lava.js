@@ -4,8 +4,6 @@
  * Base error that the specific errors extend.
  */
 export class LavaJsError extends Error {
-  name = "LavaJsError";
-
   constructor(message = "There was an error") {
     super(message);
   }
@@ -38,6 +36,17 @@ export class RenderableNotFound extends LavaJsError {
  *
  * Thrown when the given ID for an HTMLElement is not found in the DOM.
  */
+export class DataError extends LavaJsError {
+  constructor(elemId: string) {
+    super(`[lava.js] There was an error setting the data for the chart.`);
+  }
+}
+
+/**
+ * ElementIdNotFound Error
+ *
+ * Thrown when the given ID for an HTMLElement is not found in the DOM.
+ */
 export class ElementIdNotFound extends LavaJsError {
   constructor(elemId: string) {
     super(`[lava.js] DOM node where id="${elemId}" was not found.`);
@@ -45,7 +54,7 @@ export class ElementIdNotFound extends LavaJsError {
 }
 
 LavaJsError.prototype = Error.prototype;
+DataError.prototype = LavaJsError.prototype;
 InvalidCallback.prototype = LavaJsError.prototype;
-RenderableNotFound.prototype = LavaJsError.prototype;
 ElementIdNotFound.prototype = LavaJsError.prototype;
-// DataError.prototype = LavaJsError.prototype;
+RenderableNotFound.prototype = LavaJsError.prototype;

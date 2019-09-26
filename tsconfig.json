@@ -13,11 +13,13 @@
     "lib": ["dom","es2015"],
     "resolveJsonModule": true,
     "downlevelIteration": true,
-    "experimentalDecorators": true,
-    "typeRoots": [ "./typings", "./node_modules/@types"]
+    "experimentalDecorators": true
+    // "typeRoots": [ "./typings", "./node_modules/@types"]
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "typings/lavajs/index.d.ts",
+    "typings/lavajs/global.d.ts"
   ],
   "exclude": [
     "typings",

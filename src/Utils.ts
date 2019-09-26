@@ -1,4 +1,4 @@
-import propertyMap from "../resources/visualization-map.json";
+import propertyMap from "./resources/visualization-map.json";
 import { DataTable, VizProps, VizPropsCollection } from "./types/index.js";
 
 /**

@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@angular/core": "^4.2.4",
+    "@types/google.visualization": "^0.0.48",
     "@types/lodash-es": "^4.17.3",
     "@types/node": "^12.7.5",
     "@typescript-eslint/eslint-plugin": "^2.3.1",

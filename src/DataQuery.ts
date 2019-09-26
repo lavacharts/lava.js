@@ -1,4 +1,4 @@
-import LavaJs from "./LavaJs";
+import { Query } from "google.visualization";
 
 /**
  * Used for loading remote data as a {@link DataTable}
@@ -10,38 +10,29 @@ import LavaJs from "./LavaJs";
  * @license   http://opensource.org/licenses/MIT MIT
  */
 export default class DataQuery {
-  url: any;
-  opts: {};
-  query: undefined;
+  private opts: { sendMethod: "auto" };
+
+  /**
+   * Callback for accessing the query object before send
+   *
+   * @see https://developers.google.com/chart/interactive/docs/reference#Query
+   * @see https://developers.google.com/chart/interactive/docs/querylanguage
+   * @type {Function}
+   */
+  private query: Query;
 
   /**
    * Create a new DataQuery for a DataTable
    *
    * @throws {DataError}
    */
-  constructor(url) {
-    /**
-     * URL of your Datasource
-     *
-     * @type {String}
-     */
-    this.url = url;
-
+  constructor(private url: string | object) {
     /**
      * Optional request options
      *
      * @type {Object}
      */
     this.opts = {};
-
-    /**
-     * Callback for accessing the query object before send
-     *
-     * @see https://developers.google.com/chart/interactive/docs/reference#Query
-     * @see https://developers.google.com/chart/interactive/docs/querylanguage
-     * @type {Function}
-     */
-    this.query = undefined;
 
     // If the passed param is an Object, us it to configure the DataQuery
     if (typeof url === "object") {
@@ -82,8 +73,8 @@ export default class DataQuery {
    * @public
    * @return {Promise}
    */
-  async send() {
-    let query = new google.visualization.Query(this.url, this.opts);
+  async send(): Promise<any> {
+    let query = new window.google.visualization.Query(this.url, this.opts);
 
     if (this.query) {
       query = this.query(query);

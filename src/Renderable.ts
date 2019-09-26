@@ -1,7 +1,7 @@
 import EventEmitter from "events";
 
 import { DataQuery, Utils } from ".";
-import LavaJs from "./LavaJs";
+import { DataError, ElementIdNotFound } from "./Errors";
 import { DataTable, Formatter, RenderableTmpl } from "./types";
 import { getVizProps } from "./Utils";
 
@@ -15,8 +15,37 @@ import { getVizProps } from "./Utils";
  * @license   MIT
  */
 export default class Renderable extends EventEmitter {
-  protected container: HTMLElement;
-  protected data: DataTable | null = null;
+  /**
+   * Unique label for the {@link Chart} / {@link Dashboard}.
+   */
+  public label: any;
+
+  /**
+   * Configurable options.
+   */
+  public options: any;
+
+  /**
+   * DataTable for the {@link Chart} / {@link Dashboard}.
+   */
+  public data: DataTable | null = null;
+
+  /**
+   * Google chart object created once the {@link Chart} / {@link Dashboard}
+   * has been rendered.
+   *
+   * @type {Object}
+   */
+  public gchart: any;
+
+  protected container: HTMLElement | null;
+
+  /**
+   * The source of the DataTable, to be used in setData().
+   *
+   * @private
+   * @type {*}
+   */
   protected _dataSrc: any;
 
   /**
@@ -28,19 +57,6 @@ export default class Renderable extends EventEmitter {
    * Formatters for the DataTable
    */
   protected formats: Formatter[];
-  protected gchart: any;
-
-  /**
-   * Unique label for the {@link Chart} / {@link Dashboard}.
-   */
-  protected label: any;
-
-  /**
-   * Configurable options.
-   */
-  protected options: any;
-  protected _preDraw: any;
-  protected _postDraw: any;
 
   /**
    * Type of {@link Renderable}.
@@ -62,27 +78,10 @@ export default class Renderable extends EventEmitter {
 
     this.elementId = json.elementId;
 
-    /**
-     * The source of the DataTable, to be used in setData().
-     *
-     * @private
-     * @type {*}
-     */
     this._dataSrc = json.data || json.datatable;
 
-    /**
-     * DataTable for the {@link Chart} / {@link Dashboard}.
-     *
-     * @type {DataTable}
-     */
     this.data = undefined;
 
-    /**
-     * Google chart object created once the {@link Chart} / {@link Dashboard}
-     * has been rendered.
-     *
-     * @type {Object}
-     */
     this.gchart = undefined;
 
     this.container = document.getElementById(this.elementId);
@@ -114,25 +113,23 @@ export default class Renderable extends EventEmitter {
    *
    * @public
    */
-  draw() {
-    if (typeof this._preDraw === "function") {
+  public draw(): void {
+    if (typeof this.preDraw === "function") {
       console.log(`[lava.js] Running ${this.uuid}.preDraw()`);
 
-      this._preDraw();
+      this.preDraw();
     }
 
     if (!this.data) {
-      throw new LavaJs.Errors.DataError(
-        `${this.uuid} Could not draw, data is ${this.data}`
-      );
+      throw new DataError(`${this.uuid} Could not draw, data is ${this.data}`);
     }
 
     this.gchart.draw(this.data, this.options);
 
-    if (typeof this._postDraw === "function") {
+    if (typeof this.postDraw === "function") {
       console.log(`[lava.js] Running ${this.uuid}.postDraw()`);
 
-      this._postDraw();
+      this.postDraw();
     }
   }
 
@@ -147,14 +144,14 @@ export default class Renderable extends EventEmitter {
    *
    * @return {Promise}
    */
-  async run() {
+  async run(): Promise<any> {
     if (!this.container) {
-      throw new LavaJs.Errors.ElementIdNotFound(this.elementId);
+      throw new ElementIdNotFound(this.elementId);
     }
 
-    this._setup();
+    // this._setup();
 
-    this._attachEventRelays();
+    this.attachEventRelays();
 
     await this.setData(this._dataSrc);
 
@@ -165,9 +162,9 @@ export default class Renderable extends EventEmitter {
     this.draw();
   }
 
-  _setup() {
-    throw new Error("Method not implemented.");
-  }
+  // _setup() {
+  //   throw new Error("Method not implemented.");
+  // }
 
   /**
    * Sets the {@link DataTable} for the {@link Renderable}.
@@ -188,7 +185,7 @@ export default class Renderable extends EventEmitter {
       this.data = Utils.createDataTable(payload);
     }
 
-    if (!this.data) {
+    if (!this.data instanceof google.visualisation.DataTable) {
       throw new DataError(
         `There was a error setting the data for ${this.uuid}`
       );
@@ -204,7 +201,7 @@ export default class Renderable extends EventEmitter {
   /**
    * Apply the formats to the DataTable
    */
-  public applyFormats(formats: Formatter[]): void {
+  public applyFormats(formats?: Formatter[]): void {
     if (formats) {
       this.formats = formats;
     }
@@ -230,20 +227,9 @@ export default class Renderable extends EventEmitter {
    *
    * The Google Chart and DataTable objects will be passed to the listener
    * callback for interaction.
-   *
-   * @protected
-   * @return {void}
    */
-  _attachEventRelays() {
-    const defaultEvents = [
-      "ready",
-      "select",
-      "error",
-      "onmouseover",
-      "onmouseout"
-    ];
-
-    defaultEvents.forEach(event => {
+  protected attachEventRelays(): void {
+    ["ready", "select", "error", "onmouseover", "onmouseout"].forEach(event => {
       window.google.visualization.events.addListener(this.gchart, event, () =>
         this.emit(event, this.gchart, this.data)
       );

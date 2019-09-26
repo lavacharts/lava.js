@@ -57,7 +57,7 @@ export default class Chart extends Renderable {
 
     // TODO: append Lavachart defined events?
     // if (this.events) {
-    //     this._attachEvents();
+    //     this.attachEvents();
     // }
   }
 
@@ -69,7 +69,7 @@ export default class Chart extends Renderable {
    *
    * @private
    */
-  private postDraw(): void {
+  public postDraw(): void {
     if (this.png) {
       this.drawPng();
     }
@@ -97,7 +97,7 @@ export default class Chart extends Renderable {
    * @private
    * @return {void}
    */
-  _attachEvents(): void {
+  private attachEvents(): void {
     this.events.forEach((callback: Function, event: any) => {
       let context = window;
       let func = callback;
@@ -117,7 +117,7 @@ export default class Chart extends Renderable {
        * chart that fired the event while providing the datatable of the chart
        * to the callback as an argument.
        */
-      google.visualization.events.addListener(this.gchart, event, () => {
+      window.google.visualization.events.addListener(this.gchart, event, () => {
         const callback = context[func].bind(this.gchart);
 
         callback(this.data);

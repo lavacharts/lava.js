@@ -1,15 +1,15 @@
 import EventEmitter from "events";
 
-import { GOOGLE_API_VERSION,GOOGLE_LOADER_URL } from ".";
+import { GOOGLE_API_VERSION, GOOGLE_LOADER_URL } from ".";
 import Chart from "./Chart";
 import Dashboard from "./Dashboard";
 import DataQuery from "./DataQuery";
 import DefaultOptions from "./DefaultOptions";
 import { InvalidCallback, RenderableNotFound } from "./Errors";
+import GoogleLoader from "./GoogleLoader";
 import Renderable from "./Renderable";
 import { LavaJsOptions, RenderableTmpl } from "./types";
-import * as Utils from "./Utils";
-import { getType } from "./Utils";
+import { addEvent, getType } from "./Utils";
 
 /**
  * Google Chart API wrapper library
@@ -23,11 +23,6 @@ import { getType } from "./Utils";
  * @license   http://opensource.org/licenses/MIT MIT
  */
 export default class LavaJs extends EventEmitter {
-  static Chart: Chart;
-  static Dashboard: Dashboard;
-  static DataQuery: DataQuery;
-  static Renderable: Renderable;
-
   /**
    * Version of the LavaJs module
    */
@@ -54,46 +49,31 @@ export default class LavaJs extends EventEmitter {
   private readyCallback: null | Function = null;
 
   /**
+   * Loader class for appending the google script and making window.google available
+   */
+  private loader: GoogleLoader;
+
+  /**
    * Create a new instance of the LavaJs library
    */
   constructor(options?: LavaJsOptions) {
     super();
 
-    this.options = DefaultOptions;
-
     if (options) {
-      this.options = Object.assign(this.options, options);
-    }
-  }
-
-  /**
-   * Flag that will be true once window.google is available in page.
-   */
-  public get googleIsLoaded(): boolean {
-    return typeof window.google !== "undefined";
-  }
-
-  /**
-   * Flag that will be true once Google's Static Loader is in page.
-   */
-  public get googleLoaderInPage(): boolean {
-    const scripts = document.getElementsByTagName("script");
-
-    for (const script of scripts) {
-      if (script.src === GOOGLE_LOADER_URL) {
-        return true;
-      }
+      this.options = Object.assign(options, DefaultOptions);
+    } else {
+      this.options = DefaultOptions;
     }
 
-    return false;
+    this.loader = new GoogleLoader(this.options);
   }
 
   /**
    * Initializes the library by loading google to the window.
    */
-  public async init(): Promise<google.Google> {
-    if (this.googleIsLoaded === false) {
-      await this.loadGoogle();
+  public async init(): Promise<any> {
+    if (this.loader.isLoaded === false) {
+      await this.loader.loadGoogle();
     }
 
     console.log("[lava.js] Google is ready", window.google);
@@ -179,7 +159,7 @@ export default class LavaJs extends EventEmitter {
 
     console.log(`[lava.js] Storing ${renderable.uuid}`);
 
-    this.addPackages(renderable.packages);
+    this.loader.addPackages(renderable.packages);
 
     this.volcano.set(renderable.label, renderable);
 
@@ -202,10 +182,7 @@ export default class LavaJs extends EventEmitter {
    * See https://google-developers.appspot.com/chart/interactive/docs/gallery/linechart#methods
    * for some examples relative to LineCharts.
    *
-   * @public
-   * @param  {String} label
-   * @throws {LavaJs.Errors.RenderableNotFound}
-   * @return {Chart|Dashboard}
+   * @throws {RenderableNotFound}
    */
   public get(label: string): Chart | Dashboard {
     if (this.volcano.has(label) === false) {
@@ -223,7 +200,7 @@ export default class LavaJs extends EventEmitter {
    *
    * @public
    * @param {Function} callback
-   * @throws {LavaJs.Errors.InvalidCallback}
+   * @throws {InvalidCallback}
    * @return {void}
    */
   public ready(callback: Function): void {
@@ -234,7 +211,6 @@ export default class LavaJs extends EventEmitter {
     this.readyCallback = callback.bind(this);
   }
 
-  //noinspection JSUnusedGlobalSymbols
   /**
    * Loads new data into the chart and redraws.
    *
@@ -312,101 +288,13 @@ export default class LavaJs extends EventEmitter {
   }
 
   /**
-   * Adds to the list of packages that Google needs to load.
-   *
-   * @private
-   * @param {String|String[]} packages Single or array of package names to add.
-   * @return {void}
-   */
-  private addPackages(packages: string | string[]): void {
-    if (typeof packages === "string") {
-      this.packages.add(packages);
-    }
-
-    if (getType(packages) === "Array") {
-      packages = new Set(packages);
-
-      this.packages = new Set([this.packages, ...packages]);
-    }
-  }
-
-  /**
-   * Load the Google Static Loader and resolve the promise when ready.
-   */
-  private async loadGoogle(): Promise<any> {
-    console.log("[lava.js] Resolving Google...");
-
-    if (!this.googleLoaderInPage) {
-      console.log("[lava.js] Static loader not found, appending to head");
-
-      await this.addGoogleScriptToHead();
-    }
-
-    console.log("[lava.js] Static loader found, initializing window.google");
-
-    return this.googleChartLoader();
-  }
-
-  /**
-   * Runs the Google Chart Loader using the passed Promise resolver as
-   * the setOnLoadCallback function.
-   */
-  private googleChartLoader(): Promise<any> {
-    return new Promise(resolve => {
-      const config = {
-        language: this.options.locale
-      } as google.GoogleChartConfig;
-
-      config.packages =
-        this.packages.size > 0 ? [...this.packages] : ["corechart"];
-
-      if (this.options.mapsApiKey !== "") {
-        config.mapsApiKey = this.options.mapsApiKey;
-      }
-
-      console.log("[lava.js] Loading Google with config:", config);
-
-      window.google.charts.load(GOOGLE_API_VERSION, config);
-
-      window.google.charts.setOnLoadCallback(resolve);
-    });
-  }
-
-  /**
-   * Create a new script tag for the Google Static Loader
-   */
-  private async addGoogleScriptToHead(): Promise<any> {
-    return new Promise(resolve => {
-      const script = document.createElement("script");
-
-      script.type = "text/javascript";
-      script.async = true;
-      script.src = GOOGLE_LOADER_URL;
-      script.onload = script.onreadystatechange = event => {
-        event = event || window.event;
-
-        if (
-          event.type === "load" ||
-          /loaded|complete/.test(script.readyState)
-        ) {
-          script.onload = script.onreadystatechange = null;
-
-          resolve();
-        }
-      };
-
-      document.head.appendChild(script);
-    });
-  }
-
-  /**
    * Attach a listener to the window resize event for redrawing the charts.
    */
   private attachRedrawHandler(): void {
     if (this.options.responsive === true) {
-      let debounced = 0;
+      let debounced!: NodeJS.Timeout;
 
-      Utils.addEvent(window, "resize", () => {
+      addEvent(window, "resize", () => {
         // let redrawAll = this.redrawAll().bind(this);
 
         clearTimeout(debounced);

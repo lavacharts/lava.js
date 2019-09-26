@@ -40,12 +40,13 @@ export interface RenderableTmpl {
   packages: Set<string>;
   png: boolean;
   uuid: string;
+  formats?: Formatter[];
   type: RenderableType;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Renderable {
-  //
+  type: RenderableType;
 }
 
 export interface Chart extends Renderable {
