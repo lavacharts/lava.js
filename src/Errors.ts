@@ -37,8 +37,8 @@ export class RenderableNotFound extends LavaJsError {
  * Thrown when the given ID for an HTMLElement is not found in the DOM.
  */
 export class DataError extends LavaJsError {
-  constructor(elemId: string) {
-    super(`[lava.js] There was an error setting the data for the chart.`);
+  constructor(msg: string) {
+    super(msg);
   }
 }
 

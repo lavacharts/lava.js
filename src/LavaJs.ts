@@ -1,6 +1,5 @@
 import EventEmitter from "events";
 
-import { GOOGLE_API_VERSION, GOOGLE_LOADER_URL } from ".";
 import Chart from "./Chart";
 import Dashboard from "./Dashboard";
 import DataQuery from "./DataQuery";
@@ -34,11 +33,6 @@ export default class LavaJs extends EventEmitter {
   private options: LavaJsOptions;
 
   /**
-   * Pacakges to render
-   */
-  private packages: Set<string> = new Set();
-
-  /**
    * Chart storage
    */
   private volcano: Map<string, Renderable> = new Map();
@@ -46,7 +40,7 @@ export default class LavaJs extends EventEmitter {
   /**
    * Ready Callback
    */
-  private readyCallback: null | Function = null;
+  private readyCallback!: Function;
 
   /**
    * Loader class for appending the google script and making window.google available
@@ -128,6 +122,7 @@ export default class LavaJs extends EventEmitter {
    * If an Object is passed, then the query must be defined by the object.
    */
   public query(url: string | object): DataQuery {
+    
     return new DataQuery(url);
   }
 
@@ -137,7 +132,7 @@ export default class LavaJs extends EventEmitter {
    * The payload payload can come from Lavacharts or manually if used
    * as an independent library.
    */
-  public create(payload: RenderableTmpl | Renderable): Chart | Dashboard {
+  public create(payload: RenderableTmpl): Chart | Dashboard {
     console.log(`[lava.js] Creating a new ${payload.type}:`, payload);
 
     if (payload.type === "Dashboard") {
@@ -152,22 +147,23 @@ export default class LavaJs extends EventEmitter {
    *
    * @todo If the library has ran, and is ready, loading new charts will force a redrawAll of all the currently drawn charts.
    */
-  public store(renderable: RenderableTmpl | Renderable): Chart | Dashboard {
-    if (renderable instanceof Renderable === false) {
-      renderable = this.create(renderable);
-    }
+  public store(renderable: RenderableTmpl): Chart | Dashboard {
+    // if (renderable instanceof Renderable === false) {
+    //   renderable = this.create(renderable);
+    // }
+    const newRenderable = this.create(renderable);
 
-    console.log(`[lava.js] Storing ${renderable.uuid}`);
+    console.log(`[lava.js] Storing ${newRenderable.uuid}`);
 
-    this.loader.addPackages(renderable.packages);
+    this.loader.addPackages(newRenderable.packages);
 
-    this.volcano.set(renderable.label, renderable);
+    this.volcano.set(newRenderable.label, newRenderable);
 
     //if (this.isReady) {
     //    this.redrawAll();
     //}
 
-    return renderable;
+    return newRenderable;
   }
 
   /**
@@ -189,7 +185,7 @@ export default class LavaJs extends EventEmitter {
       throw new RenderableNotFound(label);
     }
 
-    return this.volcano.get(label);
+    return this.volcano.get(label) as Chart | Dashboard;
   }
 
   /**

@@ -1,4 +1,14 @@
-import { Query } from "google.visualization";
+import { callbackify } from "util";
+
+type QueryTap = (
+  query: google.visualization.Query
+) => google.visualization.Query;
+
+export interface DataQueryObj {
+  url: string;
+  opts: google.visualization.QueryOptions;
+  tap?: QueryTap;
+}
 
 /**
  * Used for loading remote data as a {@link DataTable}
@@ -10,60 +20,50 @@ import { Query } from "google.visualization";
  * @license   http://opensource.org/licenses/MIT MIT
  */
 export default class DataQuery {
-  private opts: { sendMethod: "auto" };
-
   /**
    * Callback for accessing the query object before send
    *
    * @see https://developers.google.com/chart/interactive/docs/reference#Query
    * @see https://developers.google.com/chart/interactive/docs/querylanguage
-   * @type {Function}
    */
-  private query: Query;
+  private query!: google.visualization.Query;
 
   /**
    * Create a new DataQuery for a DataTable
    *
    * @throws {DataError}
    */
-  constructor(private url: string | object) {
-    /**
-     * Optional request options
-     *
-     * @type {Object}
-     */
-    this.opts = {};
-
-    // If the passed param is an Object, us it to configure the DataQuery
-    if (typeof url === "object") {
-      this.configure(url);
-    }
-
-    // If the this.url is still not a string after .configure(), error out.
-    if (typeof this.url !== "string") {
-      throw new DataError('"url" is must be a string.');
-    }
+  constructor(
+    private url: string,
+    private opts: google.visualization.QueryOptions = { sendMethod: "auto" },
+    private query?: QueryTap
+  ) {
+    // super(url, opts || { sendMethod: "auto" });
+    this.tap = query;
   }
 
   /**
    * Configure the DataQuery
    *
-   * @param {Object}   config       Configuration object for the DataQuery
-   * @param {String}   config.url   Corresponds to "dataSourceUrl" in Google's docs
-   * @param {Object}   config.opts  Corresponds to "opt_options" in Google's docs
-   * @param {Function} config.query The current query is passed for modification before sending
    * @throws {DataError}
    */
-  configure({ url, opts = {}, query }): any {
+  configure(payload: DataQueryObj): any {
     if (!url) {
       throw new DataError(
         '"url" is a mandatory parameter for configuring a DataQuery.'
       );
     }
 
-    this.url = url;
-    this.opts = opts;
-    this.query = query;
+    this.url = payload.url;
+    this.opts = payload.opts;
+    this.tap = payload.tap;
+  }
+
+  /**
+   * Tap the query object to modify as needed.
+   */
+  tap(callback: QueryTap): void {
+    this.query = callback(this.query);
   }
 
   //noinspection JSUnusedGlobalSymbols
@@ -73,7 +73,7 @@ export default class DataQuery {
    * @public
    * @return {Promise}
    */
-  async send(): Promise<any> {
+  async send(): Promise<google.visualization.QueryResponse> {
     let query = new window.google.visualization.Query(this.url, this.opts);
 
     if (this.query) {
@@ -81,7 +81,7 @@ export default class DataQuery {
     }
 
     return new Promise((resolve, reject) => {
-      query.send(response => {
+      query.send((response: google.visualization.QueryResponse) => {
         if (response.isError()) {
           reject(response);
         }

@@ -1,5 +1,4 @@
-import propertyMap from "./resources/visualization-map.json";
-import { DataTable, VizProps, VizPropsCollection } from "./types/index.js";
+import { VizProps, VizPropsMap } from "./types/visualization-props";
 
 /**
  * Returns the type of object, with a capital first letter.
@@ -52,7 +51,7 @@ export function addEvent(
  * Returns the visualization properties of the given chart type.
  */
 export function getVizProps(chartType: string): VizProps {
-  return (propertyMap as VizPropsCollection)[chartType];
+  return VizPropsMap[chartType];
 }
 
 /**
@@ -60,7 +59,7 @@ export function getVizProps(chartType: string): VizProps {
  *
  * @param {Object|Function|Array} payload Json representation of a DataTable
  */
-export function createDataTable(payload: any): DataTable {
+export function createDataTable(payload: any): google.visualization.DataTable {
   // If a function is received, then create an new DataTable and pass it to the
   // function for user modifications.
   if (getType(payload) === "Function") {

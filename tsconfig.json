@@ -12,17 +12,15 @@
     "esModuleInterop": true,
     "lib": ["dom","es2015"],
     "resolveJsonModule": true,
+    "preserveConstEnums": true,
     "downlevelIteration": true,
     "experimentalDecorators": true
-    // "typeRoots": [ "./typings", "./node_modules/@types"]
   },
   "include": [
-    "src/**/*",
-    "typings/lavajs/index.d.ts",
-    "typings/lavajs/global.d.ts"
+    "src/**/*"
   ],
   "exclude": [
-    "typings",
+    "src/DataQuery.ts",
     "src/angular",
     "node_modules"
   ]

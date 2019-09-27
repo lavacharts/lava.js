@@ -2,7 +2,7 @@ import EventEmitter from "events";
 
 import { DataQuery, Utils } from ".";
 import { DataError, ElementIdNotFound } from "./Errors";
-import { DataTable, Formatter, RenderableTmpl } from "./types";
+import { Formatter, RenderableTmpl, RenderableType } from "./types";
 import { getVizProps } from "./Utils";
 
 /**
@@ -28,7 +28,7 @@ export default class Renderable extends EventEmitter {
   /**
    * DataTable for the {@link Chart} / {@link Dashboard}.
    */
-  public data: DataTable | null = null;
+  public data: google.visualization.DataTable;
 
   /**
    * Google chart object created once the {@link Chart} / {@link Dashboard}
@@ -38,15 +38,15 @@ export default class Renderable extends EventEmitter {
    */
   public gchart: any;
 
-  protected container: HTMLElement | null;
+  /**
+   * HTMLElement into which the chart will be rendered.
+   */
+  protected container!: HTMLElement;
 
   /**
    * The source of the DataTable, to be used in setData().
-   *
-   * @private
-   * @type {*}
    */
-  protected _dataSrc: any;
+  private dataSrc: any;
 
   /**
    * Element ID of the DOM node for the container.
@@ -61,7 +61,17 @@ export default class Renderable extends EventEmitter {
   /**
    * Type of {@link Renderable}.
    */
-  protected type: string;
+  protected type: RenderableType;
+
+  /**
+   * PreDraw hook
+   */
+  public preDraw!: Function;
+
+  /**
+   * PostDraw hook
+   */
+  public postDraw!: Function;
 
   /**
    * Create a new Renderable
@@ -78,7 +88,7 @@ export default class Renderable extends EventEmitter {
 
     this.elementId = json.elementId;
 
-    this._dataSrc = json.data || json.datatable;
+    this.dataSrc = json.data;
 
     this.data = undefined;
 
@@ -97,7 +107,7 @@ export default class Renderable extends EventEmitter {
   /**
    * The google.visualization package needed for rendering.
    */
-  public get packages(): string {
+  public get packages(): string[] {
     return getVizProps(this.type).package;
   }
 
@@ -153,7 +163,7 @@ export default class Renderable extends EventEmitter {
 
     this.attachEventRelays();
 
-    await this.setData(this._dataSrc);
+    await this.setData(this.dataSrc);
 
     if (this.formats) {
       this.applyFormats();
@@ -185,7 +195,7 @@ export default class Renderable extends EventEmitter {
       this.data = Utils.createDataTable(payload);
     }
 
-    if (!this.data instanceof google.visualisation.DataTable) {
+    if (this.data instanceof google.visualization.DataTable === false) {
       throw new DataError(
         `There was a error setting the data for ${this.uuid}`
       );

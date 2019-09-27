@@ -1,4 +1,4 @@
-import { LavaJsOptions } from "./types";
+import { LavaJsOptions, ModernHTMLScriptElement } from "./types";
 
 /**
  * Version of the Google charts API to load
@@ -68,7 +68,7 @@ export default class GoogleLoader {
   /**
    * Add multiple packages to the list that Google needs to load.
    */
-  addPackages(packages: string[]): void {
+  addPackages(packages: string[] | Set<string>): void {
     packages.forEach(this.packages.add);
   }
 
@@ -108,12 +108,15 @@ export default class GoogleLoader {
    */
   private async addGoogleScriptToHead(): Promise<any> {
     return new Promise(resolve => {
-      const script = document.createElement("script");
+      const script = document.createElement(
+        "script"
+      ) as ModernHTMLScriptElement;
 
       script.type = "text/javascript";
       script.async = true;
       script.src = LOADER_URL;
-      script.onload = script.onreadystatechange = event => {
+      script.onload = script.onreadystatechange = (event: Event) => {
+        // eslint-disable-next-line no-param-reassign
         event = event || window.event;
 
         if (

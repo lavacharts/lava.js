@@ -16,23 +16,25 @@ export interface LavaJsOptions {
   timezone: string;
 }
 
+export interface GoogleChartConfig {
+  language: string;
+  packages: string[];
+  mapsApiKey: string;
+}
+
+export interface ModernHTMLScriptElement extends HTMLScriptElement {
+  readyState?: any;
+  onreadystatechange?: any;
+}
+
 export interface Formatter {
   index: number;
   options: object;
   type: string;
 }
 
-export interface VizPropsCollection {
-  [K: string]: VizProps;
-}
-
-export interface VizProps {
-  class: string;
-  package: string;
-  version: number;
-}
-
 export interface RenderableTmpl {
+  data: any;
   datatable: any;
   elementId: string;
   label: any;
@@ -44,28 +46,18 @@ export interface RenderableTmpl {
   type: RenderableType;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface Renderable {
-  type: RenderableType;
-}
-
-export interface Chart extends Renderable {
-  data: object;
-  elementId: string;
-  events?: any[];
-  formats?: any[];
-  label: string;
-  options?: object;
-  png?: boolean;
-  type: RenderableType;
-}
+// export interface Chart extends Renderable {
+//   data: object;
+//   elementId: string;
+//   events?: any[];
+//   formats?: any[];
+//   label: string;
+//   options?: object;
+//   png?: boolean;
+//   type: RenderableType;
+// }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface Dashboard extends Renderable {
-  //
-}
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface DataTable {
-  //
-}
+// export interface Dashboard extends Renderable {
+//   //
+// }
