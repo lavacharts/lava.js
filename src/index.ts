@@ -1,5 +1,4 @@
 import Chart from "./Chart";
-import { GOOGLE_API_VERSION, GOOGLE_LOADER_URL } from "./Constants";
 import Dashboard from "./Dashboard";
 import DataQuery from "./DataQuery";
 import DefaultOptions from "./DefaultOptions";
@@ -17,7 +16,5 @@ export {
   DataQuery,
   Errors,
   Renderable,
-  Utils,
-  GOOGLE_LOADER_URL,
-  GOOGLE_API_VERSION
+  Utils
 };

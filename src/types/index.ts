@@ -2,6 +2,18 @@ import LavaJs from "..";
 
 export type RenderableType = "Chart" | "Dashboard";
 
+export type Dict = {
+  [K: string]: string;
+};
+
+export type QueryTap = (
+  query: google.visualization.Query
+) => google.visualization.Query;
+
+export type GoogleDataTable = google.visualization.DataTable;
+
+export type ValidFormatterTypes = "NumberFormat" | "DateFormat";
+
 export interface LavaJsConstructor {
   new (options: LavaJsOptions): LavaJs;
 }
@@ -21,6 +33,8 @@ export interface GoogleChartConfig {
   packages: string[];
   mapsApiKey: string;
 }
+
+export type HtmlElementOrNull = HTMLElement | null;
 
 export interface ModernHTMLScriptElement extends HTMLScriptElement {
   readyState?: any;

@@ -75,7 +75,7 @@ export default class GoogleLoader {
   /**
    * Load the Google Static Loader and resolve the promise when ready.
    */
-  async loadGoogle(): Promise<any> {
+  async loadGoogle(): Promise<void> {
     console.log("[lava.js] Resolving Google...");
 
     if (this.googleLoaderInPage === false) {
@@ -93,7 +93,7 @@ export default class GoogleLoader {
    * Runs the Google Chart Loader using the passed Promise resolver as
    * the setOnLoadCallback function.
    */
-  googleChartLoader(): Promise<any> {
+  googleChartLoader(): Promise<void> {
     return new Promise(resolve => {
       console.log("[lava.js] Loading Google with config:", this.config);
 
@@ -106,7 +106,7 @@ export default class GoogleLoader {
   /**
    * Create a new script tag for the Google Static Loader
    */
-  private async addGoogleScriptToHead(): Promise<any> {
+  private async addGoogleScriptToHead(): Promise<void> {
     return new Promise(resolve => {
       const script = document.createElement(
         "script"

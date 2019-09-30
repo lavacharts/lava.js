@@ -2,13 +2,13 @@ import EventEmitter from "events";
 
 import Chart from "./Chart";
 import Dashboard from "./Dashboard";
-import DataQuery from "./DataQuery";
+import DataQuery, { DataQueryTmpl } from "./DataQuery";
 import DefaultOptions from "./DefaultOptions";
 import { InvalidCallback, RenderableNotFound } from "./Errors";
 import GoogleLoader from "./GoogleLoader";
 import Renderable from "./Renderable";
 import { LavaJsOptions, RenderableTmpl } from "./types";
-import { addEvent, getType } from "./Utils";
+import { addEvent } from "./Utils";
 
 /**
  * Google Chart API wrapper library
@@ -121,9 +121,12 @@ export default class LavaJs extends EventEmitter {
    * If a String is passed, then a new {@link DataQuery} is created with no options.
    * If an Object is passed, then the query must be defined by the object.
    */
-  public query(url: string | object): DataQuery {
-    
-    return new DataQuery(url);
+  public query(url: string | DataQueryTmpl): DataQuery {
+    if (typeof url === "string") {
+      return new DataQuery(url);
+    } else {
+      return DataQuery.create(url);
+    }
   }
 
   /**

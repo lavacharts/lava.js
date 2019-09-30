@@ -1,5 +1,6 @@
 import Renderable from "./Renderable";
 import { RenderableTmpl } from "./types";
+import { SupportedCharts } from "./types/visualization-props/index";
 
 /**
  * Chart Class
@@ -53,7 +54,9 @@ export default class Chart extends Renderable {
    * @private
    */
   private setup(): void {
-    this.gchart = new window.google.visualization[this.class](this.container);
+    this.gchart = new window.google.visualization[
+      this.class as SupportedCharts
+    ](this.container) as google.visualization.ChartBase;
 
     // TODO: append Lavachart defined events?
     // if (this.events) {
@@ -66,10 +69,9 @@ export default class Chart extends Renderable {
    *
    * This method will have access to window.google since it is called
    * within the run method.
-   *
    * @private
    */
-  public postDraw(): void {
+  private _postDraw(): void {
     if (this.png) {
       this.drawPng();
     }
@@ -103,6 +105,8 @@ export default class Chart extends Renderable {
       let func = callback;
 
       if (typeof callback === "object") {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        //@ts-ignore I don't know what to do here
         context = context[callback[0]];
         func = callback[1];
       }
@@ -118,7 +122,10 @@ export default class Chart extends Renderable {
        * to the callback as an argument.
        */
       window.google.visualization.events.addListener(this.gchart, event, () => {
-        const callback = context[func].bind(this.gchart);
+        const callback = Object.bind(
+          context[Object.call.prototype.toString(func)],
+          this.gchart
+        ) as (data: google.visualization.DataTable) => any;
 
         callback(this.data);
       });

@@ -1,12 +1,9 @@
-import { callbackify } from "util";
+import { DataError } from "./Errors";
+import { QueryTap } from "./types";
 
-type QueryTap = (
-  query: google.visualization.Query
-) => google.visualization.Query;
-
-export interface DataQueryObj {
+export interface DataQueryTmpl {
   url: string;
-  opts: google.visualization.QueryOptions;
+  opts?: google.visualization.QueryOptions;
   tap?: QueryTap;
 }
 
@@ -20,13 +17,11 @@ export interface DataQueryObj {
  * @license   http://opensource.org/licenses/MIT MIT
  */
 export default class DataQuery {
-  /**
-   * Callback for accessing the query object before send
-   *
-   * @see https://developers.google.com/chart/interactive/docs/reference#Query
-   * @see https://developers.google.com/chart/interactive/docs/querylanguage
-   */
-  private query!: google.visualization.Query;
+  public tap: QueryTap = (
+    query: google.visualization.Query
+  ): google.visualization.Query => query;
+
+  public opts: google.visualization.QueryOptions = { sendMethod: "auto" };
 
   /**
    * Create a new DataQuery for a DataTable
@@ -34,36 +29,42 @@ export default class DataQuery {
    * @throws {DataError}
    */
   constructor(
-    private url: string,
-    private opts: google.visualization.QueryOptions = { sendMethod: "auto" },
-    private query?: QueryTap
+    public url: string,
+    opts?: google.visualization.QueryOptions,
+    tap?: QueryTap
   ) {
-    // super(url, opts || { sendMethod: "auto" });
-    this.tap = query;
+    if (tap) {
+      this.tap = tap;
+    }
+
+    if (opts) {
+      this.opts;
+    }
   }
 
   /**
-   * Configure the DataQuery
+   * create a new DataQuery based on the given payload
    *
    * @throws {DataError}
    */
-  configure(payload: DataQueryObj): any {
-    if (!url) {
+  static create(payload: DataQueryTmpl): DataQuery {
+    if (!payload.url) {
       throw new DataError(
-        '"url" is a mandatory parameter for configuring a DataQuery.'
+        '"url" is a mandatory parameter for creating a DataQuery.'
       );
     }
 
-    this.url = payload.url;
-    this.opts = payload.opts;
-    this.tap = payload.tap;
-  }
+    const query = new DataQuery(payload.url);
 
-  /**
-   * Tap the query object to modify as needed.
-   */
-  tap(callback: QueryTap): void {
-    this.query = callback(this.query);
+    if (typeof payload.opts === "object") {
+      query.opts = payload.opts as google.visualization.QueryOptions;
+    }
+
+    if (typeof payload.tap === "function") {
+      query.tap = payload.tap as QueryTap;
+    }
+
+    return query;
   }
 
   //noinspection JSUnusedGlobalSymbols
@@ -74,14 +75,10 @@ export default class DataQuery {
    * @return {Promise}
    */
   async send(): Promise<google.visualization.QueryResponse> {
-    let query = new window.google.visualization.Query(this.url, this.opts);
-
-    if (this.query) {
-      query = this.query(query);
-    }
+    const query = new window.google.visualization.Query(this.url, this.opts);
 
     return new Promise((resolve, reject) => {
-      query.send((response: google.visualization.QueryResponse) => {
+      this.tap(query).send((response: google.visualization.QueryResponse) => {
         if (response.isError()) {
           reject(response);
         }

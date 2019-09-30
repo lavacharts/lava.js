@@ -1,4 +1,9 @@
-import { VizProps, VizPropsMap } from "./types/visualization-props";
+import { RenderableType } from "./types";
+import {
+  SupportedCharts,
+  VizProps,
+  VizPropsMap
+} from "./types/visualization-props";
 
 /**
  * Returns the type of object, with a capital first letter.
@@ -50,7 +55,7 @@ export function addEvent(
 /**
  * Returns the visualization properties of the given chart type.
  */
-export function getVizProps(chartType: string): VizProps {
+export function getVizProps(chartType: SupportedCharts): VizProps {
   return VizPropsMap[chartType];
 }
 

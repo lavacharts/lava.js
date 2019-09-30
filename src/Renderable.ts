@@ -2,7 +2,14 @@ import EventEmitter from "events";
 
 import { DataQuery, Utils } from ".";
 import { DataError, ElementIdNotFound } from "./Errors";
-import { Formatter, RenderableTmpl, RenderableType } from "./types";
+import {
+  Formatter,
+  HtmlElementOrNull,
+  RenderableTmpl,
+  RenderableType,
+  ValidFormatterTypes
+} from "./types";
+import { SupportedCharts } from "./types/visualization-props/index";
 import { getVizProps } from "./Utils";
 
 /**
@@ -23,12 +30,14 @@ export default class Renderable extends EventEmitter {
   /**
    * Configurable options.
    */
-  public options: any;
+  public options: {
+    [K: string]: string;
+  };
 
   /**
    * DataTable for the {@link Chart} / {@link Dashboard}.
    */
-  public data: google.visualization.DataTable;
+  public data!: google.visualization.DataTable;
 
   /**
    * Google chart object created once the {@link Chart} / {@link Dashboard}
@@ -41,7 +50,7 @@ export default class Renderable extends EventEmitter {
   /**
    * HTMLElement into which the chart will be rendered.
    */
-  protected container!: HTMLElement;
+  protected container: HtmlElementOrNull;
 
   /**
    * The source of the DataTable, to be used in setData().
@@ -61,7 +70,7 @@ export default class Renderable extends EventEmitter {
   /**
    * Type of {@link Renderable}.
    */
-  protected type: RenderableType;
+  protected type: SupportedCharts;
 
   /**
    * PreDraw hook
@@ -83,18 +92,12 @@ export default class Renderable extends EventEmitter {
 
     this.type = json.type;
     this.label = json.label;
-    this.options = json.options;
-    this.formats = json.formats;
-
-    this.elementId = json.elementId;
-
     this.dataSrc = json.data;
-
-    this.data = undefined;
-
-    this.gchart = undefined;
-
+    this.elementId = json.elementId;
     this.container = document.getElementById(this.elementId);
+
+    this.options = json.options || {};
+    this.formats = json.formats || [];
   }
 
   /**
@@ -108,7 +111,7 @@ export default class Renderable extends EventEmitter {
    * The google.visualization package needed for rendering.
    */
   public get packages(): string[] {
-    return getVizProps(this.type).package;
+    return [getVizProps(this.type).package];
   }
 
   /**
@@ -217,9 +220,9 @@ export default class Renderable extends EventEmitter {
     }
 
     for (const format of this.formats) {
-      const formatter = new window.google.visualization[format.type](
-        format.options
-      );
+      const formatter = new window.google.visualization[
+        format.type as ValidFormatterTypes
+      ](format.options);
 
       console.log(`[lava.js] Formatting data for ${this.uuid}.`);
       console.log(

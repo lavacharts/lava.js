@@ -20,6 +20,7 @@
     "src/**/*"
   ],
   "exclude": [
+    "src/Dashboard.ts",
     "src/DataQuery.ts",
     "src/angular",
     "node_modules"
