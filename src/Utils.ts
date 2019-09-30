@@ -1,4 +1,3 @@
-import { RenderableType } from "./types";
 import {
   SupportedCharts,
   VizProps,

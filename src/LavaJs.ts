@@ -1,3 +1,5 @@
+import "dom";
+
 import EventEmitter from "events";
 
 import Chart from "./Chart";
@@ -291,7 +293,7 @@ export default class LavaJs extends EventEmitter {
    */
   private attachRedrawHandler(): void {
     if (this.options.responsive === true) {
-      let debounced!: NodeJS.Timeout;
+      let debounced: ReturnType<typeof setTimeout>;
 
       addEvent(window, "resize", () => {
         // let redrawAll = this.redrawAll().bind(this);

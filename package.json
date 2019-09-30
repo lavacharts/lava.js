@@ -17,7 +17,8 @@
     "test": "karma start --singleRun",
     "dev": "yarn gulp dev",
     "prod": "yarn gulp prod",
-    "watch": "yarn tsc --watch"
+    "watch": "yarn tsc --watch",
+    "start:dev": "webpack-dev-server"
   },
   "devDependencies": {
     "@angular/core": "^4.2.4",
@@ -41,6 +42,7 @@
     "chai": "^4.1.1",
     "chai-shallow-deep-equal": "^1.4.6",
     "chalk": "^2.4.2",
+    "copy-webpack-plugin": "^5.0.4",
     "esdoc": "^1.1.0",
     "esdoc-standard-plugin": "^1.0.0",
     "eslint": "^6.4.0",
@@ -50,6 +52,7 @@
     "eslint-plugin-simple-import-sort": "^4.0.0",
     "esm": "^3.2.25",
     "events": "^3.0.0",
+    "fork-ts-checker-webpack-plugin": "^1.5.0",
     "gh-pages": "^1.0.0",
     "glob": "^7.1.2",
     "gulp": "^4.0.2",
@@ -67,6 +70,7 @@
     "gulp-uglify": "^1.5.3",
     "gulp-util": "^3.0.8",
     "gulp-watch": "^4.3.11",
+    "html-webpack-plugin": "^3.2.0",
     "jasmine-core": "^2.7.0",
     "jasmine-sinon": "^0.4.0",
     "jsdoc": "^3.4.0",
@@ -91,6 +95,7 @@
     "sinon": "^1.17.3",
     "sinon-chai": "^2.13.0",
     "stripify": "^6.0.0",
+    "ts-loader": "^6.2.0",
     "tsify": "^4.0.1",
     "typescript": "^3.6.3",
     "vinyl-buffer": "^1.0.0",

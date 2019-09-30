@@ -1,6 +1,8 @@
 import "google.visualization";
 
 export interface Google {
+  [K: string]: any;
+
   charts: {
     load(version: string, config: any): void;
     setOnLoadCallback(callback: Function): void;
@@ -24,9 +26,6 @@ export interface Google {
 
     arrayToDataTable(payload: any): google.visualization.DataTable;
 
-    DataTable: google.visualization.DataTable;
-    Dashboard: google.visualization.Dashboard;
-
     AnnotationChart(container: HTMLElement): any;
     AreaChart(container: HTMLElement): any;
     BarChart(container: HTMLElement): any;
@@ -35,14 +34,6 @@ export interface Google {
     CandlestickChart(container: HTMLElement): any;
     ColumnChart(container: HTMLElement): any;
     ComboChart(container: HTMLElement): any;
-
-    //#region Query
-
-    // https://developers.google.com/chart/interactive/docs/reference#query
-    Query: google.visualization.Query;
-    QueryOptions: google.visualization.QueryOptions;
-    QueryResponse: google.visualization.QueryResponse;
-
     Gantt(container: HTMLElement): any;
     Gauge(container: HTMLElement): any;
     GeoChart(container: HTMLElement): any;

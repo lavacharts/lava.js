@@ -17,7 +17,7 @@ export default class Dashboard extends Renderable {
    *
    * @param {Object} json JSON object representing a Dashboard.
    */
-  constructor(json) {
+  constructor(json: any) {
     json.type = "Dashboard";
 
     super(json);

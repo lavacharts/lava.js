@@ -1,4 +1,7 @@
 import LavaJs from "..";
+import * as VisualizationProps from "./visualization-props";
+
+export { VisualizationProps };
 
 export type RenderableType = "Chart" | "Dashboard";
 
@@ -33,8 +36,6 @@ export interface GoogleChartConfig {
   packages: string[];
   mapsApiKey: string;
 }
-
-export type HtmlElementOrNull = HTMLElement | null;
 
 export interface ModernHTMLScriptElement extends HTMLScriptElement {
   readyState?: any;

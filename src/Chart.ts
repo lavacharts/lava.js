@@ -1,6 +1,20 @@
 import Renderable from "./Renderable";
 import { RenderableTmpl } from "./types";
-import { SupportedCharts } from "./types/visualization-props/index";
+import { VisualizationPropertyMap } from "./types/visualization-props";
+
+type SupportedChartTypes = keyof VisualizationPropertyMap;
+
+interface NewChartConstructor {
+  new (container: HTMLElement): any;
+}
+
+function makeChartFactory(
+  container: HTMLElement
+): (type: string) => NewChartConstructor {
+  return function(type: SupportedChartTypes): NewChartConstructor {
+    return new window.google.visualization[type](container);
+  };
+}
 
 /**
  * Chart Class
@@ -54,9 +68,9 @@ export default class Chart extends Renderable {
    * @private
    */
   private setup(): void {
-    this.gchart = new window.google.visualization[
-      this.class as SupportedCharts
-    ](this.container) as google.visualization.ChartBase;
+    const chartFactory = makeChartFactory(this.container);
+
+    this.gchart = chartFactory(this.class);
 
     // TODO: append Lavachart defined events?
     // if (this.events) {

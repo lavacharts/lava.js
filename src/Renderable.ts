@@ -2,14 +2,8 @@ import EventEmitter from "events";
 
 import { DataQuery, Utils } from ".";
 import { DataError, ElementIdNotFound } from "./Errors";
-import {
-  Formatter,
-  HtmlElementOrNull,
-  RenderableTmpl,
-  RenderableType,
-  ValidFormatterTypes
-} from "./types";
-import { SupportedCharts } from "./types/visualization-props/index";
+import { Formatter, RenderableTmpl, ValidFormatterTypes } from "./types";
+import { SupportedCharts } from "./types/visualization-props";
 import { getVizProps } from "./Utils";
 
 /**
@@ -50,7 +44,7 @@ export default class Renderable extends EventEmitter {
   /**
    * HTMLElement into which the chart will be rendered.
    */
-  protected container: HtmlElementOrNull;
+  protected container: HTMLElement;
 
   /**
    * The source of the DataTable, to be used in setData().
@@ -94,7 +88,12 @@ export default class Renderable extends EventEmitter {
     this.label = json.label;
     this.dataSrc = json.data;
     this.elementId = json.elementId;
-    this.container = document.getElementById(this.elementId);
+
+    const container = document.getElementById(this.elementId);
+
+    if (container) {
+      this.container = container;
+    }
 
     this.options = json.options || {};
     this.formats = json.formats || [];

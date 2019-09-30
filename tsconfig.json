@@ -4,17 +4,19 @@
     "target": "es5",
     "sourceMap": true,
     "outDir": "./build",
-    "allowJs": false,
-    "declaration": true,
+    // "allowJs": false,
     "module": "commonjs",
     "noImplicitAny": true,
     "removeComments": true,
+    "noUnusedLocals": true,
     "esModuleInterop": true,
     "lib": ["dom","es2015"],
+    "noImplicitReturns": true,
     "resolveJsonModule": true,
     "preserveConstEnums": true,
     "downlevelIteration": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": [
     "src/**/*"
