@@ -1,27 +1,17 @@
 const path = require("path");
 const webpack = require("webpack");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
-
-const isDevServer = process.env.WEBPACK_DEV_SERVER;
 
 module.exports = {
   context: __dirname,
-  mode: "development",
-  entry: __dir("index.ts"),
-  devtool: "source-map",
-  devServer: {
-    open: true
-  },
+  entry: path.resolve(__dirname, "index.ts"),
   output: {
     library: "lava",
     filename: "lava.min.js",
-    libraryTarget:'window',
-    path: __dir(isDevServer ? "build" : "dist"),
+    libraryTarget: "window",
+    path: path.resolve(__dirname, "dist"),
   },
   plugins: [
-    ...[
       new webpack.ProgressPlugin(),
       new ForkTsCheckerWebpackPlugin({
         eslint: true
@@ -34,8 +24,6 @@ module.exports = {
           }
         }
       })
-    ],
-    ...(isDevServer ? devPlugins : [])
   ],
   module: {
     rules: [

@@ -1,8 +1,4 @@
-import "google.visualization";
-
 declare namespace google.visualization {
-  // export default google.visualization;
-
   export function load(
     visualization: string,
     version: string,

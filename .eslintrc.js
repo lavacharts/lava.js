@@ -1,42 +1,45 @@
-{
-  "root": true,
-  "env": {
-    "es6": true,
-    "browser": true
+module.exports = {
+  root: true,
+  env: {
+    es6: true,
+    browser: true
   },
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "ecmaVersion": 2018,
-    "sourceType": "module"
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
+    ecmaVersion: 2018,
+    sourceType: "module",
+    tsconfigRootDir: __dirname,
+    project: path.resolve(__dirname, './tsconfig.json')
   },
-  "extends": [
+  extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "prettier/@typescript-eslint",
     "prettier"
   ],
-  "plugins": [
-    "@typescript-eslint",
-    "prettier",
+  plugins: [
     "import",
-    "simple-import-sort"
+    "prettier",
+    "simple-import-sort",
+    "@typescript-eslint"
   ],
-  "rules": {
+  rules: {
     "no-console": "off",
     "sort-imports": "off",
 
-    "eqeqeq": ["error", "always"],
+    eqeqeq: ["error", "always"],
     "no-mixed-operators": "error",
     "no-param-reassign": "error",
 
     "prettier/prettier": [
       "error",
       {
-        "semi": true,
-        "tabWidth": 2,
-        "singleQuote": false,
-        "trailingComma": "none"
+        semi: true,
+        tabWidth: 2,
+        singleQuote: false,
+        trailingComma: "none",
+        quoteProps: "as-needed"
       }
     ],
 
@@ -51,18 +54,19 @@
       { "allowExpressions": true }
     ]
   },
-  "overrides": [
+  overrides: [
     {
-      "files": [
+      files: [
         "karma.conf.js",
         "gulpfile.js",
         "webpack.config.js",
         "gulp-fucntions/*.js"
       ],
-      "env": {
-        "node": true
+      env: {
+        node: true
       },
-      "rules": {
+      rules: {
+        "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/no-var-requires": "off"
       }
     }
