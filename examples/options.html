@@ -61,9 +61,9 @@
                 <div class="align-left float">
                     <pre><code>
 function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
+    const letters = '0123456789ABCDEF';
+    const color = '#';
+    for (const i = 0; i < 6; i++) {
         color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
@@ -75,11 +75,11 @@ function loadOptions() {
     });
 }
 
-var chartJson = {
+const chartJson = {
     label: 'MyFancyChart',
     type: 'ScatterChart',
     elementId: 'chart_div',
-    datatable: [
+    data: [
         ['Age', 'Cash'],
         [12,  101],
         [15,  240],
@@ -108,9 +108,9 @@ lava.run();
 
     <script type="text/javascript">
         function getRandomColor() {
-            var letters = '0123456789ABCDEF';
-            var color = '#';
-            for (var i = 0; i < 6; i++) {
+            const letters = '0123456789ABCDEF';
+            const color = '#';
+            for (const i = 0; i < 6; i++) {
                 color += letters[Math.floor(Math.random() * 16)];
             }
             return color;
@@ -122,11 +122,11 @@ lava.run();
             });
         }
 
-        var chartJson = {
+        const chartJson = {
             label: 'MyFancyChart',
             type: 'ScatterChart',
             elementId: 'chart_div',
-            datatable: [
+            data: [
                 ['Age', 'Cash'],
                 [12,  101],
                 [15,  240],

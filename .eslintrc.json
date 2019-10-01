@@ -55,7 +55,7 @@
     {
       "files": [
         "karma.conf.js",
-        "gulpfile.esm.js",
+        "gulpfile.js",
         "webpack.config.js",
         "gulp-fucntions/*.js"
       ],

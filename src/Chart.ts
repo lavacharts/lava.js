@@ -1,19 +1,9 @@
 import Renderable from "./Renderable";
 import { RenderableTmpl } from "./types";
-import { VisualizationPropertyMap } from "./types/visualization-props";
+import { ChartFactory } from "./types/chart";
 
-type SupportedChartTypes = keyof VisualizationPropertyMap;
-
-interface NewChartConstructor {
-  new (container: HTMLElement): any;
-}
-
-function makeChartFactory(
-  container: HTMLElement
-): (type: string) => NewChartConstructor {
-  return function(type: SupportedChartTypes): NewChartConstructor {
-    return new window.google.visualization[type](container);
-  };
+function makeChartFactory(container: HTMLElement): ChartFactory {
+  return type => new window.google.visualization[type](container);
 }
 
 /**
@@ -24,13 +14,19 @@ function makeChartFactory(
  * @license   MIT
  */
 export default class Chart extends Renderable {
+  /**
+   * If this is set to true, then the {@link Chart} will be output as a PNG
+   *
+   * @type {Boolean}
+   */
   png: boolean;
-  events: any;
+
+  events!: Array<any>;
 
   /**
    * Create a new Chart.
    *
-   * @example
+   * @exampl
    * {
    *     label: 'Test',
    *     type: 'PieChart',
@@ -51,11 +47,6 @@ export default class Chart extends Renderable {
   constructor(payload: RenderableTmpl) {
     super(payload);
 
-    /**
-     * If this is set to true, then the {@link Chart} will be output as a PNG
-     *
-     * @type {Boolean}
-     */
     this.png = Boolean(payload.png);
   }
 
@@ -64,10 +55,8 @@ export default class Chart extends Renderable {
    *
    * This method will have access to window.google since it is called
    * within the render method.
-   *
-   * @private
    */
-  private setup(): void {
+  protected _preDraw(): void {
     const chartFactory = makeChartFactory(this.container);
 
     this.gchart = chartFactory(this.class);
@@ -85,7 +74,7 @@ export default class Chart extends Renderable {
    * within the run method.
    * @private
    */
-  private _postDraw(): void {
+  protected _postDraw(): void {
     if (this.png) {
       this.drawPng();
     }
@@ -113,36 +102,36 @@ export default class Chart extends Renderable {
    * @private
    * @return {void}
    */
-  private attachEvents(): void {
-    this.events.forEach((callback: Function, event: any) => {
-      let context = window;
-      let func = callback;
+  // private attachEvents(): void {
+  //   this.events.forEach((callback: Function, event: any) => {
+  //     let context = window;
+  //     let func = callback;
 
-      if (typeof callback === "object") {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-        //@ts-ignore I don't know what to do here
-        context = context[callback[0]];
-        func = callback[1];
-      }
+  //     if (typeof callback === "object") {
+  //       // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  //       //@ts-ignore I don't know what to do here
+  //       context = context[callback[0]];
+  //       func = callback[1];
+  //     }
 
-      console.log(
-        `[lava.js] The "${this.uuid}::${event}" event will be handled by "${func}" in the context`,
-        context
-      );
+  //     console.log(
+  //       `[lava.js] The "${this.uuid}::${event}" event will be handled by "${func}" in the context`,
+  //       context
+  //     );
 
-      /**
-       * Set the context of "this" within the user provided callback to the
-       * chart that fired the event while providing the datatable of the chart
-       * to the callback as an argument.
-       */
-      window.google.visualization.events.addListener(this.gchart, event, () => {
-        const callback = Object.bind(
-          context[Object.call.prototype.toString(func)],
-          this.gchart
-        ) as (data: google.visualization.DataTable) => any;
+  //     /**
+  //      * Set the context of "this" within the user provided callback to the
+  //      * chart that fired the event while providing the datatable of the chart
+  //      * to the callback as an argument.
+  //      */
+  //     window.google.visualization.events.addListener(this.gchart, event, () => {
+  //       const callback = Object.bind(
+  //         context[Object.call.prototype.toString(func)],
+  //         this.gchart
+  //       ) as (data: google.visualization.DataTable) => any;
 
-        callback(this.data);
-      });
-    });
-  }
+  //       callback(this.data);
+  //     });
+  //   });
+  // }
 }

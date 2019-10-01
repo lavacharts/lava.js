@@ -60,11 +60,11 @@
         <div>
             <div class="align-left float">
                     <pre><code>
-var chartJson = {
+const chartJson = {
     label: 'Test',
     type: 'PieChart',
     elementId: 'chart_div',
-    datatable: function (data) {
+    data: (data) => {
         data.addColumn('string', 'Topping');
         data.addColumn('number', 'Slices');
         data.addRows([
@@ -79,16 +79,16 @@ var chartJson = {
     }
 };
 
-var chart = lava.store(chartJson);
+const chart = lava.store(chartJson);
 
 chart.on('ready', function() {
     console.log(this.uuid + ' is ready!');
 });
 
 chart.on('select', function (chart, data) {
-    var selectedItem = chart.getSelection()[0];
+    const selectedItem = chart.getSelection()[0];
     if (selectedItem) {
-        var topping = data.getValue(selectedItem.row, 0);
+        const topping = data.getValue(selectedItem.row, 0);
         alert('The user selected ' + topping);
     }
 });
@@ -107,11 +107,11 @@ lava.run();
 </div>
 
 <script type="text/javascript">
-    var chartJson = {
+    const chartJson = {
         label: 'Test',
         type: 'PieChart',
         elementId: 'chart_div',
-        datatable: function (data) {
+        data: (data) => {
             data.addColumn('string', 'Topping');
             data.addColumn('number', 'Slices');
             data.addRows([
@@ -133,9 +133,9 @@ lava.run();
     });
 
     chart.on('select', function (chart, data) {
-        var selectedItem = chart.getSelection()[0];
+        const selectedItem = chart.getSelection()[0];
         if (selectedItem) {
-            var topping = data.getValue(selectedItem.row, 0);
+            const topping = data.getValue(selectedItem.row, 0);
             alert('The user selected ' + topping);
         }
     });

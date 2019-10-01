@@ -19,7 +19,7 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "src/**/*"
+    "src/**/*", "index.ts"
   ],
   "exclude": [
     "src/Dashboard.ts",

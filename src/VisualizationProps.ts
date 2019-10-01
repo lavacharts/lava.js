@@ -1,38 +1,11 @@
-export type SupportedCharts =
-  | "AnnotationChart"
-  | "AreaChart"
-  | "BarChart"
-  | "BubbleChart"
-  | "CalendarChart"
-  | "CandlestickChart"
-  | "ColumnChart"
-  | "ComboChart"
-  | "DonutChart"
-  | "GanttChart"
-  | "GaugeChart"
-  | "GeoChart"
-  | "HistogramChart"
-  | "LineChart"
-  | "PieChart"
-  | "SankeyChart"
-  | "ScatterChart"
-  | "SteppedAreaChart"
-  | "TableChart"
-  | "TimelineChart"
-  | "TreeMapChart"
-  | "WordTreeChart";
+import { VizProps } from "./types/chart";
+import { SupportedCharts } from "./types/strings";
 
-export interface VizProps {
-  class: string;
-  package: string;
-  version: number;
-}
+type VisualizationPropertyDict = {
+  [K in SupportedCharts]: VizProps;
+};
 
-export interface VisualizationPropertyMap {
-  [K: string]: VizProps;
-}
-
-export const VizPropsMap: VisualizationPropertyMap = {
+export default {
   AnnotationChart: {
     class: "AnnotationChart",
     package: "annotationchart",
@@ -143,4 +116,4 @@ export const VizPropsMap: VisualizationPropertyMap = {
     package: "wordtree",
     version: 1
   }
-};
+} as VisualizationPropertyDict;

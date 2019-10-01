@@ -16,7 +16,7 @@
   "scripts": {
     "test": "karma start --singleRun",
     "dev": "yarn gulp dev",
-    "prod": "yarn gulp prod",
+    "prod": "webpack --production",
     "watch": "yarn tsc --watch",
     "start:dev": "webpack-dev-server"
   },
@@ -94,6 +94,7 @@
     "rxjs": "^5.1.0",
     "sinon": "^1.17.3",
     "sinon-chai": "^2.13.0",
+    "string-replace-loader": "^2.2.0",
     "stripify": "^6.0.0",
     "ts-loader": "^6.2.0",
     "tsify": "^4.0.1",
@@ -103,6 +104,7 @@
     "watchify": "^3.7.0",
     "webpack": "^4.41.0",
     "webpack-cli": "^3.3.9",
+    "webpack-dashboard": "^3.2.0",
     "yargs": "^3.6.0",
     "zone.js": "^0.8.12"
   }

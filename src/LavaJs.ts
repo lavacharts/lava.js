@@ -1,16 +1,13 @@
-import "dom";
-
 import EventEmitter from "events";
 
 import Chart from "./Chart";
 import Dashboard from "./Dashboard";
 import DataQuery, { DataQueryTmpl } from "./DataQuery";
-import DefaultOptions from "./DefaultOptions";
 import { InvalidCallback, RenderableNotFound } from "./Errors";
 import GoogleLoader from "./GoogleLoader";
+import { addEvent, defaultOptions } from "./lib";
 import Renderable from "./Renderable";
 import { LavaJsOptions, RenderableTmpl } from "./types";
-import { addEvent } from "./Utils";
 
 /**
  * Google Chart API wrapper library
@@ -32,7 +29,7 @@ export default class LavaJs extends EventEmitter {
   /**
    * Configurable options for the library
    */
-  private options: LavaJsOptions;
+  private options: LavaJsOptions = defaultOptions;
 
   /**
    * Chart storage
@@ -55,13 +52,25 @@ export default class LavaJs extends EventEmitter {
   constructor(options?: LavaJsOptions) {
     super();
 
-    if (options) {
-      this.options = Object.assign(options, DefaultOptions);
-    } else {
-      this.options = DefaultOptions;
-    }
+    if (options) this.configure(options);
 
     this.loader = new GoogleLoader(this.options);
+  }
+
+  /**
+   * Forward the autoRun option to the main object to check in page.
+   */
+  get autorun(): boolean {
+    return typeof this.options.autoRun === "undefined"
+      ? true
+      : this.options.autoRun;
+  }
+
+  /**
+   * Configure the LavaJs module.
+   */
+  public configure(options: LavaJsOptions): void {
+    this.options = Object.assign(this.options, options);
   }
 
   /**
@@ -293,7 +302,7 @@ export default class LavaJs extends EventEmitter {
    */
   private attachRedrawHandler(): void {
     if (this.options.responsive === true) {
-      let debounced: ReturnType<typeof setTimeout>;
+      let debounced: number;
 
       addEvent(window, "resize", () => {
         // let redrawAll = this.redrawAll().bind(this);

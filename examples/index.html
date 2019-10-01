@@ -3,7 +3,6 @@
 <head>
     <title>Lava.js | Basic Syntax</title>
     <meta charset="UTF-8">
-    <script type="text/javascript" src="../dist/lava.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <style rel="stylesheet" type="text/css">
         html, body {
@@ -63,7 +62,7 @@ var chartJson = {
     label: 'Test',
     type: 'PieChart',
     elementId: 'chart_div',
-    datatable: [
+    data: [
         ['Task', 'Hours per Day'],
         ['Work',     11],
         ['Eat',      2],
@@ -95,7 +94,7 @@ lava.run();
             label: 'Test',
             type: 'PieChart',
             elementId: 'chart_div',
-            datatable: [
+            data: [
                 ['Task', 'Hours per Day'],
                 ['Work',     11],
                 ['Eat',      2],

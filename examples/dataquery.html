@@ -62,15 +62,15 @@
             <div>
                 <div class="align-left float">
                     <pre><code>
-var sheetRoot = 'https://docs.google.com/spreadsheets/d/';
-var id = '1DwWSti6L3KRyJC0Wi33X3i-6lsZ2iStrhK7sxw7uoek';
-var queryStr = '/gviz/tq?range=A1:B6';
+const sheetRoot = 'https://docs.google.com/spreadsheets/d/';
+const id = '1DwWSti6L3KRyJC0Wi33X3i-6lsZ2iStrhK7sxw7uoek';
+const queryStr = '/gviz/tq?range=A1:B6';
 
-var chartJson = {
+const chartJson = {
     label: 'Test',
     type: 'PieChart',
     elementId: 'chart_div',
-    datatable: lava.query(
+    data: lava.query(
         sheetRoot + id + queryStr
     ),
     options: {

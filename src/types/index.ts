@@ -1,13 +1,13 @@
-import LavaJs from "..";
-import * as VisualizationProps from "./visualization-props";
+import LavaJs from "../LavaJs";
+import {
+  RenderableType,
+  SupportedCharts,
+  SupportedFormatters
+} from "./strings";
 
-export { VisualizationProps };
-
-export type RenderableType = "Chart" | "Dashboard";
-
-export type Dict = {
-  [K: string]: string;
-};
+export interface Lavacharts {
+  options: LavaJsOptions;
+}
 
 export type QueryTap = (
   query: google.visualization.Query
@@ -15,26 +15,24 @@ export type QueryTap = (
 
 export type GoogleDataTable = google.visualization.DataTable;
 
-export type ValidFormatterTypes = "NumberFormat" | "DateFormat";
-
 export interface LavaJsConstructor {
   new (options: LavaJsOptions): LavaJs;
 }
 
 export interface LavaJsOptions {
-  autoRun: boolean;
-  datetimeFormat: string;
-  debounceTimeout: number;
-  locale: string;
-  mapsApiKey: string;
-  responsive: boolean;
-  timezone: string;
+  autoRun?: boolean;
+  datetimeFormat?: string;
+  debounceTimeout?: number;
+  locale?: string;
+  mapsApiKey?: string;
+  responsive?: boolean;
+  timezone?: string;
 }
 
-export interface GoogleChartConfig {
+export interface GoogleLoaderOptions {
   language: string;
   packages: string[];
-  mapsApiKey: string;
+  mapsApiKey?: string;
 }
 
 export interface ModernHTMLScriptElement extends HTMLScriptElement {
@@ -45,7 +43,7 @@ export interface ModernHTMLScriptElement extends HTMLScriptElement {
 export interface Formatter {
   index: number;
   options: object;
-  type: string;
+  type: SupportedFormatters;
 }
 
 export interface RenderableTmpl {
@@ -58,7 +56,7 @@ export interface RenderableTmpl {
   png: boolean;
   uuid: string;
   formats?: Formatter[];
-  type: RenderableType;
+  type: SupportedCharts | RenderableType;
 }
 
 // export interface Chart extends Renderable {
