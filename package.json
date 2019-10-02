@@ -1,6 +1,6 @@
 {
   "name": "@lavacharts/lava.js",
-  "version": "4.0.0-beta2",
+  "version": "4.0.0-beta3",
   "description": "Wrapper library for the Google Chart API",
   "homepage": "http://lavacharts.com",
   "author": "Kevin Hill",
@@ -13,13 +13,13 @@
   "bugs": {
     "url": "https://github.com/lavacharts/lava.js/issues"
   },
-  "main": "./dist/lava.min.js",
+  "main": "./dist/lava.js",
   "scripts": {
     "start": "yarn run dev",
-    "test": "karma start --singleRun",
-    "dev": "yarn webpack-dev-server --config webpack.dev.js --inline --hot --no-info",
-    "build": "webpack --config webpack.dev.js --progress",
-    "prod": "webpack --config webpack.prod.js --progress --profile"
+    "test": "yarn run karma start --singleRun",
+    "dev": "yarn run webpack-dev-server --config webpack.dev.js --inline --hot --no-info",
+    "build": "yarn run webpack --config webpack.dev.js --progress",
+    "prod": "yarn run webpack --config webpack.prod.js --progress --profile"
   },
   "dependencies": {
     "@angular/core": "^4.2.4",
@@ -34,7 +34,7 @@
     "copy-webpack-plugin": "^5.0.4",
     "esdoc": "^1.1.0",
     "esdoc-standard-plugin": "^1.0.0",
-    "eslint": "^6.4.0",
+    "eslint": "^6.5.1",
     "eslint-config-prettier": "^6.3.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-prettier": "^3.1.1",
@@ -83,6 +83,7 @@
     "typescript": "^3.6.3",
     "webpack": "^4.41.0",
     "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.1",
     "webpack-merge": "^4.2.2",
     "yargs": "^3.6.0"
   }

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "strict": true,
-    "target": "es5",
+    "target": "es2018",
     "sourceMap": true,
     "outDir": "./build",
     // "allowJs": false,
@@ -13,14 +13,14 @@
     "lib": ["dom","es2015"],
     "strictNullChecks": true,
     "noImplicitReturns": true,
-    "resolveJsonModule": true,
     "preserveConstEnums": true,
-    "downlevelIteration": true,
+    // "downlevelIteration": true,
     "experimentalDecorators": true,
-    "forceConsistentCasingInFileNames": true
+    // "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "src/**/*", "index.ts"
+    "index.ts",
+    "src/**/*"
   ],
   "exclude": [
     "src/Dashboard.ts",

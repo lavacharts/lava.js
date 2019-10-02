@@ -28,7 +28,7 @@ describe('LavaJs', function () {
             expect(chart._elementId).to.equal('test-chart');
 
             expect(chart.data).to.be.undefined;
-            expect(chart.gchart).to.be.undefined;
+            expect(chart.googleChart).to.be.undefined;
 
             expect(typeof chart._setup).to.equal('function');
             expect(typeof chart.draw).to.equal('function');
@@ -46,9 +46,9 @@ describe('LavaJs', function () {
 
                 expect(chart.data).to.shallowDeepEqual(new google.visualization.DataTable());
 
-                // console.log(Object.keys(chart.gchart));
+                // console.log(Object.keys(chart.googleChart));
 
-                expect(chart.gchart.container).to.equal(
+                expect(chart.googleChart.container).to.equal(
                     (new google.visualization.PieChart(testdiv)).container
                 );
             });

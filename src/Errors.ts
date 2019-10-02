@@ -52,9 +52,3 @@ export class ElementIdNotFound extends LavaJsError {
     super(`[lava.js] DOM node where id="${elemId}" was not found.`);
   }
 }
-
-LavaJsError.prototype = Error.prototype;
-DataError.prototype = LavaJsError.prototype;
-InvalidCallback.prototype = LavaJsError.prototype;
-ElementIdNotFound.prototype = LavaJsError.prototype;
-RenderableNotFound.prototype = LavaJsError.prototype;

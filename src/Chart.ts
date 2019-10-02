@@ -59,7 +59,7 @@ export default class Chart extends Renderable {
   protected _preDraw(): void {
     const chartFactory = makeChartFactory(this.container);
 
-    this.gchart = chartFactory(this.class);
+    this.googleChart = chartFactory(this.class);
 
     // TODO: append Lavachart defined events?
     // if (this.events) {
@@ -88,7 +88,7 @@ export default class Chart extends Renderable {
    */
   private drawPng(): void {
     const img = document.createElement("img");
-    img.src = this.gchart.getImageURI();
+    img.src = this.googleChart.getImageURI();
 
     if (this.container) {
       this.container.innerHTML = "";
@@ -124,10 +124,10 @@ export default class Chart extends Renderable {
   //      * chart that fired the event while providing the datatable of the chart
   //      * to the callback as an argument.
   //      */
-  //     window.google.visualization.events.addListener(this.gchart, event, () => {
+  //     window.google.visualization.events.addListener(this.googleChart, event, () => {
   //       const callback = Object.bind(
   //         context[Object.call.prototype.toString(func)],
-  //         this.gchart
+  //         this.googleChart
   //       ) as (data: google.visualization.DataTable) => any;
 
   //       callback(this.data);

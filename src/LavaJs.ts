@@ -1,5 +1,3 @@
-import EventEmitter from "events";
-
 import Chart from "./Chart";
 import Dashboard from "./Dashboard";
 import DataQuery, { DataQueryTmpl } from "./DataQuery";
@@ -7,7 +5,8 @@ import { InvalidCallback, RenderableNotFound } from "./Errors";
 import GoogleLoader from "./GoogleLoader";
 import { addEvent, defaultOptions } from "./lib";
 import Renderable from "./Renderable";
-import { LavaJsOptions, RenderableTmpl } from "./types";
+import { Google, LavaJsOptions, RenderableTmpl } from "./types";
+import { ChartUpdateReturn } from "./types/index";
 
 /**
  * Google Chart API wrapper library
@@ -20,7 +19,7 @@ import { LavaJsOptions, RenderableTmpl } from "./types";
  * @copyright (c) 2019, Kevin Hill
  * @license   http://opensource.org/licenses/MIT MIT
  */
-export default class LavaJs extends EventEmitter {
+export default class LavaJs {
   /**
    * Version of the LavaJs module
    */
@@ -50,8 +49,6 @@ export default class LavaJs extends EventEmitter {
    * Create a new instance of the LavaJs library
    */
   constructor(options?: LavaJsOptions) {
-    super();
-
     if (options) this.configure(options);
 
     this.loader = new GoogleLoader(this.options);
@@ -76,14 +73,12 @@ export default class LavaJs extends EventEmitter {
   /**
    * Initializes the library by loading google to the window.
    */
-  public async init(): Promise<any> {
+  public async init(): Promise<Google> {
+    console.log("[lava.js] Inititalizing...");
+
     if (this.loader.isLoaded === false) {
-      await this.loader.loadGoogle();
+      return this.loader.loadGoogle();
     }
-
-    console.log("[lava.js] Google is ready", window.google);
-
-    return window.google;
   }
 
   /**
@@ -92,38 +87,41 @@ export default class LavaJs extends EventEmitter {
    * @emits {ready}
    */
   public async run(): Promise<any> {
-    const runPromises: Promise<any>[] = [];
-
     console.log(`[lava.js] v${LavaJs.VERSION} Running...`);
     console.log("[lava.js] Loading options:", this.options);
 
     this.attachRedrawHandler();
 
-    try {
-      await this.init();
-    } catch (error) {
-      this.emit("error", error);
+    await this.init();
+
+    console.log("[lava.js] Google is ready", window.google);
+
+    await this.renderAll();
+
+    // try {
+
+    // } catch (error) {
+    //   this.emit("error", error);
+    // }
+
+    // this.emit("ready");
+
+    if (typeof this.readyCallback === "function") {
+      console.log("[lava.js] Ready!");
+      this.readyCallback();
     }
+  }
+
+  public renderAll(): Promise<any>[] {
+    const promises: Promise<any>[] = [];
 
     this.volcano.forEach(renderable => {
       console.log(`[lava.js] Rendering ${renderable.uuid}`);
 
-      runPromises.push(renderable.run());
+      promises.push(renderable.run());
     });
 
-    try {
-      await Promise.all(runPromises);
-    } catch (error) {
-      this.emit("error", error);
-    }
-
-    console.log("[lava.js] Ready!");
-
-    this.emit("ready");
-
-    if (typeof this.readyCallback === "function") {
-      this.readyCallback();
-    }
+    return promises;
   }
 
   /**
@@ -146,7 +144,7 @@ export default class LavaJs extends EventEmitter {
    * The payload payload can come from Lavacharts or manually if used
    * as an independent library.
    */
-  public create(payload: RenderableTmpl): Chart | Dashboard {
+  public create(payload: RenderableTmpl): Renderable {
     console.log(`[lava.js] Creating a new ${payload.type}:`, payload);
 
     if (payload.type === "Dashboard") {
@@ -161,7 +159,7 @@ export default class LavaJs extends EventEmitter {
    *
    * @todo If the library has ran, and is ready, loading new charts will force a redrawAll of all the currently drawn charts.
    */
-  public store(renderable: RenderableTmpl): Chart | Dashboard {
+  public store(renderable: RenderableTmpl): void {
     // if (renderable instanceof Renderable === false) {
     //   renderable = this.create(renderable);
     // }
@@ -169,15 +167,13 @@ export default class LavaJs extends EventEmitter {
 
     console.log(`[lava.js] Storing ${newRenderable.uuid}`);
 
-    this.loader.addPackages(newRenderable.packages);
+    this.loader.addPackage(newRenderable.package);
 
     this.volcano.set(newRenderable.label, newRenderable);
 
     //if (this.isReady) {
     //    this.redrawAll();
     //}
-
-    return newRenderable;
   }
 
   /**
@@ -185,7 +181,7 @@ export default class LavaJs extends EventEmitter {
    *
    * The {@link Chart} object has the user defined properties such as data, options, formats, etc.
    *
-   * The Google Chart object is available as ".gchart" from the returned LavaChart.
+   * The Google Chart object is available as ".googleChart" from the returned LavaChart.
    * It can be used to access any of the available methods such as
    * getImageURI() or getChartLayoutInterface().
    *
@@ -194,12 +190,12 @@ export default class LavaJs extends EventEmitter {
    *
    * @throws {RenderableNotFound}
    */
-  public get(label: string): Chart | Dashboard {
+  public get(label = ""): Renderable | undefined {
     if (this.volcano.has(label) === false) {
       throw new RenderableNotFound(label);
     }
 
-    return this.volcano.get(label) as Chart | Dashboard;
+    return this.volcano.get(label);
   }
 
   /**
@@ -208,10 +204,7 @@ export default class LavaJs extends EventEmitter {
    * This is used to wrap calls to lava.loadData() or lava.loadOptions()
    * to protect against accessing charts that aren't loaded yet
    *
-   * @public
-   * @param {Function} callback
    * @throws {InvalidCallback}
-   * @return {void}
    */
   public ready(callback: Function): void {
     if (typeof callback !== "function") {
@@ -230,21 +223,25 @@ export default class LavaJs extends EventEmitter {
    */
   public async loadData(
     label: string,
-    payload: object,
-    callback?: Function
-  ): Promise<any> {
+    payload: object
+  ): Promise<ChartUpdateReturn | boolean> {
     const chart = this.get(label);
 
-    await chart.setData(payload);
+    if (chart) {
+      await chart.setData(payload);
 
-    chart.draw();
+      chart.draw();
 
-    if (typeof callback === "function") {
-      callback(chart.data, chart.gchart);
+      return {
+        data: chart.data,
+        chart: chart.googleChart,
+        options: chart.options
+      };
     }
+
+    return false;
   }
 
-  //noinspection JSUnusedGlobalSymbols
   /**
    * Loads new options into a chart and redraws.
    *
@@ -252,25 +249,25 @@ export default class LavaJs extends EventEmitter {
    * Used with an AJAX call, or javascript events, to load a new array of options into a chart.
    * This can be used to update a chart dynamically, without reloads.
    */
-  public loadOptions(
+  public async loadOptions(
     label: string,
-    payload: object,
-    callback?: Function
-  ): void {
-    //TODO: test this
+    payload: object
+  ): Promise<ChartUpdateReturn | boolean> {
     const chart = this.get(label);
 
-    chart.options = Object.assign(chart.options, payload);
+    if (chart) {
+      chart.options = Object.assign(chart.options, payload);
 
-    try {
       chart.draw();
-    } catch (error) {
-      this.emit("error", error);
+
+      return {
+        data: chart.data,
+        chart: chart.googleChart,
+        options: chart.options
+      };
     }
 
-    if (typeof callback === "function") {
-      callback(chart.data, chart.gchart);
-    }
+    return false;
   }
 
   /**

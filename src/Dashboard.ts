@@ -22,17 +22,11 @@ export default class Dashboard extends Renderable {
 
     super(json);
 
-    this.bindings = json.bindings;
-  }
+    this.googleChart = new window.google.visualization.Dashboard(
+      this.container
+    );
 
-  /**
-   * Actions to perform before drawing the {@link Dashboard}
-   *
-   * This method will have access to window.google since it is called
-   * within the render method.
-   */
-  public setup(): void {
-    this.gchart = new window.google.visualization.Dashboard(this.container);
+    this.bindings = json.bindings;
 
     // this._attachBindings();
   }
@@ -55,7 +49,7 @@ export default class Dashboard extends Renderable {
   //       chartWraps.push(new google.visualization.ChartWrapper(chartWrap));
   //     }
 
-  //     this.gchart.bind(controlWraps, chartWraps);
+  //     this.googleChart.bind(controlWraps, chartWraps);
   //   }
   // }
 }

@@ -1,6 +1,5 @@
-import { Lavacharts } from "..";
+import { Google, Lavacharts } from "../";
 import LavaJs from "../../LavaJs";
-import { Google } from "./index";
 
 declare global {
   interface Window {

@@ -6,9 +6,9 @@ module.exports = {
   context: __dirname,
   entry: path.resolve(__dirname, "index.ts"),
   output: {
-    library: "lava",
-    filename: "lava.min.js",
-    libraryTarget: "window",
+    // library: "lava",
+    filename: "lava.js",
+    // libraryTarget: "window",
     path: path.resolve(__dirname, "dist"),
   },
   plugins: [

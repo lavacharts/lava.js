@@ -1,3 +1,5 @@
+const path = require("path");
+
 module.exports = {
   root: true,
   env: {
@@ -51,7 +53,7 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/explicit-function-return-type": [
       "error",
-      { "allowExpressions": true }
+      { allowExpressions: true }
     ]
   },
   overrides: [
@@ -59,8 +61,8 @@ module.exports = {
       files: [
         "karma.conf.js",
         "gulpfile.js",
-        "webpack.config.js",
-        "gulp-fucntions/*.js"
+        "webpack.*.js",
+        "gulp-functions/*.js"
       ],
       env: {
         node: true

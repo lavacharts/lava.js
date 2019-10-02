@@ -1,8 +1,4 @@
-import {
-  GoogleLoaderOptions,
-  LavaJsOptions,
-  ModernHTMLScriptElement
-} from "./types";
+import { Google, GoogleLoaderOptions, LavaJsOptions } from "./types";
 
 export default class GoogleLoader {
   /**
@@ -18,21 +14,21 @@ export default class GoogleLoader {
   /**
    * Packages to load
    */
-  private packages: Set<string> = new Set(["corechart"]);
+  private packages: Set<string> = new Set();
 
   constructor(private options: LavaJsOptions) {}
 
   /**
    * Flag that will be true once window.google is available in page.
    */
-  get isLoaded(): boolean {
+  public get isLoaded(): boolean {
     return typeof window.google !== "undefined";
   }
 
   /**
    * Flag that will be true once Google's Static Loader is in page.
    */
-  get googleLoaderInPage(): boolean {
+  public get googleLoaderInPage(): boolean {
     const scripts = document.getElementsByTagName("script");
 
     for (const script of Array.from(scripts)) {
@@ -47,11 +43,11 @@ export default class GoogleLoader {
   /**
    * Get the options for the google loader.
    */
-  get config(): any {
-    const config = {
-      language: this.options.locale,
+  public get config(): GoogleLoaderOptions {
+    const config: GoogleLoaderOptions = {
+      language: this.options.locale || "en",
       packages: Array.from(this.packages)
-    } as GoogleLoaderOptions;
+    };
 
     if (this.options.mapsApiKey !== "") {
       config.mapsApiKey = this.options.mapsApiKey;
@@ -68,16 +64,9 @@ export default class GoogleLoader {
   }
 
   /**
-   * Add multiple packages to the list that Google needs to load.
-   */
-  public addPackages(packages: string[] | Set<string>): void {
-    packages.forEach((pkg: string) => this.packages.add(pkg));
-  }
-
-  /**
    * Load the Google Static Loader and resolve the promise when ready.
    */
-  public async loadGoogle(): Promise<void> {
+  public async loadGoogle(): Promise<Google> {
     console.log("[lava.js] Resolving Google...");
 
     if (this.googleLoaderInPage === false) {
@@ -86,33 +75,25 @@ export default class GoogleLoader {
       await this.addGoogleScriptToHead();
     }
 
-    console.log("[lava.js] Static loader found, initializing window.google");
-
-    return this.googleChartLoader();
-  }
-
-  /**
-   * Runs the Google Chart Loader using the passed Promise resolver as
-   * the setOnLoadCallback function.
-   */
-  public googleChartLoader(): Promise<void> {
     return new Promise(resolve => {
-      console.log("[lava.js] Loading Google with config:", this.config);
+      console.log("[lava.js] Static loader found, initializing window.google");
 
       window.google.charts.load(this.API_VERSION, this.config);
 
-      window.google.charts.setOnLoadCallback(resolve);
+      console.log("[lava.js] Loaded Google with config:", this.config);
+
+      window.google.charts.setOnLoadCallback(() => {
+        resolve(window.google);
+      });
     });
   }
 
   /**
    * Create a new script tag for the Google Static Loader
    */
-  private async addGoogleScriptToHead(): Promise<void> {
+  private addGoogleScriptToHead(): Promise<void> {
     return new Promise(resolve => {
-      const script = document.createElement(
-        "script"
-      ) as ModernHTMLScriptElement;
+      const script = document.createElement("script") as ScriptElement;
 
       script.type = "text/javascript";
       script.async = true;

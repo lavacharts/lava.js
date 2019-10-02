@@ -1,12 +1,18 @@
 import LavaJs from "../LavaJs";
+import { Google } from "./google";
+import { Lavacharts } from "./lavacharts";
 import {
   RenderableType,
   SupportedCharts,
   SupportedFormatters
 } from "./strings";
 
-export interface Lavacharts {
-  options: LavaJsOptions;
+export { Google, Lavacharts };
+
+export interface ChartUpdateReturn {
+  data: google.visualization.DataTable;
+  chart: any;
+  options: Record<string, any>;
 }
 
 export type QueryTap = (
@@ -35,14 +41,9 @@ export interface GoogleLoaderOptions {
   mapsApiKey?: string;
 }
 
-export interface ModernHTMLScriptElement extends HTMLScriptElement {
-  readyState?: any;
-  onreadystatechange?: any;
-}
-
 export interface Formatter {
   index: number;
-  options: object;
+  options: Record<string, any>;
   type: SupportedFormatters;
 }
 
@@ -52,25 +53,9 @@ export interface RenderableTmpl {
   elementId: string;
   label: any;
   options: any;
-  packages: Set<string>;
+  package: string;
   png: boolean;
   uuid: string;
   formats?: Formatter[];
   type: SupportedCharts | RenderableType;
 }
-
-// export interface Chart extends Renderable {
-//   data: object;
-//   elementId: string;
-//   events?: any[];
-//   formats?: any[];
-//   label: string;
-//   options?: object;
-//   png?: boolean;
-//   type: RenderableType;
-// }
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-// export interface Dashboard extends Renderable {
-//   //
-// }

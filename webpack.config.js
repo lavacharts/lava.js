@@ -6,19 +6,18 @@ const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 const isDevServer = process.env.WEBPACK_DEV_SERVER;
 
-module.exports = {
+module.exports = (env, argv) => console.log(argv)
+
+const config = {
   context: __dirname,
   mode: "development",
-  entry: __dir("index.ts"),
+  entry: path.resolve(__dirname, "index.ts"),
   devtool: "source-map",
-  devServer: {
-    open: true
-  },
   output: {
-    library: "lava",
+    // library: "lava",
     filename: "lava.min.js",
-    libraryTarget:'window',
-    path: __dir(isDevServer ? "build" : "dist"),
+    // libraryTarget: "window",
+    path: path.resolve(__dirname, "dist"),
   },
   plugins: [
     ...[

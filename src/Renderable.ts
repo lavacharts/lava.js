@@ -47,30 +47,38 @@ export default class Renderable extends EventEmitter {
   /**
    * Google chart object created once the {@link Chart} / {@link Dashboard}
    * has been rendered.
-   *
-   * @type {Object}
    */
-  protected gchart: any;
+  public googleChart: any;
+
+  /**
+   * Type of {@link Renderable}.
+   */
+  public readonly type: SupportedCharts | RenderableType;
+
+  /**
+   * The google.visualization class needed for rendering.
+   */
+  public readonly class: ChartClasses;
+
+  /**
+   * The google.visualization package needed for rendering.
+   */
+  public readonly package: string;
 
   /**
    * HTMLElement into which the chart will be rendered.
    */
-  protected container!: HTMLElement;
+  public readonly container: HTMLElement;
 
   /**
    * Element ID of the DOM node for the container.
    */
-  protected elementId: string;
+  public readonly elementId: string;
 
   /**
    * Formatters for the DataTable
    */
   protected formats: Formatter[];
-
-  /**
-   * Type of {@link Renderable}.
-   */
-  protected type: SupportedCharts | RenderableType;
 
   /**
    * The source of the DataTable, to be used in setData().
@@ -92,26 +100,19 @@ export default class Renderable extends EventEmitter {
 
     const container = document.getElementById(this.elementId);
 
-    if (container) {
-      this.container = container;
+    if (container === null) {
+      throw new Error(
+        `document.getElementById("${this.elementId}") did not return an HTMLElement`
+      );
     }
+
+    this.container = container;
 
     this.options = json.options || {};
     this.formats = json.formats || [];
-  }
 
-  /**
-   * The google.visualization class needed for rendering.
-   */
-  public get class(): ChartClasses {
-    return VizProps[this.type as SupportedCharts].class;
-  }
-
-  /**
-   * The google.visualization package needed for rendering.
-   */
-  public get packages(): string[] {
-    return [VizProps[this.type as SupportedCharts].package];
+    this.class = VizProps[this.type as SupportedCharts].class;
+    this.package = VizProps[this.type as SupportedCharts].package;
   }
 
   /**
@@ -143,7 +144,7 @@ export default class Renderable extends EventEmitter {
       throw new DataError(`${this.uuid} Could not draw, data is ${this.data}`);
     }
 
-    this.gchart.draw(this.data, this.options);
+    this.googleChart.draw(this.data, this.options);
 
     if (typeof this._postDraw === "function") {
       console.log(`[lava.js] Running ${this.uuid}._postDraw()`);
@@ -251,9 +252,9 @@ export default class Renderable extends EventEmitter {
   //   const events = ["ready", "select", "error", "onmouseover", "onmouseout"];
 
   //   for (const event in events) {
-  //     window.google.visualization.events.addListener(this.gchart, event, () =>
+  //     window.google.visualization.events.addListener(this.googleChart, event, () =>
   //       this.emit(event, {
-  //         chart: this.gchart,
+  //         chart: this.googleChart,
   //         data: this.data
   //       })
   //     );
