@@ -1,6 +1,9 @@
 .idea/
+node_modules/
+
 docs/
 build/
-node_modules/
+
 renders/*.png
+
 *.log
