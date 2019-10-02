@@ -1,11 +1,10 @@
 import { DataError } from "./Errors";
-import { QueryTap } from "./types";
-
-export interface DataQueryTmpl {
-  url: string;
-  opts?: google.visualization.QueryOptions;
-  tap?: QueryTap;
-}
+import {
+  GoogleQuery,
+  GoogleQueryOptions,
+  GoogleQueryResponse,
+  QueryTransformer
+} from "./types/google";
 
 /**
  * Used for loading remote data as a {@link DataTable}
@@ -17,11 +16,9 @@ export interface DataQueryTmpl {
  * @license   http://opensource.org/licenses/MIT MIT
  */
 export default class DataQuery {
-  public tap: QueryTap = (
-    query: google.visualization.Query
-  ): google.visualization.Query => query;
+  public transformer: QueryTransformer;
 
-  public opts: google.visualization.QueryOptions = { sendMethod: "auto" };
+  public opts: GoogleQueryOptions;
 
   /**
    * Create a new DataQuery for a DataTable
@@ -30,15 +27,18 @@ export default class DataQuery {
    */
   constructor(
     public url: string,
-    opts?: google.visualization.QueryOptions,
-    tap?: QueryTap
+    opts?: GoogleQueryOptions,
+    transformer?: QueryTransformer
   ) {
-    if (tap) {
-      this.tap = tap;
+    this.opts = { sendMethod: "auto" };
+    this.transformer = (query: GoogleQuery): GoogleQuery => query;
+
+    if (transformer) {
+      this.transformer = transformer;
     }
 
     if (opts) {
-      this.opts;
+      this.opts = opts;
     }
   }
 
@@ -47,7 +47,7 @@ export default class DataQuery {
    *
    * @throws {DataError}
    */
-  static create(payload: DataQueryTmpl): DataQuery {
+  public static create(payload: DataQuery): DataQuery {
     if (!payload.url) {
       throw new DataError(
         '"url" is a mandatory parameter for creating a DataQuery.'
@@ -57,28 +57,24 @@ export default class DataQuery {
     const query = new DataQuery(payload.url);
 
     if (typeof payload.opts === "object") {
-      query.opts = payload.opts as google.visualization.QueryOptions;
+      query.opts = payload.opts as GoogleQueryOptions;
     }
 
-    if (typeof payload.tap === "function") {
-      query.tap = payload.tap as QueryTap;
+    if (typeof payload.transformer === "function") {
+      query.transformer = payload.transformer as QueryTransformer;
     }
 
     return query;
   }
 
-  //noinspection JSUnusedGlobalSymbols
   /**
    * Send the DataQuery
-   *
-   * @public
-   * @return {Promise}
    */
-  async send(): Promise<google.visualization.QueryResponse> {
+  public send(): Promise<GoogleQueryResponse> {
     const query = new window.google.visualization.Query(this.url, this.opts);
 
     return new Promise((resolve, reject) => {
-      this.tap(query).send((response: google.visualization.QueryResponse) => {
+      this.transformer(query).send(response => {
         if (response.isError()) {
           reject(response);
         }

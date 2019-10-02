@@ -1,4 +1,4 @@
-import { getType } from "./lib";
+import { getType } from ".";
 
 /**
  * Sets the data for the chart by creating a new DataTable

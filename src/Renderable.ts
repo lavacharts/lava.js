@@ -1,10 +1,15 @@
 import EventEmitter from "events";
 
 import DataQuery from "./DataQuery";
-import { createDataTable } from "./DataTable";
 import { DataError, ElementIdNotFound } from "./Errors";
-import { Formatter, RenderableTmpl } from "./types";
-import { ChartClasses, RenderableType, SupportedCharts } from "./types/strings";
+import { createDataTable } from "./lib";
+import {
+  ChartClasses,
+  Formatter,
+  RenderableTmpl,
+  RenderableType,
+  SupportedCharts
+} from "./types";
 import VizProps from "./VisualizationProps";
 
 /**

@@ -1,12 +1,11 @@
 import Chart from "./Chart";
 import Dashboard from "./Dashboard";
-import DataQuery, { DataQueryTmpl } from "./DataQuery";
+import DataQuery from "./DataQuery";
 import { InvalidCallback, RenderableNotFound } from "./Errors";
 import GoogleLoader from "./GoogleLoader";
 import { addEvent, defaultOptions } from "./lib";
 import Renderable from "./Renderable";
-import { Google, LavaJsOptions, RenderableTmpl } from "./types";
-import { ChartUpdateReturn } from "./types/index";
+import { ChartUpdateReturn, LavaJsOptions, RenderableTmpl } from "./types";
 
 /**
  * Google Chart API wrapper library
@@ -73,7 +72,7 @@ export default class LavaJs {
   /**
    * Initializes the library by loading google to the window.
    */
-  public async init(): Promise<Google> {
+  public async init(): Promise<any> {
     console.log("[lava.js] Inititalizing...");
 
     if (this.loader.isLoaded === false) {
@@ -130,7 +129,7 @@ export default class LavaJs {
    * If a String is passed, then a new {@link DataQuery} is created with no options.
    * If an Object is passed, then the query must be defined by the object.
    */
-  public query(url: string | DataQueryTmpl): DataQuery {
+  public query(url: string | DataQuery): DataQuery {
     if (typeof url === "string") {
       return new DataQuery(url);
     } else {

@@ -1,44 +1,28 @@
-import LavaJs from "../LavaJs";
-import { Google } from "./google";
+import { Google, GoogleDataTable, GoogleLoaderOptions } from "./google";
 import { Lavacharts } from "./lavacharts";
+import { LavaJsOptions } from "./lavajs";
 import {
+  ChartClasses,
   RenderableType,
   SupportedCharts,
   SupportedFormatters
 } from "./strings";
 
-export { Google, Lavacharts };
+export {
+  ChartClasses,
+  Google,
+  GoogleLoaderOptions,
+  Lavacharts,
+  LavaJsOptions,
+  RenderableType,
+  SupportedCharts,
+  SupportedFormatters
+};
 
 export interface ChartUpdateReturn {
-  data: google.visualization.DataTable;
+  data: GoogleDataTable;
   chart: any;
   options: Record<string, any>;
-}
-
-export type QueryTap = (
-  query: google.visualization.Query
-) => google.visualization.Query;
-
-export type GoogleDataTable = google.visualization.DataTable;
-
-export interface LavaJsConstructor {
-  new (options: LavaJsOptions): LavaJs;
-}
-
-export interface LavaJsOptions {
-  autoRun?: boolean;
-  datetimeFormat?: string;
-  debounceTimeout?: number;
-  locale?: string;
-  mapsApiKey?: string;
-  responsive?: boolean;
-  timezone?: string;
-}
-
-export interface GoogleLoaderOptions {
-  language: string;
-  packages: string[];
-  mapsApiKey?: string;
 }
 
 export interface Formatter {
