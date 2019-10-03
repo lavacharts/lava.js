@@ -2,7 +2,7 @@ const path = require("path");
 const { ProgressPlugin } = require("webpack");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
-const { resolvePath } = require("./helpers");
+const resolvePath = (...args) => path.resolve(__dirname, "..", ...args);
 
 module.exports = {
   context: resolvePath(),
@@ -24,7 +24,7 @@ module.exports = {
       {
         test: /.(ts|tsx)?$/,
         loader: "ts-loader",
-        include: [path.resolve(__dirname, "src")],
+        include: [resolvePath("src")],
         exclude: [/node_modules/],
         options: { transpileOnly: true }
       },
@@ -33,7 +33,7 @@ module.exports = {
         loader: "string-replace-loader",
         options: {
           search: "__VERSION__",
-          replace: require("./package.json").version,
+          replace: require("../package.json").version,
           strict: true
         }
       }

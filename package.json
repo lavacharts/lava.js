@@ -17,9 +17,9 @@
   "scripts": {
     "start": "yarn run dev",
     "test": "yarn run karma start --singleRun",
-    "dev": "yarn run webpack-dev-server --config webpack.dev.js --inline --hot --no-info",
-    "build": "yarn run webpack --config webpack.dev.js --progress",
-    "prod": "yarn run webpack --config webpack.prod.js --progress"
+    "dev": "yarn run webpack-dev-server --development --inline --hot --no-info",
+    "build": "yarn run webpack --development  --progress",
+    "prod": "yarn run webpack --production --progress"
   },
   "dependencies": {
     "@angular/core": "^4.2.4",

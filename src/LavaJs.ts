@@ -6,7 +6,6 @@ import GoogleLoader from "./GoogleLoader";
 import { addEvent, defaultOptions } from "./lib";
 import Renderable from "./Renderable";
 import { ChartUpdateReturn, LavaJsOptions, RenderableTmpl } from "./types";
-import { RenderableTmpl } from "./types/index";
 
 /**
  * Google Chart API wrapper library
