@@ -25,6 +25,7 @@
   "exclude": [
     "src/Dashboard.ts",
     "src/angular",
+    "lib",
     "node_modules"
   ]
 }

@@ -6,6 +6,7 @@ import GoogleLoader from "./GoogleLoader";
 import { addEvent, defaultOptions } from "./lib";
 import Renderable from "./Renderable";
 import { ChartUpdateReturn, LavaJsOptions, RenderableTmpl } from "./types";
+import { RenderableTmpl } from "./types/index";
 
 /**
  * Google Chart API wrapper library
@@ -72,11 +73,23 @@ export default class LavaJs {
   /**
    * Initializes the library by loading google to the window.
    */
-  public async init(): Promise<any> {
+  public async init(
+    renderables?: RenderableTmpl | RenderableTmpl[]
+  ): Promise<any> {
     console.log("[lava.js] Inititalizing...");
 
+    if (renderables) {
+      if (typeof renderables === "object") {
+        this.store(renderables as RenderableTmpl);
+      }
+
+      if (renderables.length > 0) {
+        renderables.forEach(this.store, this);
+      }
+    }
+
     if (this.loader.isLoaded === false) {
-      return this.loader.loadGoogle();
+      await this.loader.loadGoogle();
     }
   }
 

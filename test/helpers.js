@@ -1,8 +1,9 @@
 before(function() {
-  window.__LAVAJS__TEST_DIV = document.createElement("div");
-  window.__LAVAJS__TEST_DIV.id = "test-chart";
+  window["__LAVAJS__TEST_DIV"] = document.createElement("div");
 
-  document.body.appendChild(window.__LAVAJS__TEST_DIV);
+  window["__LAVAJS__TEST_DIV"].id = "test-chart";
+
+  document.body.appendChild(window["__LAVAJS__TEST_DIV"]);
 });
 
 beforeEach(function() {

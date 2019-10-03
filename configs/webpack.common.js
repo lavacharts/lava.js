@@ -1,29 +1,23 @@
 const path = require("path");
-const webpack = require("webpack");
+const { ProgressPlugin } = require("webpack");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
+const { resolvePath } = require("./helpers");
+
 module.exports = {
-  context: __dirname,
-  entry: path.resolve(__dirname, "index.ts"),
+  context: resolvePath(),
+  entry: resolvePath("index.ts"),
   output: {
-    // library: "lava",
     filename: "lava.js",
+    path: resolvePath("dist")
+    // library: "lava",
     // libraryTarget: "window",
-    path: path.resolve(__dirname, "dist"),
   },
   plugins: [
-      new webpack.ProgressPlugin(),
-      new ForkTsCheckerWebpackPlugin({
-        eslint: true
-      }),
-      new webpack.LoaderOptionsPlugin({
-        options: {
-          tslint: {
-            emitErrors: true,
-            failOnHint: true
-          }
-        }
-      })
+    new ProgressPlugin(),
+    new ForkTsCheckerWebpackPlugin({
+      eslint: true
+    })
   ],
   module: {
     rules: [

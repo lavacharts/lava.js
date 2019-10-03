@@ -1,17 +1,15 @@
-const path = require("path");
-
 module.exports = {
   root: true,
   env: {
-    es6: true,
-    browser: true
+    es2017: true,
+    browser: true,
+    commonjs: true
   },
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    ecmaVersion: 2018,
     sourceType: "module",
     tsconfigRootDir: __dirname,
-    project: path.resolve(__dirname, './tsconfig.json')
+    // project: path.resolve(__dirname, './tsconfig.json')
   },
   extends: [
     "eslint:recommended",
@@ -34,16 +32,7 @@ module.exports = {
     "no-mixed-operators": "error",
     "no-param-reassign": "error",
 
-    "prettier/prettier": [
-      "error",
-      {
-        semi: true,
-        tabWidth: 2,
-        singleQuote: false,
-        trailingComma: "none",
-        quoteProps: "as-needed"
-      }
-    ],
+    "prettier/prettier": "error",
 
     "simple-import-sort/sort": "error",
     "import/first": "error",
@@ -61,15 +50,33 @@ module.exports = {
       files: [
         "karma.conf.js",
         "gulpfile.js",
-        "webpack.*.js",
-        "gulp-functions/*.js"
+        "lib/**/*.js",
+        "configs/*.js"
       ],
       env: {
         node: true
       },
       rules: {
-        "@typescript-eslint/explicit-function-return-type": "off",
-        "@typescript-eslint/no-var-requires": "off"
+        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/explicit-function-return-type": "off"
+      }
+    },
+    {
+      files: [
+        "test/*.js",
+      ],
+      globals: {
+        lava: true,
+        LavaJs: true,
+        sinon: true,
+        expect: true
+      },
+      env: {
+        mocha: true,
+        browser: true
+      },
+      rules: {
+        "max-nested-callbacks": "off"
       }
     }
   ]
