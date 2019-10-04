@@ -1,4 +1,4 @@
-import EventEmitter from "events";
+import { TinyEmitter } from "tiny-emitter";
 
 import DataQuery from "./DataQuery";
 import { DataError, ElementIdNotFound } from "./Errors";
@@ -21,7 +21,7 @@ import VizProps from "./VisualizationProps";
  * @copyright (c) 2019, Kevin Hill
  * @license   MIT
  */
-export default class Renderable extends EventEmitter {
+export default class Renderable extends TinyEmitter {
   [K: string]: any;
 
   /**

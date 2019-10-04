@@ -1,5 +1,4 @@
 const { ProgressPlugin } = require("webpack");
-const HtmlWebpackDeployPlugin = require("html-webpack-deploy-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 const { resolvePath } = require(".");
@@ -11,26 +10,21 @@ module.exports = {
     filename: "lava.js",
     path: resolvePath("dist")
     // publicPath: resolvePath("public")
-    // library: "lava",
-    // libraryTarget: "window",
   },
   plugins: [
     new ProgressPlugin(),
     new ForkTsCheckerWebpackPlugin({
       eslint: true
     })
-    // new HtmlWebpackDeployPlugin({
-    //   assets: {
-    //     copy: [{}],
-    //     links: ["site.css"],
-    //     scripts: ["lava.js"]
-    //   }
-    // })
   ],
   module: {
     rules: [
       {
-        test: /.(ts|tsx)?$/,
+        test: /\.hbs$/,
+        loader: "handlebars-loader"
+      },
+      {
+        test: /\.(ts|tsx)?$/,
         loader: "ts-loader",
         include: [resolvePath("src")],
         exclude: [/node_modules/],
@@ -40,9 +34,9 @@ module.exports = {
         test: /LavaJs\.ts$/,
         loader: "string-replace-loader",
         options: {
+          strict: true,
           search: "__VERSION__",
-          replace: require("../package.json").version,
-          strict: true
+          replace: require("../package.json").version
         }
       }
     ]

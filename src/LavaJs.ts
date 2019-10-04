@@ -1,3 +1,5 @@
+import { TinyEmitter } from "tiny-emitter";
+
 import Chart from "./Chart";
 import Dashboard from "./Dashboard";
 import DataQuery from "./DataQuery";
@@ -18,7 +20,7 @@ import { ChartUpdateReturn, LavaJsOptions, RenderableTmpl } from "./types";
  * @copyright (c) 2019, Kevin Hill
  * @license   http://opensource.org/licenses/MIT MIT
  */
-export default class LavaJs {
+export default class LavaJs extends TinyEmitter {
   /**
    * Version of the LavaJs module
    */
@@ -48,6 +50,8 @@ export default class LavaJs {
    * Create a new instance of the LavaJs library
    */
   constructor(options?: LavaJsOptions) {
+    super();
+
     if (options) this.configure(options);
 
     this.loader = new GoogleLoader(this.options);
