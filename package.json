@@ -15,16 +15,25 @@
   },
   "main": "./dist/lava.js",
   "scripts": {
-    "start": "yarn run dev",
+    "start": "yarn dev",
+    "lint": "yarn run eslint --ext=.ts src/",
     "test": "yarn run karma start --singleRun",
-    "dev": "yarn run webpack-dev-server --development --inline --hot --no-info",
-    "build": "yarn run webpack --development  --progress",
+    "dev": "yarn run webpack-dev-server --development",
     "prod": "yarn run webpack --production --progress"
   },
+  "lint-staged": {
+    "./src/**/*.ts": [
+      "yarn lint --fix",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "dependencies": {
-    "@angular/core": "^4.2.4",
     "@types/google.visualization": "^0.0.48",
-    "@types/lodash-es": "^4.17.3",
     "@types/node": "^12.7.5",
     "@typescript-eslint/eslint-plugin": "^2.3.1",
     "@typescript-eslint/parser": "^2.3.1",
@@ -40,7 +49,8 @@
     "eslint-plugin-simple-import-sort": "^4.0.0",
     "events": "^3.0.0",
     "fork-ts-checker-webpack-plugin": "^1.5.0",
-    "html-webpack-plugin": "^3.2.0",
+    "html-webpack-deploy-plugin": "^2.0.6",
+    "husky": "^3.0.8",
     "karma": "^1.7.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-jasmine": "^1.1.0",
@@ -50,10 +60,12 @@
     "karma-sinon": "^1.0.5",
     "karma-sinon-chai": "^1.3.1",
     "karma-viewport": "^0.4.2",
+    "lint-staged": "^9.4.1",
     "mocha": "^6.2.1",
     "mocha-sinon": "^2.0.0",
     "nightmare": "^3.0.2",
     "prettier": "^1.18.2",
+    "prismjs": "^1.17.1",
     "sinon": "^7.5.0",
     "sinon-chai": "^2.13.0",
     "string-replace-loader": "^2.2.0",
@@ -64,5 +76,9 @@
     "webpack-dev-server": "^3.8.1",
     "webpack-merge": "^4.2.2",
     "yargs": "^3.6.0"
+  },
+  "devDependencies": {
+    "@angular/core": "^8.2.9",
+    "rxjs": "^6.5.3"
   }
 }

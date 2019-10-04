@@ -78,12 +78,12 @@ export default class LavaJs {
     console.log("[lava.js] Inititalizing...");
 
     if (renderables) {
-      if (typeof renderables === "object") {
-        this.store(renderables as RenderableTmpl);
+      if (renderables instanceof Array) {
+        renderables.forEach(this.store, this);
       }
 
-      if (renderables.length > 0) {
-        renderables.forEach(this.store, this);
+      if (typeof renderables === "object") {
+        this.store(renderables as RenderableTmpl);
       }
     }
 
@@ -98,14 +98,14 @@ export default class LavaJs {
    * @emits {ready}
    */
   public async run(): Promise<any> {
-    console.log(`[lava.js] v${LavaJs.VERSION} Running...`);
-    console.log("[lava.js] Loading options:", this.options);
+    console.group(`[lava.js] v${LavaJs.VERSION}`);
+    console.log("loaded options", this.options);
 
     this.attachRedrawHandler();
 
     await this.init();
 
-    console.log("[lava.js] Google is ready", window.google);
+    console.log("google is ready", window.google);
 
     await this.renderAll();
 
@@ -118,9 +118,11 @@ export default class LavaJs {
     // this.emit("ready");
 
     if (typeof this.readyCallback === "function") {
-      console.log("[lava.js] Ready!");
+      console.log("ready!");
       this.readyCallback();
     }
+
+    console.groupEnd();
   }
 
   public renderAll(): Promise<any>[] {

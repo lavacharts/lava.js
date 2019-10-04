@@ -1,26 +1,33 @@
-const CopyWebpackPlugin = require("copy-webpack-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+// const CopyWebpackPlugin = require("copy-webpack-plugin");
+// const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-const { merge, commonConfig, resolvePath } = require("./helpers");
+const { resolvePath } = require(".");
 
-module.exports = merge(commonConfig, {
+module.exports = require("./merge")({
   mode: "development",
   devServer: {
     hot: true,
-    open: true,
+    // open: true,
     inline: true,
-    contentBase: resolvePath("examples")
+    stats: "errors-only",
+    contentBase: resolvePath("public")
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      inject: "head",
-      template: resolvePath("examples/index.html")
-    }),
-    new CopyWebpackPlugin([
-      {
-        from: resolvePath("examples"),
-        to: resolvePath("build")
-      }
-    ])
+    // new HtmlWebpackPlugin({
+    //   inject: "head",
+    //   template: resolvePath("public/index.html")
+    // }),
+    // new CopyWebpackPlugin([
+    //   {
+    //     from: resolvePath("public"),
+    //     to: resolvePath("build")
+    //   }
+    // ]),
+    // new CopyWebpackPlugin([
+    //   {
+    //     from: resolvePath("dist/lava.js"),
+    //     to: resolvePath("public/js")
+    //   }
+    // ])
   ]
 });

@@ -73,7 +73,7 @@ export default class Renderable extends EventEmitter {
   /**
    * HTMLElement into which the chart will be rendered.
    */
-  public readonly container: HTMLElement;
+  public readonly container!: HTMLElement | null;
 
   /**
    * Element ID of the DOM node for the container.
@@ -103,15 +103,13 @@ export default class Renderable extends EventEmitter {
     this.dataSrc = json.data;
     this.elementId = json.elementId;
 
-    const container = document.getElementById(this.elementId);
+    this.container = document.getElementById(this.elementId);
 
-    if (container === null) {
+    if (this.container === null) {
       throw new Error(
         `document.getElementById("${this.elementId}") did not return an HTMLElement`
       );
     }
-
-    this.container = container;
 
     this.options = json.options || {};
     this.formats = json.formats || [];

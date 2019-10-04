@@ -1,5 +1,4 @@
 import Renderable from "./Renderable";
-
 /**
  * Dashboard Class
  *
@@ -22,9 +21,8 @@ export default class Dashboard extends Renderable {
 
     super(json);
 
-    this.googleChart = new window.google.visualization.Dashboard(
-      this.container
-    );
+    this.googleChart = new window.google.visualization.Dashboard(this
+      .container as HTMLElement);
 
     this.bindings = json.bindings;
 

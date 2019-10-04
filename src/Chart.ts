@@ -57,7 +57,7 @@ export default class Chart extends Renderable {
    * within the render method.
    */
   protected _preDraw(): void {
-    const chartFactory = makeChartFactory(this.container);
+    const chartFactory = makeChartFactory(this.container as HTMLElement);
 
     this.googleChart = chartFactory(this.class);
 

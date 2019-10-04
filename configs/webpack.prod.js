@@ -1,5 +1,3 @@
-const { merge, commonConfig } = require("./helpers");
-
-module.exports = merge(commonConfig, {
+module.exports = require("./merge")({
   mode: "production"
 });
