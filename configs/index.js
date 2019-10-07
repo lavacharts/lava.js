@@ -9,9 +9,9 @@ function HtmlWebpackPluginFactory(pageArr) {
       new HtmlWebpackPlugin({
         inject: "head",
         showErrors: true,
-        templateParameters: require("./templateParameters"),
+        templateParameters: require("../src/examples/templateParameters"),
         alwaysWriteToDisk: true, // Option provided by html-webpack-harddisk-plugin
-        template: resolvePath(`src/examples/${page}.html`),
+        template: resolvePath(`src/examples/${page}.ejs`),
         filename: resolvePath(`public/${page.replace(/\.[a-z]+$/, "")}.html`)
       })
   );

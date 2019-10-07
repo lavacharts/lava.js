@@ -31,6 +31,8 @@ export interface Formatter {
   type: SupportedFormatters;
 }
 
+export type RenderableTypes = SupportedCharts | "Dashboard";
+
 export interface RenderableTmpl {
   data: any;
   datatable: any;
@@ -41,5 +43,5 @@ export interface RenderableTmpl {
   png: boolean;
   uuid: string;
   formats?: Formatter[];
-  type: SupportedCharts | RenderableType;
+  type: RenderableTypes;
 }

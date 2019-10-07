@@ -6,6 +6,7 @@ const commonConfig = require("./webpack.common.js");
 
 module.exports = merge(commonConfig, {
   mode: "development",
+  watch: true,
   output: {
     filename: "lava.js",
     path: resolvePath("public")
@@ -19,6 +20,7 @@ module.exports = merge(commonConfig, {
       errors: true,
       warnings: true
     },
+    watchContentBase: true,
     contentBase: resolvePath("public")
   },
   plugins: [

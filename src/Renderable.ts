@@ -10,7 +10,7 @@ import {
   RenderableType,
   SupportedCharts
 } from "./types";
-import VizProps from "./VisualizationProps";
+import { getClass, getPackage, getProp, VIZ_PROPS } from "./VisualizationProps";
 
 /**
  * The {@link Renderable} class is the base for {@link Chart}s and {@link Dashboard}s
@@ -114,8 +114,8 @@ export default class Renderable extends TinyEmitter {
     this.options = json.options || {};
     this.formats = json.formats || [];
 
-    this.class = VizProps[this.type as SupportedCharts].class;
-    this.package = VizProps[this.type as SupportedCharts].package;
+    this.class = getProp(this.type as SupportedCharts)(VIZ_PROPS.CLASS);
+    this.package = getProp(this.type as SupportedCharts)(VIZ_PROPS.PACKAGE);
   }
 
   /**

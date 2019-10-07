@@ -1,119 +1,43 @@
-import { VizProps } from "./types/chart";
+// import { VizProps } from "./types/chart";
 import { SupportedCharts } from "./types/strings";
 
+export const enum VIZ_PROPS {
+  "CLASS" = 0,
+  "PACKAGE" = 1,
+  "VERSION" = 2
+}
+
 type VisualizationPropertyDict = {
-  [K in SupportedCharts]: VizProps;
+  [K in SupportedCharts]: [string, string, number];
 };
 
-export default {
-  AnnotationChart: {
-    class: "AnnotationChart",
-    package: "annotationchart",
-    version: 1
-  },
-  AreaChart: {
-    class: "AreaChart",
-    package: "corechart",
-    version: 1
-  },
-  BarChart: {
-    class: "BarChart",
-    package: "corechart",
-    version: 1
-  },
-  BubbleChart: {
-    class: "BubbleChart",
-    package: "corechart",
-    version: 1
-  },
-  CalendarChart: {
-    class: "Calendar",
-    package: "calendar",
-    version: 1.1
-  },
-  CandlestickChart: {
-    class: "CandlestickChart",
-    package: "corechart",
-    version: 1
-  },
-  ColumnChart: {
-    class: "ColumnChart",
-    package: "corechart",
-    version: 1
-  },
-  ComboChart: {
-    class: "ComboChart",
-    package: "corechart",
-    version: 1
-  },
-  DonutChart: {
-    class: "PieChart",
-    package: "corechart",
-    version: 1
-  },
-  GanttChart: {
-    class: "Gantt",
-    package: "gantt",
-    version: 1
-  },
-  GaugeChart: {
-    class: "Gauge",
-    package: "gauge",
-    version: 1
-  },
-  GeoChart: {
-    class: "GeoChart",
-    package: "geochart",
-    version: 1
-  },
-  HistogramChart: {
-    class: "Histogram",
-    package: "corechart",
-    version: 1
-  },
-  LineChart: {
-    class: "LineChart",
-    package: "corechart",
-    version: 1
-  },
-  PieChart: {
-    class: "PieChart",
-    package: "corechart",
-    version: 1
-  },
-  SankeyChart: {
-    class: "Sankey",
-    package: "sankey",
-    version: 1
-  },
-  ScatterChart: {
-    class: "ScatterChart",
-    package: "corechart",
-    version: 1
-  },
-  SteppedAreaChart: {
-    class: "SteppedAreaChart",
-    package: "corechart",
-    version: 1
-  },
-  TableChart: {
-    class: "Table",
-    package: "table",
-    version: 1
-  },
-  TimelineChart: {
-    class: "Timeline",
-    package: "timeline",
-    version: 1
-  },
-  TreeMapChart: {
-    class: "TreeMap",
-    package: "treemap",
-    version: 1
-  },
-  WordTreeChart: {
-    class: "WordTree",
-    package: "wordtree",
-    version: 1
-  }
+const propMap = {
+  AnnotationChart: ["AnnotationChart", "annotationchart", 1],
+  AreaChart: ["AreaChart", "corechart", 1],
+  BarChart: ["BarChart", "corechart", 1],
+  BubbleChart: ["BubbleChart", "corechart", 1],
+  CalendarChart: ["Calendar", "calendar", 1],
+  CandlestickChart: ["CandlestickChart", "corechart", 1],
+  ColumnChart: ["ColumnChart", "corechart", 1],
+  ComboChart: ["ComboChart", "corechart", 1],
+  DonutChart: ["PieChart", "corechart", 1],
+  GanttChart: ["Gantt", "gantt", 1],
+  GaugeChart: ["Gauge", "gauge", 1],
+  GeoChart: ["GeoChart", "geochart", 1],
+  HistogramChart: ["Histogram", "corechart", 1],
+  LineChart: ["LineChart", "corechart", 1],
+  PieChart: ["PieChart", "corechart", 1],
+  SankeyChart: ["Sankey", "sankey", 1],
+  ScatterChart: ["ScatterChart", "corechart", 1],
+  SteppedAreaChart: ["SteppedAreaChart", "corechart", 1],
+  TableChart: ["Table", "table", 1],
+  TimelineChart: ["Timeline", "timeline", 1],
+  TreeMapChart: ["TreeMap", "treemap", 1],
+  WordTreeChart: ["WordTree", "wordtree", 1]
 } as VisualizationPropertyDict;
+
+export function getProp(chart: SupportedCharts) {
+  return function(prop: number): string | number {
+    return propMap[chart][prop];
+  };
+}
