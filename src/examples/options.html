@@ -1,10 +1,8 @@
 <!doctype html>
 <html>
 <head>
-    <title>Lava.js | Formats</title>
+    <title>Lava.js | Dynamic Options</title>
     <meta charset="UTF-8">
-    <link href="./site.css" rel="stylesheet">
-    <script type="text/javascript" src="../dist/lava.js"></script>
 </head>
 
 <body>
@@ -14,17 +12,32 @@
                 LavaJs v4.0
             </div>
             <p>Google Charts, made simple.</p>
-            <p>(Hover over a data point.)</p>
+            <p><a href="#" onclick="loadOptions()">(Click to update options.)</a></p>
             <p><a href="index.html">Basic</a>, <a href="events.html">Events</a>, <a href="dataquery.html">Remote Data</a></p>
 
             <div>
                 <div class="align-left float">
                     <pre><code>
-var chartJson = {
-    label: 'Test',
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    const color = '#';
+    for (const i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+function loadOptions() {
+    lava.loadOptions('MyFancyChart', {
+        colors: [getRandomColor()]
+    });
+}
+
+const chartJson = {
+    label: 'MyFancyChart',
     type: 'ScatterChart',
     elementId: 'chart_div',
-    datatable: [
+    data: [
         ['Age', 'Cash'],
         [12,  101],
         [15,  240],
@@ -34,22 +47,12 @@ var chartJson = {
     options: {
         colors: ['green'],
         chartArea: {width: '50%'}
-    },
-    formats: [
-        {
-            type: 'NumberFormat',
-            index: 1, // DataTable Column
-            options: {
-                prefix: '$',
-                suffix: ' BILLS!'
-            }
-        }
-    ]
+    }
 };
 
 lava.store(chartJson);
 lava.run();
-                    </code></pre>
+                </code></pre>
                 </div>
                 <div class="float" style="width: 400px;">
                     <pre><code>
@@ -62,11 +65,26 @@ lava.run();
     </div>
 
     <script type="text/javascript">
-        var chartJson = {
-            label: 'Test',
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            const color = '#';
+            for (const i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        function loadOptions() {
+            lava.loadOptions('MyFancyChart', {
+                colors: [getRandomColor()]
+            });
+        }
+
+        const chartJson = {
+            label: 'MyFancyChart',
             type: 'ScatterChart',
             elementId: 'chart_div',
-            datatable: [
+            data: [
                 ['Age', 'Cash'],
                 [12,  101],
                 [15,  240],
@@ -74,19 +92,8 @@ lava.run();
                 [32,  324]
             ],
             options: {
-                colors: ['green'],
-                chartArea: {width: '50%'}
-            },
-            formats: [
-                {
-                    type: 'NumberFormat',
-                    index: 1, // DataTable Column
-                    options: {
-                        prefix: '$',
-                        suffix: ' BILLS!'
-                    }
-                }
-            ]
+                colors: ['green']
+            }
         };
 
         lava.store(chartJson);

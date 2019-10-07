@@ -1,42 +1,34 @@
-const CopyWebpackPlugin = require("copy-webpack-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 const HtmlWebpackHarddiskPlugin = require("html-webpack-harddisk-plugin");
+const merge = require("webpack-merge");
 
-const { resolvePath } = require(".");
+const { HtmlWebpackPluginFactory, resolvePath } = require(".");
+const commonConfig = require("./webpack.common.js");
 
-function HtmlWebpackPluginFactory(page) {
-  return new HtmlWebpackPlugin({
-    inject: "head",
-    showErrors: true,
-    templateParameters: {
-      title: "require('../package.json').title"
-    },
-    alwaysWriteToDisk: true,
-    template: resolvePath(`pages/${page}.html`),
-    filename: resolvePath(`public/${page.replace(/\.[a-z]+$/, "")}.html`)
-  });
-}
-
-module.exports = require("./merge")({
+module.exports = merge(commonConfig, {
   mode: "development",
+  output: {
+    filename: "lava.js",
+    path: resolvePath("public")
+  },
   devServer: {
     hot: true,
     // open: true,
     inline: true,
     stats: "errors-only",
+    overlay: {
+      errors: true,
+      warnings: true
+    },
     contentBase: resolvePath("public")
   },
   plugins: [
-    new CopyWebpackPlugin([
-      {
-        from: resolvePath("dist/lava.js"),
-        to: resolvePath("public")
-      }
+    ...HtmlWebpackPluginFactory([
+      "index",
+      "events",
+      "options",
+      "formats",
+      "dataquery"
     ]),
-    ...["index", "events", "options", "formats", "dataquery"].map(
-      HtmlWebpackPluginFactory
-    ),
-    // HtmlWebpackPluginFactory("index.ejs"),
     new HtmlWebpackHarddiskPlugin()
   ]
 });

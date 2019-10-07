@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
     "strict": true,
-    "target": "es2018",
+    "target": "es6",
     "sourceMap": true,
-    // "outDir": "./build",
     "module": "commonjs",
     "noImplicitAny": true,
     "removeComments": true,
@@ -22,6 +21,7 @@
     "src/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "src/examples"
   ]
 }

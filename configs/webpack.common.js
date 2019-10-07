@@ -6,11 +6,6 @@ const { resolvePath } = require(".");
 module.exports = {
   context: resolvePath(),
   entry: resolvePath("index.ts"),
-  output: {
-    filename: "lava.js",
-    path: resolvePath("dist")
-    // publicPath: resolvePath("public")
-  },
   plugins: [
     new ProgressPlugin(),
     new ForkTsCheckerWebpackPlugin({
@@ -19,10 +14,6 @@ module.exports = {
   ],
   module: {
     rules: [
-      {
-        test: /\.hbs$/,
-        loader: "handlebars-loader"
-      },
       {
         test: /\.(ts|tsx)?$/,
         loader: "ts-loader",

@@ -1,6 +1,5 @@
 import GoogleLoader from "./GoogleLoader";
 import LavaJs from "./LavaJs";
+import { domLoaded } from "./lib";
 
-export default LavaJs;
-
-export { GoogleLoader };
+export { LavaJs, GoogleLoader, domLoaded };
