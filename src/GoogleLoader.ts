@@ -1,3 +1,4 @@
+import { log } from "./lib";
 import { Google, GoogleLoaderOptions, LavaJsOptions } from "./types";
 
 export default class GoogleLoader {
@@ -67,20 +68,20 @@ export default class GoogleLoader {
    * Load the Google Static Loader and resolve the promise when ready.
    */
   public async loadGoogle(): Promise<Google> {
-    console.log("[lava.js] Resolving Google...");
+    log("Resolving Google...");
 
     if (this.googleLoaderInPage === false) {
-      console.log("[lava.js] Static loader not found, appending to head");
+      log("Static loader not found, appending to head");
 
       await this.addGoogleScriptToHead();
     }
 
     return new Promise(resolve => {
-      console.log("[lava.js] Static loader found, initializing window.google");
+      log("Static loader found, initializing window.google");
 
       window.google.charts.load(this.API_VERSION, this.config);
 
-      console.log("[lava.js] Loaded Google with config:", this.config);
+      log("Loaded Google with config:", this.config);
 
       window.google.charts.setOnLoadCallback(() => {
         resolve(window.google);

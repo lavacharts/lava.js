@@ -114,8 +114,8 @@ export default class Chart extends Renderable {
   //       func = callback[1];
   //     }
 
-  //     console.log(
-  //       `[lava.js] The "${this.uuid}::${event}" event will be handled by "${func}" in the context`,
+  //     log(
+  //       `The "${this.uuid}::${event}" event will be handled by "${func}" in the context`,
   //       context
   //     );
 

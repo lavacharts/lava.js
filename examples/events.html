@@ -1,0 +1,189 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>lava.js</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/themes/prism.min.css" />
+  <script async src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/prism.min.js"></script>
+</head>
+
+<body>
+  <nav class="light-blue lighten-1" role="navigation">
+    <div class="nav-wrapper container">
+      <a id="logo-container" href="#" class="brand-logo"><%= title %></a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="#">Navbar Link</a></li>
+      </ul>
+
+      <ul id="nav-mobile" class="sidenav">
+        <li><a href="#">Navbar Link</a></li>
+      </ul>
+      <a href="#" data-target="nav-mobile" class="sidenav-trigger">
+        <i class="material-icons">menu</i>
+      </a>
+    </div>
+  </nav>
+
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <h1 class="header center orange-text">lava.js</h1>
+
+      <div class="row center">
+        <h5 class="header col s12 light">we have events</h5>
+      </div>
+      <br>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="section">
+      <div class="row">
+        <!-- #region Code Box -->
+        <div class="col s12 m6">
+          <div class="icon-block">
+            <h2 class="center light-blue-text">
+              Events
+            </h2>
+            <h5 class="center">let's listen</h5>
+            <pre class="language-javascript">
+              <code>
+const chartJson = {
+  label: 'Test',
+  type: 'PieChart',
+  elementId: 'chart_div',
+  data: (data) => {
+    data.addColumn('string', 'Topping');
+    data.addColumn('number', 'Slices');
+    data.addRows([
+      ['Mushrooms', 3],
+      ['Onions', 1],
+      ['Olives', 1],
+      ['Zucchini', 1],
+      ['Pepperoni', 2]
+    ]);
+
+    return data;
+  }
+};
+
+const chart = lava.store(chartJson);
+
+chart.on('ready', function() {
+  console.lavalog(this.uuid + ' is ready!');
+});
+
+chart.on('select', function (chart, data) {
+  const selectedItem = chart.getSelection()[0];
+
+  if (selectedItem) {
+    const topping = data.getValue(selectedItem.row, 0);
+    
+    alert('The user selected ' + topping);
+  }
+});
+
+lava.run();</code>
+            </pre>
+          </div>
+        </div>
+        <!-- #endregion -->
+
+        <!-- #region Chart Box -->
+        <div class="col s12 m6">
+          <div class="icon-block">
+            <h2 class="center light-blue-text">
+              React
+            </h2>
+            <h5 class="center">to events</h5>
+            <pre class="language-html">
+              <code>
+&#x3C;div id=&#x22;chart_div&#x22;&#x3E;&#x3C;/div&#x3E;</code>
+            </pre>
+            <div id="chart_div"></div>
+          </div>
+        </div>
+        <!-- #endregion -->
+
+      </div><!-- </div class="row"> -->
+    </div>
+
+    <div class="section">
+      <div class="row">
+      </div>
+    </div>
+  </div>
+
+
+  <footer class="page-footer orange">
+    <div class="container">
+      <div class="row">
+        <div class="col l9 s12">
+          <h5 class="white-text">lava.js</h5>
+          <p class="grey-text text-lighten-4">This library was initially part of its parent project, <a
+              href="https://github.com/kevinkhill/lavacharts">Lavacharts</a>. It was developed alongside Lavacharts as
+            part of the package for php projects. It grew and grew with Lavacharts, until it matured enough to stand on
+            its own, here, as lava.js</p>
+        </div>
+        <div class="col l3 s12">
+          <h5 class="white-text">Examples</h5>
+          <ul>
+            <li><a class="white-text" href="#!">Link 1</a></li>
+            <li><a class="white-text" href="#!">Link 2</a></li>
+            <li><a class="white-text" href="#!">Link 3</a></li>
+            <li><a class="white-text" href="#!">Link 4</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+        Made by <a class="orange-text text-lighten-3" href="https://github.com/kevinkhill">kevinkhill</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="text/javascript">
+    const chartJson = {
+      label: 'Test',
+      type: 'PieChart',
+      elementId: 'chart_div',
+      data: (data) => {
+        data.addColumn('string', 'Topping');
+        data.addColumn('number', 'Slices');
+        data.addRows([
+          ['Mushrooms', 3],
+          ['Onions', 1],
+          ['Olives', 1],
+          ['Zucchini', 1],
+          ['Pepperoni', 2]
+        ]);
+
+        return data;
+      }
+    };
+
+    const chart = lava.chart(chartJson);
+
+    chart.on('ready', () => {
+      alert(this.uuid + ' is ready!');
+    });
+
+    chart.on('select', (chart, data) => {
+      const selectedItem = chart.getSelection()[0];
+
+      if (selectedItem) {
+        const topping = data.getValue(selectedItem.row, 0);
+        alert('The user selected ' + topping);
+      }
+    });
+
+    lava.store(chart);
+    lava.run();
+  </script>
+</body>
+
+</html>

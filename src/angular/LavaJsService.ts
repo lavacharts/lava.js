@@ -13,7 +13,7 @@ export class LavaJsService {
   constructor() {
     this._window = getWindow();
 
-    console.log("[lava.js] Angular service provider loaded.");
+    LavaJs.Log("Angular service provider loaded.");
   }
 
   /**

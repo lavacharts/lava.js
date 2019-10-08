@@ -5,7 +5,7 @@ import Dashboard from "./Dashboard";
 import DataQuery from "./DataQuery";
 import { InvalidCallback, RenderableNotFound } from "./Errors";
 import GoogleLoader from "./GoogleLoader";
-import { addEvent, defaultOptions } from "./lib";
+import { addEvent, defaultOptions, log } from "./lib";
 import Renderable from "./Renderable";
 import { ChartUpdateReturn, LavaJsOptions, RenderableTmpl } from "./types";
 
@@ -21,6 +21,8 @@ import { ChartUpdateReturn, LavaJsOptions, RenderableTmpl } from "./types";
  * @license   http://opensource.org/licenses/MIT MIT
  */
 export default class LavaJs extends TinyEmitter {
+  static Log = log;
+
   /**
    * Version of the LavaJs module
    */
@@ -79,7 +81,7 @@ export default class LavaJs extends TinyEmitter {
   public async init(
     renderables?: RenderableTmpl | RenderableTmpl[]
   ): Promise<any> {
-    console.log("[lava.js] Inititalizing...");
+    log("Inititalizing...");
 
     if (renderables) {
       if (renderables instanceof Array) {
@@ -102,14 +104,14 @@ export default class LavaJs extends TinyEmitter {
    * @emits {ready}
    */
   public async run(): Promise<any> {
-    console.group(`[lava.js] v${LavaJs.VERSION}`);
-    console.log("loaded options", this.options);
+    log(`v${LavaJs.VERSION}`);
+    log("loaded options", this.options);
 
     this.attachRedrawHandler();
 
     await this.init();
 
-    console.log("google is ready", window.google);
+    log("google is ready", window.google);
 
     await this.renderAll();
 
@@ -122,18 +124,16 @@ export default class LavaJs extends TinyEmitter {
     // this.emit("ready");
 
     if (typeof this.readyCallback === "function") {
-      console.log("ready!");
+      log("ready!");
       this.readyCallback();
     }
-
-    console.groupEnd();
   }
 
   public renderAll(): Promise<any>[] {
     const promises: Promise<any>[] = [];
 
     this.volcano.forEach(renderable => {
-      console.log(`[lava.js] Rendering ${renderable.uuid}`);
+      log(`Rendering ${renderable.uuid}`);
 
       promises.push(renderable.run());
     });
@@ -162,7 +162,7 @@ export default class LavaJs extends TinyEmitter {
    * as an independent library.
    */
   public create(payload: RenderableTmpl): Renderable {
-    console.log(`[lava.js] Creating a new ${payload.type}:`, payload);
+    log(`Creating a new ${payload.type}:`, payload);
 
     if (payload.type === "Dashboard") {
       return new Dashboard(payload);
@@ -182,7 +182,7 @@ export default class LavaJs extends TinyEmitter {
     // }
     const newRenderable = this.create(renderable);
 
-    console.log(`[lava.js] Storing ${newRenderable.uuid}`);
+    log(`Storing ${newRenderable.uuid}`);
 
     this.loader.addPackage(newRenderable.package);
 
@@ -207,7 +207,7 @@ export default class LavaJs extends TinyEmitter {
    *
    * @throws {RenderableNotFound}
    */
-  public get(label = ""): Renderable | undefined {
+  public get(label: string): Renderable | undefined {
     if (this.volcano.has(label) === false) {
       throw new RenderableNotFound(label);
     }
@@ -235,28 +235,18 @@ export default class LavaJs extends TinyEmitter {
    * Loads new data into the chart and redraws.
    *
    *
-   * Used with an AJAX call to a PHP method returning DataTable->topayload(),
+   * Used with an AJAX call to a PHP method returning DataTable->toPayload(),
    * a chart can be dynamically update in page, without reloads.
    */
   public async loadData(
     label: string,
     payload: object
-  ): Promise<ChartUpdateReturn | boolean> {
+  ): Promise<ChartUpdateReturn | void> {
     const chart = this.get(label);
 
     if (chart) {
-      await chart.setData(payload);
-
-      chart.draw();
-
-      return {
-        data: chart.data,
-        chart: chart.googleChart,
-        options: chart.options
-      };
+      return chart.updateData(payload);
     }
-
-    return false;
   }
 
   /**
@@ -269,22 +259,12 @@ export default class LavaJs extends TinyEmitter {
   public async loadOptions(
     label: string,
     payload: object
-  ): Promise<ChartUpdateReturn | boolean> {
+  ): Promise<ChartUpdateReturn | void> {
     const chart = this.get(label);
 
     if (chart) {
-      chart.options = Object.assign(chart.options, payload);
-
-      chart.draw();
-
-      return {
-        data: chart.data,
-        chart: chart.googleChart,
-        options: chart.options
-      };
+      return chart.updateOptions(payload);
     }
-
-    return false;
   }
 
   /**
@@ -295,15 +275,15 @@ export default class LavaJs extends TinyEmitter {
    */
   public redrawAll(): boolean {
     if (this.volcano.size === 0) {
-      console.log(`[lava.js] Nothing to redraw.`);
+      log(`Nothing to redraw.`);
 
       return false;
     }
 
-    console.log(`[lava.js] Redrawing ${this.volcano.size} renderables.`);
+    log(`Redrawing ${this.volcano.size} renderables.`);
 
     this.volcano.forEach(renderable => {
-      console.log(`[lava.js] Redrawing ${renderable.uuid}`);
+      log(`Redrawing ${renderable.uuid}`);
 
       renderable.draw();
     });
@@ -324,7 +304,7 @@ export default class LavaJs extends TinyEmitter {
         clearTimeout(debounced);
 
         debounced = setTimeout(() => {
-          console.log("[lava.js] Window re-sized, redrawing...");
+          log("Window re-sized, redrawing...");
 
           this.redrawAll();
         }, this.options.debounceTimeout);

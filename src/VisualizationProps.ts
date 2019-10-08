@@ -36,8 +36,6 @@ const propMap = {
   WordTreeChart: ["WordTree", "wordtree", 1]
 } as VisualizationPropertyDict;
 
-export function getProp(chart: SupportedCharts) {
-  return function(prop: number): string | number {
-    return propMap[chart][prop];
-  };
+export function getProp(chart: SupportedCharts, prop: number): any {
+  return propMap[chart][prop];
 }

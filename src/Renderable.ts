@@ -2,15 +2,16 @@ import { TinyEmitter } from "tiny-emitter";
 
 import DataQuery from "./DataQuery";
 import { DataError, ElementIdNotFound } from "./Errors";
-import { createDataTable } from "./lib";
+import { createDataTable, log } from "./lib";
 import {
   ChartClasses,
+  ChartUpdateReturn,
   Formatter,
   RenderableTmpl,
   RenderableType,
   SupportedCharts
 } from "./types";
-import { getClass, getPackage, getProp, VIZ_PROPS } from "./VisualizationProps";
+import { getProp, VIZ_PROPS } from "./VisualizationProps";
 
 /**
  * The {@link Renderable} class is the base for {@link Chart}s and {@link Dashboard}s
@@ -114,8 +115,8 @@ export default class Renderable extends TinyEmitter {
     this.options = json.options || {};
     this.formats = json.formats || [];
 
-    this.class = getProp(this.type as SupportedCharts)(VIZ_PROPS.CLASS);
-    this.package = getProp(this.type as SupportedCharts)(VIZ_PROPS.PACKAGE);
+    this.class = getProp(this.type as SupportedCharts, VIZ_PROPS.CLASS);
+    this.package = getProp(this.type as SupportedCharts, VIZ_PROPS.PACKAGE);
   }
 
   /**
@@ -132,13 +133,13 @@ export default class Renderable extends TinyEmitter {
    */
   public draw(): void {
     if (typeof this._preDraw === "function") {
-      console.log(`[lava.js] Running ${this.uuid}._preDraw()`);
+      log(`Firing ${this.uuid}._preDraw()`);
 
       this._preDraw();
     }
 
     if (typeof this.preDraw === "function") {
-      console.log(`[lava.js] Running ${this.uuid}.preDraw()`);
+      log(`Firing ${this.uuid}.preDraw()`);
 
       this.preDraw();
     }
@@ -150,19 +151,18 @@ export default class Renderable extends TinyEmitter {
     this.googleChart.draw(this.data, this.options);
 
     if (typeof this._postDraw === "function") {
-      console.log(`[lava.js] Running ${this.uuid}._postDraw()`);
+      log(`Firing ${this.uuid}._postDraw()`);
 
       this._postDraw();
     }
 
     if (typeof this.postDraw === "function") {
-      console.log(`[lava.js] Running ${this.uuid}.postDraw()`);
+      log(`Firing ${this.uuid}.postDraw()`);
 
       this.postDraw();
     }
   }
 
-  //noinspection JSUnusedGlobalSymbols
   /**
    * Run the setup and draw the chart.
    *
@@ -197,11 +197,11 @@ export default class Renderable extends TinyEmitter {
    */
   public async setData(payload: any): Promise<void> {
     if (payload instanceof DataQuery) {
-      console.log(`[lava.js] Sending DataQuery for ${this.uuid}`);
+      log(`Firing DataQuery for ${this.uuid}`);
 
       const response = await payload.send();
 
-      console.log(`[lava.js] Response received:`, response);
+      log(`Response received:`, response);
 
       this.data = response.getDataTable();
     } else {
@@ -214,7 +214,7 @@ export default class Renderable extends TinyEmitter {
       );
     }
 
-    console.log(`[lava.js] Data set for ${this.uuid}`, this.data);
+    log(`Setting data for ${this.uuid}`, this.data);
 
     if (payload.formats) {
       this.applyFormats(payload.formats);
@@ -234,14 +234,47 @@ export default class Renderable extends TinyEmitter {
         format.options
       );
 
-      console.log(`[lava.js] Formatting data for ${this.uuid}.`);
-      console.log(
-        `[lava.js] Formatting column [${format.index}] with:`,
-        format
-      );
+      log(`Setting data for ${this.uuid}.`);
+      log(`Formatting column [${format.index}] with:`, format);
 
       formatter.format(this.data, format.index);
     }
+  }
+
+  /**
+   * Loads new data into the renderable and redraws.
+   *
+   * Used with an AJAX call to a PHP method returning DataTable->toPayload(),
+   * a chart can be dynamically update in page, without reloads.
+   */
+  public async updateData(payload: object): Promise<ChartUpdateReturn> {
+    await this.setData(payload);
+
+    this.draw();
+
+    return {
+      data: this.data,
+      chart: this.googleChart,
+      options: this.options
+    };
+  }
+
+  /**
+   * Loads new options into the renderable and redraws.
+   *
+   * Used with an AJAX call, or javascript events, to load a new array of options into a chart.
+   * This can be used to update a chart dynamically, without reloads.
+   */
+  public async updateOptions(payload: object): Promise<ChartUpdateReturn> {
+    this.options = Object.assign(this.options, payload);
+
+    this.draw();
+
+    return {
+      data: this.data,
+      chart: this.googleChart,
+      options: this.options
+    };
   }
 
   /**
