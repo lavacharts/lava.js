@@ -1,18 +1,17 @@
+const CopyPlugin = require("copy-webpack-plugin");
 const HtmlWebpackHarddiskPlugin = require("html-webpack-harddisk-plugin");
 const merge = require("webpack-merge");
 
-const { HtmlWebpackPluginFactory, resolvePath } = require(".");
-const commonConfig = require("./webpack.common.js");
+const { PATHS, HtmlWebpackPluginFactory } = require(".");
 
-module.exports = merge(commonConfig, {
+console.log("PATHS.public", PATHS.public);
+
+module.exports = merge(require("./webpack.common.js"), {
   mode: "development",
   watch: true,
-  output: {
-    filename: "lava.js",
-    path: resolvePath("public")
-  },
+  output: { path: PATHS.public },
   devServer: {
-    hot: true,
+    // hot: true,
     // open: true,
     inline: true,
     stats: "errors-only",
@@ -21,9 +20,18 @@ module.exports = merge(commonConfig, {
       warnings: true
     },
     watchContentBase: true,
-    contentBase: resolvePath("public")
+    contentBase: PATHS.public
   },
   plugins: [
+    new CopyPlugin([
+      {
+        context: PATHS.examples,
+        from: "*.js",
+        flatten: true,
+        to: PATHS.public,
+        ignore: ["templateParameters.js"]
+      }
+    ]),
     ...HtmlWebpackPluginFactory([
       "index",
       "events",

@@ -2,7 +2,8 @@ import { TinyEmitter } from "tiny-emitter";
 
 import DataQuery from "./DataQuery";
 import { DataError, ElementIdNotFound } from "./Errors";
-import { createDataTable, log } from "./lib";
+import { logger } from "./LavaJs";
+import { createDataTable } from "./lib";
 import {
   ChartClasses,
   ChartUpdateReturn,
@@ -133,13 +134,13 @@ export default class Renderable extends TinyEmitter {
    */
   public draw(): void {
     if (typeof this._preDraw === "function") {
-      log(`Firing ${this.uuid}._preDraw()`);
+      logger.log(`Firing ${this.uuid}._preDraw()`);
 
       this._preDraw();
     }
 
     if (typeof this.preDraw === "function") {
-      log(`Firing ${this.uuid}.preDraw()`);
+      logger.log(`Firing ${this.uuid}.preDraw()`);
 
       this.preDraw();
     }
@@ -151,13 +152,13 @@ export default class Renderable extends TinyEmitter {
     this.googleChart.draw(this.data, this.options);
 
     if (typeof this._postDraw === "function") {
-      log(`Firing ${this.uuid}._postDraw()`);
+      logger.log(`Firing ${this.uuid}._postDraw()`);
 
       this._postDraw();
     }
 
     if (typeof this.postDraw === "function") {
-      log(`Firing ${this.uuid}.postDraw()`);
+      logger.log(`Firing ${this.uuid}.postDraw()`);
 
       this.postDraw();
     }
@@ -197,11 +198,11 @@ export default class Renderable extends TinyEmitter {
    */
   public async setData(payload: any): Promise<void> {
     if (payload instanceof DataQuery) {
-      log(`Firing DataQuery for ${this.uuid}`);
+      logger.log(`Firing DataQuery for ${this.uuid}`);
 
       const response = await payload.send();
 
-      log(`Response received:`, response);
+      logger.log(`Response received:`, response);
 
       this.data = response.getDataTable();
     } else {
@@ -214,7 +215,7 @@ export default class Renderable extends TinyEmitter {
       );
     }
 
-    log(`Setting data for ${this.uuid}`, this.data);
+    logger.log(`Setting data for ${this.uuid}`, this.data);
 
     if (payload.formats) {
       this.applyFormats(payload.formats);
@@ -234,8 +235,8 @@ export default class Renderable extends TinyEmitter {
         format.options
       );
 
-      log(`Setting data for ${this.uuid}.`);
-      log(`Formatting column [${format.index}] with:`, format);
+      logger.log(`Setting data for ${this.uuid}.`);
+      logger.log(`Formatting column [${format.index}] with:`, format);
 
       formatter.format(this.data, format.index);
     }

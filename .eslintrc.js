@@ -57,6 +57,7 @@ module.exports = {
         node: true
       },
       rules: {
+        "@typescript-eslint/camelcase": "off",
         "@typescript-eslint/no-var-requires": "off",
         "@typescript-eslint/explicit-function-return-type": "off"
       }
@@ -64,6 +65,7 @@ module.exports = {
     {
       files: [
         "test/*.js",
+        "examples/*.js"
       ],
       globals: {
         lava: true,

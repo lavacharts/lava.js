@@ -1,13 +1,24 @@
-const { ProgressPlugin } = require("webpack");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
+const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
+const path = require("path");
+const { ProgressPlugin } = require("webpack");
 
-const { resolvePath } = require(".");
+const PKG = require("../package.json");
+const { PATHS } = require(".");
 
 module.exports = {
-  context: resolvePath(),
-  entry: resolvePath("index.ts"),
+  context: PATHS.root,
+  entry: path.join(PATHS.root, "index.ts"),
+  output: {
+    filename: "lava.js"
+  },
   plugins: [
     new ProgressPlugin(),
+    new CleanWebpackPlugin(),
+    new HardSourceWebpackPlugin(),
+    new FriendlyErrorsWebpackPlugin(),
     new ForkTsCheckerWebpackPlugin({
       eslint: true
     })
@@ -17,7 +28,7 @@ module.exports = {
       {
         test: /\.(ts|tsx)?$/,
         loader: "ts-loader",
-        include: [resolvePath("src")],
+        include: [PATHS.src],
         exclude: [/node_modules/],
         options: { transpileOnly: true }
       },
@@ -27,7 +38,7 @@ module.exports = {
         options: {
           strict: true,
           search: "__VERSION__",
-          replace: require("../package.json").version
+          replace: PKG.version
         }
       }
     ]

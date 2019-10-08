@@ -1,17 +1,17 @@
 <!doctype html>
 <html>
 <head>
-    <title>lava.js</title>
+    <title><%= title %> | Events</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/themes/prism.min.css" />
-<script type="text/javascript" src="lava.js"></script></head>
+</head>
 
 <body>
   <nav class="light-blue lighten-1" role="navigation">
     <div class="nav-wrapper container">
-      <a id="logo-container" href="#" class="brand-logo">lava.js</a>
+      <a id="logo-container" href="#" class="brand-logo"><%= title %></a>
       <ul class="right hide-on-med-and-down">
         <li><a href="#">Navbar Link</a></li>
       </ul>
@@ -27,7 +27,7 @@
 
   <div class="section no-pad-bot" id="index-banner">
     <div class="container">
-      <h1 class="header center orange-text">lava.js</h1>
+      <h1 class="header center orange-text"><%= title %></h1>
 
       <div class="row center">
         <h5 class="header col s12 light">charts made simple</h5>
@@ -62,29 +62,44 @@
         <div class="col s12 m6">
           <div class="icon-block">
             <h2 class="center light-blue-text">
-                Easy Syntax
+                Listen to Events
             </h2>
-            <h5 class="center">clean & consise</h5>
+            <h5 class="center">interactive charts</h5>
             <pre class="language-javascript">
               <code>
-var chartJson = {
-  label: 'Test',
-  type: 'PieChart',
-  elementId: 'chart_div',
-  data: [
-    ['Task', 'Hours per Day'],
-    ['Work',     11],
-    ['Eat',      2],
-    ['Commute',  2],
-    ['Watch TV', 2],
-    ['Sleep',    7]
-  ],
-  options: {
-    title: 'My Daily Activities'
-  }
+const chartJson = {
+    label: 'Test',
+    type: 'PieChart',
+    elementId: 'chart_div',
+    data: (data) => {
+        data.addColumn('string', 'Topping');
+        data.addColumn('number', 'Slices');
+        data.addRows([
+            ['Mushrooms', 3],
+            ['Onions', 1],
+            ['Olives', 1],
+            ['Zucchini', 1],
+            ['Pepperoni', 2]
+        ]);
+
+        return data;
+    }
 };
 
-lava.store(chartJson);
+const chart = lava.store(chartJson);
+
+chart.on('ready', function() {
+    console.log(this.uuid + ' is ready!');
+});
+
+chart.on('select', function (chart, data) {
+    const selectedItem = chart.getSelection()[0];
+    if (selectedItem) {
+        const topping = data.getValue(selectedItem.row, 0);
+        alert('The user selected ' + topping);
+    }
+});
+
 lava.run();</code>
             </pre>
           </div>
@@ -95,9 +110,9 @@ lava.run();</code>
         <div class="col s12 m6">
           <div class="icon-block">
             <h2 class="center light-blue-text">
-                Easy Charts
+                Perform Actions
             </h2>
-            <h5 class="center">thanks google!</h5>
+            <h5 class="center"> google!</h5>
             <pre class="language-html">
               <code>
 &#x3C;div id=&#x22;chart_div&#x22;&#x3E;&#x3C;/div&#x3E;</code>
@@ -164,6 +179,6 @@ lava.run();</code>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/prism.min.js"></script>
   <script type="text/javascript" src="lava.js"></script>
-  <script type="text/javascript" src="index.js"></script>
+  <script type="text/javascript" src="events.js"></script>></script>
 </body>
 </html>

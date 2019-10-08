@@ -1,17 +1,25 @@
-const fmtMsg = (msg: string): string => `[lava.js] ${msg}`;
+import { VERSION } from "../LavaJs";
 
-export function start(msg: string): void {
-  console.group(fmtMsg(msg)); //@TODO
-}
+export class Logger {
+  constructor(version: string = VERSION) {
+    console.log(`Initializing lava.js v${version}`); //@TODO
+  }
 
-export function end(): void {
-  console.groupEnd();
-}
+  public grouped(msg: string, group: Function): void {
+    console.group(msg);
+    group();
+    console.groupEnd();
+  }
 
-export function log(msg: string, ...args: any[]): void {
-  console.log(fmtMsg(msg), ...args);
-}
+  public log(msg: string, ...args: any[]): void {
+    console.log(this.format(msg), ...args);
+  }
 
-export function err(msg: string, ...args: any[]): void {
-  console.error(fmtMsg(msg), ...args);
+  public err(msg: string, ...args: any[]): void {
+    console.error(this.format(msg), ...args);
+  }
+
+  private format(msg: string): string {
+    return `[lava.js] ${msg}`;
+  }
 }

@@ -1,7 +1,4 @@
-const LavaJs = require("../dist/lava.js");
-
-const lava = new LavaJs();
-
+// Create a chart
 const chart = lava.chart({
   label: "Test",
   type: "PieChart",
@@ -19,5 +16,13 @@ const chart = lava.chart({
   }
 });
 
+/**
+ * Store your chart within the lava
+ *
+ * This adds to the render queue that will be processed once
+ * window.google !== undefined
+ */
 lava.store(chart);
+
+// Lets draw some charts!
 lava.run();

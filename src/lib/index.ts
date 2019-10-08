@@ -1,8 +1,8 @@
 import { createDataTable } from "./datatable";
-import { err, log } from "./logger";
+import { Logger } from "./logger";
 import { defaultOptions } from "./options";
 
-export { log, err, defaultOptions, createDataTable };
+export { Logger, defaultOptions, createDataTable };
 
 /**
  * Returns the type of object, with a capital first letter.

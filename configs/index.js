@@ -3,21 +3,27 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const resolvePath = (...args) => path.resolve(__dirname, "..", ...args);
 
+const PATHS = require("./paths");
+
 function HtmlWebpackPluginFactory(pageArr) {
   return pageArr.map(
     page =>
       new HtmlWebpackPlugin({
         inject: "head",
         showErrors: true,
-        templateParameters: require("../src/examples/templateParameters"),
+        templateParameters: require("../examples/templateParameters"),
         alwaysWriteToDisk: true, // Option provided by html-webpack-harddisk-plugin
-        template: resolvePath(`src/examples/${page}.ejs`),
-        filename: resolvePath(`public/${page.replace(/\.[a-z]+$/, "")}.html`)
+        template: path.join(PATHS.examples, `${page}.ejs`),
+        filename: path.join(
+          PATHS.public,
+          `${page.replace(/\.[a-z]+$/, "")}.html`
+        )
       })
   );
 }
 
 module.exports = {
+  PATHS,
   resolvePath,
   HtmlWebpackPluginFactory
 };

@@ -44,4 +44,5 @@ export interface RenderableTmpl {
   uuid: string;
   formats?: Formatter[];
   type: RenderableTypes;
+  events?: any[];
 }

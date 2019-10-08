@@ -1,13 +1,9 @@
 const merge = require("webpack-merge");
 
-const { resolvePath } = require(".");
-const commonConfig = require("./webpack.common.js");
+const { PATHS } = require(".");
 
-module.exports = merge(commonConfig, {
+module.exports = merge(require("./webpack.common.js"), {
   mode: "production",
   devtool: "source-map",
-  output: {
-    filename: "lava.js",
-    path: resolvePath("dist")
-  }
+  output: { path: PATHS.dist }
 });
