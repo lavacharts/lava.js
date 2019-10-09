@@ -1,5 +1,4 @@
-import LavaJs from "./src";
-import { domLoaded } from "./src/lib";
+import { domLoaded, LavaJs } from "./src";
 
 /**
  * Create a new instance and attach to window.
@@ -22,7 +21,5 @@ if (typeof window.lavacharts !== "undefined") {
  * to false so the user can setup the charts and call .run()
  */
 if (window.lava.autorun) {
-  domLoaded().then(() => {
-    window.lava.run();
-  });
+  domLoaded().then(() => window.lava.run());
 }

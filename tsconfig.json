@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "strict": true,
-    "target": "es6",
+    "target": "es5",
     "sourceMap": true,
     "module": "commonjs",
     "noImplicitAny": true,
@@ -17,7 +17,7 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "index.ts",
+    "index.js",
     "src/**/*.ts"
   ],
   "exclude": [

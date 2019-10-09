@@ -1,21 +1,23 @@
 <!doctype html>
 <html>
 <head>
-    <title><%= title %> | Events</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/themes/prism.min.css" />
-</head>
+  <!-- ./examples/partials/head.hbs -->
+  
+  <title>lava.js</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/themes/prism.min.css" />
+<script type="text/javascript" src="../public/vendor.js"></script><script type="text/javascript" src="../public/index.js"></script><script type="text/javascript" src="../public/events.js"></script></head>
 
 <body>
   <nav class="light-blue lighten-1" role="navigation">
     <div class="nav-wrapper container">
-      <a id="logo-container" href="#" class="brand-logo"><%= title %></a>
+      <a id="logo-container" href="#" class="brand-logo">lava.js</a>
       <ul class="right hide-on-med-and-down">
         <li><a href="#">Navbar Link</a></li>
       </ul>
-
+  
       <ul id="nav-mobile" class="sidenav">
         <li><a href="#">Navbar Link</a></li>
       </ul>
@@ -26,9 +28,11 @@
   </nav>
 
   <div class="section no-pad-bot" id="index-banner">
+    <!-- ./examples/partials/banner.hbs -->
+    
     <div class="container">
-      <h1 class="header center orange-text"><%= title %></h1>
-
+      <h1 class="header center orange-text">lava.js</h1>
+    
       <div class="row center">
         <h5 class="header col s12 light">charts made simple</h5>
       </div>
@@ -62,44 +66,29 @@
         <div class="col s12 m6">
           <div class="icon-block">
             <h2 class="center light-blue-text">
-                Listen to Events
+                Easy Syntax
             </h2>
-            <h5 class="center">interactive charts</h5>
+            <h5 class="center">clean & consise</h5>
             <pre class="language-javascript">
               <code>
-const chartJson = {
-    label: 'Test',
-    type: 'PieChart',
-    elementId: 'chart_div',
-    data: (data) => {
-        data.addColumn('string', 'Topping');
-        data.addColumn('number', 'Slices');
-        data.addRows([
-            ['Mushrooms', 3],
-            ['Onions', 1],
-            ['Olives', 1],
-            ['Zucchini', 1],
-            ['Pepperoni', 2]
-        ]);
-
-        return data;
-    }
+var chartJson = {
+  label: 'Test',
+  type: 'PieChart',
+  elementId: 'chart_div',
+  data: [
+    ['Task', 'Hours per Day'],
+    ['Work',     11],
+    ['Eat',      2],
+    ['Commute',  2],
+    ['Watch TV', 2],
+    ['Sleep',    7]
+  ],
+  options: {
+    title: 'My Daily Activities'
+  }
 };
 
-const chart = lava.store(chartJson);
-
-chart.on('ready', function() {
-    console.log(this.uuid + ' is ready!');
-});
-
-chart.on('select', function (chart, data) {
-    const selectedItem = chart.getSelection()[0];
-    if (selectedItem) {
-        const topping = data.getValue(selectedItem.row, 0);
-        alert('The user selected ' + topping);
-    }
-});
-
+lava.store(chartJson);
 lava.run();</code>
             </pre>
           </div>
@@ -110,9 +99,9 @@ lava.run();</code>
         <div class="col s12 m6">
           <div class="icon-block">
             <h2 class="center light-blue-text">
-                Perform Actions
+                Easy Charts
             </h2>
-            <h5 class="center"> google!</h5>
+            <h5 class="center">thanks google!</h5>
             <pre class="language-html">
               <code>
 &#x3C;div id=&#x22;chart_div&#x22;&#x3E;&#x3C;/div&#x3E;</code>
@@ -122,16 +111,6 @@ lava.run();</code>
         </div>
         <!-- #endregion -->
 
-      <!--
-          <div class="col s12 m4">
-          <div class="icon-block">
-            <h2 class="center light-blue-text"><i class="material-icons">settings</i></h2>
-            <h5 class="center">Easy to work with</h5>
-
-            <p class="light">We have provided detailed documentation as well as specific code examples to help new users get started. We are also always open to feedback and can answer any questions a user may have about Materialize.</p>
-          </div>
-        </div>
-      -->
       </div><!-- </div class="row"> -->
     </div>
 
@@ -140,7 +119,6 @@ lava.run();</code>
       </div>
     </div>
   </div>
-
 
   <footer class="page-footer orange">
     <div class="container">
@@ -175,10 +153,5 @@ lava.run();</code>
       </div>
     </div>
   </footer>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/prism.min.js"></script>
-  <script type="text/javascript" src="lava.js"></script>
-  <script type="text/javascript" src="events.js"></script>></script>
 </body>
 </html>

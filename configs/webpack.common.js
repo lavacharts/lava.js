@@ -1,30 +1,27 @@
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
-const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
-const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
-const path = require("path");
+const { CleanWebpackPlugin: CleanPlugin } = require("clean-webpack-plugin");
+const ForkTsCheckerPlugin = require("fork-ts-checker-webpack-plugin");
+const FriendlyErrorsPlugin = require("friendly-errors-webpack-plugin");
+const HardSourcePlugin = require("hard-source-webpack-plugin");
 const { ProgressPlugin } = require("webpack");
 
 const PKG = require("../package.json");
-const { PATHS } = require(".");
+const PATHS = require("./paths");
 
 module.exports = {
   context: PATHS.root,
-  entry: path.join(PATHS.root, "index.ts"),
-  output: {
-    filename: "lava.js"
-  },
   plugins: [
+    // new CleanPlugin(),
     new ProgressPlugin(),
-    new CleanWebpackPlugin(),
-    new HardSourceWebpackPlugin(),
-    new FriendlyErrorsWebpackPlugin(),
-    new ForkTsCheckerWebpackPlugin({
-      eslint: true
-    })
+    new HardSourcePlugin(),
+    new FriendlyErrorsPlugin(),
+    new ForkTsCheckerPlugin({ eslint: true })
   ],
   module: {
     rules: [
+      {
+        test: /\.hbs$/,
+        loader: "handlebars-loader"
+      },
       {
         test: /\.(ts|tsx)?$/,
         loader: "ts-loader",

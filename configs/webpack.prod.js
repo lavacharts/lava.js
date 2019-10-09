@@ -1,9 +1,13 @@
 const merge = require("webpack-merge");
 
-const { PATHS } = require(".");
+const PATHS = require("./paths");
 
 module.exports = merge(require("./webpack.common.js"), {
   mode: "production",
-  devtool: "source-map",
-  output: { path: PATHS.dist }
+  entry: PATHS.fromRoot("index.ts"),
+  output: {
+    filename: "lava.js",
+    path: PATHS.dist
+  },
+  devtool: "source-map"
 });

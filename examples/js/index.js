@@ -1,3 +1,8 @@
+require("materialize");
+require("prismjs");
+// LavaJs
+require("../../index");
+
 // Create a chart
 const chart = lava.chart({
   label: "Test",
