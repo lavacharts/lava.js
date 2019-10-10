@@ -8,7 +8,7 @@ import { getType } from ".";
 export function createDataTable(payload: any): google.visualization.DataTable {
   // If a function is received, then create an new DataTable and pass it to the
   // function for user modifications.
-  if (getType(payload) === "Function") {
+  if (typeof payload === "function") {
     return payload(new window.google.visualization.DataTable());
   }
 

@@ -5,7 +5,9 @@
 </head>
 
 <body>
-  {{> layout/navbar }}
+  <nav class="light-blue lighten-1" role="navigation">
+    {{> partials/navbar }}
+  </nav>
 
   <div class="section no-pad-bot" id="index-banner">
     {{> partials/banner }}
@@ -23,25 +25,7 @@
             <h5 class="center">clean & consise</h5>
             <pre class="language-javascript">
               <code>
-var chartJson = {
-  label: 'Test',
-  type: 'PieChart',
-  elementId: 'chart_div',
-  data: [
-    ['Task', 'Hours per Day'],
-    ['Work',     11],
-    ['Eat',      2],
-    ['Commute',  2],
-    ['Watch TV', 2],
-    ['Sleep',    7]
-  ],
-  options: {
-    title: 'My Daily Activities'
-  }
-};
-
-lava.store(chartJson);
-lava.run();</code>
+{{ exampleCode }}</code>
             </pre>
           </div>
         </div>
@@ -72,6 +56,8 @@ lava.run();</code>
     </div>
   </div>
 
-  {{> layout/footer }}
+  <footer class="page-footer orange">
+      {{> partials/footer }}
+  </footer>
 </body>
 </html>

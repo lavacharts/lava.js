@@ -1,34 +1,40 @@
 <!doctype html>
 <html>
 <head>
-    <title><%= title %> | Events</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/themes/prism.min.css" />
-</head>
+  <!-- ./examples/partials/head.hbs -->
+  
+  <title>lava.js</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/themes/prism.min.css" />
+<script type="text/javascript" src="/runtime.js"></script><script type="text/javascript" src="/vendor.js"></script><script type="text/javascript" src="/commons.js"></script><script type="text/javascript" src="/events.js"></script></head>
 
 <body>
   <nav class="light-blue lighten-1" role="navigation">
-    <div class="nav-wrapper container">
-      <a id="logo-container" href="#" class="brand-logo"><%= title %></a>
-      <ul class="right hide-on-med-and-down">
-        <li><a href="#">Navbar Link</a></li>
-      </ul>
-
-      <ul id="nav-mobile" class="sidenav">
-        <li><a href="#">Navbar Link</a></li>
-      </ul>
-      <a href="#" data-target="nav-mobile" class="sidenav-trigger">
-        <i class="material-icons">menu</i>
-      </a>
-    </div>
+    <nav class="light-blue lighten-1" role="navigation">
+      <div class="nav-wrapper container">
+        <a id="logo-container" href="#" class="brand-logo">lava.js</a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="#">Navbar Link</a></li>
+        </ul>
+    
+        <ul id="nav-mobile" class="sidenav">
+          <li><a href="#">Navbar Link</a></li>
+        </ul>
+        <a href="#" data-target="nav-mobile" class="sidenav-trigger">
+          <i class="material-icons">menu</i>
+        </a>
+      </div>
+    </nav>
   </nav>
 
   <div class="section no-pad-bot" id="index-banner">
+    <!-- ./examples/partials/banner.hbs -->
+    
     <div class="container">
-      <h1 class="header center orange-text"><%= title %></h1>
-
+      <h1 class="header center orange-text">lava.js</h1>
+    
       <div class="row center">
         <h5 class="header col s12 light">charts made simple</h5>
       </div>
@@ -141,41 +147,39 @@ lava.run();</code>
     </div>
   </div>
 
-
   <footer class="page-footer orange">
-    <div class="container">
-      <div class="row">
-        <div class="col l6 s12">
-          <h5 class="white-text">lava.js</h5>
-          <p class="grey-text text-lighten-4">This library was initially part of its parent project, <a href="https://github.com/kevinkhill/lavacharts">Lavacharts</a>. It was developed alongside Lavacharts as part of the package for php projects. It grew and grew with Lavacharts, until it matured enough to stand on its own, here, as lava.js</p>
-        </div>
-        <div class="col l3 s12">
-          <h5 class="white-text">Settings</h5>
-          <ul>
-            <li><a class="white-text" href="#!">Link 1</a></li>
-            <li><a class="white-text" href="#!">Link 2</a></li>
-            <li><a class="white-text" href="#!">Link 3</a></li>
-            <li><a class="white-text" href="#!">Link 4</a></li>
-          </ul>
-        </div>
-        <div class="col l3 s12">
-          <h5 class="white-text">Connect</h5>
-          <ul>
-            <li><a class="white-text" href="#!">Link 1</a></li>
-            <li><a class="white-text" href="#!">Link 2</a></li>
-            <li><a class="white-text" href="#!">Link 3</a></li>
-            <li><a class="white-text" href="#!">Link 4</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="footer-copyright">
       <div class="container">
-      Made by <a class="orange-text text-lighten-3" href="https://github.com/kevinkhill">kevinkhill</a>
+        <div class="row">
+          <div class="col l6 s12">
+            <h5 class="white-text">lava.js</h5>
+            <p class="grey-text text-lighten-4">This library was initially part of its parent project, <a href="https://github.com/kevinkhill/lavacharts">Lavacharts</a>. It was developed alongside Lavacharts as part of the package for php projects. It grew and grew with Lavacharts, until it matured enough to stand on its own, here, as lava.js</p>
+          </div>
+          <div class="col l3 s12">
+            <h5 class="white-text">Settings</h5>
+            <ul>
+              <li><a class="white-text" href="#!">Link 1</a></li>
+              <li><a class="white-text" href="#!">Link 2</a></li>
+              <li><a class="white-text" href="#!">Link 3</a></li>
+              <li><a class="white-text" href="#!">Link 4</a></li>
+            </ul>
+          </div>
+          <div class="col l3 s12">
+            <h5 class="white-text">Connect</h5>
+            <ul>
+              <li><a class="white-text" href="#!">Link 1</a></li>
+              <li><a class="white-text" href="#!">Link 2</a></li>
+              <li><a class="white-text" href="#!">Link 3</a></li>
+              <li><a class="white-text" href="#!">Link 4</a></li>
+            </ul>
+          </div>
+        </div>
       </div>
-    </div>
+      <div class="footer-copyright">
+        <div class="container">
+        Made by <a class="orange-text text-lighten-3" href="https://github.com/kevinkhill">kevinkhill</a>
+        </div>
+      </div>
   </footer>
 
-  <script src="./js/events.js"></script>
 </body>
 </html>

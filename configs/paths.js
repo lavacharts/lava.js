@@ -10,13 +10,5 @@ module.exports = {
   public: path.join(appRoot, "public"),
   examples: path.join(appRoot, "examples"),
 
-  fromRoot: (...args) => path.join(appRoot, ...args),
-  createEntryMap: pages =>
-    Object.assign(
-      ...pages.map(function(page) {
-        return {
-          [page]: path.join(appRoot, `examples/js/${page}.js`)
-        };
-      })
-    )
+  fromRoot: (...args) => path.join(appRoot, ...args)
 };

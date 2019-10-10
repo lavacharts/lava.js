@@ -65,7 +65,8 @@ module.exports = {
     {
       files: [
         "test/*.js",
-        "examples/*.js"
+        "public/*.js",
+        "examples/js/*.js"
       ],
       globals: {
         lava: true,
@@ -78,7 +79,8 @@ module.exports = {
         browser: true
       },
       rules: {
-        "max-nested-callbacks": "off"
+        "max-nested-callbacks": "off",
+        "@typescript-eslint/explicit-function-return-type": "off"
       }
     }
   ]

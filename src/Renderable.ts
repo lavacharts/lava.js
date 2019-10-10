@@ -29,7 +29,7 @@ export default class Renderable extends TinyEmitter {
   /**
    * Unique label for the {@link Chart} / {@link Dashboard}.
    */
-  public label: any;
+  public readonly label: string;
 
   /**
    * Configurable options.
@@ -73,11 +73,6 @@ export default class Renderable extends TinyEmitter {
   public readonly package: string;
 
   /**
-   * HTMLElement into which the chart will be rendered.
-   */
-  public readonly container!: HTMLElement | null;
-
-  /**
    * Element ID of the DOM node for the container.
    */
   public readonly elementId: string;
@@ -105,14 +100,6 @@ export default class Renderable extends TinyEmitter {
     this.dataSrc = json.data;
     this.elementId = json.elementId;
 
-    this.container = document.getElementById(this.elementId);
-
-    if (this.container === null) {
-      throw new Error(
-        `document.getElementById("${this.elementId}") did not return an HTMLElement`
-      );
-    }
-
     this.options = json.options || {};
     this.formats = json.formats || [];
 
@@ -125,6 +112,13 @@ export default class Renderable extends TinyEmitter {
    */
   public get uuid(): string {
     return this.type + "::" + this.label;
+  }
+
+  /**
+   * HTMLElement into which the chart will be rendered.
+   */
+  public get container(): HTMLElement | null {
+    return document.getElementById(this.elementId);
   }
 
   /**

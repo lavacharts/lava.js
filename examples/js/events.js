@@ -1,3 +1,5 @@
+require("./bootstrap");
+
 const chart = lava.chart({
   label: "Test",
   type: "PieChart",

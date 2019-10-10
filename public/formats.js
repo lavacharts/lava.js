@@ -1,4 +1,4 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["events"],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["formats"],{
 
 /***/ "./examples/js/bootstrap.js":
 /*!**********************************!*\
@@ -11,14 +11,14 @@ eval("/**\r\n * Bootstrap the example pages dependencies\r\n */\r\n\r\n__webpack
 
 /***/ }),
 
-/***/ "./examples/js/events.js":
-/*!*******************************!*\
-  !*** ./examples/js/events.js ***!
-  \*******************************/
+/***/ "./examples/js/formats.js":
+/*!********************************!*\
+  !*** ./examples/js/formats.js ***!
+  \********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("__webpack_require__(/*! ./bootstrap */ \"./examples/js/bootstrap.js\");\r\n\r\nconst chart = lava.chart({\r\n  label: \"Test\",\r\n  type: \"PieChart\",\r\n  elementId: \"chart_div\",\r\n  data: data => {\r\n    data.addColumn(\"string\", \"Topping\");\r\n    data.addColumn(\"number\", \"Slices\");\r\n    data.addRows([\r\n      [\"Mushrooms\", 3],\r\n      [\"Onions\", 1],\r\n      [\"Olives\", 1],\r\n      [\"Zucchini\", 1],\r\n      [\"Pepperoni\", 2]\r\n    ]);\r\n\r\n    return data;\r\n  },\r\n  events: {\r\n    // Can be defined upon creation\r\n    select({ chart, data }) {\r\n      const selectedItem = chart.getSelection()[0];\r\n\r\n      if (selectedItem) {\r\n        const topping = data.getValue(selectedItem.row, 0);\r\n\r\n        alert(\"The user selected \" + topping);\r\n      }\r\n    }\r\n  }\r\n});\r\n\r\n// Or attached later on...\r\nchart.on(\"ready\", () => {\r\n  // this.uuid is a simple getter for `${this.type}::${label}`\r\n  alert(this.uuid + \" is ready!\");\r\n});\r\n\r\nlava.store(chart);\r\n\r\nlava.run();\r\n\n\n//# sourceURL=webpack:///./examples/js/events.js?");
+eval("__webpack_require__(/*! ./bootstrap */ \"./examples/js/bootstrap.js\");\n\nconst chart = lava.chart({\n  label: \"Test\",\n  type: \"ScatterChart\",\n  elementId: \"chart_div\",\n  datatable: [[\"Age\", \"Cash\"], [12, 101], [15, 240], [18, 280], [32, 324]],\n  options: {\n    colors: [\"green\"],\n    chartArea: { width: \"50%\" }\n  },\n  formats: [\n    {\n      type: \"NumberFormat\",\n      index: 1, // DataTable Column\n      options: {\n        prefix: \"$\",\n        suffix: \" BILLS!\"\n      }\n    }\n  ]\n});\n\nlava.store(chart);\nlava.run();\n\n\n//# sourceURL=webpack:///./examples/js/formats.js?");
 
 /***/ }),
 
@@ -190,4 +190,4 @@ eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexport
 
 /***/ })
 
-},[["./examples/js/events.js","runtime","vendor"]]]);
+},[["./examples/js/formats.js","runtime","vendor"]]]);

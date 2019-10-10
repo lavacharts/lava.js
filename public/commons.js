@@ -1,4 +1,4 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["events"],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["commons"],{
 
 /***/ "./examples/js/bootstrap.js":
 /*!**********************************!*\
@@ -8,17 +8,6 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 eval("/**\r\n * Bootstrap the example pages dependencies\r\n */\r\n\r\n__webpack_require__(/*! materialize */ \"./node_modules/materialize/index.js\");\r\n__webpack_require__(/*! prismjs */ \"./node_modules/prismjs/prism.js\");\r\n// LavaJs\r\n__webpack_require__(/*! ../../index */ \"./index.js\");\r\n\n\n//# sourceURL=webpack:///./examples/js/bootstrap.js?");
-
-/***/ }),
-
-/***/ "./examples/js/events.js":
-/*!*******************************!*\
-  !*** ./examples/js/events.js ***!
-  \*******************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("__webpack_require__(/*! ./bootstrap */ \"./examples/js/bootstrap.js\");\r\n\r\nconst chart = lava.chart({\r\n  label: \"Test\",\r\n  type: \"PieChart\",\r\n  elementId: \"chart_div\",\r\n  data: data => {\r\n    data.addColumn(\"string\", \"Topping\");\r\n    data.addColumn(\"number\", \"Slices\");\r\n    data.addRows([\r\n      [\"Mushrooms\", 3],\r\n      [\"Onions\", 1],\r\n      [\"Olives\", 1],\r\n      [\"Zucchini\", 1],\r\n      [\"Pepperoni\", 2]\r\n    ]);\r\n\r\n    return data;\r\n  },\r\n  events: {\r\n    // Can be defined upon creation\r\n    select({ chart, data }) {\r\n      const selectedItem = chart.getSelection()[0];\r\n\r\n      if (selectedItem) {\r\n        const topping = data.getValue(selectedItem.row, 0);\r\n\r\n        alert(\"The user selected \" + topping);\r\n      }\r\n    }\r\n  }\r\n});\r\n\r\n// Or attached later on...\r\nchart.on(\"ready\", () => {\r\n  // this.uuid is a simple getter for `${this.type}::${label}`\r\n  alert(this.uuid + \" is ready!\");\r\n});\r\n\r\nlava.store(chart);\r\n\r\nlava.run();\r\n\n\n//# sourceURL=webpack:///./examples/js/events.js?");
 
 /***/ }),
 
@@ -190,4 +179,4 @@ eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexport
 
 /***/ })
 
-},[["./examples/js/events.js","runtime","vendor"]]]);
+},[["./examples/js/bootstrap.js","runtime","vendor"]]]);

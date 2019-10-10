@@ -1,13 +1,19 @@
 <!doctype html>
 <html>
 <head>
-    <title>Lava.js | DataQuery</title>
-    <meta charset="UTF-8">
+  {{> partials/head }}
 </head>
 
 <body>
-    <div class="flex-center position-ref">
-        <div class="content">
+  <nav class="light-blue lighten-1" role="navigation">
+    {{> partials/navbar }}
+  </nav>
+
+  <div class="section no-pad-bot" id="index-banner">
+    {{> partials/banner }}
+  </div>
+
+        <div class="container">
             <div class="title">
                 LavaJs v4.0
             </div>
@@ -75,5 +81,9 @@ lava.run();
         lava.store(chartJson);
         lava.run();
     </script>
+
+  <footer class="page-footer orange">
+      {{> partials/footer }}
+  </footer>
 </body>
 </html>

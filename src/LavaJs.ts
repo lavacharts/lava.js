@@ -85,21 +85,7 @@ export default class LavaJs extends TinyEmitter {
   /**
    * Initializes the library by loading google to the window.
    */
-  public async init(
-    renderables?: RenderableTmpl | RenderableTmpl[]
-  ): Promise<any> {
-    logger.log("Inititalizing...");
-
-    if (renderables) {
-      if (renderables instanceof Array) {
-        renderables.forEach(this.store, this);
-      }
-
-      if (typeof renderables === "object") {
-        this.store(renderables as RenderableTmpl);
-      }
-    }
-
+  public async loadGoogle(): Promise<any> {
     if (this.loader.isLoaded === false) {
       await this.loader.loadGoogle();
     }
@@ -111,13 +97,15 @@ export default class LavaJs extends TinyEmitter {
    * @emits {ready}
    */
   public async run(): Promise<any> {
-    logger.log("loaded options", this.options);
+    logger.log("Loaded with options", this.options);
 
-    this.attachRedrawHandler();
+    if (this.options.responsive === true) {
+      this.attachRedrawHandler();
+    }
 
-    await this.init();
+    await this.loadGoogle();
 
-    logger.log("google is ready", window.google);
+    logger.log("Google is ready!", window.google);
 
     await this.renderAll();
 
@@ -194,21 +182,28 @@ export default class LavaJs extends TinyEmitter {
    *
    * @todo If the library has ran, and is ready, loading new charts will force a redrawAll of all the currently drawn charts.
    */
-  public store(renderable: RenderableTmpl): void {
+  public store(renderable: Renderable): void {
     // if (renderable instanceof Renderable === false) {
     //   renderable = this.create(renderable);
     // }
-    const newRenderable = this.create(renderable);
+    // const newRenderable = this.create(renderable);
 
-    logger.log(`Storing ${newRenderable.uuid}`);
+    logger.log(`Storing ${renderable.uuid}`);
 
-    this.loader.addPackage(newRenderable.package);
+    this.loader.addPackage(renderable.package);
 
-    this.volcano.set(newRenderable.label, newRenderable);
+    this.volcano.set(renderable.label, renderable);
 
     //if (this.isReady) {
     //    this.redrawAll();
     //}
+  }
+
+  /**
+   * Stores many charts at once.
+   */
+  public storeMany(renderables: Renderable[]): void {
+    renderables.forEach(this.store, this);
   }
 
   /**
@@ -313,20 +308,18 @@ export default class LavaJs extends TinyEmitter {
    * Attach a listener to the window resize event for redrawing the charts.
    */
   private attachRedrawHandler(): void {
-    if (this.options.responsive === true) {
-      let debounced: number;
+    let debounced: number;
 
-      addEvent(window, "resize", () => {
-        // let redrawAll = this.redrawAll().bind(this);
+    addEvent(window, "resize", () => {
+      // let redrawAll = this.redrawAll().bind(this);
 
-        clearTimeout(debounced);
+      clearTimeout(debounced);
 
-        debounced = setTimeout(() => {
-          logger.log("Window re-sized, redrawing...");
+      debounced = setTimeout(() => {
+        logger.log("Window re-sized, redrawing...");
 
-          this.redrawAll();
-        }, this.options.debounceTimeout);
-      });
-    }
+        this.redrawAll();
+      }, this.options.debounceTimeout);
+    });
   }
 }

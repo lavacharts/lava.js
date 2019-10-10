@@ -10,7 +10,7 @@ const PATHS = require("./paths");
 module.exports = {
   context: PATHS.root,
   plugins: [
-    // new CleanPlugin(),
+    new CleanPlugin(),
     new ProgressPlugin(),
     new HardSourcePlugin(),
     new FriendlyErrorsPlugin(),

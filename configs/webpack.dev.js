@@ -1,26 +1,27 @@
-const HandlebarsPlugin = require("handlebars-webpack-plugin");
-// const HtmlHarddiskPlugin = require("html-webpack-harddisk-plugin");
+const fs = require("fs");
+const HtmlHarddiskPlugin = require("html-webpack-harddisk-plugin");
 const HtmlPlugin = require("html-webpack-plugin");
-const path = require("path");
-// const { HashedModuleIdsPlugin } = require("webpack");
 const merge = require("webpack-merge");
 
 const PATHS = require("./paths");
 
-const pages = [
-  "index",
-  "events"
-  // "options",
-  // "formats",
-  // "dataquery"
-];
+const pages = {
+  index: "./examples/js/index.js",
+  events: "./examples/js/events.js",
+  options: "./examples/js/options.js",
+  formats: "./examples/js/formats.js",
+  dataquery: "./examples/js/dataquery.js"
+};
 
 module.exports = merge(require("./webpack.common.js"), {
+  entry: {
+    commons: "./examples/js/bootstrap.js",
+    ...pages
+  },
   mode: "development",
-  entry: PATHS.createEntryMap(pages),
   output: {
+    publicPath: "/",
     path: PATHS.public,
-    // chunkFilename: '[name].js',
     filename: "[name].js"
   },
   devServer: {
@@ -38,12 +39,7 @@ module.exports = merge(require("./webpack.common.js"), {
   optimization: {
     splitChunks: {
       cacheGroups: {
-        commons: {
-          chunks: "initial",
-          minChunks: 2,
-          maxInitialRequests: 5, // The default limit is too small to showcase the effect
-          minSize: 0 // This is example is too small to create commons chunks
-        },
+        chunks: "all",
         vendor: {
           test: /node_modules/,
           chunks: "initial",
@@ -52,31 +48,33 @@ module.exports = merge(require("./webpack.common.js"), {
           enforce: true
         }
       }
+    },
+    runtimeChunk: {
+      name: "runtime"
     }
   },
   plugins: [
-    ...pages.map(page => {
-      return new HtmlPlugin({
+    ...Object.keys(pages).map(page => {
+      const config = {
         inject: "head",
         showErrors: true,
-        templateParameters: require("../examples/js/templateParameters"),
-        // alwaysWriteToDisk: true, // Option provided by html-webpack-harddisk-plugin
-        template: path.join(PATHS.examples, `${page}.hbs`),
-        filename: path.join(PATHS.html, `${page.replace(/\.[a-z]+$/, "")}.html`)
+        // templateParameters: require("../examples/js/templateParameters"),
+        templateParameters: {
+          title: "lava.js",
+          exampleCode: fs.readFileSync(PATHS.fromRoot(`examples/js/${page}.js`))
+        },
+        alwaysWriteToDisk: true // Option provided by html-webpack-harddisk-plugin
+      };
+
+      const commonChunks = ["vendor", "runtime", "commons"];
+
+      return new HtmlPlugin({
+        ...config,
+        chunks: [...commonChunks, page],
+        template: PATHS.fromRoot(`examples/${page}.hbs`),
+        filename: PATHS.fromRoot(`public/${page}.html`)
       });
     }),
-    // new HtmlHarddiskPlugin(),
-    new HandlebarsPlugin({
-      htmlPlugin: {
-        enabled: true, // register all partials from html-webpack-plugin, defaults to `false`
-        prefix: "html" // where to look for htmlPlugin output. default is "html"
-      },
-      entry: path.join(PATHS.examples, "*.hbs"),
-      output: path.join(PATHS.public, "[name].html"),
-      partials: [
-        path.join(PATHS.html, "*", "*.hbs"),
-        path.join(process.cwd(), "src", "hbs", "*", "*.hbs")
-      ]
-    })
+    new HtmlHarddiskPlugin()
   ]
 });

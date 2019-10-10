@@ -1,8 +1,3 @@
-require("materialize");
-require("prismjs");
-// LavaJs
-require("../../index");
-
 // Create a chart
 const chart = lava.chart({
   label: "Test",
@@ -22,12 +17,12 @@ const chart = lava.chart({
 });
 
 /**
- * Store your chart within the lava
+ * Store the chart
  *
- * This adds to the render queue that will be processed once
- * window.google !== undefined
+ * This adds the chart to the render queue. The queue will
+ * be processed once `window.google !== undefined`
  */
 lava.store(chart);
 
-// Lets draw some charts!
+// Process the queue and draw your charts!
 lava.run();

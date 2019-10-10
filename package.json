@@ -19,8 +19,8 @@
     "test": "yarn run karma start --singleRun",
     "lint": "yarn run eslint --ext=.ts src/",
     "prod": "yarn run build:prod",
-    "build": "yarn run webpack -d --config ./configs/webpack.dev.js --progress",
-    "build:prod": "yarn run webpack -p --config ./configs/webpack.prod.js --progress"
+    "build": "yarn run webpack --config ./configs/webpack.dev.js",
+    "build:prod": "yarn run webpack --config ./configs/webpack.prod.js"
   },
   "lint-staged": {
     "./src/**/*.ts": [

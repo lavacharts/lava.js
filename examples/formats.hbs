@@ -1,13 +1,19 @@
 <!doctype html>
 <html>
 <head>
-    <title>Lava.js | Formats</title>
-    <meta charset="UTF-8">
+  {{> partials/head }}
 </head>
 
 <body>
-    <div class="flex-center position-ref">
-        <div class="content">
+  <nav class="light-blue lighten-1" role="navigation">
+    {{> partials/navbar }}
+  </nav>
+
+  <div class="section no-pad-bot" id="index-banner">
+    {{> partials/banner }}
+  </div>
+
+        <div class="container">
             <div class="title">
                 LavaJs v4.0
             </div>
@@ -59,36 +65,8 @@ lava.run();
         </div>
     </div>
 
-    <script type="text/javascript">
-        var chartJson = {
-            label: 'Test',
-            type: 'ScatterChart',
-            elementId: 'chart_div',
-            datatable: [
-                ['Age', 'Cash'],
-                [12,  101],
-                [15,  240],
-                [18,  280],
-                [32,  324]
-            ],
-            options: {
-                colors: ['green'],
-                chartArea: {width: '50%'}
-            },
-            formats: [
-                {
-                    type: 'NumberFormat',
-                    index: 1, // DataTable Column
-                    options: {
-                        prefix: '$',
-                        suffix: ' BILLS!'
-                    }
-                }
-            ]
-        };
-
-        lava.store(chartJson);
-        lava.run();
-    </script>
+  <footer class="page-footer orange">
+      {{> partials/footer }}
+  </footer>
 </body>
 </html>
