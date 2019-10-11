@@ -10,10 +10,10 @@ const PATHS = require("./paths");
 module.exports = {
   context: PATHS.root,
   plugins: [
-    new CleanPlugin(),
-    new ProgressPlugin(),
+    // new CleanPlugin(),
+    // new ProgressPlugin(),
     new HardSourcePlugin(),
-    new FriendlyErrorsPlugin(),
+    // new FriendlyErrorsPlugin(),
     new ForkTsCheckerPlugin({ eslint: true })
   ],
   module: {
@@ -23,12 +23,19 @@ module.exports = {
         loader: "handlebars-loader"
       },
       {
-        test: /\.(ts|tsx)?$/,
-        loader: "ts-loader",
+        test: /\.ts$/,
+        loader: "babel-loader",
         include: [PATHS.src],
-        exclude: [/node_modules/],
-        options: { transpileOnly: true }
+        exclude: [/node_modules/]
+        // options: { transpileOnly: true }
       },
+      // {
+      //   test: /\.(ts|tsx)?$/,
+      //   loader: "ts-loader",
+      //   include: [PATHS.src],
+      //   exclude: [/node_modules/],
+      //   options: { transpileOnly: true }
+      // },
       {
         test: /LavaJs\.ts$/,
         loader: "string-replace-loader",

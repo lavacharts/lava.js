@@ -5,18 +5,27 @@ const merge = require("webpack-merge");
 
 const PATHS = require("./paths");
 
-const pages = {
-  index: "./examples/js/index.js",
-  events: "./examples/js/events.js",
-  options: "./examples/js/options.js",
-  formats: "./examples/js/formats.js",
-  dataquery: "./examples/js/dataquery.js"
-};
+const examplePages = fs
+  .readdirSync(PATHS.examples)
+  .filter(filename => filename.endsWith(".hbs"))
+  .map(filename => filename.replace(/\.hbs/, ""))
+  .reduce(
+    (entrys, filename) =>
+      Object.assign(entrys, {
+        [filename]: `./examples/js/${filename}.js`
+      }),
+    {}
+  );
 
 module.exports = merge(require("./webpack.common.js"), {
   entry: {
-    commons: "./examples/js/bootstrap.js",
-    ...pages
+    commons: [
+      require.resolve("materialize-css"),
+      require.resolve("prismjs"),
+      // This
+      PATHS.fromRoot("src/LavaJs.ts")
+    ],
+    ...examplePages
   },
   mode: "development",
   output: {
@@ -54,14 +63,14 @@ module.exports = merge(require("./webpack.common.js"), {
     }
   },
   plugins: [
-    ...Object.keys(pages).map(page => {
+    ...Object.keys(examplePages).map(page => {
       const config = {
         inject: "head",
         showErrors: true,
         // templateParameters: require("../examples/js/templateParameters"),
         templateParameters: {
           title: "lava.js",
-          exampleCode: fs.readFileSync(PATHS.fromRoot(`examples/js/${page}.js`))
+          exampleCode: fs.readFileSync(PATHS.fromRoot(examplePages[page]))
         },
         alwaysWriteToDisk: true // Option provided by html-webpack-harddisk-plugin
       };

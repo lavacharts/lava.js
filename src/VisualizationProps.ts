@@ -1,7 +1,7 @@
 // import { VizProps } from "./types/chart";
 import { SupportedCharts } from "./types/strings";
 
-export const enum VIZ_PROPS {
+export enum VIZ_PROPS {
   "CLASS" = 0,
   "PACKAGE" = 1,
   "VERSION" = 2

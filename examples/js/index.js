@@ -1,4 +1,3 @@
-// Create a chart
 const chart = lava.chart({
   label: "Test",
   type: "PieChart",
