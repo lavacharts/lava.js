@@ -5,6 +5,8 @@ const merge = require("webpack-merge");
 
 const PATHS = require("./paths");
 
+const commonChunks = ["vendor", "runtime", "commons", "lava"];
+
 const examplePages = fs
   .readdirSync(PATHS.examples)
   .filter(filename => filename.endsWith(".hbs"))
@@ -19,12 +21,8 @@ const examplePages = fs
 
 module.exports = merge(require("./webpack.common.js"), {
   entry: {
-    commons: [
-      require.resolve("materialize-css"),
-      require.resolve("prismjs"),
-      // This
-      PATHS.fromRoot("src/LavaJs.ts")
-    ],
+    lava: "./src/lib/instance.ts",
+    commons: ["babel-polyfill", "materialize-css", "prismjs"],
     ...examplePages
   },
   mode: "development",
@@ -74,8 +72,6 @@ module.exports = merge(require("./webpack.common.js"), {
         },
         alwaysWriteToDisk: true // Option provided by html-webpack-harddisk-plugin
       };
-
-      const commonChunks = ["vendor", "runtime", "commons"];
 
       return new HtmlPlugin({
         ...config,

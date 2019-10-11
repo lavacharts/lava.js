@@ -1,12 +1,7 @@
-import { VERSION } from "../LavaJs";
-
 export class Logger {
-  constructor(version: string = VERSION) {
-    console.log(`Initializing lava.js v${version}`); //@TODO
-  }
-
   public grouped(msg: string, group: Function): void {
     console.group(msg);
+    // Run `console.log`s in the callback
     group();
     console.groupEnd();
   }

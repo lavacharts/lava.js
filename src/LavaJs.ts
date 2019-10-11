@@ -14,7 +14,7 @@ import { ChartUpdateReturn, LavaJsOptions, RenderableTmpl } from "./types";
  */
 export const VERSION = "__VERSION__";
 
-export const logger = new Logger(VERSION);
+export const logger = new Logger();
 
 /**
  * Google Chart API wrapper library
@@ -97,6 +97,8 @@ export default class LavaJs extends TinyEmitter {
    * @emits {ready}
    */
   public async run(): Promise<any> {
+    console.log(`LavaJs v${VERSION}`);
+
     logger.log("Loaded with options", this.options);
 
     if (this.options.responsive === true) {
