@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/themes/prism.min.css" />
-<script type="text/javascript" src="/vendor.js"></script><script type="text/javascript" src="/runtime.js"></script><script type="text/javascript" src="/lava.js"></script><script type="text/javascript" src="/events.js"></script></head>
+<script type="text/javascript" src="/vendor.js"></script><script type="text/javascript" src="/runtime.js"></script><script type="text/javascript" src="/lava.js"></script><script type="text/javascript" src="/options.js"></script></head>
 
 <body>
   <nav class="light-blue lighten-1" role="navigation">
@@ -61,91 +61,62 @@
     </div>
   </div>
 
-  <div class="container">
-    <div class="section">
-      <div class="row">
-        <!-- #region Code Box -->
-        <div class="col s12 m6">
-          <div class="icon-block">
-            <h2 class="center light-blue-text">
-                Listen to Events
-            </h2>
-            <h5 class="center">interactive charts</h5>
-            <pre class="language-javascript">
-              <code>
-const chartJson = {
-    label: 'Test',
-    type: 'PieChart',
-    elementId: 'chart_div',
-    data: (data) => {
-        data.addColumn('string', 'Topping');
-        data.addColumn('number', 'Slices');
-        data.addRows([
-            ['Mushrooms', 3],
-            ['Onions', 1],
-            ['Olives', 1],
-            ['Zucchini', 1],
-            ['Pepperoni', 2]
-        ]);
+        <div class="container">
+            <div class="title">
+                LavaJs v4.0
+            </div>
+            <p>Google Charts, made simple.</p>
+            <p><a href="#" onclick="loadOptions()">(Click to update options.)</a></p>
+            <p><a href="index.html">Basic</a>, <a href="events.html">Events</a>, <a href="dataquery.html">Remote Data</a></p>
 
-        return data;
+            <div>
+                <div class="align-left float">
+                    <pre><code>
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    const color = '#';
+    for (const i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+function loadOptions() {
+    lava.loadOptions('MyFancyChart', {
+        colors: [getRandomColor()]
+    });
+}
+
+const chartJson = {
+    label: 'MyFancyChart',
+    type: 'ScatterChart',
+    elementId: 'chart_div',
+    data: [
+        ['Age', 'Cash'],
+        [12,  101],
+        [15,  240],
+        [18,  280],
+        [32,  324]
+    ],
+    options: {
+        colors: ['green'],
+        chartArea: {width: '50%'}
     }
 };
 
-const chart = lava.store(chartJson);
-
-chart.on('ready', function() {
-    console.log(this.uuid + ' is ready!');
-});
-
-chart.on('select', function (chart, data) {
-    const selectedItem = chart.getSelection()[0];
-    if (selectedItem) {
-        const topping = data.getValue(selectedItem.row, 0);
-        alert('The user selected ' + topping);
-    }
-});
-
-lava.run();</code>
-            </pre>
-          </div>
+lava.store(chartJson);
+lava.run();
+                </code></pre>
+                </div>
+                <div class="float" style="width: 400px;">
+                    <pre><code>
+&#x3C;div id=&#x22;chart_div&#x22;&#x3E;&#x3C;/div&#x3E;
+                    </code></pre>
+                    <div id="chart_div"></div>
+                </div>
+            </div>
         </div>
-        <!-- #endregion -->
-
-        <!-- #region Chart Box -->
-        <div class="col s12 m6">
-          <div class="icon-block">
-            <h2 class="center light-blue-text">
-                Perform Actions
-            </h2>
-            <h5 class="center"> google!</h5>
-            <pre class="language-html">
-              <code>
-&#x3C;div id=&#x22;chart_div&#x22;&#x3E;&#x3C;/div&#x3E;</code>
-            </pre>
-            <div id="chart_div"></div>
-          </div>
-        </div>
-        <!-- #endregion -->
-
-      <!--
-          <div class="col s12 m4">
-          <div class="icon-block">
-            <h2 class="center light-blue-text"><i class="material-icons">settings</i></h2>
-            <h5 class="center">Easy to work with</h5>
-
-            <p class="light">We have provided detailed documentation as well as specific code examples to help new users get started. We are also always open to feedback and can answer any questions a user may have about Materialize.</p>
-          </div>
-        </div>
-      -->
-      </div><!-- </div class="row"> -->
     </div>
-
-    <div class="section">
-      <div class="row">
-      </div>
-    </div>
-  </div>
 
   <footer class="page-footer orange">
       <div class="container">
@@ -180,6 +151,5 @@ lava.run();</code>
         </div>
       </div>
   </footer>
-
 </body>
 </html>

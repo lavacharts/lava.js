@@ -1,114 +1,170 @@
 <!doctype html>
 <html>
 <head>
-    <title>Lava.js | Basic Syntax</title>
-    <script type="text/javascript" src="dist/lava.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-    <style rel="stylesheet" type="text/css">
-        html, body {
-            background-color: #fff;
-            color: #636b6f;
-            font-family: 'Nunito', sans-serif;
-            font-weight: 100;
-            height: 100vh;
-            margin: 0;
-        }
-
-        p {
-            font-size: larger;
-        }
-
-        .flex-center {
-            align-items: center;
-            display: flex;
-            justify-content: center;
-        }
-
-        .position-ref {
-            position: relative;
-        }
-
-        .align-left {
-            text-align: left;
-        }
-
-        .float {
-            float: left;
-        }
-
-        .content {
-            text-align: center;
-        }
-
-        .title {
-            font-size: 74px;
-        }
-    </style>
-</head>
+  <!-- ./examples/partials/head.hbs -->
+  
+  <title>lava.js</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/themes/prism.min.css" />
+<script type="text/javascript" src="/vendor.js"></script><script type="text/javascript" src="/runtime.js"></script><script type="text/javascript" src="/lava.js"></script><script type="text/javascript" src="/index.js"></script></head>
 
 <body>
-    <div class="flex-center position-ref">
-        <div class="content">
-            <div class="title">
-                LavaJs v4.0
-            </div>
-            <p>Google Charts, made simple.</p>
-            <p>With <a href="events.html">Events</a> and <a href="dataquery.html">Remote Data</a></p>
+  <nav class="light-blue lighten-1" role="navigation">
+    <nav class="light-blue lighten-1" role="navigation">
+      <div class="nav-wrapper container">
+        <a id="logo-container" href="#" class="brand-logo">lava.js</a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="#">Navbar Link</a></li>
+        </ul>
+    
+        <ul id="nav-mobile" class="sidenav">
+          <li><a href="#">Navbar Link</a></li>
+        </ul>
+        <a href="#" data-target="nav-mobile" class="sidenav-trigger">
+          <i class="material-icons">menu</i>
+        </a>
+      </div>
+    </nav>
+  </nav>
 
-            <div>
-                <div class="align-left float">
-                    <pre><code>
-var chartJson = {
-    label: 'Test',
-    type: 'PieChart',
-    elementId: 'chart_div',
-    datatable: [
-        ['Task', 'Hours per Day'],
-        ['Work',     11],
-        ['Eat',      2],
-        ['Commute',  2],
-        ['Watch TV', 2],
-        ['Sleep',    7]
-    ],
-    options: {
-        title: 'My Daily Activities'
-    },
-};
-
-lava.store(chartJson);
-lava.run();
-                    </code></pre>
-                </div>
-                <div class="float" style="width: 400px;">
-                    <pre><code>
-&#x3C;div id=&#x22;chart_div&#x22;&#x3E;&#x3C;/div&#x3E;
-                    </code></pre>
-                    <div id="chart_div"></div>
-                </div>
+  <div class="section no-pad-bot" id="index-banner">
+    <!-- ./examples/partials/banner.hbs -->
+    
+    <div class="container">
+      <h1 class="header center orange-text">lava.js</h1>
+    
+      <div class="row center">
+        <h5 class="header col s12 light">charts made simple</h5>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col s12 m6">
+          <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+              <span class="card-title">Yarn</span>
+              <p><pre>yarn add @lavacharts/lava.js</pre></p>
             </div>
+          </div>
         </div>
+        <div class="col s12 m6">
+          <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+              <span class="card-title">npm</span>
+              <p><pre>npm i --save @lavacharts/lava.js</pre></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="section">
+      <div class="row">
+        <!-- #region Code Box -->
+        <div class="col s12 m6">
+          <div class="icon-block">
+            <h2 class="center light-blue-text">
+                Easy Syntax
+            </h2>
+            <h5 class="center">clean & consise</h5>
+            <pre class="language-javascript">
+              <code>
+const lava &#x3D; new LavaJs();
+
+const chart &#x3D; lava.chart({
+  label: &quot;Test&quot;,
+  type: &quot;PieChart&quot;,
+  elementId: &quot;chart_div&quot;,
+  data: [
+    [&quot;Task&quot;, &quot;Hours per Day&quot;],
+    [&quot;Work&quot;, 11],
+    [&quot;Eat&quot;, 2],
+    [&quot;Commute&quot;, 2],
+    [&quot;Watch TV&quot;, 2],
+    [&quot;Sleep&quot;, 7]
+  ],
+  options: {
+    title: &quot;My Daily Activities&quot;
+  }
+});
+
+/**
+ * Store the chart
+ *
+ * This adds the chart to the render queue. The queue will
+ * be processed once &#x60;window.google !&#x3D;&#x3D; undefined&#x60;
+ */
+lava.store(chart);
+
+// Process the queue and draw your charts!
+lava.run();
+</code>
+            </pre>
+          </div>
+        </div>
+        <!-- #endregion -->
+
+        <!-- #region Chart Box -->
+        <div class="col s12 m6">
+          <div class="icon-block">
+            <h2 class="center light-blue-text">
+                Easy Charts
+            </h2>
+            <h5 class="center">thanks google!</h5>
+            <pre class="language-html">
+              <code>
+&#x3C;div id=&#x22;chart_div&#x22;&#x3E;&#x3C;/div&#x3E;</code>
+            </pre>
+            <div id="chart_div"></div>
+          </div>
+        </div>
+        <!-- #endregion -->
+
+      </div><!-- </div class="row"> -->
     </div>
 
-    <script type="text/javascript">
-        var chartJson = {
-            label: 'Test',
-            type: 'PieChart',
-            elementId: 'chart_div',
-            datatable: [
-                ['Task', 'Hours per Day'],
-                ['Work',     11],
-                ['Eat',      2],
-                ['Commute',  2],
-                ['Watch TV', 2],
-                ['Sleep',    7]
-            ],
-            options: {
-                title: 'My Daily Activities'
-            },
-        };
+    <div class="section">
+      <div class="row">
+      </div>
+    </div>
+  </div>
 
-        lava.store(chartJson);
-        lava.run();
-    </script>
+  <footer class="page-footer orange">
+      <div class="container">
+        <div class="row">
+          <div class="col l6 s12">
+            <h5 class="white-text">lava.js</h5>
+            <p class="grey-text text-lighten-4">This library was initially part of its parent project, <a href="https://github.com/kevinkhill/lavacharts">Lavacharts</a>. It was developed alongside Lavacharts as part of the package for php projects. It grew and grew with Lavacharts, until it matured enough to stand on its own, here, as lava.js</p>
+          </div>
+          <div class="col l3 s12">
+            <h5 class="white-text">Settings</h5>
+            <ul>
+              <li><a class="white-text" href="#!">Link 1</a></li>
+              <li><a class="white-text" href="#!">Link 2</a></li>
+              <li><a class="white-text" href="#!">Link 3</a></li>
+              <li><a class="white-text" href="#!">Link 4</a></li>
+            </ul>
+          </div>
+          <div class="col l3 s12">
+            <h5 class="white-text">Connect</h5>
+            <ul>
+              <li><a class="white-text" href="#!">Link 1</a></li>
+              <li><a class="white-text" href="#!">Link 2</a></li>
+              <li><a class="white-text" href="#!">Link 3</a></li>
+              <li><a class="white-text" href="#!">Link 4</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-copyright">
+        <div class="container">
+        Made by <a class="orange-text text-lighten-3" href="https://github.com/kevinkhill">kevinkhill</a>
+        </div>
+      </div>
+  </footer>
 </body>
 </html>
