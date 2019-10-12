@@ -1,3 +1,5 @@
+const lava = new LavaJs();
+
 function getRandomColor() {
   let color = "#";
 

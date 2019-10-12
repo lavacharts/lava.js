@@ -1,4 +1,4 @@
-import { Lavacharts } from "../";
+import { LavaJsOptions } from "..";
 import LavaJs from "../../LavaJs";
 import { Google } from "../google";
 
@@ -7,6 +7,8 @@ declare global {
     lava: LavaJs;
     LavaJs: LavaJs;
     google: Google;
-    lavacharts?: Lavacharts;
+    lavacharts?: {
+      options: LavaJsOptions;
+    };
   }
 }

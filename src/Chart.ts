@@ -26,7 +26,7 @@ export default class Chart extends Renderable {
   /**
    * Create a new Chart.
    *
-   * @exampl
+   * @example
    * {
    *     label: 'Test',
    *     type: 'PieChart',

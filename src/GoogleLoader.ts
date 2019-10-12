@@ -1,4 +1,5 @@
-import { logger } from "./LavaJs";
+import { getLogger } from "./lib";
+import Logger from "./lib/Logger";
 import { Google, GoogleLoaderOptions, LavaJsOptions } from "./types";
 
 export default class GoogleLoader {
@@ -17,7 +18,14 @@ export default class GoogleLoader {
    */
   private packages: Set<string> = new Set();
 
-  constructor(private options: LavaJsOptions) {}
+  /**
+   * Logging instance
+   */
+  private readonly logger: Logger;
+
+  constructor(private options: LavaJsOptions) {
+    this.logger = getLogger();
+  }
 
   /**
    * Flag that will be true once window.google is available in page.
@@ -79,20 +87,20 @@ export default class GoogleLoader {
    * Load the Google Static Loader and resolve the promise when ready.
    */
   public async loadGoogle(): Promise<Google> {
-    logger.log("Resolving Google...");
+    this.logger.log("Resolving Google...");
 
     if (this.googleLoaderInPage === false) {
-      logger.log("Static loader not found, appending to head");
+      this.logger.log("Static loader not found, appending to head");
 
       await this.addGoogleScriptToHead();
     }
 
     return new Promise(resolve => {
-      logger.log("Static loader found, initializing window.google");
+      this.logger.log("Static loader found, initializing window.google");
 
       window.google.charts.load(this.API_VERSION, this.config);
 
-      logger.log("Loaded Google with config:", this.config);
+      this.logger.log("Loaded Google with config:", this.config);
 
       window.google.charts.setOnLoadCallback(() => {
         resolve(window.google);

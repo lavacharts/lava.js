@@ -1,4 +1,3 @@
-const { CleanWebpackPlugin: CleanPlugin } = require("clean-webpack-plugin");
 const ForkTsCheckerPlugin = require("fork-ts-checker-webpack-plugin");
 const FriendlyErrorsPlugin = require("friendly-errors-webpack-plugin");
 const HardSourcePlugin = require("hard-source-webpack-plugin");
@@ -11,9 +10,9 @@ module.exports = {
   context: PATHS.root,
   plugins: [
     // new CleanPlugin(),
-    // new ProgressPlugin(),
+    new ProgressPlugin(),
     new HardSourcePlugin(),
-    // new FriendlyErrorsPlugin(),
+    new FriendlyErrorsPlugin(),
     new ForkTsCheckerPlugin({ eslint: true })
   ],
   module: {
@@ -23,19 +22,11 @@ module.exports = {
         loader: "handlebars-loader"
       },
       {
-        test: /\.ts$/,
+        test: /\.(j|t)sx?$/,
         loader: "babel-loader",
         include: [PATHS.src],
         exclude: [/node_modules/]
-        // options: { transpileOnly: true }
       },
-      // {
-      //   test: /\.(ts|tsx)?$/,
-      //   loader: "ts-loader",
-      //   include: [PATHS.src],
-      //   exclude: [/node_modules/],
-      //   options: { transpileOnly: true }
-      // },
       {
         test: /LavaJs\.ts$/,
         loader: "string-replace-loader",
@@ -48,6 +39,6 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js"]
+    extensions: [".tsx", ".ts", ".js", ".jsx"]
   }
 };

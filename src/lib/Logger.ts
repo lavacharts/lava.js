@@ -1,4 +1,4 @@
-export class Logger {
+export default class Logger {
   public grouped(msg: string, group: Function): void {
     console.group(msg);
     // Run `console.log`s in the callback

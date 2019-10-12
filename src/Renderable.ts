@@ -2,8 +2,8 @@ import { TinyEmitter } from "tiny-emitter";
 
 import DataQuery from "./DataQuery";
 import { DataError, ElementIdNotFound } from "./Errors";
-import { logger } from "./LavaJs";
-import { createDataTable } from "./lib";
+import { createDataTable, getLogger } from "./lib";
+import Logger from "./lib/Logger";
 import {
   ChartClasses,
   ChartUpdateReturn,
@@ -24,7 +24,7 @@ import { getProp, VIZ_PROPS } from "./VisualizationProps";
  * @license   MIT
  */
 export default class Renderable extends TinyEmitter {
-  [K: string]: any;
+  // [K: string]: any;
 
   /**
    * Unique label for the {@link Chart} / {@link Dashboard}.
@@ -88,12 +88,22 @@ export default class Renderable extends TinyEmitter {
   private dataSrc: any;
 
   /**
+   * Logging instance for the {@link Renderable}
+   */
+  private readonly logger: Logger;
+
+  protected _preDraw?(): any;
+  protected _postDraw?(): any;
+
+  /**
    * Create a new Renderable
    *
    * @param {Object} json
    */
   constructor(json: RenderableTmpl) {
     super();
+
+    this.logger = getLogger();
 
     this.type = json.type;
     this.label = json.label;
@@ -128,13 +138,13 @@ export default class Renderable extends TinyEmitter {
    */
   public draw(): void {
     if (typeof this._preDraw === "function") {
-      logger.log(`Firing ${this.uuid}._preDraw()`);
+      this.logger.log(`Firing ${this.uuid}._preDraw()`);
 
       this._preDraw();
     }
 
     if (typeof this.preDraw === "function") {
-      logger.log(`Firing ${this.uuid}.preDraw()`);
+      this.logger.log(`Firing ${this.uuid}.preDraw()`);
 
       this.preDraw();
     }
@@ -146,13 +156,13 @@ export default class Renderable extends TinyEmitter {
     this.googleChart.draw(this.data, this.options);
 
     if (typeof this._postDraw === "function") {
-      logger.log(`Firing ${this.uuid}._postDraw()`);
+      this.logger.log(`Firing ${this.uuid}._postDraw()`);
 
       this._postDraw();
     }
 
     if (typeof this.postDraw === "function") {
-      logger.log(`Firing ${this.uuid}.postDraw()`);
+      this.logger.log(`Firing ${this.uuid}.postDraw()`);
 
       this.postDraw();
     }
@@ -192,11 +202,11 @@ export default class Renderable extends TinyEmitter {
    */
   public async setData(payload: any): Promise<void> {
     if (payload instanceof DataQuery) {
-      logger.log(`Firing DataQuery for ${this.uuid}`);
+      this.logger.log(`Firing DataQuery for ${this.uuid}`);
 
       const response = await payload.send();
 
-      logger.log(`Response received:`, response);
+      this.logger.log(`Response received:`, response);
 
       this.data = response.getDataTable();
     } else {
@@ -209,7 +219,7 @@ export default class Renderable extends TinyEmitter {
       );
     }
 
-    logger.log(`Setting data for ${this.uuid}`, this.data);
+    this.logger.log(`Setting data for ${this.uuid}`, this.data);
 
     if (payload.formats) {
       this.applyFormats(payload.formats);
@@ -229,8 +239,8 @@ export default class Renderable extends TinyEmitter {
         format.options
       );
 
-      logger.log(`Setting data for ${this.uuid}.`);
-      logger.log(`Formatting column [${format.index}] with:`, format);
+      this.logger.log(`Setting data for ${this.uuid}.`);
+      this.logger.log(`Formatting column [${format.index}] with:`, format);
 
       formatter.format(this.data, format.index);
     }

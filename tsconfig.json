@@ -1,18 +1,21 @@
 {
   "compilerOptions": {
     "strict": true,
-    "target": "esnext",
+    "target": "es6",
     "sourceMap": true,
     "module": "commonjs",
     "noImplicitAny": true,
     "removeComments": true,
     "noUnusedLocals": true,
-    "isolatedModules":true,
+    "isolatedModules": true,
     "esModuleInterop": true,
-    "lib": ["dom","es2018"],
+    "lib": [
+      "dom",
+      "es2018"
+    ],
     "strictNullChecks": true,
     "noImplicitReturns": true,
-    "preserveConstEnums": true,
+    // "preserveConstEnums": true,
     "experimentalDecorators": true,
     "strictPropertyInitialization": true,
     "forceConsistentCasingInFileNames": true

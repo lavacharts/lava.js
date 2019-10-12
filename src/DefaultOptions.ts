@@ -1,6 +1,6 @@
-import { LavaJsOptions } from "../types";
+import { LavaJsOptions } from "./types";
 
-export const defaultOptions = {
+export default {
   autoRun: true,
   datetimeFormat: "",
   debounceTimeout: 250,

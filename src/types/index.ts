@@ -1,6 +1,4 @@
 import { Google, GoogleDataTable, GoogleLoaderOptions } from "./google";
-import { Lavacharts } from "./lavacharts";
-import { LavaJsOptions } from "./lavajs";
 import {
   ChartClasses,
   RenderableType,
@@ -12,12 +10,20 @@ export {
   ChartClasses,
   Google,
   GoogleLoaderOptions,
-  Lavacharts,
-  LavaJsOptions,
   RenderableType,
   SupportedCharts,
   SupportedFormatters
 };
+
+export interface LavaJsOptions {
+  autoRun?: boolean;
+  datetimeFormat?: string;
+  debounceTimeout?: number;
+  locale?: string;
+  mapsApiKey?: string;
+  responsive?: boolean;
+  timezone?: string;
+}
 
 export interface ChartUpdateReturn {
   data: GoogleDataTable;

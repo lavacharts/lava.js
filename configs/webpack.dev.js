@@ -1,11 +1,13 @@
 const fs = require("fs");
+const { CleanWebpackPlugin: CleanPlugin } = require("clean-webpack-plugin");
+const ErrorNotificationPlugin = require("webpack-error-notification");
 const HtmlHarddiskPlugin = require("html-webpack-harddisk-plugin");
 const HtmlPlugin = require("html-webpack-plugin");
 const merge = require("webpack-merge");
 
 const PATHS = require("./paths");
 
-const commonChunks = ["vendor", "runtime", "commons", "lava"];
+const commonChunks = ["vendor", "runtime", "lava"];
 
 const examplePages = fs
   .readdirSync(PATHS.examples)
@@ -20,12 +22,12 @@ const examplePages = fs
   );
 
 module.exports = merge(require("./webpack.common.js"), {
+  mode: "development",
   entry: {
-    lava: "./src/lib/instance.ts",
-    commons: ["babel-polyfill", "materialize-css", "prismjs"],
+    vendor: ["materialize-css", "prismjs"],
+    lava: "./src/index.ts",
     ...examplePages
   },
-  mode: "development",
   output: {
     publicPath: "/",
     path: PATHS.public,
@@ -61,6 +63,8 @@ module.exports = merge(require("./webpack.common.js"), {
     }
   },
   plugins: [
+    new CleanPlugin(),
+    new ErrorNotificationPlugin(),
     ...Object.keys(examplePages).map(page => {
       const config = {
         inject: "head",

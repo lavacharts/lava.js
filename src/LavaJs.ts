@@ -3,9 +3,10 @@ import { TinyEmitter } from "tiny-emitter";
 import Chart from "./Chart";
 import Dashboard from "./Dashboard";
 import DataQuery from "./DataQuery";
+import DefaultOptions from "./DefaultOptions";
 import { InvalidCallback, RenderableNotFound } from "./Errors";
 import GoogleLoader from "./GoogleLoader";
-import { addEvent, defaultOptions, Logger } from "./lib";
+import { addEvent, getLogger } from "./lib";
 import Renderable from "./Renderable";
 import { ChartUpdateReturn, LavaJsOptions, RenderableTmpl } from "./types";
 
@@ -14,22 +15,13 @@ import { ChartUpdateReturn, LavaJsOptions, RenderableTmpl } from "./types";
  */
 export const VERSION = "__VERSION__";
 
-export const logger = new Logger();
-
 /**
  * Google Chart API wrapper library
  *
  * This module can be used as a standalone, browser based library, or in
  * conjunction with the PHP library, <a href="https://github.com/kevinkhill/lavacharts">Lavacharts</a>.
- *
- * @class
- * @author    Kevin Hill <kevinkhill@gmail.com>
- * @copyright (c) 2019, Kevin Hill
- * @license   http://opensource.org/licenses/MIT MIT
  */
 export default class LavaJs extends TinyEmitter {
-  static readonly logger = logger;
-
   /**
    * Version of the LavaJs module
    */
@@ -38,7 +30,7 @@ export default class LavaJs extends TinyEmitter {
   /**
    * Configurable options for the library
    */
-  private options: LavaJsOptions = defaultOptions;
+  private options: LavaJsOptions = DefaultOptions;
 
   /**
    * Chart storage
@@ -54,6 +46,11 @@ export default class LavaJs extends TinyEmitter {
    * Loader class for appending the google script and making window.google available
    */
   private readonly loader: GoogleLoader;
+
+  /**
+   * Instance of the {@link Logger}
+   */
+  private readonly logger = getLogger();
 
   /**
    * Create a new instance of the LavaJs library
@@ -90,16 +87,17 @@ export default class LavaJs extends TinyEmitter {
       await this.loader.loadGoogle();
     }
   }
-
   /**
    * Runs the LavaJs.js module
    *
    * @emits {ready}
    */
   public async run(): Promise<any> {
-    console.log(`LavaJs v${VERSION}`);
+    await this.waitForDom();
 
-    logger.log("Loaded with options", this.options);
+    this.logger.log(`LavaJs v${VERSION}`);
+
+    this.logger.log("Loaded with options", this.options);
 
     if (this.options.responsive === true) {
       this.attachRedrawHandler();
@@ -107,7 +105,7 @@ export default class LavaJs extends TinyEmitter {
 
     await this.loadGoogle();
 
-    logger.log("Google is ready!", window.google);
+    this.logger.log("Google is ready!", window.google);
 
     await this.renderAll();
 
@@ -120,7 +118,7 @@ export default class LavaJs extends TinyEmitter {
     // this.emit("ready");
 
     if (typeof this.readyCallback === "function") {
-      logger.log("ready!");
+      this.logger.log("ready!");
       this.readyCallback();
     }
   }
@@ -129,7 +127,7 @@ export default class LavaJs extends TinyEmitter {
     const promises: Promise<any>[] = [];
 
     this.volcano.forEach(renderable => {
-      logger.log(`Rendering ${renderable.uuid}`);
+      this.logger.log(`Rendering ${renderable.uuid}`);
 
       promises.push(renderable.run());
     });
@@ -158,7 +156,7 @@ export default class LavaJs extends TinyEmitter {
    * as an independent library.
    */
   public chart(payload: RenderableTmpl): Chart {
-    logger.log(`Creating a new Chart`);
+    this.logger.log(`Creating a new Chart`);
 
     return new Chart(payload);
   }
@@ -170,7 +168,7 @@ export default class LavaJs extends TinyEmitter {
    * as an independent library.
    */
   public create(payload: RenderableTmpl): Renderable {
-    logger.log(`Creating a new ${payload.type}:`, payload);
+    this.logger.log(`Creating a new ${payload.type}:`, payload);
 
     if (payload.type === "Dashboard") {
       return new Dashboard(payload);
@@ -185,20 +183,11 @@ export default class LavaJs extends TinyEmitter {
    * @todo If the library has ran, and is ready, loading new charts will force a redrawAll of all the currently drawn charts.
    */
   public store(renderable: Renderable): void {
-    // if (renderable instanceof Renderable === false) {
-    //   renderable = this.create(renderable);
-    // }
-    // const newRenderable = this.create(renderable);
-
-    logger.log(`Storing ${renderable.uuid}`);
+    this.logger.log(`Storing ${renderable.uuid}`);
 
     this.loader.addPackage(renderable.package);
 
     this.volcano.set(renderable.label, renderable);
-
-    //if (this.isReady) {
-    //    this.redrawAll();
-    //}
   }
 
   /**
@@ -290,20 +279,36 @@ export default class LavaJs extends TinyEmitter {
    */
   public redrawAll(): boolean {
     if (this.volcano.size === 0) {
-      logger.log(`Nothing to redraw.`);
+      this.logger.log(`Nothing to redraw.`);
 
       return false;
     }
 
-    logger.log(`Redrawing ${this.volcano.size} renderables.`);
+    this.logger.log(`Redrawing ${this.volcano.size} renderables.`);
 
     this.volcano.forEach(renderable => {
-      logger.log(`Redrawing ${renderable.uuid}`);
+      this.logger.log(`Redrawing ${renderable.uuid}`);
 
       renderable.draw();
     });
 
     return true;
+  }
+
+  /**
+   * Simple Promise for the DOM to be ready.
+   */
+  private async waitForDom(): Promise<void> {
+    return new Promise(resolve => {
+      if (
+        document.readyState === "interactive" ||
+        document.readyState === "complete"
+      ) {
+        resolve();
+      } else {
+        document.addEventListener("DOMContentLoaded", () => resolve());
+      }
+    });
   }
 
   /**
@@ -318,7 +323,7 @@ export default class LavaJs extends TinyEmitter {
       clearTimeout(debounced);
 
       debounced = setTimeout(() => {
-        logger.log("Window re-sized, redrawing...");
+        this.logger.log("Window re-sized, redrawing...");
 
         this.redrawAll();
       }, this.options.debounceTimeout);

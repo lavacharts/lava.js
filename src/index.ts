@@ -1,3 +1,3 @@
-// import LavaJs from "./LavaJs";
+import LavaJs from "./LavaJs";
 
-// export { LavaJs };
+(window as any).LavaJs = LavaJs;
