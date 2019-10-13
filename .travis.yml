@@ -6,7 +6,8 @@ node_js: '10'
 
 branches:
   only:
-    - master
+    # - master
+    - typescript
 
 cache: yarn
 
@@ -20,7 +21,7 @@ install:
   - yarn install
 
 before_script:
-  - yarn run production
+  - yarn build
 
 script:
-  - yarn run test
+  - yarn run gh-pages -d public/

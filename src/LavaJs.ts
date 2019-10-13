@@ -11,11 +11,6 @@ import Renderable from "./Renderable";
 import { ChartUpdateReturn, LavaJsOptions, RenderableTmpl } from "./types";
 
 /**
- * Version of the LavaJs module
- */
-export const VERSION = "__VERSION__";
-
-/**
  * Google Chart API wrapper library
  *
  * This module can be used as a standalone, browser based library, or in
@@ -80,12 +75,14 @@ export default class LavaJs extends TinyEmitter {
   }
 
   /**
-   * Initializes the library by loading google to the window.
+   * Initializes the library by loading the Google Chart API.
    */
-  public async loadGoogle(): Promise<any> {
+  public async loadGoogle(): Promise<void> {
     if (this.loader.isLoaded === false) {
-      await this.loader.loadGoogle();
+      return this.loader.loadGoogle();
     }
+
+    // return this.loader.getGoogle();
   }
   /**
    * Runs the LavaJs.js module
@@ -95,7 +92,7 @@ export default class LavaJs extends TinyEmitter {
   public async run(): Promise<any> {
     await this.waitForDom();
 
-    this.logger.log(`LavaJs v${VERSION}`);
+    this.logger.log(`LavaJs v${LavaJs.VERSION}`);
 
     this.logger.log("Loaded with options", this.options);
 

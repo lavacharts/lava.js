@@ -16,7 +16,7 @@
   "main": "./dist/lava.js",
   "scripts": {
     "dev": "yarn run webpack-dev-server --config ./configs/webpack.dev.js",
-    "ts-check": "yarn run tsc --noEmit ./tsconfig.json ",
+    "ts-check": "yarn run tsc --noEmit",
     "test": "yarn run karma start --singleRun",
     "lint": "yarn run eslint --ext=.ts src/",
     "prod": "yarn run build:prod",
@@ -39,7 +39,6 @@
     }
   },
   "dependencies": {
-    "@babel/runtime": "^7.6.3",
     "tiny-emitter": "^2.1.0"
   },
   "devDependencies": {
@@ -49,6 +48,7 @@
     "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.6.3",
     "@babel/preset-typescript": "^7.6.0",
+    "@babel/runtime": "^7.6.3",
     "@types/google.visualization": "^0.0.48",
     "@types/node": "^12.7.5",
     "@typescript-eslint/eslint-plugin": "^2.3.1",

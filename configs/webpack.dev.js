@@ -29,7 +29,7 @@ module.exports = merge(require("./webpack.common.js"), {
     ...examplePages
   },
   output: {
-    publicPath: "/",
+    publicPath: "",
     path: PATHS.public,
     filename: "[name].js"
   },

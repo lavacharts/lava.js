@@ -16,13 +16,18 @@ export default class GoogleLoader {
   /**
    * Packages to load
    */
-  private packages: Set<string> = new Set();
+  private readonly packages: Set<string> = new Set();
 
   /**
    * Logging instance
    */
   private readonly logger: Logger;
 
+  /**
+   * Create a new instance of the GoogleLoader
+   *
+   * @param options LavaJsOptions
+   */
   constructor(private options: LavaJsOptions) {
     this.logger = getLogger();
   }
@@ -66,17 +71,6 @@ export default class GoogleLoader {
   }
 
   /**
-   * Get a reference to the window.google object or load it if needed.
-   */
-  // public async getGoogle(): Promise<Google> {
-  //   if (this.isLoaded) {
-  //     return window.google;
-  //   }
-
-  //   return this.loadGoogle();
-  // }
-
-  /**
    * Add one package to the list that Google needs to load.
    */
   public addPackage(pkgs: string): void {
@@ -84,9 +78,20 @@ export default class GoogleLoader {
   }
 
   /**
+   * Get a reference to the window.google object or load it if needed.
+   */
+  public async getGoogle(): Promise<Google> {
+    if (this.isLoaded === false) {
+      await this.loadGoogle();
+    }
+
+    return window.google;
+  }
+
+  /**
    * Load the Google Static Loader and resolve the promise when ready.
    */
-  public async loadGoogle(): Promise<Google> {
+  public async loadGoogle(): Promise<void> {
     this.logger.log("Resolving Google...");
 
     if (this.googleLoaderInPage === false) {
@@ -103,7 +108,7 @@ export default class GoogleLoader {
       this.logger.log("Loaded Google with config:", this.config);
 
       window.google.charts.setOnLoadCallback(() => {
-        resolve(window.google);
+        resolve();
       });
     });
   }

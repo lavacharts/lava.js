@@ -1,9 +1,10 @@
+.vscode/
 .idea/
 node_modules/
 
+public/*
+!public/.gitkeep
 docs/
 build/
-
-renders/*.png
 
 *.log
