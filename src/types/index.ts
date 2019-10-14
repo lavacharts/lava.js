@@ -1,7 +1,7 @@
 import { Google, GoogleDataTable, GoogleLoaderOptions } from "./google";
 import {
   ChartClasses,
-  RenderableType,
+  DrawableType,
   SupportedCharts,
   SupportedFormatters
 } from "./strings";
@@ -10,7 +10,7 @@ export {
   ChartClasses,
   Google,
   GoogleLoaderOptions,
-  RenderableType,
+  DrawableType,
   SupportedCharts,
   SupportedFormatters
 };
@@ -37,18 +37,20 @@ export interface Formatter {
   type: SupportedFormatters;
 }
 
-export type RenderableTypes = SupportedCharts | "Dashboard";
+export interface Logger {
+  log: Function;
+  error: Function;
+}
 
-export interface RenderableTmpl {
-  data: any;
-  datatable: any;
-  elementId: string;
+export type DrawableTypes = SupportedCharts | "Dashboard";
+
+export interface DrawableTmpl {
   label: any;
+  type: DrawableTypes;
+  elementId: string;
+  data: any;
   options: any;
-  package: string;
-  png: boolean;
-  uuid: string;
+  png?: boolean;
+  events?: Record<string, Function>;
   formats?: Formatter[];
-  type: RenderableTypes;
-  events?: any[];
 }

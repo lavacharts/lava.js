@@ -1,5 +1,3 @@
-const lava = new LavaJs();
-
 const id = "1DwWSti6L3KRyJC0Wi33X3i-6lsZ2iStrhK7sxw7uoek";
 const base = "https://docs.google.com/spreadsheets/d";
 const query = "gviz/tq?range=A1:B6";

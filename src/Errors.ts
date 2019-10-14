@@ -23,11 +23,11 @@ export class InvalidCallback extends LavaJsError {
 /**
  * InvalidLabel Error
  *
- * Thrown when a {@link Renderable} is not found in the module.
+ * Thrown when a {@link Drawable} is not found in the module.
  */
-export class RenderableNotFound extends LavaJsError {
+export class DrawableNotFound extends LavaJsError {
   constructor(label: string) {
-    super(`[lava.js] A renderable with the label "${label}" was not found.`);
+    super(`[lava.js] A drawable with the label "${label}" was not found.`);
   }
 }
 

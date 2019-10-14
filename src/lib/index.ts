@@ -1,9 +1,34 @@
-import Logger from "./Logger";
+import LavaJs from "../LavaJs";
+import { Logger } from "../types";
 
-const logger = new Logger();
+export function getWindowInstance(): LavaJs {
+  return window.lava;
+}
 
+/**
+ * Create an Logger
+ */
 export function getLogger(): Logger {
-  return logger;
+  const { log: _log, error: _error } = console;
+
+  const prefix = "[lava.js]";
+
+  return {
+    log(args: any[]): void {
+      if (typeof args === "string") {
+        _log(prefix, args);
+      } else {
+        _log(prefix, ...args);
+      }
+    },
+    error(args: any[]): void {
+      if (typeof args === "string") {
+        _error(prefix, args);
+      } else {
+        _error(prefix, ...args);
+      }
+    }
+  };
 }
 
 /**

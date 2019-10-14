@@ -1,80 +1,44 @@
-import Renderable from "./Renderable";
-import { RenderableTmpl } from "./types";
+import Drawable from "./Drawable";
+import { DrawableTmpl } from "./types";
 import { ChartFactory } from "./types/chart";
 
 function makeChartFactory(container: HTMLElement): ChartFactory {
   return type => new window.google.visualization[type](container);
 }
 
-/**
- * Chart Class
- *
- * @author    Kevin Hill <kevinkhill@gmail.com>
- * @copyright (c) 2019, Kevin Hill
- * @license   MIT
- */
-export default class Chart extends Renderable {
+export default class Chart extends Drawable {
   /**
-   * If this is set to true, then the {@link Chart} will be output as a PNG
-   *
-   * @type {Boolean}
+   * If this is set to true, then the {@link Chart}
+   * will be drawn and converted to a PNG
    */
-  png: boolean;
-
-  events!: Array<any>;
+  public png = false;
 
   /**
-   * Create a new Chart.
-   *
-   * @example
-   * {
-   *     label: 'Test',
-   *     type: 'PieChart',
-   *     elementId: 'my-pie-chart',
-   *     datatable: [
-   *         ['Task', 'Hours per Day'],
-   *         ['Work',     11],
-   *         ['Eat',      2],
-   *         ['Commute',  2],
-   *         ['Watch TV', 2],
-   *         ['Sleep',    7]
-   *     ],
-   *     options: {
-   *         title: 'My Daily Activities'
-   *     }
-   * }
+   * Create a new {@link Chart}
    */
-  constructor(payload: RenderableTmpl) {
+  constructor(payload: DrawableTmpl) {
     super(payload);
 
     this.png = Boolean(payload.png);
   }
 
   /**
-   * Actions to perform before drawing the {@link Chart}
-   *
-   * This method will have access to window.google since it is called
-   * within the render method.
+   * Actions to perform before `chart.draw()`
    */
-  protected _preDraw(): void {
+  public preDraw(): void {
     const chartFactory = makeChartFactory(this.container as HTMLElement);
 
     this.googleChart = chartFactory(this.class);
 
-    // TODO: append Lavachart defined events?
-    // if (this.events) {
-    //     this.attachEvents();
-    // }
+    if (this.events) {
+      // this.attachEvents();
+    }
   }
 
   /**
-   * Actions to perform once the {@link Chart} has been drawn
-   *
-   * This method will have access to window.google since it is called
-   * within the run method.
-   * @private
+   * Actions to perform after `chart.draw()`
    */
-  protected _postDraw(): void {
+  public postDraw(): void {
     if (this.png) {
       this.drawPng();
     }
@@ -83,11 +47,11 @@ export default class Chart extends Renderable {
   /**
    * Draws the chart as a PNG instead of the standard SVG
    *
-   * @private
    * @see https://developers.google.com/chart/interactive/docs/printing
    */
   private drawPng(): void {
     const img = document.createElement("img");
+
     img.src = this.googleChart.getImageURI();
 
     if (this.container) {
@@ -98,9 +62,6 @@ export default class Chart extends Renderable {
 
   /**
    * Attach the defined chart event handlers.
-   *
-   * @private
-   * @return {void}
    */
   // private attachEvents(): void {
   //   this.events.forEach((callback: Function, event: any) => {

@@ -43,7 +43,7 @@ module.exports = merge(require("./webpack.common.js"), {
       warnings: true
     },
     watchContentBase: true,
-    contentBase: PATHS.public
+    contentBase: [PATHS.public, PATHS.examples]
   },
   optimization: {
     splitChunks: {
@@ -63,7 +63,7 @@ module.exports = merge(require("./webpack.common.js"), {
     }
   },
   plugins: [
-    new CleanPlugin(),
+    // new CleanPlugin(),
     new ErrorNotificationPlugin(),
     ...Object.keys(examplePages).map(page => {
       const config = {

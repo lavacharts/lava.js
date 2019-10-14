@@ -1,6 +1,5 @@
 import { getLogger } from "./lib";
-import Logger from "./lib/Logger";
-import { Google, GoogleLoaderOptions, LavaJsOptions } from "./types";
+import { Google, GoogleLoaderOptions, LavaJsOptions, Logger } from "./types";
 
 export default class GoogleLoader {
   /**

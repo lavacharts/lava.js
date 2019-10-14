@@ -1,7 +1,7 @@
 /**
  * Create a new instance and attach to window.
  */
-import "./instance";
+import ".";
 
 /**
  * Since LavaJs was loaded with Lavacharts, then `window.lavacharts` will
@@ -15,4 +15,6 @@ if (typeof window.lavacharts !== "undefined") {
  * Lavacharts defaults to `autorun: true` so once the DOM is ready,
  * rendering will begin!
  */
-if (window.lava.autorun) window.lava.run();
+if (window.lava.autorun) {
+  window.lava.draw();
+}

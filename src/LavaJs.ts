@@ -4,11 +4,12 @@ import Chart from "./Chart";
 import Dashboard from "./Dashboard";
 import DataQuery from "./DataQuery";
 import DefaultOptions from "./DefaultOptions";
-import { InvalidCallback, RenderableNotFound } from "./Errors";
+import Drawable from "./Drawable";
+import { DrawableNotFound, InvalidCallback } from "./Errors";
+import { EVENTS } from "./Events";
 import GoogleLoader from "./GoogleLoader";
 import { addEvent, getLogger } from "./lib";
-import Renderable from "./Renderable";
-import { ChartUpdateReturn, LavaJsOptions, RenderableTmpl } from "./types";
+import { ChartUpdateReturn, DrawableTmpl, LavaJsOptions } from "./types";
 
 /**
  * Google Chart API wrapper library
@@ -30,7 +31,7 @@ export default class LavaJs extends TinyEmitter {
   /**
    * Chart storage
    */
-  private readonly volcano: Map<string, Renderable> = new Map();
+  private readonly volcano: Map<string, Drawable> = new Map();
 
   /**
    * Ready Callback
@@ -89,7 +90,7 @@ export default class LavaJs extends TinyEmitter {
    *
    * @emits {ready}
    */
-  public async run(): Promise<any> {
+  public async draw(): Promise<any> {
     await this.waitForDom();
 
     this.logger.log(`LavaJs v${LavaJs.VERSION}`);
@@ -102,38 +103,35 @@ export default class LavaJs extends TinyEmitter {
 
     await this.loadGoogle();
 
+    this.emit(EVENTS.INITIALIZING);
+
     this.logger.log("Google is ready!", window.google);
 
-    await this.renderAll();
+    this.emit(EVENTS.DRAW);
 
-    // try {
+    // await this.drawAll();
 
-    // } catch (error) {
-    //   this.emit("error", error);
-    // }
-
-    // this.emit("ready");
+    this.emit(EVENTS.READY);
 
     if (typeof this.readyCallback === "function") {
-      this.logger.log("ready!");
       this.readyCallback();
     }
   }
 
-  public renderAll(): Promise<any>[] {
-    const promises: Promise<any>[] = [];
+  // public drawAll(): Promise<any>[] {
+  //   const promises: Promise<any>[] = [];
 
-    this.volcano.forEach(renderable => {
-      this.logger.log(`Rendering ${renderable.uuid}`);
+  //   this.volcano.forEach(drawable => {
+  //     this.logger.log(`Rendering ${drawable.uuid}`);
 
-      promises.push(renderable.run());
-    });
+  //     promises.push(drawable.init());
+  //   });
 
-    return promises;
-  }
+  //   return promises;
+  // }
 
   /**
-   * Create a new {@link DataQuery} for a {@link Renderable}
+   * Create a new {@link DataQuery} for a {@link Drawable}
    *
    * If a String is passed, then a new {@link DataQuery} is created with no options.
    * If an Object is passed, then the query must be defined by the object.
@@ -147,51 +145,43 @@ export default class LavaJs extends TinyEmitter {
   }
 
   /**
-   * Static method for creating new Charts.
-   *
-   * The payload payload can come from Lavacharts or manually if used
-   * as an independent library.
+   * Create a new {@link Chart} from an Object
    */
-  public chart(payload: RenderableTmpl): Chart {
-    this.logger.log(`Creating a new Chart`);
+  public chart(payload: DrawableTmpl): Chart {
+    this.logger.log("Creating a new Chart", payload);
 
-    return new Chart(payload);
+    const chart = new Chart(payload);
+
+    return this.store(chart);
   }
 
   /**
-   * Static method for creating new Charts and Dashboards from a payload definition.
-   *
-   * The payload payload can come from Lavacharts or manually if used
-   * as an independent library.
+   * Create a new {@link Dashboard} from an Object
    */
-  public create(payload: RenderableTmpl): Renderable {
-    this.logger.log(`Creating a new ${payload.type}:`, payload);
+  public dashboard(payload: DrawableTmpl): Drawable {
+    this.logger.log("Creating a new Dashboard", payload);
 
-    if (payload.type === "Dashboard") {
-      return new Dashboard(payload);
-    }
-
-    return new Chart(payload);
+    return new Dashboard(payload);
   }
 
   /**
-   * Stores or creates then stores a {@link Renderable} within the module.
-   *
-   * @todo If the library has ran, and is ready, loading new charts will force a redrawAll of all the currently drawn charts.
+   * Stores a {@link Drawable} within the module.
    */
-  public store(renderable: Renderable): void {
-    this.logger.log(`Storing ${renderable.uuid}`);
+  public store<T>(drawable: Chart | Dashboard): T {
+    this.logger.log(`Storing ${drawable.uuid}`);
 
-    this.loader.addPackage(renderable.package);
+    this.loader.addPackage(drawable.package);
 
-    this.volcano.set(renderable.label, renderable);
+    this.volcano.set(drawable.label, drawable);
+
+    return drawable;
   }
 
   /**
    * Stores many charts at once.
    */
-  public storeMany(renderables: Renderable[]): void {
-    renderables.forEach(this.store, this);
+  public storeMany(drawables: Drawable[]): void {
+    drawables.forEach(this.store, this);
   }
 
   /**
@@ -206,11 +196,11 @@ export default class LavaJs extends TinyEmitter {
    * See https://google-developers.appspot.com/chart/interactive/docs/gallery/linechart#methods
    * for some examples relative to LineCharts.
    *
-   * @throws {RenderableNotFound}
+   * @throws {DrawableNotFound}
    */
-  public get(label: string): Renderable | undefined {
+  public get(label: string): Drawable | undefined {
     if (this.volcano.has(label) === false) {
-      throw new RenderableNotFound(label);
+      throw new DrawableNotFound(label);
     }
 
     return this.volcano.get(label);
@@ -281,12 +271,12 @@ export default class LavaJs extends TinyEmitter {
       return false;
     }
 
-    this.logger.log(`Redrawing ${this.volcano.size} renderables.`);
+    this.logger.log(`Redrawing ${this.volcano.size} drawables.`);
 
-    this.volcano.forEach(renderable => {
-      this.logger.log(`Redrawing ${renderable.uuid}`);
+    this.volcano.forEach(drawable => {
+      this.logger.log(`Redrawing ${drawable.uuid}`);
 
-      renderable.draw();
+      drawable.draw();
     });
 
     return true;

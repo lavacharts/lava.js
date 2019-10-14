@@ -5,7 +5,7 @@ import { Google } from "../google";
 declare global {
   interface Window {
     lava: LavaJs;
-    LavaJs: LavaJs;
+    LavaJs: typeof LavaJs;
     google: Google;
     lavacharts?: {
       options: LavaJsOptions;

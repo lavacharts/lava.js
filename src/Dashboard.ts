@@ -1,4 +1,4 @@
-import Renderable from "./Renderable";
+import Drawable from "./Drawable";
 /**
  * Dashboard Class
  *
@@ -8,7 +8,7 @@ import Renderable from "./Renderable";
  * @copyright (c) 2019, Kevin Hill
  * @license   MIT
  */
-export default class Dashboard extends Renderable {
+export default class Dashboard extends Drawable {
   bindings: any;
 
   /**

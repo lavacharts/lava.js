@@ -1,7 +1,7 @@
 import { LavaJsOptions } from "./types";
 
 export default {
-  autoRun: true,
+  autodraw: true,
   datetimeFormat: "",
   debounceTimeout: 250,
   locale: "en",

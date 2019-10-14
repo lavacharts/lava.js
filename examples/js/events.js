@@ -1,5 +1,3 @@
-const lava = new LavaJs();
-
 const chart = lava.chart({
   label: "Test",
   type: "PieChart",

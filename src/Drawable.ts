@@ -2,54 +2,44 @@ import { TinyEmitter } from "tiny-emitter";
 
 import DataQuery from "./DataQuery";
 import { DataError, ElementIdNotFound } from "./Errors";
-import { createDataTable, getLogger } from "./lib";
-import Logger from "./lib/Logger";
+import { EVENTS } from "./Events";
+import { createDataTable, getLogger, getWindowInstance } from "./lib";
 import {
   ChartClasses,
   ChartUpdateReturn,
+  DrawableTmpl,
+  DrawableType,
   Formatter,
-  RenderableTmpl,
-  RenderableType,
+  LavaJsOptions,
+  Logger,
   SupportedCharts
 } from "./types";
 import { getProp, VIZ_PROPS } from "./VisualizationProps";
 
 /**
- * The {@link Renderable} class is the base for {@link Chart}s and {@link Dashboard}s
+ * The {@link Drawable} class is the base for {@link Chart}s and {@link Dashboard}s
  * to share common methods between the two types.
- *
- *
- * @author    Kevin Hill <kevinkhill@gmail.com>
- * @copyright (c) 2019, Kevin Hill
- * @license   MIT
  */
-export default class Renderable extends TinyEmitter {
-  // [K: string]: any;
+export default class Drawable extends TinyEmitter {
+  /**
+   * PreDraw hook
+   */
+  public preDraw?(): void;
 
   /**
-   * Unique label for the {@link Chart} / {@link Dashboard}.
+   * PostDraw hook
    */
-  public readonly label: string;
+  public postDraw?(): void;
 
   /**
    * Configurable options.
    */
-  public options: Record<string, any>;
+  public options: LavaJsOptions;
 
   /**
    * DataTable for the {@link Chart} / {@link Dashboard}.
    */
   public data!: google.visualization.DataTable;
-
-  /**
-   * PreDraw hook
-   */
-  public preDraw!: Function;
-
-  /**
-   * PostDraw hook
-   */
-  public postDraw!: Function;
 
   /**
    * Google chart object created once the {@link Chart} / {@link Dashboard}
@@ -58,9 +48,9 @@ export default class Renderable extends TinyEmitter {
   public googleChart: any;
 
   /**
-   * Type of {@link Renderable}.
+   * Type of {@link Drawable}.
    */
-  public readonly type: SupportedCharts | RenderableType;
+  public readonly type: SupportedCharts | DrawableType;
 
   /**
    * The google.visualization class needed for rendering.
@@ -78,9 +68,19 @@ export default class Renderable extends TinyEmitter {
   public readonly elementId: string;
 
   /**
+   * Unique label for the {@link Chart} / {@link Dashboard}.
+   */
+  public readonly label: string;
+
+  /**
    * Formatters for the DataTable
    */
   protected formats: Formatter[];
+
+  /**
+   * Event listeners for the Drawable.
+   */
+  protected events: Record<string, Function>;
 
   /**
    * The source of the DataTable, to be used in setData().
@@ -88,33 +88,49 @@ export default class Renderable extends TinyEmitter {
   private dataSrc: any;
 
   /**
-   * Logging instance for the {@link Renderable}
+   * Logging instance for the {@link Drawable}
    */
   private readonly logger: Logger;
 
-  protected _preDraw?(): any;
-  protected _postDraw?(): any;
-
   /**
-   * Create a new Renderable
+   * Create a new Drawable
    *
    * @param {Object} json
    */
-  constructor(json: RenderableTmpl) {
+  constructor(drawable: DrawableTmpl) {
     super();
 
     this.logger = getLogger();
 
-    this.type = json.type;
-    this.label = json.label;
-    this.dataSrc = json.data;
-    this.elementId = json.elementId;
+    this.type = drawable.type;
+    this.label = drawable.label;
+    this.dataSrc = drawable.data;
+    this.elementId = drawable.elementId;
 
-    this.options = json.options || {};
-    this.formats = json.formats || [];
+    this.options = drawable.options || {};
+    this.formats = drawable.formats || [];
+    this.events = drawable.events || {};
 
     this.class = getProp(this.type as SupportedCharts, VIZ_PROPS.CLASS);
     this.package = getProp(this.type as SupportedCharts, VIZ_PROPS.PACKAGE);
+
+    const lava = getWindowInstance();
+
+    lava.once(EVENTS.GOOGLE_READY, () => {
+      if (typeof this.init === "function") this.init();
+    });
+
+    lava.on(EVENTS.DRAW, () => {
+      this.draw();
+    });
+
+    this.on(EVENTS.PRE_DRAW, () => {
+      if (typeof this.postDraw === "function") this.postDraw();
+    });
+
+    this.on(EVENTS.POST_DRAW, () => {
+      if (typeof this.postDraw === "function") this.postDraw();
+    });
   }
 
   /**
@@ -136,36 +152,16 @@ export default class Renderable extends TinyEmitter {
    *
    * @public
    */
-  public draw(): void {
-    if (typeof this._preDraw === "function") {
-      this.logger.log(`Firing ${this.uuid}._preDraw()`);
-
-      this._preDraw();
-    }
-
-    if (typeof this.preDraw === "function") {
-      this.logger.log(`Firing ${this.uuid}.preDraw()`);
-
-      this.preDraw();
-    }
-
+  public async draw(): Promise<void> {
     if (!this.data) {
       throw new DataError(`${this.uuid} Could not draw, data is ${this.data}`);
     }
 
+    this.emit(EVENTS.PRE_DRAW);
+
     this.googleChart.draw(this.data, this.options);
 
-    if (typeof this._postDraw === "function") {
-      this.logger.log(`Firing ${this.uuid}._postDraw()`);
-
-      this._postDraw();
-    }
-
-    if (typeof this.postDraw === "function") {
-      this.logger.log(`Firing ${this.uuid}.postDraw()`);
-
-      this.postDraw();
-    }
+    this.emit(EVENTS.POST_DRAW);
   }
 
   /**
@@ -178,7 +174,7 @@ export default class Renderable extends TinyEmitter {
    *
    * @return {Promise}
    */
-  async run(): Promise<any> {
+  protected async init(): Promise<any> {
     if (!this.container) {
       throw new ElementIdNotFound(this.elementId);
     }
@@ -195,7 +191,7 @@ export default class Renderable extends TinyEmitter {
   }
 
   /**
-   * Sets the {@link DataTable} for the {@link Renderable}.
+   * Sets the {@link DataTable} for the {@link Drawable}.
    *
    * @public
    * @param {Object|Function|Array|DataQuery|DataTable} payload Source of data
@@ -247,7 +243,7 @@ export default class Renderable extends TinyEmitter {
   }
 
   /**
-   * Loads new data into the renderable and redraws.
+   * Loads new data into the drawable and redraws.
    *
    * Used with an AJAX call to a PHP method returning DataTable->toPayload(),
    * a chart can be dynamically update in page, without reloads.
@@ -265,7 +261,7 @@ export default class Renderable extends TinyEmitter {
   }
 
   /**
-   * Loads new options into the renderable and redraws.
+   * Loads new options into the drawable and redraws.
    *
    * Used with an AJAX call, or javascript events, to load a new array of options into a chart.
    * This can be used to update a chart dynamically, without reloads.

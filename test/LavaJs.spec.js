@@ -83,20 +83,20 @@ describe("LavaJs", function() {
       lava.store(getPieChartJson());
     });
 
-    it("should return a valid Renderable when given a valid label.", function() {
+    it("should return a valid Drawable when given a valid label.", function() {
       const chart = lava.get("MyCoolChart");
 
       expect(chart).to.be.an.instanceOf(LavaJs.Chart);
       expect(chart.uuid).to.equal("PieChart::MyCoolChart");
     });
 
-    it('should throw "RenderableNotFound" if the renderable is not found.', function() {
+    it('should throw "DrawableNotFound" if the drawable is not found.', function() {
       expect(function() {
         lava.get("Pizza!");
       }).to.throw();
     });
 
-    it('should throw "RenderableNotFound" if a string label is not given.', function() {
+    it('should throw "DrawableNotFound" if a string label is not given.', function() {
       expect(function() {
         lava.get(1234);
       }).to.throw();

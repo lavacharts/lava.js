@@ -1,4 +1,4 @@
-export type RenderableType = "Chart" | "Dashboard";
+export type DrawableType = "Chart" | "Dashboard";
 
 export type SupportedFormatters = "NumberFormat" | "DateFormat";
 
