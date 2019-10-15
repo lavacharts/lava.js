@@ -3,13 +3,7 @@ import { TinyEmitter } from "tiny-emitter";
 import DataQuery from "./DataQuery";
 import { DataError, ElementIdNotFound } from "./Errors";
 import { EVENTS } from "./Events";
-import {
-  addEvent,
-  createDataTable,
-  getLogger,
-  getProp,
-  getWindowInstance
-} from "./lib";
+import { createDataTable, getLogger, getProp, getWindowInstance } from "./lib";
 import {
   ChartClasses,
   ChartUpdateReturn,
@@ -266,39 +260,29 @@ export default class Drawable extends TinyEmitter {
    * The Google Chart and DataTable objects will be passed to the listener
    * callback for interaction.
    */
-  // protected attachEventRelays(): void {
-  //   const events = ["ready", "select", "error", "onmouseover", "onmouseout"];
-
-  //   for (const event in events) {
-  //     window.google.visualization.events.addListener(this.googleChart, event, () =>
-  //       this.emit(event, {
-  //         chart: this.googleChart,
-  //         data: this.data
-  //       })
-  //     );
-  //   }
-  // }
-
-  protected attachEventRelays(): void {
-    for (const event in Drawable.CHART_EVENTS) {
-      addEvent(this.googleChart, event, () =>
-        this.emit(event, {
-          chart: this.googleChart,
-          data: this.data
-        })
-      );
-    }
-
+  protected async attachEventRelays(): Promise<void> {
     const lava = getWindowInstance();
+    const google = await lava.getGoogle();
 
     lava.on(EVENTS.DRAW, () => this.draw());
 
-    this.on(EVENTS.PRE_DRAW, () => {
-      if (typeof this.postDraw === "function") this.postDraw();
+    Drawable.CHART_EVENTS.forEach(event => {
+      google.visualization.events.addListener(
+        this.googleChart,
+        event,
+        this.fireEvent
+      );
     });
+  }
 
-    this.on(EVENTS.POST_DRAW, () => {
-      if (typeof this.postDraw === "function") this.postDraw();
-    });
+  private fireEvent(event: string): void {
+    this.logger.log(`Firing <${event}>`);
+
+    const payload = {
+      chart: this.googleChart,
+      data: this.data
+    };
+
+    this.emit(event, payload);
   }
 }

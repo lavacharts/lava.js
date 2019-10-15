@@ -77,9 +77,9 @@ export default class Chart extends Drawable {
         func = callback[1];
       }
 
-      this.logger.log(
-        `The "${this.uuid}::${event}" event will be handled by "${func}" in the context:`
-      );
+      this.logger.log(`The <${event}> event will be handled by:`);
+      this.logger.log(func);
+      this.logger.log("within the context of:");
       this.logger.log(context);
 
       /**
@@ -88,6 +88,7 @@ export default class Chart extends Drawable {
        * to the callback as an argument.
        */
       addEvent(this.googleChart, event, () => {
+        console.log("EVENTS!");
         const callback = Object.bind(
           context[Object.call.prototype.toString(func)],
           this.googleChart

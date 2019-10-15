@@ -10,7 +10,7 @@ import { EVENTS } from "./Events";
 import GoogleLoader from "./GoogleLoader";
 import { addEvent, getLogger } from "./lib";
 // import { actions, store } from "./lib/store";
-import { ChartUpdateReturn, /*Google,*/ LavaJsOptions } from "./types";
+import { ChartUpdateReturn, Google, LavaJsOptions } from "./types";
 import { DrawableState, DrawableTmpl } from "./types/drawable";
 
 type LavaState = Record<string, DrawableState>;
@@ -87,7 +87,7 @@ export default class LavaJs extends TinyEmitter {
   /**
    * Get a list of all the registered charts
    */
-  public getLavatState(): LavaState {
+  public getLavaState(): LavaState {
     return this.registry;
   }
 
@@ -105,6 +105,17 @@ export default class LavaJs extends TinyEmitter {
     if (this.loader.isLoaded === false) {
       return this.loader.loadGoogle();
     }
+  }
+
+  /**
+   * Get a reference to the window.google object or load it if needed.
+   */
+  public async getGoogle(): Promise<Google> {
+    if (this.loader.isLoaded === false) {
+      await this.loadGoogle();
+    }
+
+    return window.google;
   }
 
   /**

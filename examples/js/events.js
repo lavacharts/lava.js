@@ -35,6 +35,4 @@ chart.on("ready", () => {
   alert(this.uuid + " is ready!");
 });
 
-lava.store(chart);
-
-lava.run();
+lava.draw();

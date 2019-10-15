@@ -1,16 +1,27 @@
 import { getLogger } from "./lib";
-import { Google, GoogleLoaderOptions, LavaJsOptions, Logger } from "./types";
+import { GoogleLoaderOptions, LavaJsOptions, Logger } from "./types";
+
+export enum LOADER_STATES {
+  "NULL" = "NULL",
+  "RESOLVING" = "RESOLVING",
+  "RESOLVED" = "RESOLVED"
+}
 
 export default class GoogleLoader {
   /**
    * Version of the Google charts API to load
    */
-  API_VERSION = "current";
+  public static API_VERSION = "current";
 
   /**
    * Url to Google's static loader
    */
-  LOADER_URL = "https://www.gstatic.com/charts/loader.js";
+  public static LOADER_URL = "https://www.gstatic.com/charts/loader.js";
+
+  /**
+   * State of the `window.google`
+   */
+  public state: LOADER_STATES = LOADER_STATES.NULL;
 
   /**
    * Packages to load
@@ -32,6 +43,13 @@ export default class GoogleLoader {
   }
 
   /**
+   * Return the current state of the {@link GoogleLoader}
+   */
+  public getState(): LOADER_STATES {
+    return this.state;
+  }
+
+  /**
    * Flag that will be true once window.google is available in page.
    */
   public get isLoaded(): boolean {
@@ -45,7 +63,7 @@ export default class GoogleLoader {
     const scripts = document.getElementsByTagName("script");
 
     for (const script of Array.from(scripts)) {
-      if (script.src === this.LOADER_URL) {
+      if (script.src === GoogleLoader.LOADER_URL) {
         return true;
       }
     }
@@ -77,20 +95,11 @@ export default class GoogleLoader {
   }
 
   /**
-   * Get a reference to the window.google object or load it if needed.
-   */
-  public async getGoogle(): Promise<Google> {
-    if (this.isLoaded === false) {
-      await this.loadGoogle();
-    }
-
-    return window.google;
-  }
-
-  /**
    * Load the Google Static Loader and resolve the promise when ready.
    */
   public async loadGoogle(): Promise<void> {
+    this.state = LOADER_STATES.RESOLVING;
+
     this.logger.log("Resolving Google...");
 
     if (this.googleLoaderInPage === false) {
@@ -102,13 +111,15 @@ export default class GoogleLoader {
     return new Promise(resolve => {
       this.logger.log("Static loader found, initializing window.google");
 
-      window.google.charts.load(this.API_VERSION, this.config);
+      window.google.charts.load(GoogleLoader.API_VERSION, this.config);
 
       this.logger.log("Loaded Google with config:");
       this.logger.log(this.config);
 
       window.google.charts.setOnLoadCallback(() => {
         resolve();
+
+        this.state = LOADER_STATES.RESOLVED;
       });
     });
   }
@@ -122,7 +133,7 @@ export default class GoogleLoader {
 
       script.type = "text/javascript";
       script.async = true;
-      script.src = this.LOADER_URL;
+      script.src = GoogleLoader.LOADER_URL;
       script.onload = script.onreadystatechange = (event: Event) => {
         // eslint-disable-next-line no-param-reassign
         event = event || window.event;

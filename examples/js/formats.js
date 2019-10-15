@@ -19,5 +19,4 @@ const chart = lava.chart({
   ]
 });
 
-lava.store(chart);
-lava.run();
+lava.draw();
