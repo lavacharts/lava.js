@@ -3,24 +3,39 @@ import { TinyEmitter } from "tiny-emitter";
 import DataQuery from "./DataQuery";
 import { DataError, ElementIdNotFound } from "./Errors";
 import { EVENTS } from "./Events";
-import { createDataTable, getLogger, getWindowInstance } from "./lib";
+import {
+  addEvent,
+  createDataTable,
+  getLogger,
+  getProp,
+  getWindowInstance
+} from "./lib";
 import {
   ChartClasses,
   ChartUpdateReturn,
-  DrawableTmpl,
-  DrawableType,
-  Formatter,
   LavaJsOptions,
   Logger,
   SupportedCharts
 } from "./types";
-import { getProp, VIZ_PROPS } from "./VisualizationProps";
+import { DrawableTmpl } from "./types/drawable";
+import { Formatter } from "./types/formats";
+import { VIZ_PROPS } from "./VisualizationProps";
+
+type DrawableTypes = SupportedCharts | "Dashboard";
 
 /**
  * The {@link Drawable} class is the base for {@link Chart}s and {@link Dashboard}s
  * to share common methods between the two types.
  */
 export default class Drawable extends TinyEmitter {
+  public static CHART_EVENTS = [
+    "ready",
+    "select",
+    "error",
+    "onmouseover",
+    "onmouseout"
+  ];
+
   /**
    * PreDraw hook
    */
@@ -50,7 +65,7 @@ export default class Drawable extends TinyEmitter {
   /**
    * Type of {@link Drawable}.
    */
-  public readonly type: SupportedCharts | DrawableType;
+  public readonly type: DrawableTypes;
 
   /**
    * The google.visualization class needed for rendering.
@@ -83,14 +98,14 @@ export default class Drawable extends TinyEmitter {
   protected events: Record<string, Function>;
 
   /**
+   * Logging instance for the {@link Drawable}
+   */
+  protected readonly logger: Logger;
+
+  /**
    * The source of the DataTable, to be used in setData().
    */
   private dataSrc: any;
-
-  /**
-   * Logging instance for the {@link Drawable}
-   */
-  private readonly logger: Logger;
 
   /**
    * Create a new Drawable
@@ -100,12 +115,15 @@ export default class Drawable extends TinyEmitter {
   constructor(drawable: DrawableTmpl) {
     super();
 
-    this.logger = getLogger();
-
     this.type = drawable.type;
     this.label = drawable.label;
     this.dataSrc = drawable.data;
     this.elementId = drawable.elementId;
+
+    this.logger = getLogger(this.uuid);
+
+    this.logger.log("Creating new Drawable");
+    this.logger.log(drawable);
 
     this.options = drawable.options || {};
     this.formats = drawable.formats || [];
@@ -114,30 +132,14 @@ export default class Drawable extends TinyEmitter {
     this.class = getProp(this.type as SupportedCharts, VIZ_PROPS.CLASS);
     this.package = getProp(this.type as SupportedCharts, VIZ_PROPS.PACKAGE);
 
-    const lava = getWindowInstance();
-
-    lava.once(EVENTS.GOOGLE_READY, () => {
-      if (typeof this.init === "function") this.init();
-    });
-
-    lava.on(EVENTS.DRAW, () => {
-      this.draw();
-    });
-
-    this.on(EVENTS.PRE_DRAW, () => {
-      if (typeof this.postDraw === "function") this.postDraw();
-    });
-
-    this.on(EVENTS.POST_DRAW, () => {
-      if (typeof this.postDraw === "function") this.postDraw();
-    });
+    this.attachEventRelays();
   }
 
   /**
    * Unique identifier for the {@link Chart} / {@link Dashboard}.
    */
   public get uuid(): string {
-    return this.type + "::" + this.label;
+    return this.type + ":" + this.label;
   }
 
   /**
@@ -153,56 +155,34 @@ export default class Drawable extends TinyEmitter {
    * @public
    */
   public async draw(): Promise<void> {
-    if (!this.data) {
-      throw new DataError(`${this.uuid} Could not draw, data is ${this.data}`);
-    }
-
-    this.emit(EVENTS.PRE_DRAW);
-
-    this.googleChart.draw(this.data, this.options);
-
-    this.emit(EVENTS.POST_DRAW);
-  }
-
-  /**
-   * Run the setup and draw the chart.
-   *
-   * Any dependency on "google" must be within the run() scope.
-   *
-   * This will be called after the static loaded has completed
-   * registering window.google
-   *
-   * @return {Promise}
-   */
-  protected async init(): Promise<any> {
     if (!this.container) {
       throw new ElementIdNotFound(this.elementId);
     }
 
-    // this.attachEventRelays();
-
     await this.setData(this.dataSrc);
+
+    if (!this.data) {
+      throw new DataError(`Could not draw, data is ${this.data}`);
+    }
 
     if (this.formats) {
       this.applyFormats();
     }
-
-    this.draw();
   }
 
   /**
    * Sets the {@link DataTable} for the {@link Drawable}.
    *
-   * @public
    * @param {Object|Function|Array|DataQuery|DataTable} payload Source of data
    */
   public async setData(payload: any): Promise<void> {
     if (payload instanceof DataQuery) {
-      this.logger.log(`Firing DataQuery for ${this.uuid}`);
+      this.logger.log(`Sending DataQuery`);
 
       const response = await payload.send();
 
-      this.logger.log(`Response received:`, response);
+      this.logger.log(`Response received`);
+      this.logger.log(response);
 
       this.data = response.getDataTable();
     } else {
@@ -215,7 +195,8 @@ export default class Drawable extends TinyEmitter {
       );
     }
 
-    this.logger.log(`Setting data for ${this.uuid}`, this.data);
+    this.logger.log(`Setting data`);
+    this.logger.log(this.data);
 
     if (payload.formats) {
       this.applyFormats(payload.formats);
@@ -235,8 +216,8 @@ export default class Drawable extends TinyEmitter {
         format.options
       );
 
-      this.logger.log(`Setting data for ${this.uuid}.`);
-      this.logger.log(`Formatting column [${format.index}] with:`, format);
+      this.logger.log(`Formatting column [${format.index}] with:`);
+      this.logger.log(format);
 
       formatter.format(this.data, format.index);
     }
@@ -297,4 +278,27 @@ export default class Drawable extends TinyEmitter {
   //     );
   //   }
   // }
+
+  protected attachEventRelays(): void {
+    for (const event in Drawable.CHART_EVENTS) {
+      addEvent(this.googleChart, event, () =>
+        this.emit(event, {
+          chart: this.googleChart,
+          data: this.data
+        })
+      );
+    }
+
+    const lava = getWindowInstance();
+
+    lava.on(EVENTS.DRAW, () => this.draw());
+
+    this.on(EVENTS.PRE_DRAW, () => {
+      if (typeof this.postDraw === "function") this.postDraw();
+    });
+
+    this.on(EVENTS.POST_DRAW, () => {
+      if (typeof this.postDraw === "function") this.postDraw();
+    });
+  }
 }

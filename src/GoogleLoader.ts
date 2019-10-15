@@ -58,7 +58,7 @@ export default class GoogleLoader {
    */
   public get config(): GoogleLoaderOptions {
     const config: GoogleLoaderOptions = {
-      language: this.options.locale || "en",
+      language: this.options.language || "en",
       packages: Array.from(this.packages)
     };
 
@@ -104,7 +104,8 @@ export default class GoogleLoader {
 
       window.google.charts.load(this.API_VERSION, this.config);
 
-      this.logger.log("Loaded Google with config:", this.config);
+      this.logger.log("Loaded Google with config:");
+      this.logger.log(this.config);
 
       window.google.charts.setOnLoadCallback(() => {
         resolve();

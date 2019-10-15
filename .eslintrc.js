@@ -11,6 +11,11 @@ module.exports = {
     tsconfigRootDir: __dirname,
     // project: path.resolve(__dirname, './tsconfig.json')
   },
+  settings: {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    }
+  },
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",

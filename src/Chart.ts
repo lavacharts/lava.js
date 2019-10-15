@@ -1,6 +1,7 @@
 import Drawable from "./Drawable";
-import { DrawableTmpl } from "./types";
+import { addEvent } from "./lib";
 import { ChartFactory } from "./types/chart";
+import { DrawableTmpl } from "./types/drawable";
 
 function makeChartFactory(container: HTMLElement): ChartFactory {
   return type => new window.google.visualization[type](container);
@@ -25,20 +26,19 @@ export default class Chart extends Drawable {
   /**
    * Actions to perform before `chart.draw()`
    */
-  public preDraw(): void {
+  public async draw(): Promise<void> {
+    await super.draw();
+
     const chartFactory = makeChartFactory(this.container as HTMLElement);
 
     this.googleChart = chartFactory(this.class);
 
     if (this.events) {
-      // this.attachEvents();
+      this.attachEvents();
     }
-  }
 
-  /**
-   * Actions to perform after `chart.draw()`
-   */
-  public postDraw(): void {
+    this.googleChart.draw(this.data, this.options);
+
     if (this.png) {
       this.drawPng();
     }
@@ -63,36 +63,38 @@ export default class Chart extends Drawable {
   /**
    * Attach the defined chart event handlers.
    */
-  // private attachEvents(): void {
-  //   this.events.forEach((callback: Function, event: any) => {
-  //     let context = window;
-  //     let func = callback;
+  private attachEvents(): void {
+    Object.keys(this.events).forEach(event => {
+      const callback = this.events[event];
 
-  //     if (typeof callback === "object") {
-  //       // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-  //       //@ts-ignore I don't know what to do here
-  //       context = context[callback[0]];
-  //       func = callback[1];
-  //     }
+      let context = window;
+      let func = callback;
 
-  //     log(
-  //       `The "${this.uuid}::${event}" event will be handled by "${func}" in the context`,
-  //       context
-  //     );
+      if (typeof callback === "object") {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        //@ts-ignore I don't know what to do here
+        context = context[callback[0]];
+        func = callback[1];
+      }
 
-  //     /**
-  //      * Set the context of "this" within the user provided callback to the
-  //      * chart that fired the event while providing the datatable of the chart
-  //      * to the callback as an argument.
-  //      */
-  //     window.google.visualization.events.addListener(this.googleChart, event, () => {
-  //       const callback = Object.bind(
-  //         context[Object.call.prototype.toString(func)],
-  //         this.googleChart
-  //       ) as (data: google.visualization.DataTable) => any;
+      this.logger.log(
+        `The "${this.uuid}::${event}" event will be handled by "${func}" in the context:`
+      );
+      this.logger.log(context);
 
-  //       callback(this.data);
-  //     });
-  //   });
-  // }
+      /**
+       * Set the context of "this" within the user provided callback to the
+       * chart that fired the event while providing the datatable of the chart
+       * to the callback as an argument.
+       */
+      addEvent(this.googleChart, event, () => {
+        const callback = Object.bind(
+          context[Object.call.prototype.toString(func)],
+          this.googleChart
+        ) as (data: google.visualization.DataTable) => any;
+
+        callback(this.data);
+      });
+    });
+  }
 }

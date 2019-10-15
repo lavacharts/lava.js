@@ -9,7 +9,11 @@ import { DrawableNotFound, InvalidCallback } from "./Errors";
 import { EVENTS } from "./Events";
 import GoogleLoader from "./GoogleLoader";
 import { addEvent, getLogger } from "./lib";
-import { ChartUpdateReturn, DrawableTmpl, LavaJsOptions } from "./types";
+// import { actions, store } from "./lib/store";
+import { ChartUpdateReturn, /*Google,*/ LavaJsOptions } from "./types";
+import { DrawableState, DrawableTmpl } from "./types/drawable";
+
+type LavaState = Record<string, DrawableState>;
 
 /**
  * Google Chart API wrapper library
@@ -18,15 +22,17 @@ import { ChartUpdateReturn, DrawableTmpl, LavaJsOptions } from "./types";
  * conjunction with the PHP library, <a href="https://github.com/kevinkhill/lavacharts">Lavacharts</a>.
  */
 export default class LavaJs extends TinyEmitter {
-  /**
-   * Version of the LavaJs module
-   */
   static readonly VERSION = "__VERSION__";
 
   /**
    * Configurable options for the library
    */
   private options: LavaJsOptions = DefaultOptions;
+
+  /**
+   * Drawables registy
+   */
+  private registry: LavaState = {};
 
   /**
    * Chart storage
@@ -36,7 +42,7 @@ export default class LavaJs extends TinyEmitter {
   /**
    * Ready Callback
    */
-  private readyCallback!: Function;
+  // private readyCallback = (): void => {};
 
   /**
    * Loader class for appending the google script and making window.google available
@@ -48,24 +54,41 @@ export default class LavaJs extends TinyEmitter {
    */
   private readonly logger = getLogger();
 
+  state: any;
+
+  // private google!: Google & typeof google;
+
   /**
    * Create a new instance of the LavaJs library
    */
   constructor(options?: LavaJsOptions) {
     super();
 
-    if (options) this.configure(options);
+    this.logger.log(`LavaJs v${LavaJs.VERSION}`);
+
+    if (options) {
+      this.configure(options);
+    }
+
+    this.logger.log(this.options);
 
     this.loader = new GoogleLoader(this.options);
   }
 
   /**
-   * Forward the autoRun option to the main object to check in page.
+   * Forward the autodraw option to the main object to check in page.
    */
-  get autorun(): boolean {
-    return typeof this.options.autoRun === "undefined"
-      ? true
-      : this.options.autoRun;
+  public get autodraw(): boolean {
+    return typeof this.options.autodraw === "boolean"
+      ? this.options.autodraw
+      : true;
+  }
+
+  /**
+   * Get a list of all the registered charts
+   */
+  public getLavatState(): LavaState {
+    return this.registry;
   }
 
   /**
@@ -82,20 +105,17 @@ export default class LavaJs extends TinyEmitter {
     if (this.loader.isLoaded === false) {
       return this.loader.loadGoogle();
     }
-
-    // return this.loader.getGoogle();
   }
+
   /**
    * Runs the LavaJs.js module
    *
    * @emits {ready}
    */
   public async draw(): Promise<any> {
+    this.logger.log("Waiting for the DOM to become ready");
     await this.waitForDom();
-
-    this.logger.log(`LavaJs v${LavaJs.VERSION}`);
-
-    this.logger.log("Loaded with options", this.options);
+    this.logger.log("DOM ready");
 
     if (this.options.responsive === true) {
       this.attachRedrawHandler();
@@ -103,32 +123,16 @@ export default class LavaJs extends TinyEmitter {
 
     await this.loadGoogle();
 
-    this.emit(EVENTS.INITIALIZING);
+    this.logger.log("window.google is ready");
 
-    this.logger.log("Google is ready!", window.google);
+    // this.google = window.google;
 
-    this.emit(EVENTS.DRAW);
+    this.fireEvent(EVENTS.DRAW);
 
-    // await this.drawAll();
+    // this.fireEvent(EVENTS.READY);
 
-    this.emit(EVENTS.READY);
-
-    if (typeof this.readyCallback === "function") {
-      this.readyCallback();
-    }
+    // this.readyCallback();
   }
-
-  // public drawAll(): Promise<any>[] {
-  //   const promises: Promise<any>[] = [];
-
-  //   this.volcano.forEach(drawable => {
-  //     this.logger.log(`Rendering ${drawable.uuid}`);
-
-  //     promises.push(drawable.init());
-  //   });
-
-  //   return promises;
-  // }
 
   /**
    * Create a new {@link DataQuery} for a {@link Drawable}
@@ -148,40 +152,18 @@ export default class LavaJs extends TinyEmitter {
    * Create a new {@link Chart} from an Object
    */
   public chart(payload: DrawableTmpl): Chart {
-    this.logger.log("Creating a new Chart", payload);
-
     const chart = new Chart(payload);
 
-    return this.store(chart);
+    this.register(chart);
+
+    return chart;
   }
 
   /**
    * Create a new {@link Dashboard} from an Object
    */
-  public dashboard(payload: DrawableTmpl): Drawable {
-    this.logger.log("Creating a new Dashboard", payload);
-
+  public dashboard(payload: DrawableTmpl): Dashboard {
     return new Dashboard(payload);
-  }
-
-  /**
-   * Stores a {@link Drawable} within the module.
-   */
-  public store<T>(drawable: Chart | Dashboard): T {
-    this.logger.log(`Storing ${drawable.uuid}`);
-
-    this.loader.addPackage(drawable.package);
-
-    this.volcano.set(drawable.label, drawable);
-
-    return drawable;
-  }
-
-  /**
-   * Stores many charts at once.
-   */
-  public storeMany(drawables: Drawable[]): void {
-    drawables.forEach(this.store, this);
   }
 
   /**
@@ -280,6 +262,33 @@ export default class LavaJs extends TinyEmitter {
     });
 
     return true;
+  }
+
+  private fireEvent(event: EVENTS, ...args: any[]): void {
+    this.logger.log(`Firing Event <${event}>`);
+
+    super.emit(event, args);
+  }
+
+  /**
+   * Register a {@link Drawable} with the module.
+   *
+   * The registry keeps a record of all created charts, which enables
+   * the event firing through the common interface of `window.lava`
+   */
+  private register<T extends Drawable>(drawable: T): T {
+    this.logger.log(`Registering ${drawable.uuid}`);
+
+    this.loader.addPackage(drawable.package);
+
+    this.registry[drawable.uuid] = {
+      drawn: false,
+      needsRedraw: false
+    };
+
+    this.volcano.set(drawable.type, drawable);
+
+    return drawable;
   }
 
   /**

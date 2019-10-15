@@ -1,47 +1,35 @@
 import LavaJs from "../LavaJs";
-import { Logger } from "../types";
+import { Logger, SupportedCharts } from "../types";
+import VisualizationProps, { VIZ_PROPS } from "../VisualizationProps";
 
 export function getWindowInstance(): LavaJs {
   return window.lava;
 }
 
-/**
- * Create an Logger
- */
-export function getLogger(): Logger {
+export function getProp(chart: SupportedCharts, prop: VIZ_PROPS): any {
+  return VisualizationProps[chart][prop];
+}
+
+export function getLogger(extPrefix?: string): Logger {
   const { log: _log, error: _error } = console;
 
-  const prefix = "[lava.js]";
+  const prefix = `[LavaJs]${extPrefix ? ` (${extPrefix})` : ""}`;
 
   return {
-    log(args: any[]): void {
-      if (typeof args === "string") {
-        _log(prefix, args);
-      } else {
-        _log(prefix, ...args);
-      }
+    log(arg: any): void {
+      _log(prefix, arg);
     },
-    error(args: any[]): void {
-      if (typeof args === "string") {
-        _error(prefix, args);
-      } else {
-        _error(prefix, ...args);
-      }
+    error(arg: any): void {
+      _error(prefix, arg);
     }
   };
 }
 
 /**
- * Returns the type of object, with a capital first letter.
- */
-export function getType(object: any): string {
-  return Object.prototype.toString.call(object).slice(8, -1);
-}
-
-/**
  * Method for attaching events to objects.
  *
- * @link http://stackoverflow.com/a/3150139 Credit to Alex V.
+ * @author Alex V.
+ * @link http://stackoverflow.com/a/3150139
  */
 export function addEvent(
   target: any,
@@ -75,20 +63,20 @@ export function createDataTable(payload: any): google.visualization.DataTable {
   }
 
   // If an Array is received, then attempt to use parse with arrayToDataTable.
-  if (getType(payload) === "Array") {
+  if (Array.isArray(payload)) {
     return window.google.visualization.arrayToDataTable(payload);
   }
 
   // Since Google compiles their classes, we can't use instanceof to check since
   // it is no longer called a "DataTable" (it's "gvjs_P" but that could change...)
   // If this check passes, then it already is a DataTable
-  if (getType(payload.getTableProperties) === "Function") {
+  if (typeof payload.getTableProperties === "function") {
     return payload;
   }
 
   // If the payload is from the php class JoinedDataTable->toJson(), then create
   // two new DataTables and join them with the defined options.
-  if (getType(payload.data) === "Array") {
+  if (Array.isArray(payload.data)) {
     return window.google.visualization.data.join(
       new window.google.visualization.DataTable(payload.data[0]),
       new window.google.visualization.DataTable(payload.data[1]),
@@ -101,7 +89,7 @@ export function createDataTable(payload: any): google.visualization.DataTable {
 
   // If a php DataTable->toJson() payload is received, with formatted columns,
   // then payload.data will be defined. Use this to create the DataTable.
-  if (getType(payload.data) === "Object") {
+  if (typeof payload.data === "object") {
     // eslint-disable-next-line no-param-reassign
     payload = payload.data;
   }

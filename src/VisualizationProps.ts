@@ -1,17 +1,17 @@
 // import { VizProps } from "./types/chart";
-import { SupportedCharts } from "./types/strings";
+import { ChartClasses, SupportedCharts } from "./types/chart";
 
 export enum VIZ_PROPS {
-  "CLASS" = 0,
-  "PACKAGE" = 1,
-  "VERSION" = 2
+  "CLASS",
+  "PACKAGE",
+  "VERSION"
 }
 
 type VisualizationPropertyDict = {
-  [K in SupportedCharts]: [string, string, number];
+  [K in SupportedCharts]: [ChartClasses, string, number];
 };
 
-const propMap = {
+export default {
   AnnotationChart: ["AnnotationChart", "annotationchart", 1],
   AreaChart: ["AreaChart", "corechart", 1],
   BarChart: ["BarChart", "corechart", 1],
@@ -35,7 +35,3 @@ const propMap = {
   TreeMapChart: ["TreeMap", "treemap", 1],
   WordTreeChart: ["WordTree", "wordtree", 1]
 } as VisualizationPropertyDict;
-
-export function getProp(chart: SupportedCharts, prop: number): any {
-  return propMap[chart][prop];
-}

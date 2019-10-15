@@ -15,10 +15,10 @@ export interface GoogleLoaderOptions {
 export interface Google {
   [K: string]: any;
 
-  charts: {
-    load(version: string, config: any): void;
-    setOnLoadCallback(callback: Function): void;
-  };
+  // charts: {
+  //   load(version: string, config: any): void;
+  //   setOnLoadCallback(callback: Function): void;
+  // };
 
   visualization: {
     [K: string]: any;

@@ -1,6 +1,5 @@
 import { DataError } from "./Errors";
 import {
-  GoogleQuery,
   GoogleQueryOptions,
   GoogleQueryResponse,
   QueryTransformer
@@ -10,15 +9,9 @@ import {
  * Used for loading remote data as a {@link DataTable}
  *
  * @see https://developers.google.com/chart/interactive/docs/reference#Query
- * @class
- * @author    Kevin Hill <kevinkhill@gmail.com>
- * @copyright (c) 2019, Kevin Hill
- * @license   http://opensource.org/licenses/MIT MIT
  */
 export default class DataQuery {
   public transformer: QueryTransformer;
-
-  public opts: GoogleQueryOptions;
 
   /**
    * Create a new DataQuery for a DataTable
@@ -27,13 +20,13 @@ export default class DataQuery {
    */
   constructor(
     public url: string,
-    opts?: GoogleQueryOptions,
+    public opts?: GoogleQueryOptions,
     transformer?: QueryTransformer
   ) {
     this.opts = { sendMethod: "auto" };
-    this.transformer = (query: GoogleQuery): GoogleQuery => query;
+    this.transformer = query => query;
 
-    if (transformer) {
+    if (typeof transformer === "function") {
       this.transformer = transformer;
     }
 

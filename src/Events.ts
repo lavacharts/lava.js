@@ -1,9 +1,9 @@
 export enum EVENTS {
-  GOOGLE_READY = "GOOGLE_READY",
-  INITIALIZING = "INITIALIZING",
-  PRE_DRAW = "PRE_DRAW",
-  DRAW = "DRAW",
-  POST_DRAW = "POST_DRAW",
-  RESIZE = "RESIZE",
-  READY = "READY"
+  GOOGLE_READY = "google-ready",
+  INITIALIZING = "init",
+  PRE_DRAW = "predraw",
+  DRAW = "draw",
+  POST_DRAW = "postdraw",
+  RESIZE = "window-resize",
+  READY = "ready"
 }
