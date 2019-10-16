@@ -7,6 +7,7 @@ export default {
   responsive: true,
   datetimeFormat: "",
   debounceTimeout: 250,
+  autoloadGoogle: true,
   chartPackages: ["corechart"],
   timezone: "America/Los_Angeles"
 } as LavaJsOptions;

@@ -8,8 +8,8 @@ const PATHS = require("./paths");
 
 module.exports = {
   context: PATHS.root,
+  devtool: "source-map",
   plugins: [
-    // new CleanPlugin(),
     new ProgressPlugin(),
     new HardSourcePlugin(),
     new FriendlyErrorsPlugin(),

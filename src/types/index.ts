@@ -11,6 +11,7 @@ export {
 };
 
 export interface LavaJsOptions {
+  autoloadGoogle?: boolean;
   autodraw?: boolean;
   datetimeFormat?: string;
   debounceTimeout?: number;
@@ -25,9 +26,4 @@ export interface ChartUpdateReturn {
   data: GoogleDataTable;
   chart: any;
   options: Record<string, any>;
-}
-
-export interface Logger {
-  log(arg: any): void;
-  error(arg: any): void;
 }

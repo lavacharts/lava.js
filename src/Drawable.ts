@@ -1,14 +1,15 @@
+import Debug from "debug";
 import { TinyEmitter } from "tiny-emitter";
 
 import DataQuery from "./DataQuery";
 import { DataError, ElementIdNotFound } from "./Errors";
-import { EVENTS } from "./Events";
-import { createDataTable, getLogger, getProp, getWindowInstance } from "./lib";
+import { EVENTS } from "./Eventful";
+import { createDataTable, debug, getProp, getWindowInstance } from "./lib";
 import {
   ChartClasses,
   ChartUpdateReturn,
+  Google,
   LavaJsOptions,
-  Logger,
   SupportedCharts
 } from "./types";
 import { DrawableTmpl } from "./types/drawable";
@@ -92,14 +93,11 @@ export default class Drawable extends TinyEmitter {
   protected events: Record<string, Function>;
 
   /**
-   * Logging instance for the {@link Drawable}
-   */
-  protected readonly logger: Logger;
-
-  /**
    * The source of the DataTable, to be used in setData().
    */
   private dataSrc: any;
+
+  protected readonly debug: Debug.Debugger;
 
   /**
    * Create a new Drawable
@@ -114,11 +112,6 @@ export default class Drawable extends TinyEmitter {
     this.dataSrc = drawable.data;
     this.elementId = drawable.elementId;
 
-    this.logger = getLogger(this.uuid);
-
-    this.logger.log("Creating new Drawable");
-    this.logger.log(drawable);
-
     this.options = drawable.options || {};
     this.formats = drawable.formats || [];
     this.events = drawable.events || {};
@@ -126,7 +119,26 @@ export default class Drawable extends TinyEmitter {
     this.class = getProp(this.type as SupportedCharts, VIZ_PROPS.CLASS);
     this.package = getProp(this.type as SupportedCharts, VIZ_PROPS.PACKAGE);
 
-    this.attachEventRelays();
+    this.debug = debug.extend(this.uuid);
+
+    const lava = getWindowInstance();
+
+    lava.on(EVENTS.GOOGLE_READY, (google: Google) => {
+      this.debug("Registering event handlers");
+
+      console.log(google);
+
+      Drawable.CHART_EVENTS.forEach(event => {
+        google.visualization.events.addListener(this.googleChart, event, () => {
+          this.fireEvent(event);
+        });
+      });
+    });
+
+    lava.on(EVENTS.DRAW, () => this.draw());
+
+    this.debug("Created!");
+    this.debug(drawable);
   }
 
   /**
@@ -149,6 +161,8 @@ export default class Drawable extends TinyEmitter {
    * @public
    */
   public async draw(): Promise<void> {
+    this.registerEventHandlers();
+
     if (!this.container) {
       throw new ElementIdNotFound(this.elementId);
     }
@@ -171,12 +185,12 @@ export default class Drawable extends TinyEmitter {
    */
   public async setData(payload: any): Promise<void> {
     if (payload instanceof DataQuery) {
-      this.logger.log(`Sending DataQuery`);
+      this.debug(`Sending DataQuery`);
 
       const response = await payload.send();
 
-      this.logger.log(`Response received`);
-      this.logger.log(response);
+      this.debug(`Response received`);
+      this.debug(response);
 
       this.data = response.getDataTable();
     } else {
@@ -189,8 +203,8 @@ export default class Drawable extends TinyEmitter {
       );
     }
 
-    this.logger.log(`Setting data`);
-    this.logger.log(this.data);
+    this.debug(`Setting data`);
+    this.debug(this.data);
 
     if (payload.formats) {
       this.applyFormats(payload.formats);
@@ -210,8 +224,8 @@ export default class Drawable extends TinyEmitter {
         format.options
       );
 
-      this.logger.log(`Formatting column [${format.index}] with:`);
-      this.logger.log(format);
+      this.debug(`Formatting column [${format.index}] with:`);
+      this.debug(format);
 
       formatter.format(this.data, format.index);
     }
@@ -226,13 +240,9 @@ export default class Drawable extends TinyEmitter {
   public async updateData(payload: object): Promise<ChartUpdateReturn> {
     await this.setData(payload);
 
-    this.draw();
+    await this.draw();
 
-    return {
-      data: this.data,
-      chart: this.googleChart,
-      options: this.options
-    };
+    return this.getChartUpdateReturn();
   }
 
   /**
@@ -244,13 +254,9 @@ export default class Drawable extends TinyEmitter {
   public async updateOptions(payload: object): Promise<ChartUpdateReturn> {
     this.options = Object.assign(this.options, payload);
 
-    this.draw();
+    await this.draw();
 
-    return {
-      data: this.data,
-      chart: this.googleChart,
-      options: this.options
-    };
+    return this.getChartUpdateReturn();
   }
 
   /**
@@ -260,23 +266,12 @@ export default class Drawable extends TinyEmitter {
    * The Google Chart and DataTable objects will be passed to the listener
    * callback for interaction.
    */
-  protected async attachEventRelays(): Promise<void> {
-    const lava = getWindowInstance();
-    const google = await lava.getGoogle();
-
-    lava.on(EVENTS.DRAW, () => this.draw());
-
-    Drawable.CHART_EVENTS.forEach(event => {
-      google.visualization.events.addListener(
-        this.googleChart,
-        event,
-        this.fireEvent
-      );
-    });
+  protected async registerEventHandlers(): Promise<void> {
+    //
   }
 
   private fireEvent(event: string): void {
-    this.logger.log(`Firing <${event}>`);
+    this.debug(`Firing <${event}>`);
 
     const payload = {
       chart: this.googleChart,
@@ -284,5 +279,13 @@ export default class Drawable extends TinyEmitter {
     };
 
     this.emit(event, payload);
+  }
+
+  private getChartUpdateReturn(): ChartUpdateReturn {
+    return {
+      data: this.data,
+      chart: this.googleChart,
+      options: this.options
+    };
   }
 }

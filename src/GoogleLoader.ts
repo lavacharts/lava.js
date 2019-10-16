@@ -1,5 +1,9 @@
-import { getLogger } from "./lib";
-import { GoogleLoaderOptions, LavaJsOptions, Logger } from "./types";
+// import { Debugger } from "debug";
+// import { TinyEmitter } from "tiny-emitter";
+
+import Eventful, { EVENTS } from "./Eventful";
+import { debug } from "./lib";
+import { Google, GoogleLoaderOptions, LavaJsOptions } from "./types";
 
 export enum LOADER_STATES {
   "NULL" = "NULL",
@@ -7,7 +11,7 @@ export enum LOADER_STATES {
   "RESOLVED" = "RESOLVED"
 }
 
-export default class GoogleLoader {
+export default class GoogleLoader extends Eventful {
   /**
    * Version of the Google charts API to load
    */
@@ -19,19 +23,9 @@ export default class GoogleLoader {
   public static LOADER_URL = "https://www.gstatic.com/charts/loader.js";
 
   /**
-   * State of the `window.google`
-   */
-  public state: LOADER_STATES = LOADER_STATES.NULL;
-
-  /**
    * Packages to load
    */
   private readonly packages: Set<string> = new Set();
-
-  /**
-   * Logging instance
-   */
-  private readonly logger: Logger;
 
   /**
    * Create a new instance of the GoogleLoader
@@ -39,27 +33,22 @@ export default class GoogleLoader {
    * @param options LavaJsOptions
    */
   constructor(private options: LavaJsOptions) {
-    this.logger = getLogger();
-  }
+    super();
 
-  /**
-   * Return the current state of the {@link GoogleLoader}
-   */
-  public getState(): LOADER_STATES {
-    return this.state;
+    this.debug = debug.extend("GoogleLoader");
   }
 
   /**
    * Flag that will be true once window.google is available in page.
    */
-  public get isLoaded(): boolean {
+  public get googleIsDefined(): boolean {
     return typeof window.google !== "undefined";
   }
 
   /**
    * Flag that will be true once Google's Static Loader is in page.
    */
-  public get googleLoaderInPage(): boolean {
+  public get scriptTagInPage(): boolean {
     const scripts = document.getElementsByTagName("script");
 
     for (const script of Array.from(scripts)) {
@@ -88,6 +77,13 @@ export default class GoogleLoader {
   }
 
   /**
+   * Get a reference to the `window.google`
+   */
+  public get google(): Google {
+    return window.google;
+  }
+
+  /**
    * Add one package to the list that Google needs to load.
    */
   public addPackage(pkgs: string): void {
@@ -97,29 +93,33 @@ export default class GoogleLoader {
   /**
    * Load the Google Static Loader and resolve the promise when ready.
    */
-  public async loadGoogle(): Promise<void> {
-    this.state = LOADER_STATES.RESOLVING;
+  public async loadGoogle(): Promise<Google> {
+    this.debug("Loading Google...");
 
-    this.logger.log("Resolving Google...");
+    if (this.googleIsDefined) {
+      this.debug(this.google);
 
-    if (this.googleLoaderInPage === false) {
-      this.logger.log("Static loader not found, appending to head");
-
-      await this.addGoogleScriptToHead();
+      return this.google;
     }
 
+    if (this.scriptTagInPage === false) {
+      this.debug("Static loader not found, injecting");
+
+      await this.injectGoogleStaticLoader(document.head);
+    }
+
+    this.debug(`Loading API, version '${GoogleLoader.API_VERSION}'`);
+    this.debug("with config");
+    this.debug(this.config);
+
+    window.google.charts.load(GoogleLoader.API_VERSION, this.config);
+
     return new Promise(resolve => {
-      this.logger.log("Static loader found, initializing window.google");
-
-      window.google.charts.load(GoogleLoader.API_VERSION, this.config);
-
-      this.logger.log("Loaded Google with config:");
-      this.logger.log(this.config);
-
       window.google.charts.setOnLoadCallback(() => {
-        resolve();
+        this.debug("Loaded!");
+        this.emitEvent(EVENTS.GOOGLE_READY, this.google);
 
-        this.state = LOADER_STATES.RESOLVED;
+        resolve(this.google);
       });
     });
   }
@@ -127,7 +127,9 @@ export default class GoogleLoader {
   /**
    * Create a new script tag for the Google Static Loader
    */
-  private addGoogleScriptToHead(): Promise<void> {
+  private injectGoogleStaticLoader(target: Node): Promise<void> {
+    const debug = this.debug.extend("StaticLoader");
+
     return new Promise(resolve => {
       const script = document.createElement("script") as ScriptElement;
 
@@ -143,12 +145,15 @@ export default class GoogleLoader {
           /loaded|complete/.test(script.readyState)
         ) {
           script.onload = script.onreadystatechange = null;
-
+          debug("Ready!");
           resolve();
         }
       };
 
-      document.head.appendChild(script);
+      // debug(`Injecting ${script} into ${target}`);
+      debug(`Injecting ${script} into ${target}`);
+
+      target.appendChild(script);
     });
   }
 }

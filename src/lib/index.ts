@@ -1,6 +1,10 @@
+import Debug from "debug";
+
 import LavaJs from "../LavaJs";
-import { Logger, SupportedCharts } from "../types";
+import { SupportedCharts } from "../types";
 import VisualizationProps, { VIZ_PROPS } from "../VisualizationProps";
+
+export const debug = Debug("LavaJs");
 
 export function getWindowInstance(): LavaJs {
   return window.lava;
@@ -8,21 +12,6 @@ export function getWindowInstance(): LavaJs {
 
 export function getProp(chart: SupportedCharts, prop: VIZ_PROPS): any {
   return VisualizationProps[chart][prop];
-}
-
-export function getLogger(extPrefix?: string): Logger {
-  const { log: _log, error: _error } = console;
-
-  const prefix = `[LavaJs]${extPrefix ? ` (${extPrefix})` : ""}`;
-
-  return {
-    log(arg: any): void {
-      _log(prefix, arg);
-    },
-    error(arg: any): void {
-      _error(prefix, arg);
-    }
-  };
 }
 
 /**

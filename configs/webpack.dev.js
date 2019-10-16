@@ -1,11 +1,12 @@
 const fs = require("fs");
-const { CleanWebpackPlugin: CleanPlugin } = require("clean-webpack-plugin");
 const ErrorNotificationPlugin = require("webpack-error-notification");
 const HtmlHarddiskPlugin = require("html-webpack-harddisk-plugin");
 const HtmlPlugin = require("html-webpack-plugin");
 const merge = require("webpack-merge");
+const { DefinePlugin } = require("webpack");
 
 const PATHS = require("./paths");
+const PKG = require("../package.json");
 
 const commonChunks = ["vendor", "runtime", "lava"];
 
@@ -25,7 +26,7 @@ module.exports = merge(require("./webpack.common.js"), {
   mode: "development",
   entry: {
     vendor: ["materialize-css", "prismjs"],
-    lava: "./src/index.ts",
+    lava: "./src/lava.ts",
     ...examplePages
   },
   output: {
@@ -39,31 +40,19 @@ module.exports = merge(require("./webpack.common.js"), {
     inline: true,
     stats: "errors-only",
     overlay: {
-      errors: true,
-      warnings: true
+      errors: true
     },
     watchContentBase: true,
     contentBase: [PATHS.public, PATHS.examples]
   },
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        chunks: "all",
-        vendor: {
-          test: /node_modules/,
-          chunks: "initial",
-          name: "vendor",
-          priority: 10,
-          enforce: true
-        }
-      }
-    },
-    runtimeChunk: {
-      name: "runtime"
-    }
-  },
   plugins: [
     // new CleanPlugin(),
+    new DefinePlugin({
+      "process.env": {
+        NODE_ENV: JSON.stringify("development"),
+        DEBUG: JSON.stringify("LavaJs*")
+      }
+    }),
     new ErrorNotificationPlugin(),
     ...Object.keys(examplePages).map(page => {
       const config = {
@@ -85,5 +74,22 @@ module.exports = merge(require("./webpack.common.js"), {
       });
     }),
     new HtmlHarddiskPlugin()
-  ]
+  ],
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        chunks: "all",
+        vendor: {
+          test: /node_modules/,
+          chunks: "initial",
+          name: "vendor",
+          priority: 10,
+          enforce: true
+        }
+      }
+    },
+    runtimeChunk: {
+      name: "runtime"
+    }
+  }
 });

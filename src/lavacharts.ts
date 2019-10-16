@@ -1,7 +1,7 @@
 /**
  * Create a new instance and attach to window.
  */
-import ".";
+import "./lava";
 
 /**
  * Since LavaJs was loaded with Lavacharts, then `window.lavacharts` will

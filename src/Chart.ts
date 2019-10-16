@@ -77,10 +77,10 @@ export default class Chart extends Drawable {
         func = callback[1];
       }
 
-      this.logger.log(`The <${event}> event will be handled by:`);
-      this.logger.log(func);
-      this.logger.log("within the context of:");
-      this.logger.log(context);
+      this.debug(`The <${event}> event will be handled by:`);
+      this.debug(func);
+      this.debug("within the context of:");
+      this.debug(context);
 
       /**
        * Set the context of "this" within the user provided callback to the
