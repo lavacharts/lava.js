@@ -7,8 +7,27 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("const lava = new LavaJs();\n\nconst id = \"1DwWSti6L3KRyJC0Wi33X3i-6lsZ2iStrhK7sxw7uoek\";\nconst base = \"https://docs.google.com/spreadsheets/d\";\nconst query = \"gviz/tq?range=A1:B6\";\n\nconst chart = lava.chart({\n  label: \"Test\",\n  type: \"PieChart\",\n  elementId: \"chart_div\",\n  datatable: lava.query(`${base}/${id}/${query}`),\n  options: {\n    width: 400,\n    height: 240,\n    is3D: true\n  }\n});\n\nlava.store(chart);\nlava.run();\n\n\n//# sourceURL=webpack:///./examples/js/dataquery.js?");
+const id = "1DwWSti6L3KRyJC0Wi33X3i-6lsZ2iStrhK7sxw7uoek";
+const base = "https://docs.google.com/spreadsheets/d";
+const query = "gviz/tq?range=A1:B6";
+
+const chart = lava.chart({
+  label: "Test",
+  type: "PieChart",
+  elementId: "chart_div",
+  datatable: lava.query(`${base}/${id}/${query}`),
+  options: {
+    width: 400,
+    height: 240,
+    is3D: true
+  }
+});
+
+lava.store(chart);
+lava.run();
+
 
 /***/ })
 
 },[["./examples/js/dataquery.js","runtime"]]]);
+//# sourceMappingURL=dataquery.js.map

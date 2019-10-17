@@ -7,8 +7,31 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("const lava = new LavaJs();\n\nconst chart = lava.chart({\n  label: \"Test\",\n  type: \"ScatterChart\",\n  elementId: \"chart_div\",\n  datatable: [[\"Age\", \"Cash\"], [12, 101], [15, 240], [18, 280], [32, 324]],\n  options: {\n    colors: [\"green\"],\n    chartArea: { width: \"50%\" }\n  },\n  formats: [\n    {\n      type: \"NumberFormat\",\n      index: 1, // DataTable Column\n      options: {\n        prefix: \"$\",\n        suffix: \" BILLS!\"\n      }\n    }\n  ]\n});\n\nlava.store(chart);\nlava.run();\n\n\n//# sourceURL=webpack:///./examples/js/formats.js?");
+const chart = lava.chart({
+  label: "Test",
+  type: "ScatterChart",
+  elementId: "chart_div",
+  datatable: [["Age", "Cash"], [12, 101], [15, 240], [18, 280], [32, 324]],
+  options: {
+    colors: ["green"],
+    chartArea: { width: "50%" }
+  },
+  formats: [
+    {
+      type: "NumberFormat",
+      index: 1, // DataTable Column
+      options: {
+        prefix: "$",
+        suffix: " BILLS!"
+      }
+    }
+  ]
+});
+
+lava.draw();
+
 
 /***/ })
 
 },[["./examples/js/formats.js","runtime"]]]);
+//# sourceMappingURL=formats.js.map
