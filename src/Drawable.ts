@@ -151,8 +151,6 @@ export default class Drawable extends TinyEmitter {
    * @public
    */
   public async draw(): Promise<void> {
-    this.registerEventHandlers();
-
     if (!this.container) {
       throw new ElementIdNotFound(this.elementId);
     }
@@ -250,22 +248,20 @@ export default class Drawable extends TinyEmitter {
   }
 
   /**
-   * Attach event emitters onto the google chart to relay the events
-   * forward onto the lavachart.
-   *
-   * The Google Chart and DataTable objects will be passed to the listener
-   * callback for interaction.
+   * This method will have full access to the `google` object
    */
-  protected async registerEventHandlers(): Promise<void> {
-    //
-  }
-
   private handleGoogleReady(google: Google): void {
     this.debug(`Caught <${EVENTS.GOOGLE_READY}>`);
-    this.debug("Registering event handlers");
 
     // console.log(google);
 
+    /**
+     * Attach event emitters onto the google chart to relay the events
+     * forward onto the lavachart.
+     *
+     * The Google Chart and DataTable objects will be passed to the listener
+     * callback for interaction.
+     */
     Drawable.CHART_EVENTS.forEach(event => {
       google.visualization.events.addListener(this.googleChart, event, () => {
         this.fireEvent(event);

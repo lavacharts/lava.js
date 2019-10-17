@@ -1,5 +1,4 @@
 import Drawable from "./Drawable";
-import { addEvent } from "./lib";
 import { ChartFactory } from "./types/chart";
 import { DrawableTmpl } from "./types/drawable";
 
@@ -87,8 +86,9 @@ export default class Chart extends Drawable {
        * chart that fired the event while providing the datatable of the chart
        * to the callback as an argument.
        */
-      addEvent(this.googleChart, event, () => {
-        console.log("EVENTS!");
+      google.visualization.events.addListener(this.googleChart, event, () => {
+        this.debug(`Caught <${event}>`);
+
         const callback = Object.bind(
           context[Object.call.prototype.toString(func)],
           this.googleChart
