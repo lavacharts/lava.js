@@ -19,7 +19,7 @@ describe("LavaJs", function() {
       expect(chart.label).to.equal("MyCoolChart");
       expect(chart.type).to.equal("PieChart");
       expect(chart.class).to.equal("PieChart");
-      expect(chart.uuid).to.equal("PieChart::MyCoolChart");
+      expect(chart.id).to.equal("PieChart::MyCoolChart");
       expect(chart.packages).to.equal("corechart");
       expect(chart.container).to.be.instanceOf(HTMLElement);
 
@@ -87,7 +87,7 @@ describe("LavaJs", function() {
       const chart = lava.get("MyCoolChart");
 
       expect(chart).to.be.an.instanceOf(LavaJs.Chart);
-      expect(chart.uuid).to.equal("PieChart::MyCoolChart");
+      expect(chart.id).to.equal("PieChart::MyCoolChart");
     });
 
     it('should throw "DrawableNotFound" if the drawable is not found.', function() {

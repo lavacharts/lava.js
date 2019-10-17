@@ -1,35 +1,37 @@
-import Debug from "debug";
-import { TinyEmitter } from "tiny-emitter";
-
 import DataQuery from "./DataQuery";
 import { DataError, ElementIdNotFound } from "./Errors";
-import { EVENTS } from "./Eventful";
-import { createDataTable, debug, getProp, getWindowInstance } from "./lib";
+import Eventful, { EVENTS } from "./Eventful";
+import LavaJs from "./LavaJs";
+import { createDataTable, debug, getWindowInstance } from "./lib";
 import {
   ChartClasses,
   ChartUpdateReturn,
-  Google,
   LavaJsOptions,
   SupportedCharts
 } from "./types";
+import { ChartEvents, VisualizationProps } from "./types/chart";
 import { DrawableTmpl } from "./types/drawable";
 import { Formatter } from "./types/formats";
-import { VIZ_PROPS } from "./VisualizationProps";
 
 type DrawableTypes = SupportedCharts | "Dashboard";
+
+export enum CHART_EVENTS {
+  READY = "ready",
+  SELECT = "select",
+  ERROR = "error",
+  ON_MOUSE_OVER = "onmouseover",
+  ON_MOUSE_OUT = "onmouseout"
+}
 
 /**
  * The {@link Drawable} class is the base for {@link Chart}s and {@link Dashboard}s
  * to share common methods between the two types.
  */
-export default class Drawable extends TinyEmitter {
-  public static CHART_EVENTS = [
-    "ready",
-    "select",
-    "error",
-    "onmouseover",
-    "onmouseout"
-  ];
+export default class Drawable extends Eventful {
+  /**
+   * Reference to the `window.lava` object
+   */
+  protected _lava: LavaJs;
 
   /**
    * PreDraw hook
@@ -90,14 +92,12 @@ export default class Drawable extends TinyEmitter {
   /**
    * Event listeners for the Drawable.
    */
-  protected events: Record<string, Function>;
+  protected events: Record<ChartEvents, Function>;
 
   /**
    * The source of the DataTable, to be used in setData().
    */
   private dataSrc: any;
-
-  protected readonly debug: Debug.Debugger;
 
   /**
    * Create a new Drawable
@@ -116,16 +116,14 @@ export default class Drawable extends TinyEmitter {
     this.formats = drawable.formats || [];
     this.events = drawable.events || {};
 
-    this.class = getProp(this.type as SupportedCharts, VIZ_PROPS.CLASS);
-    this.package = getProp(this.type as SupportedCharts, VIZ_PROPS.PACKAGE);
+    this.class = this.getProp(VisualizationProps.CLASS);
+    this.package = this.getProp(VisualizationProps.PACKAGE);
 
-    this.debug = debug.extend(this.uuid);
+    this.debug = debug.extend(this.id);
 
-    const lava = getWindowInstance();
+    this._lava = getWindowInstance();
 
-    lava.on(EVENTS.GOOGLE_READY, () => this.handleGoogleReady);
-
-    lava.on(EVENTS.DRAW, () => this.draw());
+    this._lava.on(EVENTS.DRAW, () => this.draw());
 
     this.debug("Created!");
     this.debug(drawable);
@@ -134,7 +132,7 @@ export default class Drawable extends TinyEmitter {
   /**
    * Unique identifier for the {@link Chart} / {@link Dashboard}.
    */
-  public get uuid(): string {
+  public get id(): string {
     return this.type + ":" + this.label;
   }
 
@@ -167,6 +165,17 @@ export default class Drawable extends TinyEmitter {
   }
 
   /**
+   * Overidding the `on()` method from the {@link TinyEmitter} to register the
+   * handlers to our own map.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public on(event: ChartEvents, handler: Function, ctx?: any): this {
+    this.events[event] = handler;
+
+    return this;
+  }
+
+  /**
    * Sets the {@link DataTable} for the {@link Drawable}.
    *
    * @param {Object|Function|Array|DataQuery|DataTable} payload Source of data
@@ -186,9 +195,7 @@ export default class Drawable extends TinyEmitter {
     }
 
     if (this.data instanceof google.visualization.DataTable === false) {
-      throw new DataError(
-        `There was a error setting the data for ${this.uuid}`
-      );
+      throw new DataError(`There was a error setting the data for ${this.id}`);
     }
 
     this.debug(`Setting data`);
@@ -248,43 +255,33 @@ export default class Drawable extends TinyEmitter {
   }
 
   /**
-   * This method will have full access to the `google` object
+   * Payload to return to the user after updating data or options.
    */
-  private handleGoogleReady(google: Google): void {
-    this.debug(`Caught <${EVENTS.GOOGLE_READY}>`);
-
-    // console.log(google);
-
-    /**
-     * Attach event emitters onto the google chart to relay the events
-     * forward onto the lavachart.
-     *
-     * The Google Chart and DataTable objects will be passed to the listener
-     * callback for interaction.
-     */
-    Drawable.CHART_EVENTS.forEach(event => {
-      google.visualization.events.addListener(this.googleChart, event, () => {
-        this.fireEvent(event);
-      });
-    });
-  }
-
-  private fireEvent(event: string): void {
-    this.debug(`Firing <${event}>`);
-
-    const payload = {
-      chart: this.googleChart,
-      data: this.data
-    };
-
-    this.emit(event, payload);
-  }
-
-  private getChartUpdateReturn(): ChartUpdateReturn {
+  protected getChartUpdateReturn(): ChartUpdateReturn {
     return {
       data: this.data,
       chart: this.googleChart,
       options: this.options
     };
+  }
+
+  /**
+   * Helper method to attach event handlers to `this.googleChart`
+   */
+  protected registerEventHandler(event: ChartEvents, handler: Function): void {
+    google.visualization.events.addListener(
+      this.googleChart,
+      event,
+      (e: any) => {
+        this.debug(`Registering handler for <${event}>`);
+        this.debug(handler);
+
+        handler({
+          event: e,
+          data: this.data,
+          chart: this.googleChart
+        });
+      }
+    );
   }
 }

@@ -1,8 +1,21 @@
 export type ChartFactory = (type: ChartClasses) => NewChartConstructor;
 
+export enum VisualizationProps {
+  "CLASS",
+  "PACKAGE",
+  "VERSION"
+}
+
 export interface NewChartConstructor {
   new (container: HTMLElement): any;
 }
+
+export type ChartEvents =
+  | "ready"
+  | "select"
+  | "error"
+  | "onmouseover"
+  | "onmouseout";
 
 export type SupportedCharts =
   | "AnnotationChart"

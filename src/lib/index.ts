@@ -1,17 +1,11 @@
 import Debug from "debug";
 
 import LavaJs from "../LavaJs";
-import { SupportedCharts } from "../types";
-import VisualizationProps, { VIZ_PROPS } from "../VisualizationProps";
 
 export const debug = Debug("LavaJs");
 
 export function getWindowInstance(): LavaJs {
   return window.lava;
-}
-
-export function getProp(chart: SupportedCharts, prop: VIZ_PROPS): any {
-  return VisualizationProps[chart][prop];
 }
 
 /**

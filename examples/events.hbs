@@ -47,7 +47,7 @@ const chartJson = {
 const chart = lava.store(chartJson);
 
 chart.on('ready', function() {
-    console.log(this.uuid + ' is ready!');
+    console.log(this.id + ' is ready!');
 });
 
 chart.on('select', function (chart, data) {

@@ -8,7 +8,8 @@ export enum EVENTS {
   DRAW = "draw",
   POST_DRAW = "postdraw",
   RESIZE = "window-resize",
-  READY = "ready"
+  READY = "ready",
+  DOM_READY = "dom-ready"
 }
 
 export default class Eventful extends TinyEmitter {

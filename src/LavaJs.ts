@@ -88,6 +88,10 @@ export default class LavaJs extends Eventful {
         this.loader.loadGoogle();
       }
     }
+
+    if (this.options.responsive === true) {
+      this.attachResizeHandler();
+    }
   }
 
   /**
@@ -160,14 +164,6 @@ export default class LavaJs extends Eventful {
    */
   public async draw(): Promise<any> {
     await this.waitForDom();
-
-    if (this.options.responsive === true) {
-      this.attachRedrawHandler();
-    }
-
-    this.loader.on("ready", () => {
-      this.emitEvent(EVENTS.DRAW);
-    });
 
     // this.emitEvent(EVENTS.READY);
 
@@ -293,7 +289,7 @@ export default class LavaJs extends Eventful {
     this.debug(`Redrawing ${this.volcano.size} drawables.`);
 
     this.volcano.forEach(drawable => {
-      this.debug(`Redrawing ${drawable.uuid}`);
+      this.debug(`Redrawing ${drawable.id}`);
 
       drawable.draw();
     });
@@ -308,11 +304,11 @@ export default class LavaJs extends Eventful {
    * the event firing through the common interface of `window.lava`
    */
   private register<T extends Drawable>(drawable: T): T {
-    this.debug(`Registering ${drawable.uuid}`);
+    this.debug(`Registering ${drawable.id}`);
 
     this.loader.addPackage(drawable.package);
 
-    this.registry[drawable.uuid] = {
+    this.registry[drawable.id] = {
       drawn: false,
       needsRedraw: false
     };
@@ -334,7 +330,7 @@ export default class LavaJs extends Eventful {
         document.readyState === "complete"
       ) {
         resolve();
-
+        this.emit(EVENTS.DOM_READY);
         this.debug("DOM ready");
       } else {
         document.addEventListener("DOMContentLoaded", () => resolve());
@@ -345,18 +341,16 @@ export default class LavaJs extends Eventful {
   /**
    * Attach a listener to the window resize event for redrawing the charts.
    */
-  private attachRedrawHandler(): void {
+  private attachResizeHandler(): void {
     let debounced: number;
 
     addEvent(window, "resize", () => {
-      // let redrawAll = this.redrawAll().bind(this);
-
       clearTimeout(debounced);
 
       debounced = setTimeout(() => {
         this.debug("Window re-sized, redrawing...");
 
-        this.redrawAll();
+        this.emit(EVENTS.DRAW);
       }, this.options.debounceTimeout);
     });
   }

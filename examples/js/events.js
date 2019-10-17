@@ -4,19 +4,13 @@ const chart = lava.chart({
   elementId: "chart_div",
   data: data => {
     data.addColumn("string", "Topping");
-    data.addColumn("number", "Slices");
-    data.addRows([
-      ["Mushrooms", 3],
-      ["Onions", 1],
-      ["Olives", 1],
-      ["Zucchini", 1],
-      ["Pepperoni", 2]
-    ]);
+    data.addColumn("number", "Pizzas");
+    data.addRows([["Mushroom & Olive", 2], ["Pepperoni", 5]]);
 
     return data;
   },
   events: {
-    // Can be defined upon creation
+    // Events can be defined upon creation
     select({ chart, data }) {
       const selectedItem = chart.getSelection()[0];
 
@@ -29,10 +23,10 @@ const chart = lava.chart({
   }
 });
 
-// Or attached later on...
+// Or attached after the fact
 chart.on("ready", () => {
-  // this.uuid is a simple getter for `${this.type}::${label}`
-  alert(this.uuid + " is ready!");
+  // chart.id is just a getter for `${this.type}:${this.label}`
+  alert(chart.id + " is ready!");
 });
 
 lava.draw();
