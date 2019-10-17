@@ -11,7 +11,8 @@ import GoogleLoader from "./GoogleLoader";
 import { addEvent, debug } from "./lib";
 // import { actions, store } from "./lib/store";
 import { ChartUpdateReturn, Google, LavaJsOptions } from "./types";
-import { DrawableState, DrawableTmpl } from "./types/drawable";
+import { ChartInterface } from "./types/chart";
+import { DrawableInterface, DrawableState } from "./types/drawable";
 
 type LavaState = Record<string, DrawableState>;
 
@@ -187,7 +188,7 @@ export default class LavaJs extends Eventful {
   /**
    * Create a new {@link Chart} from an Object
    */
-  public chart(payload: DrawableTmpl): Chart {
+  public chart(payload: ChartInterface): Chart {
     const chart = new Chart(payload);
 
     return this.register(chart);
@@ -196,7 +197,7 @@ export default class LavaJs extends Eventful {
   /**
    * Create a new {@link Dashboard} from an Object
    */
-  public dashboard(payload: DrawableTmpl): Dashboard {
+  public dashboard(payload: DrawableInterface): Dashboard {
     return new Dashboard(payload);
   }
 
@@ -306,7 +307,9 @@ export default class LavaJs extends Eventful {
   private register<T extends Drawable>(drawable: T): T {
     this.debug(`Registering ${drawable.id}`);
 
-    this.loader.addPackage(drawable.package);
+    if (drawable instanceof Chart) {
+      this.loader.addPackage(drawable.package);
+    }
 
     this.registry[drawable.id] = {
       drawn: false,

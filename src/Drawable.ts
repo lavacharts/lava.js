@@ -3,25 +3,10 @@ import { DataError, ElementIdNotFound } from "./Errors";
 import Eventful, { EVENTS } from "./Eventful";
 import LavaJs from "./LavaJs";
 import { createDataTable, debug, getWindowInstance } from "./lib";
-import {
-  ChartClasses,
-  ChartUpdateReturn,
-  LavaJsOptions,
-  SupportedCharts
-} from "./types";
-import { ChartEvents, VisualizationProps } from "./types/chart";
-import { DrawableTmpl } from "./types/drawable";
+import { ChartUpdateReturn, LavaJsOptions, SupportedCharts } from "./types";
+import { ChartEvents, ChartInterface } from "./types/chart";
+import { DrawableInterface } from "./types/drawable";
 import { Formatter } from "./types/formats";
-
-type DrawableTypes = SupportedCharts | "Dashboard";
-
-export enum CHART_EVENTS {
-  READY = "ready",
-  SELECT = "select",
-  ERROR = "error",
-  ON_MOUSE_OVER = "onmouseover",
-  ON_MOUSE_OUT = "onmouseout"
-}
 
 /**
  * The {@link Drawable} class is the base for {@link Chart}s and {@link Dashboard}s
@@ -57,27 +42,17 @@ export default class Drawable extends Eventful {
    * Google chart object created once the {@link Chart} / {@link Dashboard}
    * has been rendered.
    */
-  public googleChart: any;
-
-  /**
-   * Type of {@link Drawable}.
-   */
-  public readonly type: DrawableTypes;
-
-  /**
-   * The google.visualization class needed for rendering.
-   */
-  public readonly class: ChartClasses;
-
-  /**
-   * The google.visualization package needed for rendering.
-   */
-  public readonly package: string;
+  public googleChart!: any;
 
   /**
    * Element ID of the DOM node for the container.
    */
   public readonly elementId: string;
+
+  /**
+   * Type of {@link Drawable}.
+   */
+  public readonly type: SupportedCharts | "Dashboard";
 
   /**
    * Unique label for the {@link Chart} / {@link Dashboard}.
@@ -92,7 +67,7 @@ export default class Drawable extends Eventful {
   /**
    * Event listeners for the Drawable.
    */
-  protected events: Record<ChartEvents, Function>;
+  protected events: Record<ChartEvents, CallableFunction>;
 
   /**
    * The source of the DataTable, to be used in setData().
@@ -104,7 +79,7 @@ export default class Drawable extends Eventful {
    *
    * @param {Object} json
    */
-  constructor(drawable: DrawableTmpl) {
+  constructor(drawable: ChartInterface | DrawableInterface) {
     super();
 
     this.type = drawable.type;
@@ -116,13 +91,9 @@ export default class Drawable extends Eventful {
     this.formats = drawable.formats || [];
     this.events = drawable.events || {};
 
-    this.class = this.getProp(VisualizationProps.CLASS);
-    this.package = this.getProp(VisualizationProps.PACKAGE);
-
     this.debug = debug.extend(this.id);
 
     this._lava = getWindowInstance();
-
     this._lava.on(EVENTS.DRAW, () => this.draw());
 
     this.debug("Created!");

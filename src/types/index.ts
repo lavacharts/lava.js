@@ -1,4 +1,4 @@
-import { ChartClasses, SupportedCharts } from "./chart";
+import { ChartClasses, ChartTypes } from "./chart";
 import { SupportedFormatters } from "./formats";
 import { Google, GoogleDataTable, GoogleLoaderOptions } from "./google";
 
@@ -6,7 +6,7 @@ export {
   ChartClasses,
   Google,
   GoogleLoaderOptions,
-  SupportedCharts,
+  ChartTypes as SupportedCharts,
   SupportedFormatters
 };
 

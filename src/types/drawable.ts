@@ -1,4 +1,5 @@
 import { SupportedCharts } from ".";
+import { ChartTypes } from "./chart";
 import { Formatter } from "./formats";
 
 export interface DrawableState {
@@ -8,13 +9,12 @@ export interface DrawableState {
 
 export type DrawableTypes = SupportedCharts | "Dashboard";
 
-export interface DrawableTmpl {
-  label: any;
-  type: DrawableTypes;
-  elementId: string;
+export interface DrawableInterface {
   data: any;
-  options: any;
-  png?: boolean;
+  label: any;
+  type: ChartTypes;
+  elementId: string;
+  options?: any;
   events?: Record<string, Function>;
   formats?: Formatter[];
 }

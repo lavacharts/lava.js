@@ -8,12 +8,6 @@ function getRandomColor() {
   return color;
 }
 
-function loadOptions() {
-  lava.loadOptions("MyFancyChart", {
-    colors: [getRandomColor()]
-  });
-}
-
 const chart = lava.chart({
   label: "MyFancyChart",
   type: "ScatterChart",
@@ -23,5 +17,11 @@ const chart = lava.chart({
     colors: ["green"]
   }
 });
+
+setInterval(() => {
+  chart.updateOptions({
+    colors: [getRandomColor()]
+  });
+}, 1000);
 
 lava.draw();

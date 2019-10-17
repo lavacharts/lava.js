@@ -56,7 +56,7 @@ module.exports = {
         "karma.conf.js",
         "gulpfile.js",
         "lib/**/*.js",
-        "configs/*.js"
+        "configs/**/*.js"
       ],
       env: {
         node: true

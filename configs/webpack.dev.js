@@ -6,7 +6,6 @@ const merge = require("webpack-merge");
 const { DefinePlugin } = require("webpack");
 
 const PATHS = require("./paths");
-const PKG = require("../package.json");
 
 const commonChunks = ["vendor", "runtime", "lava"];
 
