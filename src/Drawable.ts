@@ -123,17 +123,7 @@ export default class Drawable extends TinyEmitter {
 
     const lava = getWindowInstance();
 
-    lava.on(EVENTS.GOOGLE_READY, (google: Google) => {
-      this.debug("Registering event handlers");
-
-      console.log(google);
-
-      Drawable.CHART_EVENTS.forEach(event => {
-        google.visualization.events.addListener(this.googleChart, event, () => {
-          this.fireEvent(event);
-        });
-      });
-    });
+    lava.on(EVENTS.GOOGLE_READY, () => this.handleGoogleReady);
 
     lava.on(EVENTS.DRAW, () => this.draw());
 
@@ -268,6 +258,19 @@ export default class Drawable extends TinyEmitter {
    */
   protected async registerEventHandlers(): Promise<void> {
     //
+  }
+
+  private handleGoogleReady(google: Google): void {
+    this.debug(`Caught <${EVENTS.GOOGLE_READY}>`);
+    this.debug("Registering event handlers");
+
+    // console.log(google);
+
+    Drawable.CHART_EVENTS.forEach(event => {
+      google.visualization.events.addListener(this.googleChart, event, () => {
+        this.fireEvent(event);
+      });
+    });
   }
 
   private fireEvent(event: string): void {
