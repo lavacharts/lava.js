@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+  <title>{{ title }}</title>
   {{> partials/head }}
 </head>
 
@@ -8,15 +9,19 @@
   <nav class="light-blue lighten-1" role="navigation">
     {{> partials/navbar }}
   </nav>
-
   <div class="section no-pad-bot" id="index-banner">
-    {{> partials/banner }}
+    <div class="container">
+      <h1 class="header center orange-text">{{ title }}</h1>
+      <div class="row center">
+        <h5 class="header col s12 light">google charts made simple</h5>
+      </div>
+      <br>
+      {{> partials/install-blocks }}
+    </div>
   </div>
-
   <div class="container">
     <div class="section">
       <div class="row">
-        <!-- #region Code Box -->
         <div class="col s12 m6">
           <div class="icon-block">
             <h2 class="center light-blue-text">
@@ -29,13 +34,10 @@
             </pre>
           </div>
         </div>
-        <!-- #endregion -->
-
-        <!-- #region Chart Box -->
         <div class="col s12 m6">
           <div class="icon-block">
             <h2 class="center light-blue-text">
-                Easy Charts
+                Quick Charts
             </h2>
             <h5 class="center">thanks google!</h5>
             <pre class="language-html">
@@ -45,18 +47,15 @@
             <div id="chart_div"></div>
           </div>
         </div>
-        <!-- #endregion -->
-
-      </div><!-- </div class="row"> -->
+      </div>
     </div>
-
     <div class="section">
       <div class="row">
+        <br />
       </div>
     </div>
   </div>
-
-  <footer class="page-footer orange">
+  <footer class="page-footer">
       {{> partials/footer }}
   </footer>
 </body>

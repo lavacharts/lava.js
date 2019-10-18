@@ -5,7 +5,7 @@ import LavaJs from "./LavaJs";
 import { createDataTable, debug, getWindowInstance } from "./lib";
 import { ChartUpdateReturn, LavaJsOptions, SupportedCharts } from "./types";
 import { ChartEvents, ChartInterface } from "./types/chart";
-import { DrawableInterface } from "./types/drawable";
+import { DrawableInterface, OptionDataPayload } from "./types/drawable";
 import { Formatter } from "./types/formats";
 
 /**
@@ -120,6 +120,8 @@ export default class Drawable extends Eventful {
    * @public
    */
   public async draw(): Promise<void> {
+    this.debug("Drawing");
+
     if (!this.container) {
       throw new ElementIdNotFound(this.elementId);
     }
@@ -144,6 +146,26 @@ export default class Drawable extends Eventful {
     this.events[event] = handler;
 
     return this;
+  }
+
+  /**
+   * Apply the formats to the DataTable
+   */
+  public applyFormats(formats?: Formatter[]): void {
+    if (formats) {
+      this.formats = formats;
+    }
+
+    for (const format of this.formats) {
+      const formatter = new window.google.visualization[format.type](
+        format.options
+      );
+
+      this.debug(`Formatting column [${format.index}] with:`);
+      this.debug(format);
+
+      formatter.format(this.data, format.index);
+    }
   }
 
   /**
@@ -178,62 +200,72 @@ export default class Drawable extends Eventful {
   }
 
   /**
-   * Apply the formats to the DataTable
+   * Convenience method for setting options dynamicly
    */
-  public applyFormats(formats?: Formatter[]): void {
-    if (formats) {
-      this.formats = formats;
-    }
+  public async set(optionRef: string, value: any): Promise<ChartUpdateReturn> {
+    // if (optionRef.includes(".")) {
+    //   const options = optionRef.split(".");
+    // }
 
-    for (const format of this.formats) {
-      const formatter = new window.google.visualization[format.type](
-        format.options
-      );
+    const payload = {
+      [optionRef]: value
+    };
 
-      this.debug(`Formatting column [${format.index}] with:`);
-      this.debug(format);
+    this.updateOptions(payload);
 
-      formatter.format(this.data, format.index);
-    }
-  }
-
-  /**
-   * Loads new data into the drawable and redraws.
-   *
-   * Used with an AJAX call to a PHP method returning DataTable->toPayload(),
-   * a chart can be dynamically update in page, without reloads.
-   */
-  public async updateData(payload: object): Promise<ChartUpdateReturn> {
-    await this.setData(payload);
-
-    await this.draw();
-
-    return this.getChartUpdateReturn();
-  }
-
-  /**
-   * Loads new options into the drawable and redraws.
-   *
-   * Used with an AJAX call, or javascript events, to load a new array of options into a chart.
-   * This can be used to update a chart dynamically, without reloads.
-   */
-  public async updateOptions(payload: object): Promise<ChartUpdateReturn> {
-    this.options = Object.assign(this.options, payload);
-
-    await this.draw();
-
-    return this.getChartUpdateReturn();
-  }
-
-  /**
-   * Payload to return to the user after updating data or options.
-   */
-  protected getChartUpdateReturn(): ChartUpdateReturn {
     return {
       data: this.data,
       chart: this.googleChart,
       options: this.options
     };
+  }
+
+  /**
+   * Update a chart's options and/or data
+   *
+   * The chart will redraw.
+   */
+  public async update(
+    { data, options }: OptionDataPayload,
+    autoRedraw = true
+  ): Promise<ChartUpdateReturn> {
+    if (typeof options !== "undefined") {
+      this.options = Object.assign(this.options, options);
+    }
+
+    if (typeof data !== "undefined") {
+      this.updateData(data);
+    }
+
+    if (autoRedraw === true) {
+      await this.draw();
+    }
+
+    return {
+      data: this.data,
+      chart: this.googleChart,
+      options: this.options
+    };
+  }
+
+  /**
+   * Update the chart's data
+   */
+  protected async updateData(payload: any): Promise<ChartUpdateReturn> {
+    this.debug("Updating data");
+    this.debug(payload);
+
+    return this.update({ data: payload });
+  }
+
+  /**
+   * Update the chart's options
+   */
+  protected updateOptions(payload: any): Promise<ChartUpdateReturn> {
+    this.debug("Updating options");
+    this.debug(payload);
+
+    return this.update({ options: payload });
   }
 
   /**

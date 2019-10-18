@@ -2,20 +2,14 @@
   <div class="nav-wrapper container">
     <a id="logo-container" href="#" class="brand-logo">{{ title }}</a>
     <ul class="right hide-on-med-and-down">
-      <li><a href="index.html">Intro</a></li>
-      <li><a href="events.html">Events</a></li>
-      <li><a href="options.html">Options</a></li>
-      <li><a href="dataquery.html">DataQuery</a></li>
+      {{> linklist }}
     </ul>
 
     <ul id="nav-mobile" class="sidenav">
-      <li><a href="index.html">Intro</a></li>
-      <li><a href="events.html">Events</a></li>
-      <li><a href="options.html">Options</a></li>
-      <li><a href="dataquery.html">DataQuery</a></li>
+      {{> linklist }}
     </ul>
     <a href="#" data-target="nav-mobile" class="sidenav-trigger">
-      <i class="material-icons">Menu</i>
+      <i class="material-icons">menu</i>
     </a>
   </div>
 </nav>

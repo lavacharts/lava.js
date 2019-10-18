@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+  <title>{{ title }} | History</title>
+  {{> partials/head }}
+</head>
+
+<body>
+  <nav class="light-blue lighten-1" role="navigation">
+    {{> partials/navbar }}
+  </nav>
+  <div class="container">
+    <div class="section">
+      <div class="row">
+        <div class="col m10 offset-m1">
+          <div class="icon-block">
+            <h2 class="center orange-text">A Brief History</h2>
+            <h5 class="center light-blue-text">of LavaJs</h5>
+            <p>If you wanted to use the Google Chart API, and started searching for interfaces or libraries ~ 6 years ago, there wasn't much out there. I was using CodeIgniter back then, so I decided to create a package for myself, since I wanted charts in my project.</p>
+            <p>From this need, <a href="https://kevinkhill.github.io/Codeigniter-gCharts/">Codeigniter-gCharts</a> was born. Looking back, <a href="https://github.com/kevinkhill/Codeigniter-gCharts/blob/master/libraries/Gcharts.php#L520-L540">it's crazy how much javascript was output through string concatination.</a> The complexity grew, I started learning Laravel, my programing knowledge was expanding...</p>
+            <p>Through a big overhaul, <a href="https://github.com/kevinkhill/lavacharts/releases/tag/1.0.0">Lavacharts</a> emerged, with a <a href="https://lavacharts.com">docs site!</a> My first <em>real</em> project out in the wild. People started taking intrest, people needed charts!</p>
+            <div class="section center-align">
+              <h5 class="orange-text">&#x1F389; Hooray! &#x1F389;</h5>
+              <br>
+            </div>
+            <p>Closing issues, adding features, more work and LavaJs starts taking shape in <a href="https://github.com/kevinkhill/lavacharts/releases/tag/2.0.0">version 2.0</a> of Lavacharts with the creation of the <a href="https://github.com/kevinkhill/lavacharts/blob/2.0.0/src/Khill/Lavacharts/JavascriptFactory.php">JavascriptFactory</a>. Lavacharts reaches version 2.3 and I am learning node, npm, and the js ecosystem. I learn Gulp and by version 2.4, <a href="https://github.com/kevinkhill/lavacharts/blob/2.4.0/src/Javascript/src/lava.js">lava.js makes it's first appearance</a> with a Gulp based build chain. It wasn't much, but it was a start.</p>
+            <p><a href="https://github.com/kevinkhill/lavacharts/releases/tag/3.0.0">Version 3.0</a> was a big deal to the internals of the php module, but it wasn't until version 3.1 before LavaJs finally became a <a href="https://github.com/kevinkhill/lavacharts/blob/3.1/javascript/src/lava/Lava.js">CommonJs Module</a>. That was in 2017. Since then I have learned TypeScript and I thought it would be a great execise to convert the whole lava.js package into a nice, standalone library. It will be included in the next release of Lavacharts, but it is quite handy, all on it's own.</p>
+            <br>
+            <br>
+            <br>
+            <br>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="row">
+      <br />
+    </div>
+  </div>
+  <footer class="page-footer">
+    {{> partials/footer }}
+  </footer>
+</body>
+</html>

@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+  <title>{{ title }} | Options</title>
   {{> partials/head }}
 </head>
 
@@ -8,69 +9,51 @@
   <nav class="light-blue lighten-1" role="navigation">
     {{> partials/navbar }}
   </nav>
-
   <div class="section no-pad-bot" id="index-banner">
-    {{> partials/banner }}
-  </div>
-
-        <div class="container">
-            <div class="title">
-                LavaJs v4.0
-            </div>
-            <p>Google Charts, made simple.</p>
-            <p><a href="#" onclick="loadOptions()">(Click to update options.)</a></p>
-            <p><a href="index.html">Basic</a>, <a href="events.html">Events</a>, <a href="dataquery.html">Remote Data</a></p>
-
-            <div>
-                <div class="align-left float">
-                    <pre><code>
-function getRandomColor() {
-    const letters = '0123456789ABCDEF';
-    const color = '#';
-    for (const i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}
-
-function loadOptions() {
-    lava.loadOptions('MyFancyChart', {
-        colors: [getRandomColor()]
-    });
-}
-
-const chartJson = {
-    label: 'MyFancyChart',
-    type: 'ScatterChart',
-    elementId: 'chart_div',
-    data: [
-        ['Age', 'Cash'],
-        [12,  101],
-        [15,  240],
-        [18,  280],
-        [32,  324]
-    ],
-    options: {
-        colors: ['green'],
-        chartArea: {width: '50%'}
-    }
-};
-
-lava.store(chartJson);
-lava.run();
-                </code></pre>
-                </div>
-                <div class="float" style="width: 400px;">
-                    <pre><code>
-&#x3C;div id=&#x22;chart_div&#x22;&#x3E;&#x3C;/div&#x3E;
-                    </code></pre>
-                    <div id="chart_div"></div>
-                </div>
-            </div>
-        </div>
+    <div class="container">
+      <h1 class="header center orange-text">Dynamic Options</h1>
+      <div class="row center">
+        <h5 class="header col s12 light">make changes, on the fly</h5>
+      </div>
     </div>
-
-  <footer class="page-footer orange">
+  </div>
+  <div class="container">
+    <div class="section">
+      <div class="row">
+        <div class="col s12 m6">
+          <div class="icon-block">
+            <h2 class="center light-blue-text">
+                Update
+            </h2>
+            <h5 class="center">with easy setters</h5>
+            <pre class="language-javascript">
+              <code>
+{{ exampleCode }}</code>
+            </pre>
+          </div>
+        </div>
+        <div class="col s12 m6">
+          <div class="icon-block">
+            <h2 class="center light-blue-text">
+                Redraw
+            </h2>
+            <h5 class="center">with each change</h5>
+            <pre class="language-html">
+              <code>
+&#x3C;div id=&#x22;chart_div1&#x22;&#x3E;&#x3C;/div&#x3E;</code>
+            </pre>
+            <div id="chart_div"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="row">
+        <br />
+      </div>
+    </div>
+  </div>
+  <footer class="page-footer">
       {{> partials/footer }}
   </footer>
 </body>

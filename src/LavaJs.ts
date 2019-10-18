@@ -38,7 +38,7 @@ export default class LavaJs extends Eventful {
   /**
    * Chart storage
    */
-  private readonly volcano: Map<string, Drawable> = new Map();
+  private readonly volcano: Map<string, Chart | Dashboard> = new Map();
 
   /**
    * Ready Callback
@@ -141,34 +141,23 @@ export default class LavaJs extends Eventful {
   }
 
   /**
-   * Initializes the library by loading the Google Chart API.
-   */
-  // public async loadGoogle(): Promise<void> {
-  //   return this.loader.loadGoogle();
-  // }
-
-  /**
-   * Get a reference to the window.google object or load it if needed.
-   */
-  // public async getGoogle(): Promise<Google> {
-  //   if (this.loader.googleIsDefined === false) {
-  //     await this.loadGoogle();
-  //   }
-
-  //   return window.google;
-  // }
-
-  /**
    * Runs the LavaJs.js module
    *
-   * @emits {ready}
+   * @emits {@link EVENTS.READY}
    */
   public async draw(): Promise<any> {
     await this.waitForDom();
 
-    // this.emitEvent(EVENTS.READY);
-
     // this.readyCallback();
+  }
+
+  /**
+   * Alert all charts to redraw.
+   *
+   * @emits {@link EVENTS.DRAW}
+   */
+  public redraw(): void {
+    this.emitEvent(EVENTS.DRAW);
   }
 
   /**
@@ -253,7 +242,7 @@ export default class LavaJs extends Eventful {
     const chart = this.get(label);
 
     if (chart) {
-      return chart.updateData(payload);
+      return chart.update({ data: payload });
     }
   }
 
@@ -270,32 +259,8 @@ export default class LavaJs extends Eventful {
     const chart = this.get(label);
 
     if (chart) {
-      return chart.updateOptions(payload);
+      return chart.update({ options: payload });
     }
-  }
-
-  /**
-   * Redraws all of the registered charts on screen.
-   *
-   * This method is attached to the window resize event with debouncing
-   * to make the charts responsive to the browser resizing.
-   */
-  public redrawAll(): boolean {
-    if (this.volcano.size === 0) {
-      this.debug(`Nothing to redraw.`);
-
-      return false;
-    }
-
-    this.debug(`Redrawing ${this.volcano.size} drawables.`);
-
-    this.volcano.forEach(drawable => {
-      this.debug(`Redrawing ${drawable.id}`);
-
-      drawable.draw();
-    });
-
-    return true;
   }
 
   /**
@@ -304,7 +269,7 @@ export default class LavaJs extends Eventful {
    * The registry keeps a record of all created charts, which enables
    * the event firing through the common interface of `window.lava`
    */
-  private register<T extends Drawable>(drawable: T): T {
+  private register<T extends Chart | Dashboard>(drawable: T): T {
     this.debug(`Registering ${drawable.id}`);
 
     if (drawable instanceof Chart) {
@@ -322,7 +287,9 @@ export default class LavaJs extends Eventful {
   }
 
   /**
-   * Simple Promise for the DOM to be ready.
+   * Promise for the DOM to be ready.
+   *
+   * @emits {@link EVENTS.DOM_READY}
    */
   private async waitForDom(): Promise<void> {
     this.debug("Waiting for the DOM to become ready");

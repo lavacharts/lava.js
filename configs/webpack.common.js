@@ -18,13 +18,9 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.hbs$/,
-        loader: "handlebars-loader"
-      },
-      {
         test: /\.(j|t)sx?$/,
         loader: "babel-loader",
-        include: [PATHS.src],
+        include: [PATHS.src, PATHS.examples],
         exclude: [/node_modules/]
       },
       {

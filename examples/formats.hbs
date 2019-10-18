@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+  <title>{{ title }} | Formats</title>
   {{> partials/head }}
 </head>
 
@@ -10,62 +11,55 @@
   </nav>
 
   <div class="section no-pad-bot" id="index-banner">
-    {{> partials/banner }}
+    <div class="container">
+      <h1 class="header center orange-text">Formats</h1>
+      <div class="row center">
+        <h5 class="header col s12 light">customize your data</h5>
+      </div>
+    </div>
   </div>
 
-        <div class="container">
-            <div class="title">
-                LavaJs v4.0
-            </div>
-            <p>Google Charts, made simple.</p>
-            <p>(Hover over a data point.)</p>
-            <p><a href="index.html">Basic</a>, <a href="events.html">Events</a>, <a href="dataquery.html">Remote Data</a></p>
+  <div class="container">
+    <div class="section">
+      <div class="row">
 
-            <div>
-                <div class="align-left float">
-                    <pre><code>
-var chartJson = {
-    label: 'Test',
-    type: 'ScatterChart',
-    elementId: 'chart_div',
-    datatable: [
-        ['Age', 'Cash'],
-        [12,  101],
-        [15,  240],
-        [18,  280],
-        [32,  324]
-    ],
-    options: {
-        colors: ['green'],
-        chartArea: {width: '50%'}
-    },
-    formats: [
-        {
-            type: 'NumberFormat',
-            index: 1, // DataTable Column
-            options: {
-                prefix: '$',
-                suffix: ' BILLS!'
-            }
-        }
-    ]
-};
-
-lava.store(chartJson);
-lava.run();
-                    </code></pre>
-                </div>
-                <div class="float" style="width: 400px;">
-                    <pre><code>
-&#x3C;div id=&#x22;chart_div&#x22;&#x3E;&#x3C;/div&#x3E;
-                    </code></pre>
-                    <div id="chart_div"></div>
-                </div>
-            </div>
+        <div class="col s12 m6">
+          <div class="icon-block">
+            <h2 class="center light-blue-text">
+                Listen to Events
+            </h2>
+            <h5 class="center">interactive charts</h5>
+            <pre class="language-javascript">
+              <code>
+{{ exampleCode }}</code>
+            </pre>
+          </div>
         </div>
+
+        <div class="col s12 m6">
+          <div class="icon-block">
+            <h2 class="center light-blue-text">
+                Perform Actions
+            </h2>
+            <h5 class="center"> google!</h5>
+            <pre class="language-html">
+              <code>
+&#x3C;div id=&#x22;chart_div&#x22;&#x3E;&#x3C;/div&#x3E;</code>
+            </pre>
+            <div id="chart_div"></div>
+          </div>
+        </div>
+      </div>
     </div>
 
-  <footer class="page-footer orange">
+    <div class="section">
+      <div class="row">
+        <br />
+      </div>
+    </div>
+  </div>
+
+  <footer class="page-footer">
       {{> partials/footer }}
   </footer>
 </body>

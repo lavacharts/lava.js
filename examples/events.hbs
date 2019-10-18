@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+  <title>{{ title }} | Events</title>
   {{> partials/head }}
 </head>
 
@@ -10,13 +11,18 @@
   </nav>
 
   <div class="section no-pad-bot" id="index-banner">
-    {{> partials/banner }}
+    <div class="container">
+      <h1 class="header center orange-text">Events</h1>
+      <div class="row center">
+        <h5 class="header col s12 light">lets get interactive</h5>
+      </div>
+    </div>
   </div>
 
   <div class="container">
     <div class="section">
       <div class="row">
-        <!-- #region Code Box -->
+
         <div class="col s12 m6">
           <div class="icon-block">
             <h2 class="center light-blue-text">
@@ -25,46 +31,11 @@
             <h5 class="center">interactive charts</h5>
             <pre class="language-javascript">
               <code>
-const chartJson = {
-    label: 'Test',
-    type: 'PieChart',
-    elementId: 'chart_div',
-    data: (data) => {
-        data.addColumn('string', 'Topping');
-        data.addColumn('number', 'Slices');
-        data.addRows([
-            ['Mushrooms', 3],
-            ['Onions', 1],
-            ['Olives', 1],
-            ['Zucchini', 1],
-            ['Pepperoni', 2]
-        ]);
-
-        return data;
-    }
-};
-
-const chart = lava.store(chartJson);
-
-chart.on('ready', function() {
-    console.log(this.id + ' is ready!');
-});
-
-chart.on('select', function (chart, data) {
-    const selectedItem = chart.getSelection()[0];
-    if (selectedItem) {
-        const topping = data.getValue(selectedItem.row, 0);
-        alert('The user selected ' + topping);
-    }
-});
-
-lava.run();</code>
+{{ exampleCode }}</code>
             </pre>
           </div>
         </div>
-        <!-- #endregion -->
 
-        <!-- #region Chart Box -->
         <div class="col s12 m6">
           <div class="icon-block">
             <h2 class="center light-blue-text">
@@ -78,30 +49,18 @@ lava.run();</code>
             <div id="chart_div"></div>
           </div>
         </div>
-        <!-- #endregion -->
-
-      <!--
-          <div class="col s12 m4">
-          <div class="icon-block">
-            <h2 class="center light-blue-text"><i class="material-icons">settings</i></h2>
-            <h5 class="center">Easy to work with</h5>
-
-            <p class="light">We have provided detailed documentation as well as specific code examples to help new users get started. We are also always open to feedback and can answer any questions a user may have about Materialize.</p>
-          </div>
-        </div>
-      -->
-      </div><!-- </div class="row"> -->
+      </div>
     </div>
 
     <div class="section">
       <div class="row">
+        <br />
       </div>
     </div>
   </div>
 
-  <footer class="page-footer orange">
+  <footer class="page-footer">
       {{> partials/footer }}
   </footer>
-
 </body>
 </html>

@@ -1,31 +1,27 @@
 <div class="container">
   <div class="row">
     <div class="col l6 s12">
-      <h5 class="white-text">lava.js</h5>
-      <p class="grey-text text-lighten-4">This library was initially part of its parent project, <a href="https://github.com/kevinkhill/lavacharts">Lavacharts</a>. It was developed alongside Lavacharts as part of the package for php projects. It grew and grew with Lavacharts, until it matured enough to stand on its own, here, as lava.js</p>
+      <h5 class="orange-text">{{ title }}</h5>
+      <p class="grey-text text-lighten-4">
+        This project was initially part of <a href="https://github.com/kevinkhill/lavacharts">Lavacharts</a>, until the API surface shrank so much and my knowledge of JS grew to include TS, so I rewrote it, for fun &#128540; Check out <a href="https://github.com/lavacharts/lava.js">the source</a> if you want to see!
+      </p>
     </div>
     <div class="col l3 s12">
-      <h5 class="white-text">Settings</h5>
+      {{!-- <h5 class="white-text">Examples</h5>
       <ul>
-        <li><a class="white-text" href="#!">Link 1</a></li>
-        <li><a class="white-text" href="#!">Link 2</a></li>
-        <li><a class="white-text" href="#!">Link 3</a></li>
-        <li><a class="white-text" href="#!">Link 4</a></li>
-      </ul>
+        {{> linklist }}
+      </ul> --}}
     </div>
-    <div class="col l3 s12">
-      <h5 class="white-text">Connect</h5>
+    <div class="col l3 s12 right-align">
+      <h5 class="orange-text">Pages</h5>
       <ul>
-        <li><a class="white-text" href="#!">Link 1</a></li>
-        <li><a class="white-text" href="#!">Link 2</a></li>
-        <li><a class="white-text" href="#!">Link 3</a></li>
-        <li><a class="white-text" href="#!">Link 4</a></li>
+        {{> linklist }}
       </ul>
     </div>
   </div>
 </div>
 <div class="footer-copyright">
   <div class="container">
-  Made by <a class="orange-text text-lighten-3" href="https://github.com/kevinkhill">kevinkhill</a>
+  Made with <span class="red-text">&#10084;</span> by <a href="https://github.com/kevinkhill">kevinkhill</a>
   </div>
 </div>
