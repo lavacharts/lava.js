@@ -7,45 +7,39 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-const chart = lava.chart({
+var chart = lava.chart({
   label: "Test",
   type: "PieChart",
   elementId: "chart_div",
-  data: data => {
-    data.addColumn("string", "Topping");
-    data.addColumn("number", "Slices");
-    data.addRows([
-      ["Mushrooms", 3],
-      ["Onions", 1],
-      ["Olives", 1],
-      ["Zucchini", 1],
-      ["Pepperoni", 2]
-    ]);
+  data: function data(_data) {
+    _data.addColumn("string", "Topping");
 
-    return data;
+    _data.addColumn("number", "Pizzas");
+
+    _data.addRows([["Mushroom & Olive", 2], ["Pepperoni", 5]]);
+
+    return _data;
   },
   events: {
-    // Can be defined upon creation
-    select({ chart, data }) {
-      const selectedItem = chart.getSelection()[0];
+    // Events can be defined upon creation
+    select: function select(_ref) {
+      var chart = _ref.chart,
+          data = _ref.data;
+      var selectedItem = chart.getSelection()[0];
 
       if (selectedItem) {
-        const topping = data.getValue(selectedItem.row, 0);
-
+        var topping = data.getValue(selectedItem.row, 0);
         alert("The user selected " + topping);
       }
     }
   }
-});
+}); // Or attached after the fact
 
-// Or attached later on...
-chart.on("ready", () => {
-  // this.uuid is a simple getter for `${this.type}::${label}`
-  alert(this.uuid + " is ready!");
+chart.on("ready", function () {
+  // chart.id is just a getter for `${this.type}:${this.label}`
+  alert(chart.id + " is ready!");
 });
-
 lava.draw();
-
 
 /***/ })
 
