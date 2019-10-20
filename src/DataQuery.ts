@@ -1,4 +1,8 @@
+import { Debugger } from "debug";
+
 import { DataError } from "./Errors";
+import { debug } from "./lib";
+import { DataQueryInterface } from "./types";
 import {
   GoogleQueryOptions,
   GoogleQueryResponse,
@@ -11,7 +15,7 @@ import {
  * @see https://developers.google.com/chart/interactive/docs/reference#Query
  */
 export default class DataQuery {
-  public transformer: QueryTransformer;
+  private debug: Debugger;
 
   /**
    * Create a new DataQuery for a DataTable
@@ -21,8 +25,10 @@ export default class DataQuery {
   constructor(
     public url: string,
     public opts?: GoogleQueryOptions,
-    transformer?: QueryTransformer
+    public transformer?: QueryTransformer
   ) {
+    this.debug = debug.extend("DataQuery");
+
     this.opts = { sendMethod: "auto" };
     this.transformer = query => query;
 
@@ -40,7 +46,7 @@ export default class DataQuery {
    *
    * @throws {DataError}
    */
-  public static create(payload: DataQuery): DataQuery {
+  public static create(payload: DataQueryInterface): DataQuery {
     if (!payload.url) {
       throw new DataError(
         '"url" is a mandatory parameter for creating a DataQuery.'
@@ -64,10 +70,16 @@ export default class DataQuery {
    * Send the DataQuery
    */
   public send(): Promise<GoogleQueryResponse> {
-    const query = new window.google.visualization.Query(this.url, this.opts);
+    let query = new window.google.visualization.Query(this.url, this.opts);
+
+    if (typeof this.transformer === "function") {
+      query = this.transformer(query);
+    }
 
     return new Promise((resolve, reject) => {
-      this.transformer(query).send(response => {
+      this.debug(`Requesting ${this.url}`);
+
+      query.send(response => {
         if (response.isError()) {
           reject(response);
         }

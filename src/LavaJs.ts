@@ -10,11 +10,15 @@ import Eventful, { EVENTS } from "./Eventful";
 import GoogleLoader from "./GoogleLoader";
 import { addEvent, debug } from "./lib";
 // import { actions, store } from "./lib/store";
-import { ChartUpdateReturn, Google, LavaJsOptions } from "./types";
+import {
+  ChartUpdateReturn,
+  DataQueryInterface,
+  Google,
+  LavaJsOptions,
+  LavaState
+} from "./types";
 import { ChartInterface } from "./types/chart";
-import { DrawableInterface, DrawableState } from "./types/drawable";
-
-type LavaState = Record<string, DrawableState>;
+import { DrawableInterface } from "./types/drawable";
 
 /**
  * Google Chart API wrapper library
@@ -127,13 +131,6 @@ export default class LavaJs extends Eventful {
   }
 
   /**
-   * Get a list of all the registered charts
-   */
-  public getRegistry(): LavaState {
-    return this.registry;
-  }
-
-  /**
    * Configure the LavaJs module.
    */
   public configure(options: LavaJsOptions): void {
@@ -166,12 +163,8 @@ export default class LavaJs extends Eventful {
    * If a String is passed, then a new {@link DataQuery} is created with no options.
    * If an Object is passed, then the query must be defined by the object.
    */
-  public query(url: string | DataQuery): DataQuery {
-    if (typeof url === "string") {
-      return new DataQuery(url);
-    } else {
-      return DataQuery.create(url);
-    }
+  public query(query: DataQueryInterface): DataQuery {
+    return DataQuery.create(query);
   }
 
   /**
@@ -210,6 +203,13 @@ export default class LavaJs extends Eventful {
     }
 
     return this.volcano.get(label);
+  }
+
+  /**
+   * Get a list of all the registered charts
+   */
+  public getRegistry(): LavaState {
+    return this.registry;
   }
 
   /**

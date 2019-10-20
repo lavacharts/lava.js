@@ -79,7 +79,7 @@ export default class Chart extends Drawable {
   public async draw(): Promise<void> {
     await super.draw();
 
-    this.googleChart = this.makeChartFactory(this.class);
+    this.googleChart = this.makeChart(this.class);
 
     Object.keys(this.events).forEach(event => {
       const e = event as ChartEvents;
@@ -97,7 +97,7 @@ export default class Chart extends Drawable {
   /**
    * Create a ChartFactory function using the `this.container`
    */
-  private makeChartFactory(type: ChartClasses): NewChartConstructor {
+  private makeChart(type: ChartClasses): NewChartConstructor {
     return new window.google.visualization[type](this.container);
   }
 

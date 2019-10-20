@@ -1,6 +1,13 @@
 import { ChartClasses, ChartTypes } from "./chart";
+import { DrawableState } from "./drawable";
 import { SupportedFormatters } from "./formats";
-import { Google, GoogleDataTable, GoogleLoaderOptions } from "./google";
+import {
+  Google,
+  GoogleDataTable,
+  GoogleLoaderOptions,
+  GoogleQueryOptions,
+  QueryTransformer
+} from "./google";
 
 export {
   ChartClasses,
@@ -8,6 +15,14 @@ export {
   GoogleLoaderOptions,
   ChartTypes as SupportedCharts,
   SupportedFormatters
+};
+
+export type LavaState = Record<string, DrawableState>;
+
+export type DataQueryInterface = {
+  url: string;
+  opts?: GoogleQueryOptions;
+  transformer?: QueryTransformer;
 };
 
 export interface LavaJsOptions {

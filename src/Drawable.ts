@@ -84,7 +84,13 @@ export default class Drawable extends Eventful {
 
     this.type = drawable.type;
     this.label = drawable.label;
+
+    // if (typeof drawable.data === "string") {
+    // this.dataSrc = new DataQuery(drawable.data);
+    // } else {
     this.dataSrc = drawable.data;
+    // }
+
     this.elementId = drawable.elementId;
 
     this.options = drawable.options || {};
@@ -126,10 +132,17 @@ export default class Drawable extends Eventful {
       throw new ElementIdNotFound(this.elementId);
     }
 
-    await this.setData(this.dataSrc);
+    this.debug("Setting data");
 
-    if (!this.data) {
-      throw new DataError(`Could not draw, data is ${this.data}`);
+    const payload =
+      typeof this.dataSrc === "string"
+        ? new DataQuery(this.dataSrc)
+        : this.dataSrc;
+
+    await this.setData(payload);
+
+    if (this.data instanceof google.visualization.DataTable !== true) {
+      throw new DataError(`There was a error setting the data for ${this.id}`);
     }
 
     if (this.formats) {
@@ -146,26 +159,6 @@ export default class Drawable extends Eventful {
     this.events[event] = handler;
 
     return this;
-  }
-
-  /**
-   * Apply the formats to the DataTable
-   */
-  public applyFormats(formats?: Formatter[]): void {
-    if (formats) {
-      this.formats = formats;
-    }
-
-    for (const format of this.formats) {
-      const formatter = new window.google.visualization[format.type](
-        format.options
-      );
-
-      this.debug(`Formatting column [${format.index}] with:`);
-      this.debug(format);
-
-      formatter.format(this.data, format.index);
-    }
   }
 
   /**
@@ -246,6 +239,26 @@ export default class Drawable extends Eventful {
       chart: this.googleChart,
       options: this.options
     };
+  }
+
+  /**
+   * Apply the formats to the DataTable
+   */
+  public applyFormats(formats?: Formatter[]): void {
+    if (formats) {
+      this.formats = formats;
+    }
+
+    for (const format of this.formats) {
+      const formatter = new window.google.visualization[format.type](
+        format.options
+      );
+
+      this.debug(`Formatting column [${format.index}] with:`);
+      this.debug(format);
+
+      formatter.format(this.data, format.index);
+    }
   }
 
   /**

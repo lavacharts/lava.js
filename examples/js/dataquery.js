@@ -8,7 +8,7 @@ lava.chart({
   label: "Test",
   type: "PieChart",
   elementId: "chart_div",
-  data: lava.query(`${base}/${id}/${query}`),
+  data: `${base}/${id}/${query}`,
   options: {
     width: 400,
     height: 240,
