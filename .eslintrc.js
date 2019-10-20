@@ -53,18 +53,27 @@ module.exports = {
   overrides: [
     {
       files: [
+        ".eslintrc.js",
         "karma.conf.js",
         "gulpfile.js",
         "lib/**/*.js",
         "configs/**/*.js"
       ],
+      parser: "babel-eslint",
       env: {
         node: true
       },
+      extends: [
+        "eslint:recommended",
+        "prettier"
+      ],
+      plugins: [
+        "import",
+        "prettier",
+        "simple-import-sort",
+      ],
       rules: {
-        "@typescript-eslint/camelcase": "off",
-        "@typescript-eslint/no-var-requires": "off",
-        "@typescript-eslint/explicit-function-return-type": "off"
+        "@typescript-eslint/no-var-requires": "off"
       }
     },
     {

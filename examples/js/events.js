@@ -11,22 +11,22 @@ const chart = lava.chart({
   },
   events: {
     // Events can be defined upon creation
-    select({ chart, data }) {
-      const selectedItem = chart.getSelection()[0];
-
-      if (selectedItem) {
-        const topping = data.getValue(selectedItem.row, 0);
-
-        alert("The user selected " + topping);
-      }
+    ready() {
+      // chart.id is just a getter for `${this.type}:${this.label}`
+      alert(chart.id + " is ready!");
     }
   }
 });
 
 // Or attached after the fact
-chart.on("ready", () => {
-  // chart.id is just a getter for `${this.type}:${this.label}`
-  alert(chart.id + " is ready!");
-});
+chart.on("select", ({ chart, data }) => {
+  const selectedItem = chart.getSelection()[0];
 
+  if (selectedItem) {
+    const topping = data.getValue(selectedItem.row, 0);
+
+    alert("The user selected " + topping);
+  }
+});
+  
 lava.draw();

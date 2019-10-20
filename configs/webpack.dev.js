@@ -1,24 +1,20 @@
 const ErrorNotificationPlugin = require("webpack-error-notification");
 const HtmlHarddiskPlugin = require("html-webpack-harddisk-plugin");
 const HtmlInlineSourcePlugin = require("html-webpack-inline-source-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlPlugin = require("html-webpack-plugin");
 const merge = require("webpack-merge");
 const { DefinePlugin } = require("webpack");
+const fs = require("fs");
 
+const PKG = require("../package.json");
 const PATHS = require("./paths");
-
 const examplePages = require("./example-pages");
 
 module.exports = merge(require("./webpack.common.js"), {
   mode: "development",
   entry: {
-    vendor: [
-      "materialize-css/dist/js/materialize.min.js",
-      "materialize-css/dist/css/materialize.min.css",
-      "prismjs/prism.js",
-      "prismjs/themes/prism.css"
-    ],
-    common: ["./src/lava.ts", "./examples/js/site.js"],
+    site: "./examples/js/site.js",
     ...examplePages
   },
   output: {
@@ -44,13 +40,25 @@ module.exports = merge(require("./webpack.common.js"), {
         loader: "handlebars-loader"
       },
       {
-        test: /\.css$/i,
-        use: ["style-loader", "css-loader"]
+        test: /\.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              // you can specify a publicPath here
+              // by default it uses publicPath in webpackOptions.output
+              // publicPath: "../",
+              hmr: process.env.NODE_ENV === "development"
+            }
+          },
+          "css-loader"
+        ]
       }
     ]
   },
   plugins: [
     // new CleanPlugin(),
+    new MiniCssExtractPlugin(),
     new DefinePlugin({
       "process.env": {
         NODE_ENV: JSON.stringify("development"),
@@ -65,10 +73,26 @@ module.exports = merge(require("./webpack.common.js"), {
           viewport: "width=device-width, initial-scale=1.0"
         },
         showErrors: true,
-        templateParameters: require("./templateParameters")(page),
-        // alwaysWriteToDisk: true, // Option provided by html-webpack-harddisk-plugin
+        templateParameters() {
+          let exampleCode = "";
+
+          try {
+            exampleCode = fs.readFileSync(
+              PATHS.fromRoot(examplePages[page])
+            );
+          } catch (e) {
+            //
+          }
+
+          return {
+            title: "LavaJs",
+            version: PKG.version,
+            exampleCode
+          };
+        },
+        alwaysWriteToDisk: true, // Option provided by html-webpack-harddisk-plugin
         // inlineSource: /\.css$/, // Option provided by html-webpack-inline-source-plugin
-        chunks: ["vendor", "runtime", "common", page],
+        chunks: ["runtime", "site", page],
         template: PATHS.fromRoot(`examples/${page}.hbs`),
         filename: PATHS.fromRoot(`public/${page}.html`)
       });
@@ -79,23 +103,11 @@ module.exports = merge(require("./webpack.common.js"), {
   optimization: {
     splitChunks: {
       cacheGroups: {
-        chunks: "all",
-        vendor: {
-          test: /node_modules/,
-          chunks: "initial",
-          name: "vendor",
-          priority: 10,
-          enforce: true
-        }
+        chunks: "all"
       }
     },
     runtimeChunk: {
       name: "runtime"
-    }
-  },
-  resolve: {
-    alias: {
-      "~": PATHS.fromRoot("node_modules")
     }
   }
 });
