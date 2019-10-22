@@ -1,7 +1,7 @@
 import { Debugger } from "debug";
 
 import { DataError } from "./Errors";
-import { debug } from "./lib";
+import { getLogger } from "./lib/logger";
 import { DataQueryInterface } from "./types";
 import {
   GoogleQueryOptions,
@@ -27,7 +27,7 @@ export default class DataQuery {
     public opts?: GoogleQueryOptions,
     public transformer?: QueryTransformer
   ) {
-    this.debug = debug.extend("DataQuery");
+    this.debug = getLogger().extend("DataQuery");
 
     this.opts = { sendMethod: "auto" };
     this.transformer = query => query;

@@ -3,5 +3,5 @@
   "tabWidth": 2,
   "singleQuote": false,
   "trailingComma": "none",
-  "quoteProps": "as-needed"
+  "quoteProps": "consistent"
 }

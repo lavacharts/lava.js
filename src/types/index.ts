@@ -28,13 +28,14 @@ export type DataQueryInterface = {
 export interface LavaJsOptions {
   autoloadGoogle?: boolean;
   autodraw?: boolean;
+  chartPackages?: string[];
   datetimeFormat?: string;
   debounceTimeout?: number;
+  debug?: boolean;
+  language?: string;
+  mapsApiKey?: string;
   responsive?: boolean;
   timezone?: string;
-  language?: string;
-  chartPackages?: string[];
-  mapsApiKey?: string;
 }
 
 export interface ChartUpdateReturn {

@@ -1,11 +1,17 @@
-import Debug from "debug";
-
 import LavaJs from "../LavaJs";
-
-export const debug = Debug("LavaJs");
 
 export function getWindowInstance(): LavaJs {
   return window.lava;
+}
+
+export function getLocalStorage(): Storage {
+  if (window.localStorage && process.env.NODE_ENV === "development") {
+    window.localStorage.debug = "LavaJs*";
+  } else {
+    window.localStorage.debug = "";
+  }
+
+  return window.localStorage;
 }
 
 /**

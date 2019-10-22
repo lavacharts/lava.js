@@ -5,9 +5,9 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlPlugin = require("html-webpack-plugin");
 const merge = require("webpack-merge");
 const { DefinePlugin } = require("webpack");
-const fs = require("fs");
 
 const PKG = require("../package.json");
+
 const PATHS = require("./paths");
 const examplePages = require("./example-pages");
 
@@ -18,7 +18,7 @@ module.exports = merge(require("./webpack.common.js"), {
     ...examplePages
   },
   output: {
-    publicPath: "",
+    publicPath: "/",
     path: PATHS.public,
     filename: "[name].js"
   },
@@ -53,6 +53,10 @@ module.exports = merge(require("./webpack.common.js"), {
           },
           "css-loader"
         ]
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: ["style-loader", "css-loader", "sass-loader"]
       }
     ]
   },
@@ -77,9 +81,7 @@ module.exports = merge(require("./webpack.common.js"), {
           let exampleCode = "";
 
           try {
-            exampleCode = fs.readFileSync(
-              PATHS.fromRoot(examplePages[page])
-            );
+            exampleCode = fs.readFileSync(PATHS.fromRoot(examplePages[page]));
           } catch (e) {
             //
           }

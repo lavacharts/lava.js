@@ -1,5 +1,3 @@
-// import Debug from "debug";
-
 import Chart from "./Chart";
 import Dashboard from "./Dashboard";
 import DataQuery from "./DataQuery";
@@ -8,8 +6,8 @@ import Drawable from "./Drawable";
 import { DrawableNotFound, InvalidCallback } from "./Errors";
 import Eventful, { EVENTS } from "./Eventful";
 import GoogleLoader from "./GoogleLoader";
-import { addEvent, debug } from "./lib";
-// import { actions, store } from "./lib/store";
+import { addEvent } from "./lib";
+import { ConsoleLogger, getLogger } from "./lib/logger";
 import {
   ChartUpdateReturn,
   DataQueryInterface,
@@ -67,13 +65,15 @@ export default class LavaJs extends Eventful {
   constructor(options?: LavaJsOptions) {
     super();
 
-    this.debug = debug;
-    this.debug(`LavaJs v${LavaJs.VERSION}`);
-
     if (options) {
       this.configure(options);
     }
 
+    this.debug = getLogger();
+
+    this.options.debug ? ConsoleLogger.enable() : ConsoleLogger.disable();
+
+    this.debug(`LavaJs v${LavaJs.VERSION}`);
     this.debug("Loaded with options:");
     this.debug(this.options);
 

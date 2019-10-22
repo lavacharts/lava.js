@@ -2,7 +2,8 @@ import DataQuery from "./DataQuery";
 import { DataError, ElementIdNotFound } from "./Errors";
 import Eventful, { EVENTS } from "./Eventful";
 import LavaJs from "./LavaJs";
-import { createDataTable, debug, getWindowInstance } from "./lib";
+import { createDataTable, getWindowInstance } from "./lib";
+import { getLogger } from "./lib/logger";
 import { ChartUpdateReturn, LavaJsOptions, SupportedCharts } from "./types";
 import { ChartEvents, ChartInterface } from "./types/chart";
 import { DrawableInterface, OptionDataPayload } from "./types/drawable";
@@ -84,20 +85,14 @@ export default class Drawable extends Eventful {
 
     this.type = drawable.type;
     this.label = drawable.label;
-
-    // if (typeof drawable.data === "string") {
-    // this.dataSrc = new DataQuery(drawable.data);
-    // } else {
     this.dataSrc = drawable.data;
-    // }
-
     this.elementId = drawable.elementId;
 
     this.options = drawable.options || {};
     this.formats = drawable.formats || [];
     this.events = drawable.events || {};
 
-    this.debug = debug.extend(this.id);
+    this.debug = getLogger().extend(this.id);
 
     this._lava = getWindowInstance();
     this._lava.on(EVENTS.DRAW, () => this.draw());
@@ -290,7 +285,6 @@ export default class Drawable extends Eventful {
       event,
       (e: any) => {
         this.debug(`Registering handler for <${event}>`);
-        this.debug(handler);
 
         handler({
           event: e,

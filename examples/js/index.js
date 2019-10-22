@@ -1,3 +1,5 @@
+import "./homepage-banner";
+
 lava.chart({
   label: "Test",
   type: "PieChart",

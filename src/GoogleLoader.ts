@@ -1,8 +1,5 @@
-// import { Debugger } from "debug";
-// import { TinyEmitter } from "tiny-emitter";
-
 import Eventful, { EVENTS } from "./Eventful";
-import { debug } from "./lib";
+import { getLogger } from "./lib/logger";
 import { Google, GoogleLoaderOptions, LavaJsOptions } from "./types";
 
 export enum LOADER_STATES {
@@ -35,7 +32,7 @@ export default class GoogleLoader extends Eventful {
   constructor(private options: LavaJsOptions) {
     super();
 
-    this.debug = debug.extend("GoogleLoader");
+    this.debug = getLogger().extend("GoogleLoader");
   }
 
   /**

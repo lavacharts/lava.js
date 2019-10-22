@@ -20,6 +20,7 @@ module.exports = {
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
     "prettier/@typescript-eslint",
     "prettier"
   ],
@@ -32,8 +33,9 @@ module.exports = {
   rules: {
     "no-console": "off",
     "sort-imports": "off",
+    "import/order": "off",
 
-    eqeqeq: ["error", "always"],
+    "eqeqeq": ["error", "always"],
     "no-mixed-operators": "error",
     "no-param-reassign": "error",
 
@@ -55,45 +57,38 @@ module.exports = {
       files: [
         ".eslintrc.js",
         "karma.conf.js",
-        "gulpfile.js",
-        "lib/**/*.js",
         "configs/**/*.js"
       ],
       parser: "babel-eslint",
       env: {
+        browser: false,
         node: true
       },
-      extends: [
-        "eslint:recommended",
-        "prettier"
-      ],
-      plugins: [
-        "import",
-        "prettier",
-        "simple-import-sort",
-      ],
       rules: {
-        "@typescript-eslint/no-var-requires": "off"
+        "@typescript-eslint/no-var-requires": "off",
+        "simple-import-sort/sort": "off",
+        "import/order": ["error", { "newlines-between": "always" }]
       }
     },
     {
       files: [
         "test/*.js",
-        "public/*.js",
-        "examples/js/*.js"
+        // "public/*.js",
+        "examples/js/**/*.js"
       ],
       globals: {
+        M: true,
         lava: true,
         LavaJs: true,
         sinon: true,
         expect: true
       },
       env: {
-        mocha: true,
-        browser: true
+        mocha: true
       },
       rules: {
         "max-nested-callbacks": "off",
+
         "@typescript-eslint/explicit-function-return-type": "off"
       }
     }
