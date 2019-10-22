@@ -22,22 +22,22 @@ var chart = lava.chart({
   },
   events: {
     // Events can be defined upon creation
-    select: function select(_ref) {
-      var chart = _ref.chart,
-          data = _ref.data;
-      var selectedItem = chart.getSelection()[0];
-
-      if (selectedItem) {
-        var topping = data.getValue(selectedItem.row, 0);
-        alert("The user selected " + topping);
-      }
+    ready: function ready() {
+      // chart.id is just a getter for `${this.type}:${this.label}`
+      alert(chart.id + " is ready!");
     }
   }
 }); // Or attached after the fact
 
-chart.on("ready", function () {
-  // chart.id is just a getter for `${this.type}:${this.label}`
-  alert(chart.id + " is ready!");
+chart.on("select", function (_ref) {
+  var chart = _ref.chart,
+      data = _ref.data;
+  var selectedItem = chart.getSelection()[0];
+
+  if (selectedItem) {
+    var topping = data.getValue(selectedItem.row, 0);
+    alert("The user selected " + topping);
+  }
 });
 lava.draw();
 

@@ -5,9 +5,8 @@
   <!-- ./examples/partials/head.hbs -->
   
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="/css/site.css" />
-  
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><script type="text/javascript" src="runtime.js"></script><script type="text/javascript" src="common.js"></script><script type="text/javascript" src="dataquery.js"></script></head>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="/site.css" rel="stylesheet"><script type="text/javascript" src="/runtime.js"></script><script type="text/javascript" src="/site.js"></script><script type="text/javascript" src="/dataquery.js"></script></head>
 
 <body>
   <nav class="light-blue lighten-1" role="navigation">
@@ -24,15 +23,17 @@
           <li><a href="https://github.com/lavacharts/lava.js">Github</a></li>
         </ul>
     
-        <ul id="nav-mobile" class="sidenav">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="events.html">Events</a></li>
-          <li><a href="options.html">Options</a></li>
-          <li><a href="dataquery.html">DataQuery</a></li>
-          <li><a href="history.html">Why</a></li>
-          <li><a href="#">API</a></li>
-          <li><a href="https://github.com/lavacharts/lava.js">Github</a></li>
-        </ul>
+        <div id="nav-mobile" class="sidenav">
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="options.html">Options</a></li>
+            <li><a href="dataquery.html">DataQuery</a></li>
+            <li><a href="history.html">Why</a></li>
+            <li><a href="#">API</a></li>
+            <li><a href="https://github.com/lavacharts/lava.js">Github</a></li>
+          </ul>
+        </div>
         <a href="#" data-target="nav-mobile" class="sidenav-trigger">
           <i class="material-icons">menu</i>
         </a>
@@ -61,24 +62,6 @@
             <h5 class="center">have data in sheets?</h5>
             <pre class="language-javascript">
               <code>
-const id &#x3D; &quot;1DwWSti6L3KRyJC0Wi33X3i-6lsZ2iStrhK7sxw7uoek&quot;;
-const base &#x3D; &quot;https://docs.google.com/spreadsheets/d&quot;;
-const query &#x3D; &quot;gviz/tq?range&#x3D;A1:B6&quot;;
-
-const chart &#x3D; lava.chart({
-  label: &quot;Test&quot;,
-  type: &quot;PieChart&quot;,
-  elementId: &quot;chart_div&quot;,
-  datatable: lava.query(&#x60;${base}/${id}/${query}&#x60;),
-  options: {
-    width: 400,
-    height: 240,
-    is3D: true
-  }
-});
-
-lava.store(chart);
-lava.run();
 </code>
             </pre>
           </div>
