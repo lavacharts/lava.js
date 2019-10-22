@@ -27,4 +27,3 @@ lava.draw();
 /***/ })
 
 },[["./examples/js/dataquery.js","runtime"]]]);
-//# sourceMappingURL=dataquery.js.map

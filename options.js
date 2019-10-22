@@ -35,4 +35,3 @@ lava.draw();
 /***/ })
 
 },[["./examples/js/options.js","runtime"]]]);
-//# sourceMappingURL=options.js.map

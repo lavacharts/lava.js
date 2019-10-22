@@ -44,4 +44,3 @@ lava.draw();
 /***/ })
 
 },[["./examples/js/events.js","runtime"]]]);
-//# sourceMappingURL=events.js.map

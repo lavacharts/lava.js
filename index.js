@@ -10664,4 +10664,3 @@ return jQuery;
 /***/ })
 
 },[["./examples/js/index.js","runtime"]]]);
-//# sourceMappingURL=index.js.map

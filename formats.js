@@ -33,4 +33,3 @@ lava.draw();
 /***/ })
 
 },[["./examples/js/formats.js","runtime"]]]);
-//# sourceMappingURL=formats.js.map

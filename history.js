@@ -12,4 +12,3 @@ console.log("%c\n|      __                          __      |\n|     / /   ____ 
 /***/ })
 
 },[["./examples/js/history.js","runtime"]]]);
-//# sourceMappingURL=history.js.map
