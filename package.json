@@ -15,7 +15,7 @@
   },
   "main": "./dist/lava.js",
   "scripts": {
-    "build": "yarn run build:pages",
+    "build": "yarn run clean:pub && yarn run build:pages --devtool \"false\"",
     "build:pages": "yarn run webpack --config ./configs/webpack.dev.js",
     "build:lava": "yarn run webpack --config ./configs/prod/webpack.lava.js",
     "build:lavacharts": "yarn run webpack --config ./configs/prod/webpack.lavacharts.js",
@@ -66,6 +66,7 @@
     "chai-shallow-deep-equal": "^1.4.6",
     "clean-webpack-plugin": "^3.0.0",
     "concurrently": "^5.0.0",
+    "copy-webpack-plugin": "^5.0.4",
     "core-js": "3",
     "css-loader": "^3.2.0",
     "eslint": "^6.5.1",

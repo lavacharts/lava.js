@@ -1,8 +1,9 @@
+const CopyPlugin = require("copy-webpack-plugin");
 const ErrorNotificationPlugin = require("webpack-error-notification");
 const HtmlHarddiskPlugin = require("html-webpack-harddisk-plugin");
 const HtmlInlineSourcePlugin = require("html-webpack-inline-source-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const merge = require("webpack-merge");
 const { DefinePlugin } = require("webpack");
 
@@ -13,6 +14,7 @@ const examplePages = require("./example-pages");
 
 module.exports = merge(require("./webpack.common.js"), {
   mode: "development",
+  // devtool: false,
   entry: {
     site: "./examples/js/site.js",
     ...examplePages
@@ -62,6 +64,7 @@ module.exports = merge(require("./webpack.common.js"), {
   },
   plugins: [
     // new CleanPlugin(),
+    new CopyPlugin([{ from: "./examples/img", to: "img" }]),
     new MiniCssExtractPlugin(),
     new DefinePlugin({
       "process.env": {
