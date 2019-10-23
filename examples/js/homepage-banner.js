@@ -1,5 +1,11 @@
 import jQuery from "jquery";
 
+/**
+ * This parallax effect was found on https://freefrontend.com/css-text-effects/
+ *
+ * @author Robert Borghesi
+ * @link https://codepen.io/dghez/pen/ItxKE/
+ */
 jQuery($ => {
   let mouseX, mouseY;
 
@@ -12,5 +18,6 @@ jQuery($ => {
     traY = (4 * mouseY) / 570 + 50;
     // console.log(traX);
     $(".title").css({ "background-position": traX + "%" + traY + "%" });
+    $(".subtitle").css({ "background-position": traX + "%" + traY + "%" });
   });
 });

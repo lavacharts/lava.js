@@ -1,12 +1,18 @@
+/**
+ * This parallax effect was found on https://freefrontend.com/css-text-effects/
+ *
+ * @author Robert Borghesi
+ * @link https://codepen.io/dghez/pen/ItxKE/
+ */
 @mixin center() {
   -webkit-transform: translate(-50%,-50%);
       -ms-transform: translate(-50%,-50%);
           transform: translate(-50%,-50%);
     left:50%;
-    top:50%;
+    top:220px;
 }
 
-.paralax-container {
+.parallax-container {
   position:absolute;
   height: 300px;
   @include center();
@@ -19,12 +25,12 @@
 .title {
   font-weight: 800;
   color: transparent;
-  font-size:120px;
+  font-size:140px;
   background: url("../../static/lava.jpg") repeat;
   background-position: 10% 50%;
   -webkit-background-clip: text;
   position:relative;
-  text-align:center;
+  text-align: center;
   // line-height:90px;
   letter-spacing: -8px;
 }
@@ -34,8 +40,13 @@
   display: block;
   text-align: center;
   text-transform: uppercase;
-  margin-top:-30px;
+  margin-top: -30px;
+  background: url("../../static/lava.jpg") repeat;
+  background-position: 10% 50%;
+  -webkit-background-clip: text;
 }
+// END PARALLAX
+
 
 
 .page-footer {
