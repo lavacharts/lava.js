@@ -15,20 +15,20 @@
   },
   "main": "./dist/lava.js",
   "scripts": {
-    "build": "yarn run clean:pub && yarn run build:pages --devtool \"false\" && yarn run typedocs",
-    "build:pages": "yarn run webpack --config ./configs/webpack.dev.js",
-    "build:lava": "yarn run webpack --config ./configs/prod/webpack.lava.js",
-    "build:lavacharts": "yarn run webpack --config ./configs/prod/webpack.lavacharts.js",
+    "build": "yarn run clean:pub && yarn run build:site",
+    "build:site": "yarn run concurrently npm:build:site:*",
+    "build:site:pages": "yarn run webpack --config ./configs/dev/webpack.dev.js",
+    "build:site:typedocs": "yarn run typedoc --out ./public/api ./src",
     "clean": "yarn run concurrently npm:clean:*",
     "clean:pub": "yarn run rimraf ./public/*",
     "clean:dist": "yarn run rimraf ./dist/*",
     "deploy": "yarn run build && yarn run gh-pages -d public/",
-    "dev": "yarn run webpack-dev-server --config ./configs/webpack.dev.js",
-    "typedocs": "yarn run typedoc --out ./public/api ./src",
+    "dev": "yarn run webpack-dev-server --config ./configs/dev/webpack.dev.js",
+    "prod": "yarn run concurrently npm:prod:*",
+    "build:prod:lavacharts": "yarn run webpack --config ./configs/prod/webpack.lavacharts.js",
+    "build:prod:lava": "yarn run webpack --config ./configs/prod/webpack.lava.js",
     "lint": "yarn run eslint --ext=.ts src/",
-    "prod": "yarn run concurrently npm:build:lav*",
-    "test": "yarn run karma start --singleRun",
-    "ts-check": "yarn run tsc --noEmit"
+    "test": "yarn run karma start --singleRun"
   },
   "lint-staged": {
     "./src/**/*.ts": [

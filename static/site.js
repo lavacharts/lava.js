@@ -7,11 +7,13 @@ import "prismjs/themes/prism.css";
 import "materialize-css";
 import "materialize-css/dist/css/materialize.css";
 
-import "../css/site.scss";
-import "../../src/lava";
+import "../static/site.scss"
+import "../src/lava";
 /* eslint-enable */
 
 window.lava.options.debug = false;
+
+window.$ = window.jQuery = jQuery;
 
 jQuery(() => {
   M.AutoInit();

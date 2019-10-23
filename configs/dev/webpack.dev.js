@@ -1,59 +1,28 @@
-const path = require("path");
-const fs = require("fs");
-
-const CopyPlugin = require("copy-webpack-plugin");
 const ErrorNotificationPlugin = require("webpack-error-notification");
 const HtmlHarddiskPlugin = require("html-webpack-harddisk-plugin");
-const HtmlPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const merge = require("webpack-merge");
 const { DefinePlugin } = require("webpack");
 
-const PKG = require("../package.json");
+const PATHS = require("../paths");
 
-const PATHS = require("./paths");
-const examplePages = require("./example-pages");
+const { htmlPluginFactory } = require("./htmlPluginFactory");
+const templateEntries = require("./templateEntries");
 
-function htmlPluginFactory(page) {
-  return new HtmlPlugin({
-    inject: "head",
-    title: page === "index" ? "LavaJs" : `LavaJs | ${page}`,
-    meta: {
-      viewport: "width=device-width, initial-scale=1.0"
-    },
-    showErrors: true,
-    templateParameters() {
-      let exampleCode = "";
-
-      try {
-        exampleCode = fs.readFileSync(PATHS.fromRoot(examplePages[page]));
-      } catch (e) {
-        exampleCode = e.toString();
-      }
-
-      return {
-        title: "LavaJs",
-        version: PKG.version,
-        exampleCode
-      };
-    },
-    alwaysWriteToDisk: true, // Option provided by html-webpack-harddisk-plugin
-    // inlineSource: /\.css$/, // Option provided by html-webpack-inline-source-plugin
-    chunks: ["runtime", "site", page],
-    template: PATHS.fromRoot(`examples/${page}.hbs`),
-    filename: PATHS.fromRoot(`public/${page}.html`)
-  });
-}
-
-module.exports = merge(require("./webpack.common.js"), {
+module.exports = merge(require("../webpack.common.js"), {
   mode: "development",
-  // devtool: "inline-source-map",
+  devtool: false,
   entry: {
-    site: "./examples/js/site.js",
-    ...examplePages
+    site: PATHS.join.static("site.js"),
+    ...Object.assign(templateEntries, {
+      index: [
+        PATHS.join.static("parallax-logo.js"),
+        PATHS.join.examples("index.js")
+      ]
+    })
   },
   output: {
-    publicPath: "/",
+    publicPath: "",
     path: PATHS.public,
     filename: "[name].js"
   },
@@ -120,13 +89,6 @@ module.exports = merge(require("./webpack.common.js"), {
     ]
   },
   plugins: [
-    // new CleanPlugin(),
-    // new CopyPlugin([
-    //   {
-    //     from: "./examples/img",
-    //     to: "img"
-    //   }
-    // ]),
     new DefinePlugin({
       "process.env": {
         NODE_ENV: JSON.stringify("development"),
@@ -135,12 +97,18 @@ module.exports = merge(require("./webpack.common.js"), {
     }),
     new MiniCssExtractPlugin(),
     new ErrorNotificationPlugin(),
-    ...Object.keys(examplePages).map(htmlPluginFactory),
+    ...Object.keys(templateEntries).map(htmlPluginFactory),
     new HtmlHarddiskPlugin()
   ],
   optimization: {
     splitChunks: {
       cacheGroups: {
+        // vendor: {
+        //   test: /node_modules/,
+        //   chunks: "initial",
+        //   name: "vendor",
+        //   enforce: true
+        // },
         chunks: "all"
       }
     },

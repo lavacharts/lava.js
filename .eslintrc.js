@@ -73,9 +73,9 @@ module.exports = {
     },
     {
       files: [
-        "test/*.js",
-        // "public/*.js",
-        "examples/js/**/*.js"
+        "test/**/*.js",
+        "static/**/*.js",
+        "examples/*.js"
       ],
       globals: {
         M: true,
