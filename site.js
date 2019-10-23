@@ -7,7 +7,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var content = __webpack_require__(/*! !../../node_modules/css-loader/dist/cjs.js!../../node_modules/sass-loader/dist/cjs.js!./site.scss */ "./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./examples/css/site.scss");
+var content = __webpack_require__(/*! !../../node_modules/css-loader/dist/cjs.js!../../node_modules/resolve-url-loader??ref--9-2!../../node_modules/sass-loader/dist/cjs.js??ref--9-3!./site.scss */ "./node_modules/css-loader/dist/cjs.js!./node_modules/resolve-url-loader/index.js?!./node_modules/sass-loader/dist/cjs.js?!./examples/css/site.scss");
 
 if (typeof content === 'string') {
   content = [[module.i, content, '']];
@@ -496,16 +496,19 @@ module.exports = __webpack_require__(/*! regenerator-runtime */ "./node_modules/
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./examples/css/site.scss":
-/*!*************************************************************************************************************!*\
-  !*** ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./examples/css/site.scss ***!
-  \*************************************************************************************************************/
+/***/ "./node_modules/css-loader/dist/cjs.js!./node_modules/resolve-url-loader/index.js?!./node_modules/sass-loader/dist/cjs.js?!./examples/css/site.scss":
+/*!*******************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js!./node_modules/resolve-url-loader??ref--9-2!./node_modules/sass-loader/dist/cjs.js??ref--9-3!./examples/css/site.scss ***!
+  \*******************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js")(false);
+// Imports
+var getUrl = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/getUrl.js */ "./node_modules/css-loader/dist/runtime/getUrl.js");
+var ___CSS_LOADER_URL___0___ = getUrl(__webpack_require__(/*! ../../static/lava.jpg */ "./static/lava.jpg"));
 // Module
-exports.push([module.i, "#nav-mobile > div {\n  /* background: url(\"/img/lava.jpg\"); */\n  /* height: 150px; */ }\n\n#nav-mobile > div a {\n  font-size: 5em; }\n\n.nav-drawer-container {\n  position: absolute;\n  -webkit-transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%);\n  left: 50%;\n  top: 50%; }\n\n.paralax-container {\n  position: absolute;\n  height: 300px;\n  -webkit-transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%);\n  left: 50%;\n  top: 50%; }\n\n#install-blocks {\n  margin-top: 240px; }\n\n.title {\n  font-weight: 800;\n  color: transparent;\n  font-size: 120px;\n  background: url(\"/img/lava.jpg\") repeat;\n  background-position: 10% 50%;\n  -webkit-background-clip: text;\n  position: relative;\n  text-align: center;\n  letter-spacing: -8px; }\n\n.subtitle {\n  font-weight: 800;\n  display: block;\n  text-align: center;\n  text-transform: uppercase;\n  margin-top: -30px; }\n\n.page-footer {\n  background-color: #654321 !important; }\n\n.page-footer .footer-copyright {\n  background-color: rgba(51, 51, 51, 0.2) !important; }\n", ""]);
+exports.push([module.i, ".paralax-container {\n  position: absolute;\n  height: 300px;\n  -webkit-transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%);\n  left: 50%;\n  top: 50%; }\n\n#install-blocks {\n  margin-top: 275px; }\n\n.title {\n  font-weight: 800;\n  color: transparent;\n  font-size: 120px;\n  background: url(" + ___CSS_LOADER_URL___0___ + ") repeat;\n  background-position: 10% 50%;\n  -webkit-background-clip: text;\n  position: relative;\n  text-align: center;\n  letter-spacing: -8px; }\n\n.subtitle {\n  font-weight: 800;\n  display: block;\n  text-align: center;\n  text-transform: uppercase;\n  margin-top: -30px; }\n\n.page-footer {\n  background-color: #654321 !important; }\n\n.page-footer .footer-copyright {\n  background-color: rgba(51, 51, 51, 0.2) !important; }\n", ""]);
 
 
 /***/ }),
@@ -608,6 +611,41 @@ function toComment(sourceMap) {
   var data = "sourceMappingURL=data:application/json;charset=utf-8;base64,".concat(base64);
   return "/*# ".concat(data, " */");
 }
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/runtime/getUrl.js":
+/*!********************************************************!*\
+  !*** ./node_modules/css-loader/dist/runtime/getUrl.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function (url, needQuotes) {
+  // eslint-disable-next-line no-underscore-dangle, no-param-reassign
+  url = url.__esModule ? url.default : url;
+
+  if (typeof url !== 'string') {
+    return url;
+  } // If url is already wrapped in quotes, remove them
+
+
+  if (/^['"].*['"]$/.test(url)) {
+    // eslint-disable-next-line no-param-reassign
+    url = url.slice(1, -1);
+  } // Should url be wrapped?
+  // See https://drafts.csswg.org/css-values-3/#urls
+
+
+  if (/["'() \t\n]/.test(url) || needQuotes) {
+    return "\"".concat(url.replace(/"/g, '\\"').replace(/\n/g, '\\n'), "\"");
+  }
+
+  return url;
+};
 
 /***/ }),
 
@@ -28279,16 +28317,33 @@ function (_Eventful) {
       this.emitEvent(_Eventful__WEBPACK_IMPORTED_MODULE_14__["EVENTS"].DRAW);
     }
     /**
-     * Create a new {@link DataQuery} for a {@link Drawable}
+     * Compose a URL to a Google Sheet
      *
-     * If a String is passed, then a new {@link DataQuery} is created with no options.
-     * If an Object is passed, then the query must be defined by the object.
+     * Pass an ID and range in A1 notation to create an URL
+     * to use with a {@link DataQuery}.
+     *
+     * @param id string
+     * @param range string
      */
 
   }, {
-    key: "query",
-    value: function query(_query) {
-      return _DataQuery__WEBPACK_IMPORTED_MODULE_11__["default"].create(_query);
+    key: "rangeQuery",
+    value: function rangeQuery(id, range) {
+      var base = "https://docs.google.com/spreadsheets/d";
+      return "".concat(base, "/").concat(id, "/gviz/tq?range=").concat(range);
+    }
+    /**
+     * Get an instance of a DataQueryFactory
+     *
+     * This can be used to create custom {@link DataQuery}s
+     */
+
+  }, {
+    key: "queryFactory",
+    value: function queryFactory() {
+      return function (payload) {
+        return _DataQuery__WEBPACK_IMPORTED_MODULE_11__["default"].create(payload);
+      };
     }
     /**
      * Create a new {@link Chart} from an Object
@@ -28764,6 +28819,17 @@ var ConsoleLogger = {
     debug.enabled = false;
   }
 };
+
+/***/ }),
+
+/***/ "./static/lava.jpg":
+/*!*************************!*\
+  !*** ./static/lava.jpg ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "lava-459ad98bef2068bb46f8fbf4b121d459.jpg";
 
 /***/ })
 

@@ -1,8 +1,6 @@
 <!doctype html>
 <html>
-
 <head>
-  <title>LavaJs | Events</title>
   <!-- ./examples/partials/head.hbs -->
   
   <meta charset="UTF-8">
@@ -20,7 +18,7 @@
           <li><a href="options.html">Options</a></li>
           <li><a href="dataquery.html">DataQuery</a></li>
           <li><a href="history.html">Why</a></li>
-          <li><a href="#">API</a></li>
+          <li><a href="api/index.html">API</a></li>
           <li><a href="https://github.com/lavacharts/lava.js">Github</a></li>
         </ul>
     
@@ -31,7 +29,7 @@
             <li><a href="options.html">Options</a></li>
             <li><a href="dataquery.html">DataQuery</a></li>
             <li><a href="history.html">Why</a></li>
-            <li><a href="#">API</a></li>
+            <li><a href="api/index.html">API</a></li>
             <li><a href="https://github.com/lavacharts/lava.js">Github</a></li>
           </ul>
         </div>
@@ -63,6 +61,38 @@
             <h5 class="center">for events</h5>
             <pre class="language-javascript">
               <code>
+const chart &#x3D; lava.chart({
+  label: &quot;Test&quot;,
+  type: &quot;PieChart&quot;,
+  elementId: &quot;chart_div&quot;,
+  data: data &#x3D;&gt; {
+    data.addColumn(&quot;string&quot;, &quot;Topping&quot;);
+    data.addColumn(&quot;number&quot;, &quot;Pizzas&quot;);
+    data.addRows([[&quot;Mushroom &amp; Olive&quot;, 2], [&quot;Pepperoni&quot;, 5]]);
+
+    return data;
+  },
+  events: {
+    // Events can be defined upon creation
+    ready() {
+      // chart.id is just a getter for &#x60;${this.type}:${this.label}&#x60;
+      alert(chart.id + &quot; is ready!&quot;);
+    }
+  }
+});
+
+// Or attached after the fact
+chart.on(&quot;select&quot;, ({ chart, data }) &#x3D;&gt; {
+  const selectedItem &#x3D; chart.getSelection()[0];
+
+  if (selectedItem) {
+    const topping &#x3D; data.getValue(selectedItem.row, 0);
+
+    alert(&quot;The user selected &quot; + topping);
+  }
+});
+  
+lava.draw();
 </code>
             </pre>
           </div>
@@ -110,7 +140,7 @@
             <li><a href="options.html">Options</a></li>
             <li><a href="dataquery.html">DataQuery</a></li>
             <li><a href="history.html">Why</a></li>
-            <li><a href="#">API</a></li>
+            <li><a href="api/index.html">API</a></li>
             <li><a href="https://github.com/lavacharts/lava.js">Github</a></li>
           </ul>
         </div>

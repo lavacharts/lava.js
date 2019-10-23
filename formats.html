@@ -1,7 +1,6 @@
 <!doctype html>
 <html>
 <head>
-  <title>LavaJs | Formats</title>
   <!-- ./examples/partials/head.hbs -->
   
   <meta charset="UTF-8">
@@ -19,7 +18,7 @@
           <li><a href="options.html">Options</a></li>
           <li><a href="dataquery.html">DataQuery</a></li>
           <li><a href="history.html">Why</a></li>
-          <li><a href="#">API</a></li>
+          <li><a href="api/index.html">API</a></li>
           <li><a href="https://github.com/lavacharts/lava.js">Github</a></li>
         </ul>
     
@@ -30,7 +29,7 @@
             <li><a href="options.html">Options</a></li>
             <li><a href="dataquery.html">DataQuery</a></li>
             <li><a href="history.html">Why</a></li>
-            <li><a href="#">API</a></li>
+            <li><a href="api/index.html">API</a></li>
             <li><a href="https://github.com/lavacharts/lava.js">Github</a></li>
           </ul>
         </div>
@@ -62,6 +61,28 @@
             <h5 class="center">interactive charts</h5>
             <pre class="language-javascript">
               <code>
+const chart &#x3D; lava.chart({
+  label: &quot;Test&quot;,
+  type: &quot;ScatterChart&quot;,
+  elementId: &quot;chart_div&quot;,
+  datatable: [[&quot;Age&quot;, &quot;Cash&quot;], [12, 101], [15, 240], [18, 280], [32, 324]],
+  options: {
+    colors: [&quot;green&quot;],
+    chartArea: { width: &quot;50%&quot; }
+  },
+  formats: [
+    {
+      type: &quot;NumberFormat&quot;,
+      index: 1, // DataTable Column
+      options: {
+        prefix: &quot;$&quot;,
+        suffix: &quot; BILLS!&quot;
+      }
+    }
+  ]
+});
+
+lava.draw();
 </code>
             </pre>
           </div>
@@ -109,7 +130,7 @@
               <li><a href="options.html">Options</a></li>
               <li><a href="dataquery.html">DataQuery</a></li>
               <li><a href="history.html">Why</a></li>
-              <li><a href="#">API</a></li>
+              <li><a href="api/index.html">API</a></li>
               <li><a href="https://github.com/lavacharts/lava.js">Github</a></li>
             </ul>
           </div>

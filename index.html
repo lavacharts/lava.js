@@ -1,7 +1,6 @@
 <!doctype html>
 <html>
 <head>
-  <title>LavaJs</title>
   <!-- ./examples/partials/head.hbs -->
   
   <meta charset="UTF-8">
@@ -19,7 +18,7 @@
           <li><a href="options.html">Options</a></li>
           <li><a href="dataquery.html">DataQuery</a></li>
           <li><a href="history.html">Why</a></li>
-          <li><a href="#">API</a></li>
+          <li><a href="api/index.html">API</a></li>
           <li><a href="https://github.com/lavacharts/lava.js">Github</a></li>
         </ul>
     
@@ -30,7 +29,7 @@
             <li><a href="options.html">Options</a></li>
             <li><a href="dataquery.html">DataQuery</a></li>
             <li><a href="history.html">Why</a></li>
-            <li><a href="#">API</a></li>
+            <li><a href="api/index.html">API</a></li>
             <li><a href="https://github.com/lavacharts/lava.js">Github</a></li>
           </ul>
         </div>
@@ -82,6 +81,26 @@
             <h5 class="center">clean & consise</h5>
             <pre class="language-javascript">
               <code>
+import &quot;./homepage-banner&quot;;
+
+lava.chart({
+  label: &quot;Test&quot;,
+  type: &quot;PieChart&quot;,
+  elementId: &quot;chart_div&quot;,
+  data: [
+    [&quot;Task&quot;, &quot;Hours per Day&quot;],
+    [&quot;Work&quot;, 11],
+    [&quot;Eat&quot;, 2],
+    [&quot;Commute&quot;, 2],
+    [&quot;Watch TV&quot;, 2],
+    [&quot;Sleep&quot;, 7]
+  ],
+  options: {
+    title: &quot;My Daily Activities&quot;
+  }
+});
+
+lava.draw();
 </code>
             </pre>
           </div>
@@ -126,7 +145,7 @@
               <li><a href="options.html">Options</a></li>
               <li><a href="dataquery.html">DataQuery</a></li>
               <li><a href="history.html">Why</a></li>
-              <li><a href="#">API</a></li>
+              <li><a href="api/index.html">API</a></li>
               <li><a href="https://github.com/lavacharts/lava.js">Github</a></li>
             </ul>
           </div>
