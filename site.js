@@ -1,71 +1,5 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["site"],{
 
-/***/ "./examples/css/site.scss":
-/*!********************************!*\
-  !*** ./examples/css/site.scss ***!
-  \********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var content = __webpack_require__(/*! !../../node_modules/css-loader/dist/cjs.js!../../node_modules/resolve-url-loader??ref--9-2!../../node_modules/sass-loader/dist/cjs.js??ref--9-3!./site.scss */ "./node_modules/css-loader/dist/cjs.js!./node_modules/resolve-url-loader/index.js?!./node_modules/sass-loader/dist/cjs.js?!./examples/css/site.scss");
-
-if (typeof content === 'string') {
-  content = [[module.i, content, '']];
-}
-
-var options = {}
-
-options.insert = "head";
-options.singleton = false;
-
-var update = __webpack_require__(/*! ../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js")(content, options);
-
-if (content.locals) {
-  module.exports = content.locals;
-}
-
-
-/***/ }),
-
-/***/ "./examples/js/site.js":
-/*!*****************************!*\
-  !*** ./examples/js/site.js ***!
-  \*****************************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var prismjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prismjs */ "./node_modules/prismjs/prism.js");
-/* harmony import */ var prismjs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prismjs__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var prismjs_themes_prism_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! prismjs/themes/prism.css */ "./node_modules/prismjs/themes/prism.css");
-/* harmony import */ var prismjs_themes_prism_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(prismjs_themes_prism_css__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var materialize_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! materialize-css */ "./node_modules/materialize-css/dist/js/materialize.js");
-/* harmony import */ var materialize_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(materialize_css__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var materialize_css_dist_css_materialize_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! materialize-css/dist/css/materialize.css */ "./node_modules/materialize-css/dist/css/materialize.css");
-/* harmony import */ var materialize_css_dist_css_materialize_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(materialize_css_dist_css_materialize_css__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _css_site_scss__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../css/site.scss */ "./examples/css/site.scss");
-/* harmony import */ var _css_site_scss__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_css_site_scss__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _src_lava__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../src/lava */ "./src/lava.ts");
-/* eslint-disable */
-
-
-
-
-
-
-
-/* eslint-enable */
-
-window.lava.options.debug = false;
-jquery__WEBPACK_IMPORTED_MODULE_0___default()(function () {
-  M.AutoInit();
-});
-
-/***/ }),
-
 /***/ "./node_modules/@babel/runtime/helpers/assertThisInitialized.js":
 /*!**********************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/assertThisInitialized.js ***!
@@ -496,19 +430,19 @@ module.exports = __webpack_require__(/*! regenerator-runtime */ "./node_modules/
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/dist/cjs.js!./node_modules/resolve-url-loader/index.js?!./node_modules/sass-loader/dist/cjs.js?!./examples/css/site.scss":
-/*!*******************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader/dist/cjs.js!./node_modules/resolve-url-loader??ref--9-2!./node_modules/sass-loader/dist/cjs.js??ref--9-3!./examples/css/site.scss ***!
-  \*******************************************************************************************************************************************************************/
+/***/ "./node_modules/css-loader/dist/cjs.js!./node_modules/resolve-url-loader/index.js?!./node_modules/sass-loader/dist/cjs.js?!./static/site.scss":
+/*!*************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js!./node_modules/resolve-url-loader??ref--9-2!./node_modules/sass-loader/dist/cjs.js??ref--9-3!./static/site.scss ***!
+  \*************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js")(false);
+exports = module.exports = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js")(false);
 // Imports
-var getUrl = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/getUrl.js */ "./node_modules/css-loader/dist/runtime/getUrl.js");
-var ___CSS_LOADER_URL___0___ = getUrl(__webpack_require__(/*! ../../static/lava.jpg */ "./static/lava.jpg"));
+var getUrl = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/getUrl.js */ "./node_modules/css-loader/dist/runtime/getUrl.js");
+var ___CSS_LOADER_URL___0___ = getUrl(__webpack_require__(/*! ./lava.jpg */ "./static/lava.jpg"));
 // Module
-exports.push([module.i, ".paralax-container {\n  position: absolute;\n  height: 300px;\n  -webkit-transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%);\n  left: 50%;\n  top: 50%; }\n\n#install-blocks {\n  margin-top: 275px; }\n\n.title {\n  font-weight: 800;\n  color: transparent;\n  font-size: 120px;\n  background: url(" + ___CSS_LOADER_URL___0___ + ") repeat;\n  background-position: 10% 50%;\n  -webkit-background-clip: text;\n  position: relative;\n  text-align: center;\n  letter-spacing: -8px; }\n\n.subtitle {\n  font-weight: 800;\n  display: block;\n  text-align: center;\n  text-transform: uppercase;\n  margin-top: -30px; }\n\n.page-footer {\n  background-color: #654321 !important; }\n\n.page-footer .footer-copyright {\n  background-color: rgba(51, 51, 51, 0.2) !important; }\n", ""]);
+exports.push([module.i, "/**\r\n * This parallax effect was found on https://freefrontend.com/css-text-effects/\r\n *\r\n * @author Robert Borghesi\r\n * @link https://codepen.io/dghez/pen/ItxKE/\r\n */\n.parallax-container {\n  position: absolute;\n  height: 300px;\n  -webkit-transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%);\n  left: 50%;\n  top: 220px; }\n\n#install-blocks {\n  margin-top: 275px; }\n\n.title {\n  font-weight: 800;\n  color: transparent;\n  font-size: 140px;\n  background: url(" + ___CSS_LOADER_URL___0___ + ") repeat;\n  background-position: 10% 50%;\n  -webkit-background-clip: text;\n  position: relative;\n  text-align: center;\n  letter-spacing: -8px; }\n\n.subtitle {\n  font-weight: 800;\n  display: block;\n  text-align: center;\n  text-transform: uppercase;\n  margin-top: -30px;\n  background: url(" + ___CSS_LOADER_URL___0___ + ") repeat;\n  background-position: 10% 50%;\n  -webkit-background-clip: text; }\n\n.page-footer {\n  background-color: #654321 !important; }\n\n.page-footer .footer-copyright {\n  background-color: rgba(51, 51, 51, 0.2) !important; }\n", ""]);
 
 
 /***/ }),
@@ -28831,6 +28765,79 @@ var ConsoleLogger = {
 
 module.exports = __webpack_require__.p + "lava-459ad98bef2068bb46f8fbf4b121d459.jpg";
 
+/***/ }),
+
+/***/ "./static/site.js":
+/*!************************!*\
+  !*** ./static/site.js ***!
+  \************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var prismjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prismjs */ "./node_modules/prismjs/prism.js");
+/* harmony import */ var prismjs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prismjs__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var prismjs_themes_prism_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! prismjs/themes/prism.css */ "./node_modules/prismjs/themes/prism.css");
+/* harmony import */ var prismjs_themes_prism_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(prismjs_themes_prism_css__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var materialize_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! materialize-css */ "./node_modules/materialize-css/dist/js/materialize.js");
+/* harmony import */ var materialize_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(materialize_css__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var materialize_css_dist_css_materialize_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! materialize-css/dist/css/materialize.css */ "./node_modules/materialize-css/dist/css/materialize.css");
+/* harmony import */ var materialize_css_dist_css_materialize_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(materialize_css_dist_css_materialize_css__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _static_site_scss__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../static/site.scss */ "./static/site.scss");
+/* harmony import */ var _static_site_scss__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_static_site_scss__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _src_lava__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../src/lava */ "./src/lava.ts");
+/* eslint-disable */
+
+
+
+
+
+
+
+
+
+
+/* eslint-enable */
+
+window.lava.options.debug = false;
+
+window.$ = window.jQuery = jquery__WEBPACK_IMPORTED_MODULE_0___default.a;
+
+jquery__WEBPACK_IMPORTED_MODULE_0___default()(() => {
+  M.AutoInit();
+});
+
+
+/***/ }),
+
+/***/ "./static/site.scss":
+/*!**************************!*\
+  !*** ./static/site.scss ***!
+  \**************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var content = __webpack_require__(/*! !../node_modules/css-loader/dist/cjs.js!../node_modules/resolve-url-loader??ref--9-2!../node_modules/sass-loader/dist/cjs.js??ref--9-3!./site.scss */ "./node_modules/css-loader/dist/cjs.js!./node_modules/resolve-url-loader/index.js?!./node_modules/sass-loader/dist/cjs.js?!./static/site.scss");
+
+if (typeof content === 'string') {
+  content = [[module.i, content, '']];
+}
+
+var options = {}
+
+options.insert = "head";
+options.singleton = false;
+
+var update = __webpack_require__(/*! ../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js")(content, options);
+
+if (content.locals) {
+  module.exports = content.locals;
+}
+
+
 /***/ })
 
-},[["./examples/js/site.js","runtime"]]]);
+},[["./static/site.js","runtime"]]]);

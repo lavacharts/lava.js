@@ -1,17 +1,16 @@
 <!doctype html>
 <html>
 <head>
-  <!-- ./examples/partials/head.hbs -->
-  
+  <title>LavaJs | events</title>
   <meta charset="UTF-8">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="/site.css" rel="stylesheet"><script type="text/javascript" src="/runtime.js"></script><script type="text/javascript" src="/site.js"></script><script type="text/javascript" src="/events.js"></script></head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="site.css" rel="stylesheet"><script type="text/javascript" src="runtime.js"></script><script type="text/javascript" src="site.js"></script><script type="text/javascript" src="events.js"></script></head>
 
 <body>
   <nav class="light-blue lighten-1" role="navigation">
     <nav class="light-blue lighten-1" role="navigation">
       <div class="nav-wrapper container">
-        <a id="logo-container" href="#" class="brand-logo">LavaJs</a>
+        <a id="logo-container" href="#" class="brand-logo"></a>
         <ul class="right hide-on-med-and-down">
           <li><a href="index.html">Home</a></li>
           <li><a href="events.html">Events</a></li>
@@ -61,39 +60,7 @@
             <h5 class="center">for events</h5>
             <pre class="language-javascript">
               <code>
-const chart &#x3D; lava.chart({
-  label: &quot;Test&quot;,
-  type: &quot;PieChart&quot;,
-  elementId: &quot;chart_div&quot;,
-  data: data &#x3D;&gt; {
-    data.addColumn(&quot;string&quot;, &quot;Topping&quot;);
-    data.addColumn(&quot;number&quot;, &quot;Pizzas&quot;);
-    data.addRows([[&quot;Mushroom &amp; Olive&quot;, 2], [&quot;Pepperoni&quot;, 5]]);
-
-    return data;
-  },
-  events: {
-    // Events can be defined upon creation
-    ready() {
-      // chart.id is just a getter for &#x60;${this.type}:${this.label}&#x60;
-      alert(chart.id + &quot; is ready!&quot;);
-    }
-  }
-});
-
-// Or attached after the fact
-chart.on(&quot;select&quot;, ({ chart, data }) &#x3D;&gt; {
-  const selectedItem &#x3D; chart.getSelection()[0];
-
-  if (selectedItem) {
-    const topping &#x3D; data.getValue(selectedItem.row, 0);
-
-    alert(&quot;The user selected &quot; + topping);
-  }
-});
-  
-lava.draw();
-</code>
+TypeError: exampleCode.replace is not a function</code>
             </pre>
           </div>
         </div>
@@ -125,7 +92,7 @@ lava.draw();
     <div class="container">
       <div class="row">
         <div class="col l6 s12">
-          <h5 class="orange-text">LavaJs</h5>
+          <h5 class="orange-text"></h5>
           <p class="grey-text text-lighten-4">
             This project was initially part of <a href="https://github.com/kevinkhill/lavacharts">Lavacharts</a>, until the API surface shrank so much and my knowledge of JS grew to include TS, so I rewrote it, for fun &#128540; Check out <a href="https://github.com/lavacharts/lava.js">the source</a> if you want to see!
           </p>

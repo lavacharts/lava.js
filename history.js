@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["history"],{
 
-/***/ "./examples/js/history.js":
-/*!********************************!*\
-  !*** ./examples/js/history.js ***!
-  \********************************/
+/***/ "./examples/history.js":
+/*!*****************************!*\
+  !*** ./examples/history.js ***!
+  \*****************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -11,4 +11,4 @@ console.log("%c\n|      __                          __      |\n|     / /   ____ 
 
 /***/ })
 
-},[["./examples/js/history.js","runtime"]]]);
+},[["./examples/history.js","runtime"]]]);

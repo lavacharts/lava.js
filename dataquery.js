@@ -1,9 +1,9 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["data-query"],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["dataquery"],{
 
-/***/ "./examples/js/data-query.js":
-/*!***********************************!*\
-  !*** ./examples/js/data-query.js ***!
-  \***********************************/
+/***/ "./examples/dataquery.js":
+/*!*******************************!*\
+  !*** ./examples/dataquery.js ***!
+  \*******************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -23,4 +23,4 @@ lava.draw();
 
 /***/ })
 
-},[["./examples/js/data-query.js","runtime"]]]);
+},[["./examples/dataquery.js","runtime"]]]);

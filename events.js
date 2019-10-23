@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["events"],{
 
-/***/ "./examples/js/events.js":
-/*!*******************************!*\
-  !*** ./examples/js/events.js ***!
-  \*******************************/
+/***/ "./examples/events.js":
+/*!****************************!*\
+  !*** ./examples/events.js ***!
+  \****************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -43,4 +43,4 @@ lava.draw();
 
 /***/ })
 
-},[["./examples/js/events.js","runtime"]]]);
+},[["./examples/events.js","runtime"]]]);

@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["options"],{
 
-/***/ "./examples/js/options.js":
-/*!********************************!*\
-  !*** ./examples/js/options.js ***!
-  \********************************/
+/***/ "./examples/options.js":
+/*!*****************************!*\
+  !*** ./examples/options.js ***!
+  \*****************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -34,4 +34,4 @@ lava.draw();
 
 /***/ })
 
-},[["./examples/js/options.js","runtime"]]]);
+},[["./examples/options.js","runtime"]]]);

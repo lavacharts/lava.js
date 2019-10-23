@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["formats"],{
 
-/***/ "./examples/js/formats.js":
-/*!********************************!*\
-  !*** ./examples/js/formats.js ***!
-  \********************************/
+/***/ "./examples/formats.js":
+/*!*****************************!*\
+  !*** ./examples/formats.js ***!
+  \*****************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -32,4 +32,4 @@ lava.draw();
 
 /***/ })
 
-},[["./examples/js/formats.js","runtime"]]]);
+},[["./examples/formats.js","runtime"]]]);
