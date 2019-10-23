@@ -65,8 +65,9 @@ module.exports = {
         node: true
       },
       rules: {
-        "@typescript-eslint/no-var-requires": "off",
         "simple-import-sort/sort": "off",
+        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
         "import/order": ["error", { "newlines-between": "always" }]
       }
     },

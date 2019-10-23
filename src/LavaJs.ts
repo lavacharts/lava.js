@@ -10,6 +10,7 @@ import { addEvent } from "./lib";
 import { ConsoleLogger, getLogger } from "./lib/logger";
 import {
   ChartUpdateReturn,
+  DataQueryFactory,
   DataQueryInterface,
   Google,
   LavaJsOptions,
@@ -158,13 +159,28 @@ export default class LavaJs extends Eventful {
   }
 
   /**
-   * Create a new {@link DataQuery} for a {@link Drawable}
+   * Compose a URL to a Google Sheet
    *
-   * If a String is passed, then a new {@link DataQuery} is created with no options.
-   * If an Object is passed, then the query must be defined by the object.
+   * Pass an ID and range in A1 notation to create an URL
+   * to use with a {@link DataQuery}.
+   *
+   * @param id string
+   * @param range string
    */
-  public query(query: DataQueryInterface): DataQuery {
-    return DataQuery.create(query);
+  public rangeQuery(id: string, range: string): string {
+    const base = "https://docs.google.com/spreadsheets/d";
+
+    return `${base}/${id}/gviz/tq?range=${range}`;
+  }
+
+  /**
+   * Get an instance of a DataQueryFactory
+   *
+   * This can be used to create custom {@link DataQuery}s
+   */
+  public queryFactory(): DataQueryFactory {
+    return (payload: DataQueryInterface): DataQuery =>
+      DataQuery.create(payload);
   }
 
   /**

@@ -79,7 +79,7 @@ export default class DataQuery {
     return new Promise((resolve, reject) => {
       this.debug(`Requesting ${this.url}`);
 
-      query.send(response => {
+      query.send((response: GoogleQueryResponse) => {
         if (response.isError()) {
           reject(response);
         }

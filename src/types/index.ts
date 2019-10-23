@@ -1,3 +1,4 @@
+import DataQuery from "../DataQuery";
 import { ChartClasses, ChartTypes } from "./chart";
 import { DrawableState } from "./drawable";
 import { SupportedFormatters } from "./formats";
@@ -24,6 +25,8 @@ export type DataQueryInterface = {
   opts?: GoogleQueryOptions;
   transformer?: QueryTransformer;
 };
+
+export type DataQueryFactory = (payload: DataQueryInterface) => DataQuery;
 
 export interface LavaJsOptions {
   autoloadGoogle?: boolean;

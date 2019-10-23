@@ -6,20 +6,6 @@
     top:50%;
 }
 
-#nav-mobile > div {
-  /* background: url("/img/lava.jpg"); */
-  /* height: 150px; */
-}
-
-#nav-mobile > div a {
-  font-size: 5em;
-}
-
-.nav-drawer-container {
-  position:absolute;
-  @include center();
-}
-
 .paralax-container {
   position:absolute;
   height: 300px;
@@ -27,14 +13,14 @@
 }
 
 #install-blocks {
-  margin-top: 240px;
+  margin-top: 275px;
 }
 
 .title {
   font-weight: 800;
   color: transparent;
   font-size:120px;
-  background: url("/img/lava.jpg") repeat;
+  background: url("../../static/lava.jpg") repeat;
   background-position: 10% 50%;
   -webkit-background-clip: text;
   position:relative;

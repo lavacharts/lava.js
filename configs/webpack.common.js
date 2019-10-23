@@ -4,6 +4,7 @@ const HardSourcePlugin = require("hard-source-webpack-plugin");
 const { ProgressPlugin } = require("webpack");
 
 const PKG = require("../package.json");
+
 const PATHS = require("./paths");
 
 module.exports = {
