@@ -12,21 +12,20 @@ function htmlPluginFactory(page) {
     meta: {
       viewport: "width=device-width, initial-scale=1.0"
     },
-    // publicPath: "./",
     showErrors: true,
     templateParameters() {
       let exampleCode = "";
+
       try {
         exampleCode = fs.readFileSync(PATHS.join.examples(`${page}.js`));
-        exampleCode = exampleCode.replace(/^(import.)$/, "");
       } catch (e) {
         exampleCode = e.toString();
       }
+
       return {
         page,
         version,
-        exampleCode,
-        headerTitle: page === "index" ? "LavaJs" : `LavaJs | ${page}`
+        exampleCode
       };
     },
     alwaysWriteToDisk: true,
