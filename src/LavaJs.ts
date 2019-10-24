@@ -45,9 +45,9 @@ export default class LavaJs extends Eventful {
    *
    * When creating an instance of LavaJs, the default behavior is
    * to check if `window.google !== undefined` and if so, then we
-   * start the {@link GoogleLoader}.
+   * start the [[GoogleLoader]].
    *
-   * The {@link GoogleLoader} will check the <head> for the
+   * The [[GoogleLoader]] will check the <head> for the
    * gstatic loader and if not found, inject it into the <head>.
    */
   constructor(options?: LavaJsOptions) {
@@ -67,10 +67,6 @@ export default class LavaJs extends Eventful {
 
     this.loader = new GoogleLoader(this.options);
 
-    /**
-     * Capture [[EVENTS.GOOGLE_READY]] and use it to signal a draw if
-     * the autodraw option is set.
-     */
     this.loader.on(EVENTS.GOOGLE_READY, (google: Google) => {
       this.emitEvent(EVENTS.GOOGLE_READY, google);
 
@@ -91,14 +87,7 @@ export default class LavaJs extends Eventful {
   }
 
   /**
-   * Get a reference to the `window.google`
-   */
-  public get google(): Google {
-    return window.google;
-  }
-
-  /**
-   * Configure the LavaJs module.
+   * Override the default options of the module.
    */
   public configure(options: LavaJsOptions): void {
     this.options = Object.assign(this.options, options);
@@ -107,7 +96,7 @@ export default class LavaJs extends Eventful {
   /**
    * Wait for the DOM to be ready then single all charts to draw.
    *
-   * @emits {@link EVENTS.DRAW}
+   * @emits [[EVENTS.DRAW]]
    */
   public async draw(): Promise<any> {
     await this.waitForDom();
@@ -119,7 +108,7 @@ export default class LavaJs extends Eventful {
    * Compose a URL to a Google Sheet
    *
    * Pass an ID and range in A1 notation to create an URL
-   * to use with a {@link DataQuery}.
+   * to use with a [[DataQuery]].
    *
    * @param id string
    * @param range string
@@ -133,7 +122,7 @@ export default class LavaJs extends Eventful {
   /**
    * Get an instance of a DataQueryFactory
    *
-   * This can be used to create custom {@link DataQuery}s
+   * This can be used to create custom [[DataQuery]]s
    */
   public queryFactory(): DataQueryFactory {
     return (payload: DataQueryInterface): DataQuery =>
@@ -141,7 +130,7 @@ export default class LavaJs extends Eventful {
   }
 
   /**
-   * Create a new {@link Chart} from an Object
+   * Create a new [[Chart]] from an Object
    */
   public chart(payload: ChartInterface): Chart {
     const chart = new Chart(payload);
@@ -150,7 +139,7 @@ export default class LavaJs extends Eventful {
   }
 
   /**
-   * Create a new {@link Dashboard} from an Object
+   * Create a new [[Dashboard]] from an Object
    */
   public dashboard(payload: DrawableInterface): Dashboard {
     return new Dashboard(payload);
@@ -164,7 +153,7 @@ export default class LavaJs extends Eventful {
   }
 
   /**
-   * Register a {@link Drawable} with the module.
+   * Register a [[Drawable]] with the module.
    *
    * The registry keeps a record of all created charts, which enables
    * the event firing through the common interface of `window.lava`
@@ -187,7 +176,7 @@ export default class LavaJs extends Eventful {
   /**
    * Promise for the DOM to be ready.
    *
-   * @emits {@link EVENTS.DOM_READY}
+   * @emits [[EVENTS.DOM_READY]]
    */
   private async waitForDom(): Promise<void> {
     this.debug("Waiting for the DOM to become ready");
