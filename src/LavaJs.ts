@@ -2,14 +2,11 @@ import Chart from "./Chart";
 import Dashboard from "./Dashboard";
 import DataQuery from "./DataQuery";
 import DefaultOptions from "./DefaultOptions";
-import Drawable from "./Drawable";
-import { DrawableNotFound, InvalidCallback } from "./Errors";
 import Eventful, { EVENTS } from "./Eventful";
 import GoogleLoader from "./GoogleLoader";
 import { addEvent } from "./lib";
 import { ConsoleLogger, getLogger } from "./lib/logger";
 import {
-  ChartUpdateReturn,
   DataQueryFactory,
   DataQueryInterface,
   Google,
@@ -31,22 +28,12 @@ export default class LavaJs extends Eventful {
   /**
    * Configurable options for the library
    */
-  private options: LavaJsOptions = DefaultOptions;
+  public options: LavaJsOptions = DefaultOptions;
 
   /**
    * Drawables registy
    */
-  private registry: LavaState = {};
-
-  /**
-   * Chart storage
-   */
-  private readonly volcano: Map<string, Chart | Dashboard> = new Map();
-
-  /**
-   * Ready Callback
-   */
-  // private readyCallback = (): void => {};
+  private readonly registry: LavaState = {};
 
   /**
    * Loader class for appending the google script and making window.google available
@@ -80,7 +67,10 @@ export default class LavaJs extends Eventful {
 
     this.loader = new GoogleLoader(this.options);
 
-    // Relay the event forward from the loader
+    /**
+     * Capture [[EVENTS.GOOGLE_READY]] and use it to signal a draw if
+     * the autodraw option is set.
+     */
     this.loader.on(EVENTS.GOOGLE_READY, (google: Google) => {
       this.emitEvent(EVENTS.GOOGLE_READY, google);
 
@@ -108,30 +98,6 @@ export default class LavaJs extends Eventful {
   }
 
   /**
-   * Forward the autoloadGoogle option to the main object to check in page.
-   */
-  public get autoloadGoogle(): boolean {
-    return typeof this.options.autoloadGoogle === "boolean"
-      ? this.options.autoloadGoogle
-      : true;
-  }
-
-  /**
-   * Forward the autodraw option to the main object to check in page.
-   */
-  public get autodraw(): boolean {
-    return typeof this.options.autodraw === "boolean"
-      ? this.options.autodraw
-      : true;
-  }
-
-  public getOption(
-    option: keyof LavaJsOptions
-  ): string | number | boolean | string[] | undefined {
-    return this.options[option];
-  }
-
-  /**
    * Configure the LavaJs module.
    */
   public configure(options: LavaJsOptions): void {
@@ -139,22 +105,13 @@ export default class LavaJs extends Eventful {
   }
 
   /**
-   * Runs the LavaJs.js module
+   * Wait for the DOM to be ready then single all charts to draw.
    *
-   * @emits {@link EVENTS.READY}
+   * @emits {@link EVENTS.DRAW}
    */
   public async draw(): Promise<any> {
     await this.waitForDom();
 
-    // this.readyCallback();
-  }
-
-  /**
-   * Alert all charts to redraw.
-   *
-   * @emits {@link EVENTS.DRAW}
-   */
-  public redraw(): void {
     this.emitEvent(EVENTS.DRAW);
   }
 
@@ -200,83 +157,10 @@ export default class LavaJs extends Eventful {
   }
 
   /**
-   * Retrieve a {@link Chart} / {@link Dashboard} from storage.
-   *
-   * The {@link Chart} object has the user defined properties such as data, options, formats, etc.
-   *
-   * The Google Chart object is available as ".googleChart" from the returned LavaChart.
-   * It can be used to access any of the available methods such as
-   * getImageURI() or getChartLayoutInterface().
-   *
-   * See https://google-developers.appspot.com/chart/interactive/docs/gallery/linechart#methods
-   * for some examples relative to LineCharts.
-   *
-   * @throws {DrawableNotFound}
-   */
-  public get(label: string): Drawable | undefined {
-    if (this.volcano.has(label) === false) {
-      throw new DrawableNotFound(label);
-    }
-
-    return this.volcano.get(label);
-  }
-
-  /**
    * Get a list of all the registered charts
    */
   public getRegistry(): LavaState {
     return this.registry;
-  }
-
-  /**
-   * Assigns a callback for when the charts are ready to be interacted with.
-   *
-   * This is used to wrap calls to lava.loadData() or lava.loadOptions()
-   * to protect against accessing charts that aren't loaded yet
-   *
-   * @throws {InvalidCallback}
-   */
-  public ready(callback: Function): void {
-    if (typeof callback !== "function") {
-      throw new InvalidCallback(callback);
-    }
-
-    // this.readyCallback = callback.bind(this);
-  }
-
-  /**
-   * Loads new data into the chart and redraws.
-   *
-   *
-   * Used with an AJAX call to a PHP method returning DataTable->toPayload(),
-   * a chart can be dynamically update in page, without reloads.
-   */
-  public async loadData(
-    label: string,
-    payload: object
-  ): Promise<ChartUpdateReturn | void> {
-    const chart = this.get(label);
-
-    if (chart) {
-      return chart.update({ data: payload });
-    }
-  }
-
-  /**
-   * Loads new options into a chart and redraws.
-   *
-   * Used with an AJAX call, or javascript events, to load a new array of options into a chart.
-   * This can be used to update a chart dynamically, without reloads.
-   */
-  public async loadOptions(
-    label: string,
-    payload: object
-  ): Promise<ChartUpdateReturn | void> {
-    const chart = this.get(label);
-
-    if (chart) {
-      return chart.update({ options: payload });
-    }
   }
 
   /**
@@ -288,16 +172,14 @@ export default class LavaJs extends Eventful {
   private register<T extends Chart | Dashboard>(drawable: T): T {
     this.debug(`Registering ${drawable.id}`);
 
-    if (drawable instanceof Chart) {
-      this.loader.addPackage(drawable.package);
+    if (drawable.type !== "Dashboard") {
+      this.loader.register(drawable as Chart);
     }
 
     this.registry[drawable.id] = {
       drawn: false,
       needsRedraw: false
     };
-
-    this.volcano.set(drawable.type, drawable);
 
     return drawable;
   }
@@ -311,13 +193,10 @@ export default class LavaJs extends Eventful {
     this.debug("Waiting for the DOM to become ready");
 
     return new Promise(resolve => {
-      if (
-        document.readyState === "interactive" ||
-        document.readyState === "complete"
-      ) {
+      if (["interactive", "complete"].includes(document.readyState)) {
         resolve();
-        this.emit(EVENTS.DOM_READY);
         this.debug("DOM ready");
+        this.emit(EVENTS.DOM_READY);
       } else {
         document.addEventListener("DOMContentLoaded", () => resolve());
       }

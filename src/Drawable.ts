@@ -4,59 +4,46 @@ import Eventful, { EVENTS } from "./Eventful";
 import LavaJs from "./LavaJs";
 import { createDataTable, getWindowInstance } from "./lib";
 import { getLogger } from "./lib/logger";
-import { ChartUpdateReturn, LavaJsOptions, SupportedCharts } from "./types";
+import { ChartUpdateReturn, LavaJsOptions } from "./types";
 import { ChartEvents, ChartInterface } from "./types/chart";
 import { DrawableInterface, OptionDataPayload } from "./types/drawable";
 import { Formatter } from "./types/formats";
 
 /**
- * The {@link Drawable} class is the base for {@link Chart}s and {@link Dashboard}s
- * to share common methods between the two types.
+ * The [[Drawable]] class is the base for [[Chart]]s and [[Dashboard]]s
+ * to share common methods between the two types
  */
 export default class Drawable extends Eventful {
+  type: string;
+
   /**
    * Reference to the `window.lava` object
    */
   protected _lava: LavaJs;
 
   /**
-   * PreDraw hook
-   */
-  public preDraw?(): void;
-
-  /**
-   * PostDraw hook
-   */
-  public postDraw?(): void;
-
-  /**
-   * Configurable options.
+   * Configurable options
    */
   public options: LavaJsOptions;
 
   /**
-   * DataTable for the {@link Chart} / {@link Dashboard}.
+   * DataTable for the [[Chart]] / [[Dashboard]]
    */
   public data!: google.visualization.DataTable;
 
   /**
-   * Google chart object created once the {@link Chart} / {@link Dashboard}
-   * has been rendered.
+   * Google chart object created once the [[Chart]] / [[Dashboard]]
+   * has been rendered
    */
   public googleChart!: any;
 
   /**
-   * Element ID of the DOM node for the container.
+   * Element ID of the DOM node for the container
    */
   public readonly elementId: string;
 
   /**
-   * Type of {@link Drawable}.
-   */
-  public readonly type: SupportedCharts | "Dashboard";
-
-  /**
-   * Unique label for the {@link Chart} / {@link Dashboard}.
+   * Unique label for the [[Chart]] / [[Dashboard]].
    */
   public readonly label: string;
 
@@ -66,14 +53,14 @@ export default class Drawable extends Eventful {
   protected formats: Formatter[];
 
   /**
-   * Event listeners for the Drawable.
+   * Event listeners for the Drawable
    */
   protected events: Record<ChartEvents, CallableFunction>;
 
   /**
-   * The source of the DataTable, to be used in setData().
+   * The initial source of data for the DataTable
    */
-  private dataSrc: any;
+  private readonly initialData: any;
 
   /**
    * Create a new Drawable
@@ -85,7 +72,7 @@ export default class Drawable extends Eventful {
 
     this.type = drawable.type;
     this.label = drawable.label;
-    this.dataSrc = drawable.data;
+    this.initialData = drawable.data;
     this.elementId = drawable.elementId;
 
     this.options = drawable.options || {};
@@ -97,12 +84,12 @@ export default class Drawable extends Eventful {
     this._lava = getWindowInstance();
     this._lava.on(EVENTS.DRAW, () => this.draw());
 
-    this.debug("Created!");
+    this.debug(`${this.id} has be registered`);
     this.debug(drawable);
   }
 
   /**
-   * Unique identifier for the {@link Chart} / {@link Dashboard}.
+   * Unique identifier for the [[Chart]] / [[Dashboard]].
    */
   public get id(): string {
     return this.type + ":" + this.label;
@@ -116,23 +103,41 @@ export default class Drawable extends Eventful {
   }
 
   /**
-   * Draws the {@link Chart} / {@link Dashboard} with the predefined data and options.
+   * Apply the formats to the DataTable
+   */
+  public applyFormats(formats?: Formatter[]): void {
+    if (formats) {
+      this.formats = formats;
+    }
+
+    for (const format of this.formats) {
+      const formatter = new window.google.visualization[format.type](
+        format.options
+      );
+
+      this.debug(`Formatting column [${format.index}] with:`);
+      this.debug(format);
+
+      formatter.format(this.data, format.index);
+    }
+  }
+
+  /**
+   * Draws the [[Chart]] / [[Dashboard]] with the predefined data and options.
    *
    * @public
    */
   public async draw(): Promise<void> {
-    this.debug("Drawing");
+    this.debug("Drawing...");
 
     if (!this.container) {
       throw new ElementIdNotFound(this.elementId);
     }
 
-    this.debug("Setting data");
-
     const payload =
-      typeof this.dataSrc === "string"
-        ? new DataQuery(this.dataSrc)
-        : this.dataSrc;
+      typeof this.initialData === "string"
+        ? new DataQuery(this.initialData)
+        : this.initialData;
 
     await this.setData(payload);
 
@@ -146,20 +151,42 @@ export default class Drawable extends Eventful {
   }
 
   /**
-   * Overidding the `on()` method from the {@link TinyEmitter} to register the
-   * handlers to our own map.
+   * Overidding the `on()` method from the [[TinyEmitter]] to
+   * register the handlers to our own map.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public on(event: ChartEvents, handler: Function, ctx?: any): this {
-    this.events[event] = handler;
+    if (ctx) {
+      this.events[event] = handler.bind(ctx);
+    } else {
+      this.events[event] = handler;
+    }
 
     return this;
   }
 
   /**
-   * Sets the {@link DataTable} for the {@link Drawable}.
-   *
-   * @param {Object|Function|Array|DataQuery|DataTable} payload Source of data
+   * Convenience method for setting options dynamicly
+   */
+  public async set(optionRef: string, value: any): Promise<ChartUpdateReturn> {
+    // if (optionRef.includes(".")) {
+    //   const options = optionRef.split(".");
+    // }
+
+    const payload = {
+      [optionRef]: value
+    };
+
+    this.updateOptions(payload);
+
+    return {
+      data: this.data,
+      chart: this.googleChart,
+      options: this.options
+    };
+  }
+
+  /**
+   * Sets the [[DataTable]] for the [[Drawable]].
    */
   public async setData(payload: any): Promise<void> {
     if (payload instanceof DataQuery) {
@@ -188,27 +215,6 @@ export default class Drawable extends Eventful {
   }
 
   /**
-   * Convenience method for setting options dynamicly
-   */
-  public async set(optionRef: string, value: any): Promise<ChartUpdateReturn> {
-    // if (optionRef.includes(".")) {
-    //   const options = optionRef.split(".");
-    // }
-
-    const payload = {
-      [optionRef]: value
-    };
-
-    this.updateOptions(payload);
-
-    return {
-      data: this.data,
-      chart: this.googleChart,
-      options: this.options
-    };
-  }
-
-  /**
    * Update a chart's options and/or data
    *
    * The chart will redraw.
@@ -234,26 +240,6 @@ export default class Drawable extends Eventful {
       chart: this.googleChart,
       options: this.options
     };
-  }
-
-  /**
-   * Apply the formats to the DataTable
-   */
-  public applyFormats(formats?: Formatter[]): void {
-    if (formats) {
-      this.formats = formats;
-    }
-
-    for (const format of this.formats) {
-      const formatter = new window.google.visualization[format.type](
-        format.options
-      );
-
-      this.debug(`Formatting column [${format.index}] with:`);
-      this.debug(format);
-
-      formatter.format(this.data, format.index);
-    }
   }
 
   /**

@@ -10,28 +10,6 @@ export class LavaJsError extends Error {
 }
 
 /**
- * InvalidCallback Error
- *
- * Thrown when anything but a function is given as a callback.
- */
-export class InvalidCallback extends LavaJsError {
-  constructor(callback: any) {
-    super(`[lava.js] "${typeof callback}" is not a valid callback.`);
-  }
-}
-
-/**
- * InvalidLabel Error
- *
- * Thrown when a {@link Drawable} is not found in the module.
- */
-export class DrawableNotFound extends LavaJsError {
-  constructor(label: string) {
-    super(`[lava.js] A drawable with the label "${label}" was not found.`);
-  }
-}
-
-/**
  * ElementIdNotFound Error
  *
  * Thrown when the given ID for an HTMLElement is not found in the DOM.

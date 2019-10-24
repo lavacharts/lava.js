@@ -7,6 +7,10 @@ export function getLogger(): Debugger {
 }
 
 export const ConsoleLogger = {
+  getInstance(): Debugger {
+    return debug;
+  },
+
   enable(): void {
     debug.enabled = true;
   },

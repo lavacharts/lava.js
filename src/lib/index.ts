@@ -1,4 +1,7 @@
 import LavaJs from "../LavaJs";
+import { ConsoleLogger } from "./logger";
+
+export { ConsoleLogger };
 
 export function getWindowInstance(): LavaJs {
   return window.lava;

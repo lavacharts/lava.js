@@ -1,6 +1,8 @@
+import Chart from "./Chart";
 import Eventful, { EVENTS } from "./Eventful";
 import { getLogger } from "./lib/logger";
 import { Google, GoogleLoaderOptions, LavaJsOptions } from "./types";
+import { getChartPackage } from "./VisualizationProperties";
 
 export enum LOADER_STATES {
   "NULL" = "NULL",
@@ -81,10 +83,10 @@ export default class GoogleLoader extends Eventful {
   }
 
   /**
-   * Add one package to the list that Google needs to load.
+   * Extract and register the package needed to draw the chart.
    */
-  public addPackage(pkgs: string): void {
-    this.packages.add(pkgs);
+  public register(chart: Chart): void {
+    this.addPackage(getChartPackage(chart));
   }
 
   /**
@@ -119,6 +121,13 @@ export default class GoogleLoader extends Eventful {
         resolve(this.google);
       });
     });
+  }
+
+  /**
+   * Add one package to the list that Google needs to load.
+   */
+  private addPackage(pkgs: string): void {
+    this.packages.add(pkgs);
   }
 
   /**

@@ -15,6 +15,6 @@ if (typeof window.lavacharts !== "undefined") {
  * Lavacharts defaults to `autorun: true` so once the DOM is ready,
  * rendering will begin!
  */
-if (window.lava.autodraw) {
+if (window.lava.options.autodraw) {
   window.lava.draw();
 }

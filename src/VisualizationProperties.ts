@@ -1,7 +1,8 @@
-import { ChartTypes } from "./types/chart";
+import Chart from "./Chart";
+import { ChartClasses, ChartTypes } from "./types/chart";
 import {
-  VisualizationProperties,
-  VisualizationPropertyDict
+  VisualizationPropertyEnum,
+  VisualizationPropertyMap
 } from "./types/visualization-properties";
 
 export const CHART_PROPS = {
@@ -27,25 +28,20 @@ export const CHART_PROPS = {
   TimelineChart: ["Timeline", "timeline", 1],
   TreeMapChart: ["TreeMap", "treemap", 1],
   WordTreeChart: ["WordTree", "wordtree", 1]
-} as VisualizationPropertyDict;
+} as VisualizationPropertyMap;
 
-export function isValidChartType(chartType: ChartTypes): boolean {
+export function isSupported(chartType: ChartTypes): boolean {
   return Object.keys(CHART_PROPS).includes(chartType);
 }
 
-export enum VisualizationPropertyEnum {
-  "CLASS",
-  "PACKAGE",
-  "VERSION"
+export function getChartClass(chart: Chart): ChartClasses {
+  return CHART_PROPS[chart.type][VisualizationPropertyEnum.CLASS];
 }
 
-export function getVisualizationProperties(
-  chartType: ChartTypes
-): VisualizationProperties {
-  const props = CHART_PROPS[chartType];
-  return {
-    class: props[VisualizationPropertyEnum.CLASS],
-    package: props[VisualizationPropertyEnum.PACKAGE],
-    version: props[VisualizationPropertyEnum.VERSION]
-  };
+export function getChartPackage(chart: Chart): string {
+  return CHART_PROPS[chart.type][VisualizationPropertyEnum.PACKAGE];
+}
+
+export function getChartVersion(chart: Chart): number {
+  return CHART_PROPS[chart.type][VisualizationPropertyEnum.VERSION];
 }
