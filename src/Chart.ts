@@ -30,9 +30,11 @@ export default class Chart extends Drawable {
   public async draw(): Promise<void> {
     await super.draw();
 
-    const chartClass = window.google.visualization[getChartClass(this)];
+    const chartClass = getChartClass(this);
 
-    this.googleChart = new chartClass(this.container);
+    this.googleChart = new window.google.visualization[chartClass](
+      this.container
+    );
 
     Object.keys(this.events).forEach(event => {
       const e = event as ChartEvents;

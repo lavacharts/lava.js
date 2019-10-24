@@ -4,12 +4,6 @@ import { getLogger } from "./lib/logger";
 import { Google, GoogleLoaderOptions, LavaJsOptions } from "./types";
 import { getChartPackage } from "./VisualizationProperties";
 
-export enum LOADER_STATES {
-  "NULL" = "NULL",
-  "RESOLVING" = "RESOLVING",
-  "RESOLVED" = "RESOLVED"
-}
-
 export default class GoogleLoader extends Eventful {
   /**
    * Version of the Google charts API to load
