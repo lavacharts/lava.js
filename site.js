@@ -26723,8 +26723,8 @@ function (_Drawable) {
                 return _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6___default()(Chart.prototype), "draw", this).call(this);
 
               case 2:
-                chartClass = window.google.visualization[Object(_VisualizationProperties__WEBPACK_IMPORTED_MODULE_11__["getChartClass"])(this)];
-                this.googleChart = new chartClass(this.container);
+                chartClass = Object(_VisualizationProperties__WEBPACK_IMPORTED_MODULE_11__["getChartClass"])(this);
+                this.googleChart = new window.google.visualization[chartClass](this.container);
                 Object.keys(this.events).forEach(function (event) {
                   var e = event;
 
@@ -27729,12 +27729,11 @@ function (_TinyEmitter) {
 /*!*****************************!*\
   !*** ./src/GoogleLoader.ts ***!
   \*****************************/
-/*! exports provided: LOADER_STATES, default */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOADER_STATES", function() { return LOADER_STATES; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return GoogleLoader; });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
@@ -27769,13 +27768,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var LOADER_STATES;
-
-(function (LOADER_STATES) {
-  LOADER_STATES["NULL"] = "NULL";
-  LOADER_STATES["RESOLVING"] = "RESOLVING";
-  LOADER_STATES["RESOLVED"] = "RESOLVED";
-})(LOADER_STATES || (LOADER_STATES = {}));
 
 var GoogleLoader =
 /*#__PURE__*/
