@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+  {{> partials/head }}
+</head>
+
+<body>
+  <nav class="light-blue lighten-1" role="navigation">
+    {{> partials/navbar }}
+  </nav>
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <h1 class="header center orange-text">Dynamic Options</h1>
+      <div class="row center">
+        <h5 class="header col s12 light">make changes, on the fly</h5>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="section">
+      <div class="row">
+        <div class="col s12 m6">
+          <div class="icon-block">
+            <h2 class="center light-blue-text">
+                Update
+            </h2>
+            <h5 class="center">with easy setters</h5>
+            <pre class="language-javascript">
+              <code>
+{{ exampleCode }}</code>
+            </pre>
+          </div>
+        </div>
+        <div class="col s12 m6">
+          <div class="icon-block">
+            <h2 class="center light-blue-text">
+                Redraw
+            </h2>
+            <h5 class="center">with each change</h5>
+            <pre class="language-html">
+              <code>
+&#x3C;div id=&#x22;chart_div1&#x22;&#x3E;&#x3C;/div&#x3E;</code>
+            </pre>
+            <div id="chart_div"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="row">
+        <br />
+      </div>
+    </div>
+  </div>
+  <footer class="page-footer">
+      {{> partials/footer }}
+  </footer>
+</body>
+</html>
