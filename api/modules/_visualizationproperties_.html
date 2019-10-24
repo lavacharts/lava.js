@@ -71,12 +71,6 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Enumerations</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-enum tsd-parent-kind-external-module"><a href="../enums/_visualizationproperties_.visualizationpropertyenum.html" class="tsd-kind-icon">Visualization<wbr>Property<wbr>Enum</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
 							<h3>Variables</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="_visualizationproperties_.html#chart_props" class="tsd-kind-icon">CHART_<wbr>PROPS</a></li>
@@ -85,8 +79,10 @@
 						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_visualizationproperties_.html#getvisualizationproperties" class="tsd-kind-icon">get<wbr>Visualization<wbr>Properties</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_visualizationproperties_.html#isvalidcharttype" class="tsd-kind-icon">is<wbr>Valid<wbr>Chart<wbr>Type</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_visualizationproperties_.html#getchartclass" class="tsd-kind-icon">get<wbr>Chart<wbr>Class</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_visualizationproperties_.html#getchartpackage" class="tsd-kind-icon">get<wbr>Chart<wbr>Package</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_visualizationproperties_.html#getchartversion" class="tsd-kind-icon">get<wbr>Chart<wbr>Version</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_visualizationproperties_.html#issupported" class="tsd-kind-icon">is<wbr>Supported</a></li>
 							</ul>
 						</section>
 					</div>
@@ -97,10 +93,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 					<a name="chart_props" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> CHART_<wbr>PROPS</h3>
-					<div class="tsd-signature tsd-kind-icon">CHART_<wbr>PROPS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> =&nbsp;{AnnotationChart: [&quot;AnnotationChart&quot;, &quot;annotationchart&quot;, 1],AreaChart: [&quot;AreaChart&quot;, &quot;corechart&quot;, 1],BarChart: [&quot;BarChart&quot;, &quot;corechart&quot;, 1],BubbleChart: [&quot;BubbleChart&quot;, &quot;corechart&quot;, 1],CalendarChart: [&quot;Calendar&quot;, &quot;calendar&quot;, 1],CandlestickChart: [&quot;CandlestickChart&quot;, &quot;corechart&quot;, 1],ColumnChart: [&quot;ColumnChart&quot;, &quot;corechart&quot;, 1],ComboChart: [&quot;ComboChart&quot;, &quot;corechart&quot;, 1],DonutChart: [&quot;PieChart&quot;, &quot;corechart&quot;, 1],GanttChart: [&quot;Gantt&quot;, &quot;gantt&quot;, 1],GaugeChart: [&quot;Gauge&quot;, &quot;gauge&quot;, 1],GeoChart: [&quot;GeoChart&quot;, &quot;geochart&quot;, 1],HistogramChart: [&quot;Histogram&quot;, &quot;corechart&quot;, 1],LineChart: [&quot;LineChart&quot;, &quot;corechart&quot;, 1],PieChart: [&quot;PieChart&quot;, &quot;corechart&quot;, 1],SankeyChart: [&quot;Sankey&quot;, &quot;sankey&quot;, 1],ScatterChart: [&quot;ScatterChart&quot;, &quot;corechart&quot;, 1],SteppedAreaChart: [&quot;SteppedAreaChart&quot;, &quot;corechart&quot;, 1],TableChart: [&quot;Table&quot;, &quot;table&quot;, 1],TimelineChart: [&quot;Timeline&quot;, &quot;timeline&quot;, 1],TreeMapChart: [&quot;TreeMap&quot;, &quot;treemap&quot;, 1],WordTreeChart: [&quot;WordTree&quot;, &quot;wordtree&quot;, 1]} as VisualizationPropertyDict</span></div>
+					<div class="tsd-signature tsd-kind-icon">CHART_<wbr>PROPS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> =&nbsp;{AnnotationChart: [&quot;AnnotationChart&quot;, &quot;annotationchart&quot;, 1],AreaChart: [&quot;AreaChart&quot;, &quot;corechart&quot;, 1],BarChart: [&quot;BarChart&quot;, &quot;corechart&quot;, 1],BubbleChart: [&quot;BubbleChart&quot;, &quot;corechart&quot;, 1],CalendarChart: [&quot;Calendar&quot;, &quot;calendar&quot;, 1],CandlestickChart: [&quot;CandlestickChart&quot;, &quot;corechart&quot;, 1],ColumnChart: [&quot;ColumnChart&quot;, &quot;corechart&quot;, 1],ComboChart: [&quot;ComboChart&quot;, &quot;corechart&quot;, 1],DonutChart: [&quot;PieChart&quot;, &quot;corechart&quot;, 1],GanttChart: [&quot;Gantt&quot;, &quot;gantt&quot;, 1],GaugeChart: [&quot;Gauge&quot;, &quot;gauge&quot;, 1],GeoChart: [&quot;GeoChart&quot;, &quot;geochart&quot;, 1],HistogramChart: [&quot;Histogram&quot;, &quot;corechart&quot;, 1],LineChart: [&quot;LineChart&quot;, &quot;corechart&quot;, 1],PieChart: [&quot;PieChart&quot;, &quot;corechart&quot;, 1],SankeyChart: [&quot;Sankey&quot;, &quot;sankey&quot;, 1],ScatterChart: [&quot;ScatterChart&quot;, &quot;corechart&quot;, 1],SteppedAreaChart: [&quot;SteppedAreaChart&quot;, &quot;corechart&quot;, 1],TableChart: [&quot;Table&quot;, &quot;table&quot;, 1],TimelineChart: [&quot;Timeline&quot;, &quot;timeline&quot;, 1],TreeMapChart: [&quot;TreeMap&quot;, &quot;treemap&quot;, 1],WordTreeChart: [&quot;WordTree&quot;, &quot;wordtree&quot;, 1]} as VisualizationPropertyMap</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/bf263b3/src/VisualizationProperties.ts#L7">VisualizationProperties.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/7f34fb1/src/VisualizationProperties.ts#L8">VisualizationProperties.ts:8</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -113,39 +109,85 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
-					<a name="getvisualizationproperties" class="tsd-anchor"></a>
-					<h3>get<wbr>Visualization<wbr>Properties</h3>
+					<a name="getchartclass" class="tsd-anchor"></a>
+					<h3>get<wbr>Chart<wbr>Class</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Visualization<wbr>Properties<span class="tsd-signature-symbol">(</span>chartType<span class="tsd-signature-symbol">: </span><a href="_types_chart_.html#charttypes" class="tsd-signature-type">ChartTypes</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_types_visualization_properties_.visualizationproperties.html" class="tsd-signature-type">VisualizationProperties</a></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Chart<wbr>Class<span class="tsd-signature-symbol">(</span>chart<span class="tsd-signature-symbol">: </span><a href="../classes/_chart_.chart.html" class="tsd-signature-type">Chart</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_types_chart_.html#chartclasses" class="tsd-signature-type">ChartClasses</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/bf263b3/src/VisualizationProperties.ts#L42">VisualizationProperties.ts:42</a></li>
+									<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/7f34fb1/src/VisualizationProperties.ts#L37">VisualizationProperties.ts:37</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>chartType: <a href="_types_chart_.html#charttypes" class="tsd-signature-type">ChartTypes</a></h5>
+									<h5>chart: <a href="../classes/_chart_.chart.html" class="tsd-signature-type">Chart</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_types_visualization_properties_.visualizationproperties.html" class="tsd-signature-type">VisualizationProperties</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="_types_chart_.html#chartclasses" class="tsd-signature-type">ChartClasses</a></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
-					<a name="isvalidcharttype" class="tsd-anchor"></a>
-					<h3>is<wbr>Valid<wbr>Chart<wbr>Type</h3>
+					<a name="getchartpackage" class="tsd-anchor"></a>
+					<h3>get<wbr>Chart<wbr>Package</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">is<wbr>Valid<wbr>Chart<wbr>Type<span class="tsd-signature-symbol">(</span>chartType<span class="tsd-signature-symbol">: </span><a href="_types_chart_.html#charttypes" class="tsd-signature-type">ChartTypes</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Chart<wbr>Package<span class="tsd-signature-symbol">(</span>chart<span class="tsd-signature-symbol">: </span><a href="../classes/_chart_.chart.html" class="tsd-signature-type">Chart</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/bf263b3/src/VisualizationProperties.ts#L32">VisualizationProperties.ts:32</a></li>
+									<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/7f34fb1/src/VisualizationProperties.ts#L41">VisualizationProperties.ts:41</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>chart: <a href="../classes/_chart_.chart.html" class="tsd-signature-type">Chart</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
+					<a name="getchartversion" class="tsd-anchor"></a>
+					<h3>get<wbr>Chart<wbr>Version</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Chart<wbr>Version<span class="tsd-signature-symbol">(</span>chart<span class="tsd-signature-symbol">: </span><a href="../classes/_chart_.chart.html" class="tsd-signature-type">Chart</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/7f34fb1/src/VisualizationProperties.ts#L45">VisualizationProperties.ts:45</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>chart: <a href="../classes/_chart_.chart.html" class="tsd-signature-type">Chart</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
+					<a name="issupported" class="tsd-anchor"></a>
+					<h3>is<wbr>Supported</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Supported<span class="tsd-signature-symbol">(</span>chartType<span class="tsd-signature-symbol">: </span><a href="_types_chart_.html#charttypes" class="tsd-signature-type">ChartTypes</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/7f34fb1/src/VisualizationProperties.ts#L33">VisualizationProperties.ts:33</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -230,17 +272,20 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-enum tsd-parent-kind-external-module">
-						<a href="../enums/_visualizationproperties_.visualizationpropertyenum.html" class="tsd-kind-icon">Visualization<wbr>Property<wbr>Enum</a>
-					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
 						<a href="_visualizationproperties_.html#chart_props" class="tsd-kind-icon">CHART_<wbr>PROPS</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
-						<a href="_visualizationproperties_.html#getvisualizationproperties" class="tsd-kind-icon">get<wbr>Visualization<wbr>Properties</a>
+						<a href="_visualizationproperties_.html#getchartclass" class="tsd-kind-icon">get<wbr>Chart<wbr>Class</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
-						<a href="_visualizationproperties_.html#isvalidcharttype" class="tsd-kind-icon">is<wbr>Valid<wbr>Chart<wbr>Type</a>
+						<a href="_visualizationproperties_.html#getchartpackage" class="tsd-kind-icon">get<wbr>Chart<wbr>Package</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="_visualizationproperties_.html#getchartversion" class="tsd-kind-icon">get<wbr>Chart<wbr>Version</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="_visualizationproperties_.html#issupported" class="tsd-kind-icon">is<wbr>Supported</a>
 					</li>
 				</ul>
 			</nav>

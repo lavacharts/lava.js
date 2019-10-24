@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>LavaJs | options</title>
+  <title></title>
   <meta charset="UTF-8">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="site.css" rel="stylesheet"><script type="text/javascript" src="runtime.js"></script><script type="text/javascript" src="site.js"></script><script type="text/javascript" src="options.js"></script></head>
@@ -57,7 +57,39 @@
             <h5 class="center">with easy setters</h5>
             <pre class="language-javascript">
               <code>
-TypeError: exampleCode.replace is not a function</code>
+const chart &#x3D; lava.chart({
+  label: &quot;MyFancyChart&quot;,
+  type: &quot;ScatterChart&quot;,
+  elementId: &quot;chart_div&quot;,
+  data: [[&quot;Age&quot;, &quot;Cash&quot;], [12, 101], [15, 240], [37, 80], [32, 324]],
+  options: {
+    legend: &quot;none&quot;
+  }
+});
+
+setInterval(() &#x3D;&gt; {
+  chart.set(&quot;colors&quot;, [
+    &#x60;#${Math.random()
+      .toString(16)
+      .substr(-6)}&#x60;
+  ]);
+}, 1000);
+
+// eslint-disable-next-line no-mixed-operators
+// const r &#x3D; (mn, mx) &#x3D;&gt; Math.floor(Math.random() * (mx - mn + 1) + mn);
+
+// setInterval(async () &#x3D;&gt; {
+//   await chart.updateData([
+//     [&quot;Age&quot;, &quot;Cash&quot;],
+//     [r(20, 40), r(100, 400)],
+//     [r(20, 40), r(100, 400)],
+//     [r(20, 40), r(100, 400)],
+//     [r(20, 40), r(100, 400)]
+//   ]);
+// }, 750);
+
+lava.draw();
+</code>
             </pre>
           </div>
         </div>

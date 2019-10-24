@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>LavaJs | dataquery</title>
+  <title></title>
   <meta charset="UTF-8">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="site.css" rel="stylesheet"><script type="text/javascript" src="runtime.js"></script><script type="text/javascript" src="site.js"></script><script type="text/javascript" src="dataquery.js"></script></head>
@@ -60,7 +60,22 @@
             <h5 class="center">have data in sheets?</h5>
             <pre class="language-javascript">
               <code>
-TypeError: exampleCode.replace is not a function</code>
+const id &#x3D; &quot;1DwWSti6L3KRyJC0Wi33X3i-6lsZ2iStrhK7sxw7uoek&quot;;
+
+lava.chart({
+  label: &quot;Test&quot;,
+  type: &quot;PieChart&quot;,
+  elementId: &quot;chart_div&quot;,
+  data: lava.rangeQuery(id, &quot;A1:B6&quot;),
+  options: {
+    width: 400,
+    height: 240,
+    is3D: true
+  }
+});
+
+lava.draw();
+</code>
             </pre>
           </div>
         </div>

@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>LavaJs | events</title>
+  <title></title>
   <meta charset="UTF-8">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="site.css" rel="stylesheet"><script type="text/javascript" src="runtime.js"></script><script type="text/javascript" src="site.js"></script><script type="text/javascript" src="events.js"></script></head>
@@ -60,7 +60,39 @@
             <h5 class="center">for events</h5>
             <pre class="language-javascript">
               <code>
-TypeError: exampleCode.replace is not a function</code>
+const chart &#x3D; lava.chart({
+  label: &quot;Test&quot;,
+  type: &quot;PieChart&quot;,
+  elementId: &quot;chart_div&quot;,
+  data: data &#x3D;&gt; {
+    data.addColumn(&quot;string&quot;, &quot;Topping&quot;);
+    data.addColumn(&quot;number&quot;, &quot;Pizzas&quot;);
+    data.addRows([[&quot;Mushroom &amp; Olive&quot;, 2], [&quot;Pepperoni&quot;, 5]]);
+
+    return data;
+  },
+  events: {
+    // Events can be defined upon creation
+    ready() {
+      // chart.id is just a getter for &#x60;${this.type}:${this.label}&#x60;
+      alert(chart.id + &quot; is ready!&quot;);
+    }
+  }
+});
+
+// Or attached after the fact
+chart.on(&quot;select&quot;, ({ chart, data }) &#x3D;&gt; {
+  const selectedItem &#x3D; chart.getSelection()[0];
+
+  if (selectedItem) {
+    const topping &#x3D; data.getValue(selectedItem.row, 0);
+
+    alert(&quot;The user selected &quot; + topping);
+  }
+});
+  
+lava.draw();
+</code>
             </pre>
           </div>
         </div>

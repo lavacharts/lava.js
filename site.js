@@ -442,7 +442,7 @@ exports = module.exports = __webpack_require__(/*! ../node_modules/css-loader/di
 var getUrl = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/getUrl.js */ "./node_modules/css-loader/dist/runtime/getUrl.js");
 var ___CSS_LOADER_URL___0___ = getUrl(__webpack_require__(/*! ./lava.jpg */ "./static/lava.jpg"));
 // Module
-exports.push([module.i, "/**\r\n * This parallax effect was found on https://freefrontend.com/css-text-effects/\r\n *\r\n * @author Robert Borghesi\r\n * @link https://codepen.io/dghez/pen/ItxKE/\r\n */\n.parallax-container {\n  position: absolute;\n  height: 300px;\n  -webkit-transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%);\n  left: 50%;\n  top: 220px; }\n\n#install-blocks {\n  margin-top: 275px; }\n\n.title {\n  font-weight: 800;\n  color: transparent;\n  font-size: 140px;\n  background: url(" + ___CSS_LOADER_URL___0___ + ") repeat;\n  background-position: 10% 50%;\n  -webkit-background-clip: text;\n  position: relative;\n  text-align: center;\n  letter-spacing: -8px; }\n\n.subtitle {\n  font-weight: 800;\n  display: block;\n  text-align: center;\n  text-transform: uppercase;\n  margin-top: -30px;\n  background: url(" + ___CSS_LOADER_URL___0___ + ") repeat;\n  background-position: 10% 50%;\n  -webkit-background-clip: text; }\n\n.page-footer {\n  background-color: #654321 !important; }\n\n.page-footer .footer-copyright {\n  background-color: rgba(51, 51, 51, 0.2) !important; }\n", ""]);
+exports.push([module.i, "/**\n * This parallax effect was found on https://freefrontend.com/css-text-effects/\n *\n * @author Robert Borghesi\n * @link https://codepen.io/dghez/pen/ItxKE/\n */\n.parallax-container {\n  position: absolute;\n  height: 300px;\n  -webkit-transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%);\n  left: 50%;\n  top: 220px; }\n\n#install-blocks {\n  margin-top: 275px; }\n\n.title {\n  font-weight: 800;\n  color: transparent;\n  font-size: 140px;\n  background: url(" + ___CSS_LOADER_URL___0___ + ") repeat;\n  background-position: 10% 50%;\n  -webkit-background-clip: text;\n  position: relative;\n  text-align: center;\n  letter-spacing: -8px; }\n\n.subtitle {\n  font-weight: 800;\n  display: block;\n  text-align: center;\n  text-transform: uppercase;\n  margin-top: -30px;\n  background: url(" + ___CSS_LOADER_URL___0___ + ") repeat;\n  background-position: 10% 50%;\n  -webkit-background-clip: text; }\n\n.page-footer {\n  background-color: #654321 !important; }\n\n.page-footer .footer-copyright {\n  background-color: rgba(51, 51, 51, 0.2) !important; }\n", ""]);
 
 
 /***/ }),
@@ -26628,12 +26628,11 @@ module.exports = g;
 /*!**********************!*\
   !*** ./src/Chart.ts ***!
   \**********************/
-/*! exports provided: CHART_PROPS, default */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CHART_PROPS", function() { return CHART_PROPS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Chart; });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
@@ -26641,16 +26640,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js");
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js");
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/assertThisInitialized */ "./node_modules/@babel/runtime/helpers/assertThisInitialized.js");
-/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/getPrototypeOf.js");
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime/helpers/get */ "./node_modules/@babel/runtime/helpers/get.js");
-/* harmony import */ var _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js");
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js");
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime/helpers/assertThisInitialized */ "./node_modules/@babel/runtime/helpers/assertThisInitialized.js");
+/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/getPrototypeOf.js");
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @babel/runtime/helpers/get */ "./node_modules/@babel/runtime/helpers/get.js");
+/* harmony import */ var _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/inherits.js");
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_8__);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
@@ -26669,80 +26668,37 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var CHART_PROPS = {
-  AnnotationChart: ["AnnotationChart", "annotationchart", 1],
-  AreaChart: ["AreaChart", "corechart", 1],
-  BarChart: ["BarChart", "corechart", 1],
-  BubbleChart: ["BubbleChart", "corechart", 1],
-  CalendarChart: ["Calendar", "calendar", 1],
-  CandlestickChart: ["CandlestickChart", "corechart", 1],
-  ColumnChart: ["ColumnChart", "corechart", 1],
-  ComboChart: ["ComboChart", "corechart", 1],
-  DonutChart: ["PieChart", "corechart", 1],
-  GanttChart: ["Gantt", "gantt", 1],
-  GaugeChart: ["Gauge", "gauge", 1],
-  GeoChart: ["GeoChart", "geochart", 1],
-  HistogramChart: ["Histogram", "corechart", 1],
-  LineChart: ["LineChart", "corechart", 1],
-  PieChart: ["PieChart", "corechart", 1],
-  SankeyChart: ["Sankey", "sankey", 1],
-  ScatterChart: ["ScatterChart", "corechart", 1],
-  SteppedAreaChart: ["SteppedAreaChart", "corechart", 1],
-  TableChart: ["Table", "table", 1],
-  TimelineChart: ["Timeline", "timeline", 1],
-  TreeMapChart: ["TreeMap", "treemap", 1],
-  WordTreeChart: ["WordTree", "wordtree", 1]
-};
 
 var Chart =
 /*#__PURE__*/
 function (_Drawable) {
   _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_8___default()(Chart, _Drawable);
 
-  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_7___default()(Chart, [{
-    key: "getProp",
+  /**
+   * The google.visualization type.
+   */
 
-    /**
-     * The google.visualization class needed for rendering.
-     */
+  /**
+   * If this is set to true, then the {@link Chart}
+   * will be drawn and converted to a PNG
+   */
 
-    /**
-     * The google.visualization package needed for rendering.
-     */
-
-    /**
-     * If this is set to true, then the {@link Chart}
-     * will be drawn and converted to a PNG
-     */
-
-    /**
-     * Static accessor for chart properties
-     */
-    value: function getProp(prop) {
-      return CHART_PROPS[this.type][prop];
-    }
-    /**
-     * Create a new {@link Chart}
-     */
-
-  }]);
-
+  /**
+   * Create a new {@link Chart}
+   */
   function Chart(drawable) {
     var _this;
 
     _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2___default()(this, Chart);
 
-    _this = _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(Chart).call(this, drawable));
+    _this = _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6___default()(Chart).call(this, drawable));
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_9___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4___default()(_this), "class", void 0);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_9___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_5___default()(_this), "type", void 0);
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_9___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4___default()(_this), "package", void 0);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_9___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_5___default()(_this), "png", false);
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_9___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4___default()(_this), "png", false);
-
+    _this.type = drawable.type;
     _this.png = Boolean(drawable.png);
-    _this["class"] = Object(_VisualizationProperties__WEBPACK_IMPORTED_MODULE_11__["getVisualizationProperties"])(drawable.type)["class"];
-    _this["package"] = Object(_VisualizationProperties__WEBPACK_IMPORTED_MODULE_11__["getVisualizationProperties"])(drawable.type)["package"];
     return _this;
   }
   /**
@@ -26750,7 +26706,7 @@ function (_Drawable) {
    */
 
 
-  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_7___default()(Chart, [{
+  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3___default()(Chart, [{
     key: "draw",
     value: function () {
       var _draw = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()(
@@ -26758,15 +26714,17 @@ function (_Drawable) {
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
         var _this2 = this;
 
+        var chartClass;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(Chart.prototype), "draw", this).call(this);
+                return _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6___default()(Chart.prototype), "draw", this).call(this);
 
               case 2:
-                this.googleChart = this.makeChart(this["class"]);
+                chartClass = window.google.visualization[Object(_VisualizationProperties__WEBPACK_IMPORTED_MODULE_11__["getChartClass"])(this)];
+                this.googleChart = new chartClass(this.container);
                 Object.keys(this.events).forEach(function (event) {
                   var e = event;
 
@@ -26778,7 +26736,7 @@ function (_Drawable) {
                   this.drawPng();
                 }
 
-              case 6:
+              case 7:
               case "end":
                 return _context.stop();
             }
@@ -26792,15 +26750,6 @@ function (_Drawable) {
 
       return draw;
     }()
-    /**
-     * Create a ChartFactory function using the `this.container`
-     */
-
-  }, {
-    key: "makeChart",
-    value: function makeChart(type) {
-      return new window.google.visualization[type](this.container);
-    }
     /**
      * Draws the chart as a PNG instead of the standard SVG
      *
@@ -27120,13 +27069,50 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * The {@link Drawable} class is the base for {@link Chart}s and {@link Dashboard}s
- * to share common methods between the two types.
+ * The [[Drawable]] class is the base for [[Chart]]s and [[Dashboard]]s
+ * to share common methods between the two types
  */
 var Drawable =
 /*#__PURE__*/
 function (_Eventful) {
   _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_7___default()(Drawable, _Eventful);
+
+  /**
+   * Reference to the `window.lava` object
+   */
+
+  /**
+   * Configurable options
+   */
+
+  /**
+   * DataTable for the [[Chart]] / [[Dashboard]]
+   */
+
+  /**
+   * Google chart object created once the [[Chart]] / [[Dashboard]]
+   * has been rendered
+   */
+
+  /**
+   * Element ID of the DOM node for the container
+   */
+
+  /**
+   * Unique label for the [[Chart]] / [[Dashboard]].
+   */
+
+  /**
+   * Formatters for the DataTable
+   */
+
+  /**
+   * Event listeners for the Drawable
+   */
+
+  /**
+   * The initial source of data for the DataTable
+   */
 
   /**
    * Create a new Drawable
@@ -27140,6 +27126,8 @@ function (_Eventful) {
 
     _this = _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(Drawable).call(this));
 
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "type", void 0);
+
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "_lava", void 0);
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "options", void 0);
@@ -27150,19 +27138,17 @@ function (_Eventful) {
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "elementId", void 0);
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "type", void 0);
-
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "label", void 0);
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "formats", void 0);
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "events", void 0);
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "dataSrc", void 0);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "initialData", void 0);
 
     _this.type = drawable.type;
     _this.label = drawable.label;
-    _this.dataSrc = drawable.data;
+    _this.initialData = drawable.data;
     _this.elementId = drawable.elementId;
     _this.options = drawable.options || {};
     _this.formats = drawable.formats || [];
@@ -27174,25 +27160,63 @@ function (_Eventful) {
       return _this.draw();
     });
 
-    _this.debug("Created!");
+    _this.debug("".concat(_this.id, " has be registered"));
 
     _this.debug(drawable);
 
     return _this;
   }
   /**
-   * Unique identifier for the {@link Chart} / {@link Dashboard}.
+   * Unique identifier for the [[Chart]] / [[Dashboard]].
    */
 
 
   _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3___default()(Drawable, [{
-    key: "draw",
+    key: "applyFormats",
 
     /**
-     * Draws the {@link Chart} / {@link Dashboard} with the predefined data and options.
+     * Apply the formats to the DataTable
+     */
+    value: function applyFormats(formats) {
+      if (formats) {
+        this.formats = formats;
+      }
+
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this.formats[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var format = _step.value;
+          var formatter = new window.google.visualization[format.type](format.options);
+          this.debug("Formatting column [".concat(format.index, "] with:"));
+          this.debug(format);
+          formatter.format(this.data, format.index);
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+            _iterator["return"]();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+    }
+    /**
+     * Draws the [[Chart]] / [[Dashboard]] with the predefined data and options.
      *
      * @public
      */
+
+  }, {
+    key: "draw",
     value: function () {
       var _draw = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()(
       /*#__PURE__*/
@@ -27202,7 +27226,7 @@ function (_Eventful) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                this.debug("Drawing");
+                this.debug("Drawing...");
 
                 if (this.container) {
                   _context.next = 3;
@@ -27212,25 +27236,24 @@ function (_Eventful) {
                 throw new _Errors__WEBPACK_IMPORTED_MODULE_10__["ElementIdNotFound"](this.elementId);
 
               case 3:
-                this.debug("Setting data");
-                payload = typeof this.dataSrc === "string" ? new _DataQuery__WEBPACK_IMPORTED_MODULE_9__["default"](this.dataSrc) : this.dataSrc;
-                _context.next = 7;
+                payload = typeof this.initialData === "string" ? new _DataQuery__WEBPACK_IMPORTED_MODULE_9__["default"](this.initialData) : this.initialData;
+                _context.next = 6;
                 return this.setData(payload);
 
-              case 7:
+              case 6:
                 if (!(this.data instanceof google.visualization.DataTable !== true)) {
-                  _context.next = 9;
+                  _context.next = 8;
                   break;
                 }
 
                 throw new _Errors__WEBPACK_IMPORTED_MODULE_10__["DataError"]("There was a error setting the data for ".concat(this.id));
 
-              case 9:
+              case 8:
                 if (this.formats) {
                   this.applyFormats();
                 }
 
-              case 10:
+              case 9:
               case "end":
                 return _context.stop();
             }
@@ -27245,21 +27268,63 @@ function (_Eventful) {
       return draw;
     }()
     /**
-     * Overidding the `on()` method from the {@link TinyEmitter} to register the
-     * handlers to our own map.
+     * Overidding the `on()` method from the [[TinyEmitter]] to
+     * register the handlers to our own map.
      */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
   }, {
     key: "on",
     value: function on(event, handler, ctx) {
-      this.events[event] = handler;
+      if (ctx) {
+        this.events[event] = handler.bind(ctx);
+      } else {
+        this.events[event] = handler;
+      }
+
       return this;
     }
     /**
-     * Sets the {@link DataTable} for the {@link Drawable}.
-     *
-     * @param {Object|Function|Array|DataQuery|DataTable} payload Source of data
+     * Convenience method for setting options dynamicly
+     */
+
+  }, {
+    key: "set",
+    value: function () {
+      var _set = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(optionRef, value) {
+        var payload;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                // if (optionRef.includes(".")) {
+                //   const options = optionRef.split(".");
+                // }
+                payload = _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()({}, optionRef, value);
+                this.updateOptions(payload);
+                return _context2.abrupt("return", {
+                  data: this.data,
+                  chart: this.googleChart,
+                  options: this.options
+                });
+
+              case 3:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function set(_x, _x2) {
+        return _set.apply(this, arguments);
+      }
+
+      return set;
+    }()
+    /**
+     * Sets the [[DataTable]] for the [[Drawable]].
      */
 
   }, {
@@ -27267,27 +27332,27 @@ function (_Eventful) {
     value: function () {
       var _setData = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(payload) {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(payload) {
         var response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
                 if (!(payload instanceof _DataQuery__WEBPACK_IMPORTED_MODULE_9__["default"])) {
-                  _context2.next = 10;
+                  _context3.next = 10;
                   break;
                 }
 
                 this.debug("Sending DataQuery");
-                _context2.next = 4;
+                _context3.next = 4;
                 return payload.send();
 
               case 4:
-                response = _context2.sent;
+                response = _context3.sent;
                 this.debug("Response received");
                 this.debug(response);
                 this.data = response.getDataTable();
-                _context2.next = 11;
+                _context3.next = 11;
                 break;
 
               case 10:
@@ -27295,7 +27360,7 @@ function (_Eventful) {
 
               case 11:
                 if (!(this.data instanceof google.visualization.DataTable === false)) {
-                  _context2.next = 13;
+                  _context3.next = 13;
                   break;
                 }
 
@@ -27311,57 +27376,17 @@ function (_Eventful) {
 
               case 16:
               case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, this);
-      }));
-
-      function setData(_x) {
-        return _setData.apply(this, arguments);
-      }
-
-      return setData;
-    }()
-    /**
-     * Convenience method for setting options dynamicly
-     */
-
-  }, {
-    key: "set",
-    value: function () {
-      var _set = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(optionRef, value) {
-        var payload;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                // if (optionRef.includes(".")) {
-                //   const options = optionRef.split(".");
-                // }
-                payload = _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()({}, optionRef, value);
-                this.updateOptions(payload);
-                return _context3.abrupt("return", {
-                  data: this.data,
-                  chart: this.googleChart,
-                  options: this.options
-                });
-
-              case 3:
-              case "end":
                 return _context3.stop();
             }
           }
         }, _callee3, this);
       }));
 
-      function set(_x2, _x3) {
-        return _set.apply(this, arguments);
+      function setData(_x3) {
+        return _setData.apply(this, arguments);
       }
 
-      return set;
+      return setData;
     }()
     /**
      * Update a chart's options and/or data
@@ -27423,44 +27448,6 @@ function (_Eventful) {
 
       return update;
     }()
-    /**
-     * Apply the formats to the DataTable
-     */
-
-  }, {
-    key: "applyFormats",
-    value: function applyFormats(formats) {
-      if (formats) {
-        this.formats = formats;
-      }
-
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = this.formats[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var format = _step.value;
-          var formatter = new window.google.visualization[format.type](format.options);
-          this.debug("Formatting column [".concat(format.index, "] with:"));
-          this.debug(format);
-          formatter.format(this.data, format.index);
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator["return"] != null) {
-            _iterator["return"]();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
-    }
     /**
      * Update the chart's data
      */
@@ -27554,29 +27541,24 @@ function (_Eventful) {
 /*!***********************!*\
   !*** ./src/Errors.ts ***!
   \***********************/
-/*! exports provided: LavaJsError, InvalidCallback, DrawableNotFound, DataError, ElementIdNotFound */
+/*! exports provided: LavaJsError, DataError, ElementIdNotFound */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LavaJsError", function() { return LavaJsError; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "InvalidCallback", function() { return InvalidCallback; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DrawableNotFound", function() { return DrawableNotFound; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataError", function() { return DataError; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ElementIdNotFound", function() { return ElementIdNotFound; });
-/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js");
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js");
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/getPrototypeOf.js");
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/inherits.js");
-/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _babel_runtime_helpers_wrapNativeSuper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime/helpers/wrapNativeSuper */ "./node_modules/@babel/runtime/helpers/wrapNativeSuper.js");
-/* harmony import */ var _babel_runtime_helpers_wrapNativeSuper__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_wrapNativeSuper__WEBPACK_IMPORTED_MODULE_5__);
-
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js");
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js");
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/getPrototypeOf.js");
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/inherits.js");
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _babel_runtime_helpers_wrapNativeSuper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/wrapNativeSuper */ "./node_modules/@babel/runtime/helpers/wrapNativeSuper.js");
+/* harmony import */ var _babel_runtime_helpers_wrapNativeSuper__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_wrapNativeSuper__WEBPACK_IMPORTED_MODULE_4__);
 
 
 
@@ -27591,56 +27573,18 @@ __webpack_require__.r(__webpack_exports__);
 var LavaJsError =
 /*#__PURE__*/
 function (_Error) {
-  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4___default()(LavaJsError, _Error);
+  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default()(LavaJsError, _Error);
 
   function LavaJsError() {
     var message = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "There was an error";
 
-    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default()(this, LavaJsError);
+    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, LavaJsError);
 
-    return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3___default()(LavaJsError).call(this, message));
+    return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_1___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_2___default()(LavaJsError).call(this, message));
   }
 
   return LavaJsError;
-}(_babel_runtime_helpers_wrapNativeSuper__WEBPACK_IMPORTED_MODULE_5___default()(Error));
-/**
- * InvalidCallback Error
- *
- * Thrown when anything but a function is given as a callback.
- */
-
-var InvalidCallback =
-/*#__PURE__*/
-function (_LavaJsError) {
-  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4___default()(InvalidCallback, _LavaJsError);
-
-  function InvalidCallback(callback) {
-    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default()(this, InvalidCallback);
-
-    return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3___default()(InvalidCallback).call(this, "[lava.js] \"".concat(_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0___default()(callback), "\" is not a valid callback.")));
-  }
-
-  return InvalidCallback;
-}(LavaJsError);
-/**
- * InvalidLabel Error
- *
- * Thrown when a {@link Drawable} is not found in the module.
- */
-
-var DrawableNotFound =
-/*#__PURE__*/
-function (_LavaJsError2) {
-  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4___default()(DrawableNotFound, _LavaJsError2);
-
-  function DrawableNotFound(label) {
-    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default()(this, DrawableNotFound);
-
-    return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3___default()(DrawableNotFound).call(this, "[lava.js] A drawable with the label \"".concat(label, "\" was not found.")));
-  }
-
-  return DrawableNotFound;
-}(LavaJsError);
+}(_babel_runtime_helpers_wrapNativeSuper__WEBPACK_IMPORTED_MODULE_4___default()(Error));
 /**
  * ElementIdNotFound Error
  *
@@ -27649,13 +27593,13 @@ function (_LavaJsError2) {
 
 var DataError =
 /*#__PURE__*/
-function (_LavaJsError3) {
-  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4___default()(DataError, _LavaJsError3);
+function (_LavaJsError) {
+  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default()(DataError, _LavaJsError);
 
   function DataError(msg) {
-    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default()(this, DataError);
+    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, DataError);
 
-    return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3___default()(DataError).call(this, msg));
+    return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_1___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_2___default()(DataError).call(this, msg));
   }
 
   return DataError;
@@ -27668,13 +27612,13 @@ function (_LavaJsError3) {
 
 var ElementIdNotFound =
 /*#__PURE__*/
-function (_LavaJsError4) {
-  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4___default()(ElementIdNotFound, _LavaJsError4);
+function (_LavaJsError2) {
+  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default()(ElementIdNotFound, _LavaJsError2);
 
   function ElementIdNotFound(elemId) {
-    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default()(this, ElementIdNotFound);
+    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, ElementIdNotFound);
 
-    return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3___default()(ElementIdNotFound).call(this, "[lava.js] DOM node where id=\"".concat(elemId, "\" was not found.")));
+    return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_1___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_2___default()(ElementIdNotFound).call(this, "[lava.js] DOM node where id=\"".concat(elemId, "\" was not found.")));
   }
 
   return ElementIdNotFound;
@@ -27812,6 +27756,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8__);
 /* harmony import */ var _Eventful__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Eventful */ "./src/Eventful.ts");
 /* harmony import */ var _lib_logger__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./lib/logger */ "./src/lib/logger.ts");
+/* harmony import */ var _VisualizationProperties__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./VisualizationProperties */ "./src/VisualizationProperties.ts");
+
 
 
 
@@ -27872,13 +27818,13 @@ function (_Eventful) {
 
 
   _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3___default()(GoogleLoader, [{
-    key: "addPackage",
+    key: "register",
 
     /**
-     * Add one package to the list that Google needs to load.
+     * Extract and register the package needed to draw the chart.
      */
-    value: function addPackage(pkgs) {
-      this.packages.add(pkgs);
+    value: function register(chart) {
+      this.addPackage(Object(_VisualizationProperties__WEBPACK_IMPORTED_MODULE_11__["getChartPackage"])(chart));
     }
     /**
      * Load the Google Static Loader and resolve the promise when ready.
@@ -27945,6 +27891,15 @@ function (_Eventful) {
 
       return loadGoogle;
     }()
+    /**
+     * Add one package to the list that Google needs to load.
+     */
+
+  }, {
+    key: "addPackage",
+    value: function addPackage(pkgs) {
+      this.packages.add(pkgs);
+    }
     /**
      * Create a new script tag for the Google Static Loader
      */
@@ -28071,12 +28026,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Dashboard__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Dashboard */ "./src/Dashboard.ts");
 /* harmony import */ var _DataQuery__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./DataQuery */ "./src/DataQuery.ts");
 /* harmony import */ var _DefaultOptions__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./DefaultOptions */ "./src/DefaultOptions.ts");
-/* harmony import */ var _Errors__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Errors */ "./src/Errors.ts");
-/* harmony import */ var _Eventful__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./Eventful */ "./src/Eventful.ts");
-/* harmony import */ var _GoogleLoader__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./GoogleLoader */ "./src/GoogleLoader.ts");
-/* harmony import */ var _lib__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./lib */ "./src/lib/index.ts");
-/* harmony import */ var _lib_logger__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./lib/logger */ "./src/lib/logger.ts");
-
+/* harmony import */ var _Eventful__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Eventful */ "./src/Eventful.ts");
+/* harmony import */ var _GoogleLoader__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./GoogleLoader */ "./src/GoogleLoader.ts");
+/* harmony import */ var _lib__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./lib */ "./src/lib/index.ts");
+/* harmony import */ var _lib_logger__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./lib/logger */ "./src/lib/logger.ts");
 
 
 
@@ -28115,15 +28068,6 @@ function (_Eventful) {
    */
 
   /**
-   * Chart storage
-   */
-
-  /**
-   * Ready Callback
-   */
-  // private readyCallback = (): void => {};
-
-  /**
    * Loader class for appending the google script and making window.google available
    */
 
@@ -28148,16 +28092,14 @@ function (_Eventful) {
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "registry", {});
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "volcano", new Map());
-
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6___default()(_this), "loader", void 0);
 
     if (options) {
       _this.configure(options);
     }
 
-    _this.debug = Object(_lib_logger__WEBPACK_IMPORTED_MODULE_17__["getLogger"])();
-    _this.options.debug ? _lib_logger__WEBPACK_IMPORTED_MODULE_17__["ConsoleLogger"].enable() : _lib_logger__WEBPACK_IMPORTED_MODULE_17__["ConsoleLogger"].disable();
+    _this.debug = Object(_lib_logger__WEBPACK_IMPORTED_MODULE_16__["getLogger"])();
+    _this.options.debug ? _lib_logger__WEBPACK_IMPORTED_MODULE_16__["ConsoleLogger"].enable() : _lib_logger__WEBPACK_IMPORTED_MODULE_16__["ConsoleLogger"].disable();
 
     _this.debug("LavaJs v".concat(LavaJs.VERSION));
 
@@ -28165,13 +28107,17 @@ function (_Eventful) {
 
     _this.debug(_this.options);
 
-    _this.loader = new _GoogleLoader__WEBPACK_IMPORTED_MODULE_15__["default"](_this.options); // Relay the event forward from the loader
+    _this.loader = new _GoogleLoader__WEBPACK_IMPORTED_MODULE_14__["default"](_this.options);
+    /**
+     * Capture [[EVENTS.GOOGLE_READY]] and use it to signal a draw if
+     * the autodraw option is set.
+     */
 
-    _this.loader.on(_Eventful__WEBPACK_IMPORTED_MODULE_14__["EVENTS"].GOOGLE_READY, function (google) {
-      _this.emitEvent(_Eventful__WEBPACK_IMPORTED_MODULE_14__["EVENTS"].GOOGLE_READY, google);
+    _this.loader.on(_Eventful__WEBPACK_IMPORTED_MODULE_13__["EVENTS"].GOOGLE_READY, function (google) {
+      _this.emitEvent(_Eventful__WEBPACK_IMPORTED_MODULE_13__["EVENTS"].GOOGLE_READY, google);
 
       if (_this.options.autodraw) {
-        _this.emitEvent(_Eventful__WEBPACK_IMPORTED_MODULE_14__["EVENTS"].DRAW);
+        _this.emitEvent(_Eventful__WEBPACK_IMPORTED_MODULE_13__["EVENTS"].DRAW);
       }
     });
 
@@ -28193,23 +28139,18 @@ function (_Eventful) {
 
 
   _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3___default()(LavaJs, [{
-    key: "getOption",
-    value: function getOption(option) {
-      return this.options[option];
-    }
+    key: "configure",
+
     /**
      * Configure the LavaJs module.
      */
-
-  }, {
-    key: "configure",
     value: function configure(options) {
       this.options = Object.assign(this.options, options);
     }
     /**
-     * Runs the LavaJs.js module
+     * Wait for the DOM to be ready then single all charts to draw.
      *
-     * @emits {@link EVENTS.READY}
+     * @emits {@link EVENTS.DRAW}
      */
 
   }, {
@@ -28226,6 +28167,9 @@ function (_Eventful) {
                 return this.waitForDom();
 
               case 2:
+                this.emitEvent(_Eventful__WEBPACK_IMPORTED_MODULE_13__["EVENTS"].DRAW);
+
+              case 3:
               case "end":
                 return _context.stop();
             }
@@ -28239,17 +28183,6 @@ function (_Eventful) {
 
       return draw;
     }()
-    /**
-     * Alert all charts to redraw.
-     *
-     * @emits {@link EVENTS.DRAW}
-     */
-
-  }, {
-    key: "redraw",
-    value: function redraw() {
-      this.emitEvent(_Eventful__WEBPACK_IMPORTED_MODULE_14__["EVENTS"].DRAW);
-    }
     /**
      * Compose a URL to a Google Sheet
      *
@@ -28299,30 +28232,6 @@ function (_Eventful) {
       return new _Dashboard__WEBPACK_IMPORTED_MODULE_10__["default"](payload);
     }
     /**
-     * Retrieve a {@link Chart} / {@link Dashboard} from storage.
-     *
-     * The {@link Chart} object has the user defined properties such as data, options, formats, etc.
-     *
-     * The Google Chart object is available as ".googleChart" from the returned LavaChart.
-     * It can be used to access any of the available methods such as
-     * getImageURI() or getChartLayoutInterface().
-     *
-     * See https://google-developers.appspot.com/chart/interactive/docs/gallery/linechart#methods
-     * for some examples relative to LineCharts.
-     *
-     * @throws {DrawableNotFound}
-     */
-
-  }, {
-    key: "get",
-    value: function get(label) {
-      if (this.volcano.has(label) === false) {
-        throw new _Errors__WEBPACK_IMPORTED_MODULE_13__["DrawableNotFound"](label);
-      }
-
-      return this.volcano.get(label);
-    }
-    /**
      * Get a list of all the registered charts
      */
 
@@ -28331,110 +28240,6 @@ function (_Eventful) {
     value: function getRegistry() {
       return this.registry;
     }
-    /**
-     * Assigns a callback for when the charts are ready to be interacted with.
-     *
-     * This is used to wrap calls to lava.loadData() or lava.loadOptions()
-     * to protect against accessing charts that aren't loaded yet
-     *
-     * @throws {InvalidCallback}
-     */
-
-  }, {
-    key: "ready",
-    value: function ready(callback) {
-      if (typeof callback !== "function") {
-        throw new _Errors__WEBPACK_IMPORTED_MODULE_13__["InvalidCallback"](callback);
-      } // this.readyCallback = callback.bind(this);
-
-    }
-    /**
-     * Loads new data into the chart and redraws.
-     *
-     *
-     * Used with an AJAX call to a PHP method returning DataTable->toPayload(),
-     * a chart can be dynamically update in page, without reloads.
-     */
-
-  }, {
-    key: "loadData",
-    value: function () {
-      var _loadData = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(label, payload) {
-        var chart;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                chart = this.get(label);
-
-                if (!chart) {
-                  _context2.next = 3;
-                  break;
-                }
-
-                return _context2.abrupt("return", chart.update({
-                  data: payload
-                }));
-
-              case 3:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, this);
-      }));
-
-      function loadData(_x, _x2) {
-        return _loadData.apply(this, arguments);
-      }
-
-      return loadData;
-    }()
-    /**
-     * Loads new options into a chart and redraws.
-     *
-     * Used with an AJAX call, or javascript events, to load a new array of options into a chart.
-     * This can be used to update a chart dynamically, without reloads.
-     */
-
-  }, {
-    key: "loadOptions",
-    value: function () {
-      var _loadOptions = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(label, payload) {
-        var chart;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                chart = this.get(label);
-
-                if (!chart) {
-                  _context3.next = 3;
-                  break;
-                }
-
-                return _context3.abrupt("return", chart.update({
-                  options: payload
-                }));
-
-              case 3:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3, this);
-      }));
-
-      function loadOptions(_x3, _x4) {
-        return _loadOptions.apply(this, arguments);
-      }
-
-      return loadOptions;
-    }()
     /**
      * Register a {@link Drawable} with the module.
      *
@@ -28447,15 +28252,14 @@ function (_Eventful) {
     value: function register(drawable) {
       this.debug("Registering ".concat(drawable.id));
 
-      if (drawable instanceof _Chart__WEBPACK_IMPORTED_MODULE_9__["default"]) {
-        this.loader.addPackage(drawable["package"]);
+      if (drawable.type !== "Dashboard") {
+        this.loader.register(drawable);
       }
 
       this.registry[drawable.id] = {
         drawn: false,
         needsRedraw: false
       };
-      this.volcano.set(drawable.type, drawable);
       return drawable;
     }
     /**
@@ -28469,21 +28273,21 @@ function (_Eventful) {
     value: function () {
       var _waitForDom = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
         var _this2 = this;
 
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context2.prev = _context2.next) {
               case 0:
                 this.debug("Waiting for the DOM to become ready");
-                return _context4.abrupt("return", new Promise(function (resolve) {
-                  if (document.readyState === "interactive" || document.readyState === "complete") {
+                return _context2.abrupt("return", new Promise(function (resolve) {
+                  if (["interactive", "complete"].includes(document.readyState)) {
                     resolve();
 
-                    _this2.emit(_Eventful__WEBPACK_IMPORTED_MODULE_14__["EVENTS"].DOM_READY);
-
                     _this2.debug("DOM ready");
+
+                    _this2.emit(_Eventful__WEBPACK_IMPORTED_MODULE_13__["EVENTS"].DOM_READY);
                   } else {
                     document.addEventListener("DOMContentLoaded", function () {
                       return resolve();
@@ -28493,10 +28297,10 @@ function (_Eventful) {
 
               case 2:
               case "end":
-                return _context4.stop();
+                return _context2.stop();
             }
           }
-        }, _callee4, this);
+        }, _callee2, this);
       }));
 
       function waitForDom() {
@@ -28515,12 +28319,12 @@ function (_Eventful) {
       var _this3 = this;
 
       var debounced;
-      Object(_lib__WEBPACK_IMPORTED_MODULE_16__["addEvent"])(window, "resize", function () {
+      Object(_lib__WEBPACK_IMPORTED_MODULE_15__["addEvent"])(window, "resize", function () {
         clearTimeout(debounced);
         debounced = setTimeout(function () {
           _this3.debug("Window re-sized, redrawing...");
 
-          _this3.emit(_Eventful__WEBPACK_IMPORTED_MODULE_14__["EVENTS"].DRAW);
+          _this3.emit(_Eventful__WEBPACK_IMPORTED_MODULE_13__["EVENTS"].DRAW);
         }, _this3.options.debounceTimeout);
       });
     }
@@ -28529,28 +28333,10 @@ function (_Eventful) {
     get: function get() {
       return window.google;
     }
-    /**
-     * Forward the autoloadGoogle option to the main object to check in page.
-     */
-
-  }, {
-    key: "autoloadGoogle",
-    get: function get() {
-      return typeof this.options.autoloadGoogle === "boolean" ? this.options.autoloadGoogle : true;
-    }
-    /**
-     * Forward the autodraw option to the main object to check in page.
-     */
-
-  }, {
-    key: "autodraw",
-    get: function get() {
-      return typeof this.options.autodraw === "boolean" ? this.options.autodraw : true;
-    }
   }]);
 
   return LavaJs;
-}(_Eventful__WEBPACK_IMPORTED_MODULE_14__["default"]);
+}(_Eventful__WEBPACK_IMPORTED_MODULE_13__["default"]);
 
 _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(LavaJs, "VERSION", "4.0.0-alpha1");
 
@@ -28562,15 +28348,18 @@ _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(Lav
 /*!****************************************!*\
   !*** ./src/VisualizationProperties.ts ***!
   \****************************************/
-/*! exports provided: CHART_PROPS, isValidChartType, VisualizationPropertyEnum, getVisualizationProperties */
+/*! exports provided: CHART_PROPS, isSupported, getChartClass, getChartPackage, getChartVersion */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CHART_PROPS", function() { return CHART_PROPS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isValidChartType", function() { return isValidChartType; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualizationPropertyEnum", function() { return VisualizationPropertyEnum; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getVisualizationProperties", function() { return getVisualizationProperties; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isSupported", function() { return isSupported; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getChartClass", function() { return getChartClass; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getChartPackage", function() { return getChartPackage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getChartVersion", function() { return getChartVersion; });
+/* harmony import */ var _types_visualization_properties__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./types/visualization-properties */ "./src/types/visualization-properties.ts");
+
 var CHART_PROPS = {
   AnnotationChart: ["AnnotationChart", "annotationchart", 1],
   AreaChart: ["AreaChart", "corechart", 1],
@@ -28595,24 +28384,17 @@ var CHART_PROPS = {
   TreeMapChart: ["TreeMap", "treemap", 1],
   WordTreeChart: ["WordTree", "wordtree", 1]
 };
-function isValidChartType(chartType) {
+function isSupported(chartType) {
   return Object.keys(CHART_PROPS).includes(chartType);
 }
-var VisualizationPropertyEnum;
-
-(function (VisualizationPropertyEnum) {
-  VisualizationPropertyEnum[VisualizationPropertyEnum["CLASS"] = 0] = "CLASS";
-  VisualizationPropertyEnum[VisualizationPropertyEnum["PACKAGE"] = 1] = "PACKAGE";
-  VisualizationPropertyEnum[VisualizationPropertyEnum["VERSION"] = 2] = "VERSION";
-})(VisualizationPropertyEnum || (VisualizationPropertyEnum = {}));
-
-function getVisualizationProperties(chartType) {
-  var props = CHART_PROPS[chartType];
-  return {
-    "class": props[VisualizationPropertyEnum.CLASS],
-    "package": props[VisualizationPropertyEnum.PACKAGE],
-    version: props[VisualizationPropertyEnum.VERSION]
-  };
+function getChartClass(chart) {
+  return CHART_PROPS[chart.type][_types_visualization_properties__WEBPACK_IMPORTED_MODULE_0__["VisualizationPropertyEnum"].CLASS];
+}
+function getChartPackage(chart) {
+  return CHART_PROPS[chart.type][_types_visualization_properties__WEBPACK_IMPORTED_MODULE_0__["VisualizationPropertyEnum"].PACKAGE];
+}
+function getChartVersion(chart) {
+  return CHART_PROPS[chart.type][_types_visualization_properties__WEBPACK_IMPORTED_MODULE_0__["VisualizationPropertyEnum"].VERSION];
 }
 
 /***/ }),
@@ -28637,7 +28419,7 @@ window.lava = new _LavaJs__WEBPACK_IMPORTED_MODULE_0__["default"]();
 /*!**************************!*\
   !*** ./src/lib/index.ts ***!
   \**************************/
-/*! exports provided: getWindowInstance, getLocalStorage, addEvent, createDataTable */
+/*! exports provided: ConsoleLogger, getWindowInstance, getLocalStorage, addEvent, createDataTable */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -28648,6 +28430,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createDataTable", function() { return createDataTable; });
 /* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
 /* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _logger__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./logger */ "./src/lib/logger.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ConsoleLogger", function() { return _logger__WEBPACK_IMPORTED_MODULE_1__["ConsoleLogger"]; });
+
+
+
 
 function getWindowInstance() {
   return window.lava;
@@ -28746,6 +28533,9 @@ function getLogger() {
   return debug;
 }
 var ConsoleLogger = {
+  getInstance: function getInstance() {
+    return debug;
+  },
   enable: function enable() {
     debug.enabled = true;
   },
@@ -28753,6 +28543,26 @@ var ConsoleLogger = {
     debug.enabled = false;
   }
 };
+
+/***/ }),
+
+/***/ "./src/types/visualization-properties.ts":
+/*!***********************************************!*\
+  !*** ./src/types/visualization-properties.ts ***!
+  \***********************************************/
+/*! exports provided: VisualizationPropertyEnum */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualizationPropertyEnum", function() { return VisualizationPropertyEnum; });
+var VisualizationPropertyEnum;
+
+(function (VisualizationPropertyEnum) {
+  VisualizationPropertyEnum[VisualizationPropertyEnum["CLASS"] = 0] = "CLASS";
+  VisualizationPropertyEnum[VisualizationPropertyEnum["PACKAGE"] = 1] = "PACKAGE";
+  VisualizationPropertyEnum[VisualizationPropertyEnum["VERSION"] = 2] = "VERSION";
+})(VisualizationPropertyEnum || (VisualizationPropertyEnum = {}));
 
 /***/ }),
 

@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>LavaJs | formats</title>
+  <title></title>
   <meta charset="UTF-8">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="site.css" rel="stylesheet"><script type="text/javascript" src="runtime.js"></script><script type="text/javascript" src="site.js"></script><script type="text/javascript" src="formats.js"></script></head>
@@ -60,7 +60,29 @@
             <h5 class="center">interactive charts</h5>
             <pre class="language-javascript">
               <code>
-TypeError: exampleCode.replace is not a function</code>
+const chart &#x3D; lava.chart({
+  label: &quot;Test&quot;,
+  type: &quot;ScatterChart&quot;,
+  elementId: &quot;chart_div&quot;,
+  datatable: [[&quot;Age&quot;, &quot;Cash&quot;], [12, 101], [15, 240], [18, 280], [32, 324]],
+  options: {
+    colors: [&quot;green&quot;],
+    chartArea: { width: &quot;50%&quot; }
+  },
+  formats: [
+    {
+      type: &quot;NumberFormat&quot;,
+      index: 1, // DataTable Column
+      options: {
+        prefix: &quot;$&quot;,
+        suffix: &quot; BILLS!&quot;
+      }
+    }
+  ]
+});
+
+lava.draw();
+</code>
             </pre>
           </div>
         </div>

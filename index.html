@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>LavaJs</title>
+  <title></title>
   <meta charset="UTF-8">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="site.css" rel="stylesheet"><script type="text/javascript" src="runtime.js"></script><script type="text/javascript" src="site.js"></script><script type="text/javascript" src="index.js"></script></head>
@@ -76,7 +76,25 @@
             <h5 class="center">clean & consise</h5>
             <pre class="language-javascript">
               <code>
-TypeError: exampleCode.replace is not a function</code>
+lava.chart({
+  label: &quot;Test&quot;,
+  type: &quot;PieChart&quot;,
+  elementId: &quot;chart_div&quot;,
+  data: [
+    [&quot;Task&quot;, &quot;Hours per Day&quot;],
+    [&quot;Work&quot;, 11],
+    [&quot;Eat&quot;, 2],
+    [&quot;Commute&quot;, 2],
+    [&quot;Watch TV&quot;, 2],
+    [&quot;Sleep&quot;, 7]
+  ],
+  options: {
+    title: &quot;My Daily Activities&quot;
+  }
+});
+
+lava.draw();
+</code>
             </pre>
           </div>
         </div>
