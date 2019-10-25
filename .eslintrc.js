@@ -36,7 +36,7 @@ module.exports = {
     "import/order": "off",
 
     "eqeqeq": ["error", "always"],
-    "no-mixed-operators": "error",
+    // "no-mixed-operators": "error",
     "no-param-reassign": "error",
 
     "prettier/prettier": "error",

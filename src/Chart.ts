@@ -9,13 +9,20 @@ export default class Chart extends Drawable {
   public readonly type: ChartTypes;
 
   /**
-   * If this is set to true, then the {@link Chart}
+   * If this is set to true, then the [[Chart]]
    * will be drawn and converted to a PNG
    */
   public png = false;
 
   /**
-   * Create a new {@link Chart}
+   * Static creation method
+   */
+  static create(drawable: ChartInterface): Chart {
+    return new Chart(drawable);
+  }
+
+  /**
+   * Create a new [[Chart]]
    */
   constructor(drawable: ChartInterface) {
     super(drawable);

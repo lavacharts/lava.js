@@ -80,7 +80,7 @@ export default class GoogleLoader extends Eventful {
    * Extract and register the package needed to draw the chart.
    */
   public register(chart: Chart): void {
-    this.addPackage(getChartPackage(chart));
+    this.packages.add(getChartPackage(chart));
   }
 
   /**
@@ -115,13 +115,6 @@ export default class GoogleLoader extends Eventful {
         resolve(this.google);
       });
     });
-  }
-
-  /**
-   * Add one package to the list that Google needs to load.
-   */
-  private addPackage(pkgs: string): void {
-    this.packages.add(pkgs);
   }
 
   /**

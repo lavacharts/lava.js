@@ -33,10 +33,10 @@ export default class LavaJs extends Eventful {
   /**
    * Drawables registy
    */
-  private readonly registry: LavaState = {};
+  public readonly registry: LavaState = {};
 
   /**
-   * Loader class for appending the google script and making window.google available
+   * Loader for appending the google script and making `window.google` available
    */
   private readonly loader: GoogleLoader;
 
@@ -94,24 +94,40 @@ export default class LavaJs extends Eventful {
   }
 
   /**
-   * Wait for the DOM to be ready then single all charts to draw.
+   * Wait for the DOM to be ready then draw ^_^
+   *
+   * If passed a single chart object, then you can skip the `lava.chart()`
+   * call and draw a chart with only one method call!
+   *
+   * You can even pass an array of chart objects!!
    *
    * @emits [[EVENTS.DRAW]]
    */
-  public async draw(): Promise<any> {
+  public async draw(
+    payload?: ChartInterface | ChartInterface[]
+  ): Promise<Chart[]> {
     await this.waitForDom();
 
+    const charts: Chart[] = [];
+
+    if (typeof payload !== "undefined") {
+      if (Array.isArray(payload)) {
+        charts.push(...payload.map(this.chart, this));
+      } else {
+        charts.push(this.chart(payload));
+      }
+    }
+
     this.emitEvent(EVENTS.DRAW);
+
+    return charts;
   }
 
   /**
    * Compose a URL to a Google Sheet
    *
-   * Pass an ID and range in A1 notation to create an URL
+   * Pass a Google Sheet ID and range in A1 notation to create a URL
    * to use with a [[DataQuery]].
-   *
-   * @param id string
-   * @param range string
    */
   public rangeQuery(id: string, range: string): string {
     const base = "https://docs.google.com/spreadsheets/d";
@@ -143,13 +159,6 @@ export default class LavaJs extends Eventful {
    */
   public dashboard(payload: DrawableInterface): Dashboard {
     return new Dashboard(payload);
-  }
-
-  /**
-   * Get a list of all the registered charts
-   */
-  public getRegistry(): LavaState {
-    return this.registry;
   }
 
   /**
