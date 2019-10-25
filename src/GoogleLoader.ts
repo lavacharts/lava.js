@@ -96,7 +96,7 @@ export default class GoogleLoader extends Eventful {
     }
 
     if (this.scriptTagInPage === false) {
-      this.debug("Static loader not found, injecting");
+      this.debug("Static loader not found");
 
       await this.injectGoogleStaticLoader(document.head);
     }

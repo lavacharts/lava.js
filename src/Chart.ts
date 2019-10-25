@@ -4,15 +4,15 @@ import { getChartClass } from "./VisualizationProperties";
 
 export default class Chart extends Drawable {
   /**
-   * The google.visualization type.
-   */
-  public readonly type: ChartTypes;
-
-  /**
    * If this is set to true, then the [[Chart]]
    * will be drawn and converted to a PNG
    */
   public png = false;
+
+  /**
+   * The google.visualization type.
+   */
+  public readonly type: ChartTypes;
 
   /**
    * Static creation method

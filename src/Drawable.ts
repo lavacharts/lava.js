@@ -17,11 +17,6 @@ export default class Drawable extends Eventful {
   type: string;
 
   /**
-   * Reference to the `window.lava` object
-   */
-  protected _lava: LavaJs;
-
-  /**
    * Configurable options
    */
   public options: LavaJsOptions;
@@ -38,6 +33,20 @@ export default class Drawable extends Eventful {
   public googleChart!: any;
 
   /**
+   * Unique identifier for the [[Chart]] / [[Dashboard]].
+   */
+  public get id(): string {
+    return this.type + ":" + this.label;
+  }
+
+  /**
+   * HTMLElement into which the chart will be rendered.
+   */
+  public get container(): HTMLElement | null {
+    return document.getElementById(this.elementId);
+  }
+
+  /**
    * Element ID of the DOM node for the container
    */
   public readonly elementId: string;
@@ -46,6 +55,11 @@ export default class Drawable extends Eventful {
    * Unique label for the [[Chart]] / [[Dashboard]].
    */
   public readonly label: string;
+
+  /**
+   * Reference to the `window.lava` object
+   */
+  protected _lava: LavaJs;
 
   /**
    * Formatters for the DataTable
@@ -86,40 +100,6 @@ export default class Drawable extends Eventful {
 
     this.debug(`${this.id} has be registered`);
     this.debug(drawable);
-  }
-
-  /**
-   * Unique identifier for the [[Chart]] / [[Dashboard]].
-   */
-  public get id(): string {
-    return this.type + ":" + this.label;
-  }
-
-  /**
-   * HTMLElement into which the chart will be rendered.
-   */
-  public get container(): HTMLElement | null {
-    return document.getElementById(this.elementId);
-  }
-
-  /**
-   * Apply the formats to the DataTable
-   */
-  public applyFormats(formats?: Formatter[]): void {
-    if (formats) {
-      this.formats = formats;
-    }
-
-    for (const format of this.formats) {
-      const formatter = new window.google.visualization[format.type](
-        format.options
-      );
-
-      this.debug(`Formatting column [${format.index}] with:`);
-      this.debug(format);
-
-      formatter.format(this.data, format.index);
-    }
   }
 
   /**
@@ -186,9 +166,87 @@ export default class Drawable extends Eventful {
   }
 
   /**
+   * Sugar method for updating the chart's data directly
+   */
+  public async updateData(
+    payload: any,
+    autoRedraw = true
+  ): Promise<ChartUpdateReturn> {
+    this.debug("Updating data");
+    this.debug(payload);
+
+    return this.update({ data: payload }, autoRedraw);
+  }
+
+  /**
+   * Sugar method for updating the chart's options directly
+   */
+  public updateOptions(
+    payload: any,
+    autoRedraw = true
+  ): Promise<ChartUpdateReturn> {
+    this.debug("Updating options");
+    this.debug(payload);
+
+    return this.update({ options: payload }, autoRedraw);
+  }
+
+  /**
+   * Plumbing method Update a chart's options and/or data
+   *
+   * The chart will redraw if the `autoRedraw` option is set.
+   * default: `true`
+   */
+  public async update(
+    { data, options }: OptionDataPayload,
+    autoRedraw = true
+  ): Promise<ChartUpdateReturn> {
+    if (typeof options !== "undefined") {
+      this.options = Object.assign(this.options, options);
+    }
+
+    if (typeof data !== "undefined") {
+      this.setData(data);
+    }
+
+    if (autoRedraw === true) {
+      await this.draw();
+    }
+
+    return {
+      data: this.data,
+      chart: this.googleChart,
+      options: this.options
+    };
+  }
+
+  /**
+   * Apply the formats to the DataTable
+   */
+  public applyFormats(formats?: Formatter[]): void {
+    if (formats) {
+      this.formats = formats;
+    }
+
+    for (const format of this.formats) {
+      const formatter = new window.google.visualization[format.type](
+        format.options
+      );
+
+      this.debug(`Formatting column [${format.index}] with:`);
+      this.debug(format);
+
+      formatter.format(this.data, format.index);
+    }
+  }
+
+  /**
    * Sets the [[DataTable]] for the [[Drawable]].
    */
-  public async setData(payload: any): Promise<void> {
+  protected async setData(payload: any): Promise<void> {
+    this.debug(`Setting data`);
+    this.debug(payload);
+
     if (payload instanceof DataQuery) {
       this.debug(`Sending DataQuery`);
 
@@ -206,60 +264,9 @@ export default class Drawable extends Eventful {
       throw new DataError(`There was a error setting the data for ${this.id}`);
     }
 
-    this.debug(`Setting data`);
-    this.debug(this.data);
-
     if (payload.formats) {
       this.applyFormats(payload.formats);
     }
-  }
-
-  /**
-   * Update a chart's options and/or data
-   *
-   * The chart will redraw.
-   */
-  public async update(
-    { data, options }: OptionDataPayload,
-    autoRedraw = true
-  ): Promise<ChartUpdateReturn> {
-    if (typeof options !== "undefined") {
-      this.options = Object.assign(this.options, options);
-    }
-
-    if (typeof data !== "undefined") {
-      this.updateData(data);
-    }
-
-    if (autoRedraw === true) {
-      await this.draw();
-    }
-
-    return {
-      data: this.data,
-      chart: this.googleChart,
-      options: this.options
-    };
-  }
-
-  /**
-   * Update the chart's data
-   */
-  protected async updateData(payload: any): Promise<ChartUpdateReturn> {
-    this.debug("Updating data");
-    this.debug(payload);
-
-    return this.update({ data: payload });
-  }
-
-  /**
-   * Update the chart's options
-   */
-  protected updateOptions(payload: any): Promise<ChartUpdateReturn> {
-    this.debug("Updating options");
-    this.debug(payload);
-
-    return this.update({ options: payload });
   }
 
   /**
@@ -274,6 +281,7 @@ export default class Drawable extends Eventful {
 
         handler({
           event: e,
+          $this: this,
           data: this.data,
           chart: this.googleChart
         });

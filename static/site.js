@@ -12,6 +12,7 @@ import "../src/lava";
 /* eslint-enable */
 
 window.lava.options.debug = false;
+window.lava.options.autodraw = false;
 
 window.$ = window.jQuery = jQuery;
 
