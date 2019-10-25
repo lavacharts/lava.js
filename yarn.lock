@@ -2558,14 +2558,7 @@ date-now@^0.1.4:
   resolved "https://registry.yarnpkg.com/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
   integrity sha1-6vQ5/U1ISK105cx9vvIAZyueNFs=
 
-debug-logger@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/debug-logger/-/debug-logger-0.4.1.tgz#e33849c369e3cd361b50b299d71ca5224baa1ae1"
-  integrity sha1-4zhJw2njzTYbULKZ1xylIkuqGuE=
-  dependencies:
-    debug "^2.1.0"
-
-debug@2.6.9, debug@^2.1.0, debug@^2.1.3, debug@^2.2.0, debug@^2.3.3, debug@^2.6.8, debug@^2.6.9:
+debug@2.6.9, debug@^2.1.3, debug@^2.2.0, debug@^2.3.3, debug@^2.6.8, debug@^2.6.9:
   version "2.6.9"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.9.tgz#5d128515df134ff327e90a4c93f4e077a536341f"
   integrity sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==
@@ -7336,11 +7329,6 @@ redent@^1.0.0:
   dependencies:
     indent-string "^2.1.0"
     strip-indent "^1.0.1"
-
-redux-zero@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/redux-zero/-/redux-zero-5.1.0.tgz#d07a9bd0b0126738cdbce78b542e907d7e5ed632"
-  integrity sha512-vumZYP44A2Ah5UOR9LzTkKGJHsX9QXt57mNnYRkhzsAEnQM1QjKGLltLn/kmwhuvJCbxV7/VsiON6c1wGpyzvg==
 
 regenerate-unicode-properties@^8.1.0:
   version "8.1.0"
