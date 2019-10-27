@@ -121,7 +121,7 @@ export default class GoogleLoader extends Eventful {
       const script = document.createElement("script") as ScriptElement;
 
       script.type = "text/javascript";
-      script.async = true;
+      script.defer = true;
       script.src = GoogleLoader.LOADER_URL;
       script.onload = script.onreadystatechange = (event: Event) => {
         // eslint-disable-next-line no-param-reassign

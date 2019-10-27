@@ -1,7 +1,5 @@
 import Drawable from "./Drawable";
-import { EVENTS } from "./Eventful";
-import { Google } from "./types";
-import { ChartEvents, ChartInterface, ChartTypes } from "./types/chart";
+import { ChartInterface, ChartTypes } from "./types/chart";
 import { getChartClass } from "./VisualizationProperties";
 
 export default class Chart extends Drawable {
@@ -31,19 +29,6 @@ export default class Chart extends Drawable {
 
     this.type = drawable.type;
     this.png = Boolean(drawable.png);
-
-    Object.keys(this.events).forEach(event => {
-      const e = event as ChartEvents;
-
-      this.registerEventHandler(e, this.events[e]);
-    });
-
-    const { googleIsDefined } = this._lava.getLoader();
-
-    if (googleIsDefined) {
-      console.log("Whoa, google was already ready?! rad!");
-      this.draw();
-    }
   }
 
   /**

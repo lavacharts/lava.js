@@ -42,6 +42,20 @@ export default class DataQuery {
   }
 
   /**
+   * Send the query and fetch the DataTable
+   */
+  public async getDataTable(): Promise<google.visualization.DataTable> {
+    this.debug("Sending DataQuery");
+
+    const response = await this.send();
+
+    this.debug("Response received");
+    this.debug(response);
+
+    return response.getDataTable();
+  }
+
+  /**
    * create a new DataQuery based on the given payload
    *
    * @throws {DataError}

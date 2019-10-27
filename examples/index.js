@@ -15,10 +15,9 @@ lava.chart({
   ],
   options: {
     title: "Let your data flow",
-    curveType: "function",
     legend: "none",
     colors: ["red"]
   }
 });
 
-// lava.draw();
+lava.draw();

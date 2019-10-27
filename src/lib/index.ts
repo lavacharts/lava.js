@@ -1,3 +1,4 @@
+import DataQuery from "../DataQuery";
 import LavaJs from "../LavaJs";
 import { Google } from "../types";
 import { ConsoleLogger } from "./logger";
@@ -52,7 +53,13 @@ export function addEvent(
  *
  * @param {Object|Function|Array} payload Json representation of a DataTable
  */
-export function createDataTable(payload: any): google.visualization.DataTable {
+export async function createDataTable(
+  payload: any
+): Promise<google.visualization.DataTable> {
+  if (payload instanceof DataQuery) {
+    return await payload.getDataTable();
+  }
+
   // If a function is received, then create an new DataTable and pass it to the
   // function for user modifications.
   if (typeof payload === "function") {

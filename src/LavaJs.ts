@@ -127,9 +127,13 @@ export default class LavaJs extends Eventful {
       }
     }
 
-    this.loader.once(EVENTS.GOOGLE_READY, () => {
-      this.emitEvent(EVENTS.DRAW);
-    });
+    if (this.loader.googleIsDefined) {
+      this.draw();
+    } else {
+      this.loader.once(EVENTS.GOOGLE_READY, () => {
+        this.emitEvent(EVENTS.DRAW);
+      });
+    }
 
     return charts;
   }

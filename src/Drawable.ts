@@ -8,7 +8,6 @@ import { ChartUpdateReturn, LavaJsOptions } from "./types";
 import { ChartEvents, ChartInterface } from "./types/chart";
 import { DrawableInterface, OptionDataPayload } from "./types/drawable";
 import { Formatter } from "./types/formats";
-import { getChartClass } from "./VisualizationProperties";
 
 /**
  * The [[Drawable]] class is the base for [[Chart]]s and [[Dashboard]]s
@@ -103,24 +102,9 @@ export default class Drawable extends Eventful {
     getLogger().extend("Drawable")(this);
 
     this._lava = getLava();
-    // this._lava.google.then(() => {
-    // this._lava.on(EVENTS.DRAW, () => {
-    //   this.debug("google ready");
-    //   this.draw();
-    // });
-
-    // if (this._lava.autodrawEnabled(() => {
-    //   this._lava.on(EVENTS.GOOGLE_READY, () => {
-    //     this.debug(`Caught <${EVENTS.GOOGLE_READY}> event`);
-    //     this.draw();
-    //   });
-    // });
-
-    // if (this._lava.options.autodraw) {
-    //   this._lava.on(EVENTS.GOOGLE_READY, () => this.draw());
-    // }
 
     this.debug(`Registering <${EVENTS.DRAW}> event relay.`);
+
     this._lava.on(EVENTS.DRAW, () => {
       this.debug(`<${EVENTS.DRAW}> event recieved.`);
       this.draw();
@@ -154,6 +138,12 @@ export default class Drawable extends Eventful {
       this.applyFormats();
     }
 
+    Object.keys(this.events).forEach(event => {
+      const e = event as ChartEvents;
+
+      this.registerEventHandler(e, this.events[e]);
+    });
+
     this.googleChart.draw(this.data, this.options);
   }
 
@@ -162,6 +152,8 @@ export default class Drawable extends Eventful {
    * register the handlers to our own map.
    */
   public on(event: ChartEvents, handler: Function, ctx?: any): this {
+    this.debug(`Attaching <${event}> handler`);
+
     if (ctx) {
       this.events[event] = handler.bind(ctx);
     } else {
@@ -199,7 +191,7 @@ export default class Drawable extends Eventful {
     payload: any,
     autoRedraw = true
   ): Promise<ChartUpdateReturn> {
-    this.debug("Updating data");
+    this.debug("updatingData()");
     this.debug(payload);
 
     return this.update({ data: payload }, autoRedraw);
@@ -212,7 +204,7 @@ export default class Drawable extends Eventful {
     payload: any,
     autoRedraw = true
   ): Promise<ChartUpdateReturn> {
-    this.debug("Updating options");
+    this.debug("updatingOptions()");
     this.debug(payload);
 
     return this.update({ options: payload }, autoRedraw);
@@ -237,6 +229,7 @@ export default class Drawable extends Eventful {
     }
 
     if (autoRedraw === true) {
+      // this.debug("Redrawing...");
       await this.draw();
     }
 
@@ -271,21 +264,10 @@ export default class Drawable extends Eventful {
    * Sets the [[DataTable]] for the [[Drawable]].
    */
   protected async setData(payload: any): Promise<void> {
-    this.debug(`Setting data`);
+    this.debug("setData()");
     this.debug(payload);
 
-    if (payload instanceof DataQuery) {
-      this.debug(`Sending DataQuery`);
-
-      const response = await payload.send();
-
-      this.debug(`Response received`);
-      this.debug(response);
-
-      this.data = response.getDataTable();
-    } else {
-      this.data = createDataTable(payload);
-    }
+    this.data = await createDataTable(payload);
 
     if (this.data instanceof google.visualization.DataTable === false) {
       throw new DataError(`There was a error setting the data for ${this.id}`);

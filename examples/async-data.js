@@ -16,8 +16,10 @@ const chart = lava.chart({
 });
 
 chart.on("ready", () => {
+  console.log("Ready to start updating...");
+
   setInterval(() => {
-    console.error(new Date());
+    console.error("UPDATING!");
 
     chart.updateData([
       ["Age", "Cash"],
@@ -28,4 +30,4 @@ chart.on("ready", () => {
   }, 2000);
 });
 
-// lava.draw();
+lava.draw();
