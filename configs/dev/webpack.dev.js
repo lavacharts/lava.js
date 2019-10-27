@@ -11,7 +11,7 @@ const templateEntries = require("./templateEntries");
 
 module.exports = merge(require("../webpack.common.js"), {
   mode: "development",
-  devtool: false,
+  devtool: "inline-source-map",
   entry: {
     site: PATHS.join.static("site.js"),
     ...Object.assign(templateEntries, {

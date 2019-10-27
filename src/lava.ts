@@ -1,4 +1,3 @@
-import LavaJs from "./LavaJs";
+import "./";
 
-window.LavaJs = LavaJs;
-window.lava = new LavaJs();
+window.lava = new window.LavaJs();

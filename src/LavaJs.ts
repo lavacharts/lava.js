@@ -40,6 +40,8 @@ export default class LavaJs extends Eventful {
    */
   private readonly loader: GoogleLoader;
 
+  public google!: Promise<Google>;
+
   /**
    * Create a new instance of the LavaJs library
    *
@@ -70,20 +72,27 @@ export default class LavaJs extends Eventful {
     this.loader.on(EVENTS.GOOGLE_READY, (google: Google) => {
       this.emitEvent(EVENTS.GOOGLE_READY, google);
 
-      if (this.options.autodraw) {
-        this.emitEvent(EVENTS.DRAW);
-      }
+      // if (this.options.autodraw) {
+      //   this.emitEvent(EVENTS.DRAW);
+      // }
     });
 
     if (this.loader.googleIsDefined === false) {
       if (this.options.autoloadGoogle) {
-        this.loader.loadGoogle();
+        this.google = this.loader.loadGoogle();
       }
     }
 
     if (this.options.responsive === true) {
       this.attachResizeHandler();
     }
+  }
+
+  /**
+   * Get the instance of the GoogleLoader
+   */
+  public getLoader(): GoogleLoader {
+    return this.loader;
   }
 
   /**
@@ -118,7 +127,9 @@ export default class LavaJs extends Eventful {
       }
     }
 
-    this.emitEvent(EVENTS.DRAW);
+    this.loader.once(EVENTS.GOOGLE_READY, () => {
+      this.emitEvent(EVENTS.DRAW);
+    });
 
     return charts;
   }
@@ -205,7 +216,7 @@ export default class LavaJs extends Eventful {
    * Attach a listener to the window resize event for redrawing the charts.
    */
   private attachResizeHandler(): void {
-    let debounced: number;
+    let debounced: any;
 
     addEvent(window, "resize", () => {
       clearTimeout(debounced);

@@ -1,5 +1,6 @@
 import Chart from "./Chart";
 import Eventful, { EVENTS } from "./Eventful";
+import { getGoogle } from "./lib";
 import { getLogger } from "./lib/logger";
 import { Google, GoogleLoaderOptions, LavaJsOptions } from "./types";
 import { getChartPackage } from "./VisualizationProperties";
@@ -70,13 +71,6 @@ export default class GoogleLoader extends Eventful {
   }
 
   /**
-   * Get a reference to the `window.google`
-   */
-  public get google(): Google {
-    return window.google;
-  }
-
-  /**
    * Extract and register the package needed to draw the chart.
    */
   public register(chart: Chart): void {
@@ -90,9 +84,9 @@ export default class GoogleLoader extends Eventful {
     this.debug("Loading Google...");
 
     if (this.googleIsDefined) {
-      this.debug(this.google);
+      // this.debug(this.google);
 
-      return this.google;
+      return getGoogle();
     }
 
     if (this.scriptTagInPage === false) {
@@ -110,9 +104,9 @@ export default class GoogleLoader extends Eventful {
     return new Promise(resolve => {
       window.google.charts.setOnLoadCallback(() => {
         this.debug("Loaded!");
-        this.emitEvent(EVENTS.GOOGLE_READY, this.google);
+        this.emitEvent(EVENTS.GOOGLE_READY, getGoogle());
 
-        resolve(this.google);
+        resolve(getGoogle());
       });
     });
   }

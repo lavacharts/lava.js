@@ -28,4 +28,4 @@ chart.on("ready", () => {
   }, 2000);
 });
 
-lava.draw();
+// lava.draw();

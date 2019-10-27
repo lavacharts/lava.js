@@ -21,4 +21,4 @@ lava.chart({
   }
 });
 
-lava.draw();
+// lava.draw();

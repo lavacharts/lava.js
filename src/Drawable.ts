@@ -2,20 +2,19 @@ import DataQuery from "./DataQuery";
 import { DataError, ElementIdNotFound } from "./Errors";
 import Eventful, { EVENTS } from "./Eventful";
 import LavaJs from "./LavaJs";
-import { createDataTable, getWindowInstance } from "./lib";
+import { createDataTable, getLava } from "./lib";
 import { getLogger } from "./lib/logger";
 import { ChartUpdateReturn, LavaJsOptions } from "./types";
 import { ChartEvents, ChartInterface } from "./types/chart";
 import { DrawableInterface, OptionDataPayload } from "./types/drawable";
 import { Formatter } from "./types/formats";
+import { getChartClass } from "./VisualizationProperties";
 
 /**
  * The [[Drawable]] class is the base for [[Chart]]s and [[Dashboard]]s
  * to share common methods between the two types
  */
 export default class Drawable extends Eventful {
-  type: string;
-
   /**
    * Configurable options
    */
@@ -57,9 +56,9 @@ export default class Drawable extends Eventful {
   public readonly label: string;
 
   /**
-   * Reference to the `window.lava` object
+   * Type of [[Drawable]]
    */
-  protected _lava: LavaJs;
+  public readonly type: string;
 
   /**
    * Formatters for the DataTable
@@ -70,6 +69,11 @@ export default class Drawable extends Eventful {
    * Event listeners for the Drawable
    */
   protected events: Record<ChartEvents, CallableFunction>;
+
+  /**
+   * Reference to the `window.lava` object
+   */
+  protected readonly _lava!: LavaJs;
 
   /**
    * The initial source of data for the DataTable
@@ -95,11 +99,32 @@ export default class Drawable extends Eventful {
 
     this.debug = getLogger().extend(this.id);
 
-    this._lava = getWindowInstance();
-    this._lava.on(EVENTS.DRAW, () => this.draw());
+    getLogger().extend("Drawable")(`Building new ${drawable.type}`);
+    getLogger().extend("Drawable")(this);
 
-    this.debug(`${this.id} has be registered`);
-    this.debug(drawable);
+    this._lava = getLava();
+    // this._lava.google.then(() => {
+    // this._lava.on(EVENTS.DRAW, () => {
+    //   this.debug("google ready");
+    //   this.draw();
+    // });
+
+    // if (this._lava.autodrawEnabled(() => {
+    //   this._lava.on(EVENTS.GOOGLE_READY, () => {
+    //     this.debug(`Caught <${EVENTS.GOOGLE_READY}> event`);
+    //     this.draw();
+    //   });
+    // });
+
+    // if (this._lava.options.autodraw) {
+    //   this._lava.on(EVENTS.GOOGLE_READY, () => this.draw());
+    // }
+
+    this.debug(`Registering <${EVENTS.DRAW}> event relay.`);
+    this._lava.on(EVENTS.DRAW, () => {
+      this.debug(`<${EVENTS.DRAW}> event recieved.`);
+      this.draw();
+    });
   }
 
   /**
@@ -128,6 +153,8 @@ export default class Drawable extends Eventful {
     if (this.formats) {
       this.applyFormats();
     }
+
+    this.googleChart.draw(this.data, this.options);
   }
 
   /**

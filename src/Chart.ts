@@ -1,4 +1,6 @@
 import Drawable from "./Drawable";
+import { EVENTS } from "./Eventful";
+import { Google } from "./types";
 import { ChartEvents, ChartInterface, ChartTypes } from "./types/chart";
 import { getChartClass } from "./VisualizationProperties";
 
@@ -29,19 +31,6 @@ export default class Chart extends Drawable {
 
     this.type = drawable.type;
     this.png = Boolean(drawable.png);
-  }
-
-  /**
-   * Actions to perform before `chart.draw()`
-   */
-  public async draw(): Promise<void> {
-    await super.draw();
-
-    const chartClass = getChartClass(this);
-
-    this.googleChart = new window.google.visualization[chartClass](
-      this.container
-    );
 
     Object.keys(this.events).forEach(event => {
       const e = event as ChartEvents;
@@ -49,7 +38,23 @@ export default class Chart extends Drawable {
       this.registerEventHandler(e, this.events[e]);
     });
 
-    this.googleChart.draw(this.data, this.options);
+    const { googleIsDefined } = this._lava.getLoader();
+
+    if (googleIsDefined) {
+      console.log("Whoa, google was already ready?! rad!");
+      this.draw();
+    }
+  }
+
+  /**
+   * Actions to perform before `chart.draw()`
+   */
+  public async draw(): Promise<void> {
+    const chartClass = getChartClass(this);
+
+    this.googleChart = new google.visualization[chartClass](this.container);
+
+    await super.draw();
 
     if (this.png) {
       this.drawPng();
