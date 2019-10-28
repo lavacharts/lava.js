@@ -1,12 +1,17 @@
-# LavaJs (beta)
+# LavaJs
 
 [![Build Status](https://travis-ci.org/lavacharts/lava.js.svg?branch=master)](https://travis-ci.org/lavacharts/lava.js)
+[![Maintainability](https://api.codeclimate.com/v1/badges/96b0c79fddc76585ac58/maintainability)](https://codeclimate.com/github/lavacharts/lava.js/maintainability)
 
-LavaJs is the javascript module that accompanies the [Lavacharts PHP library](https://github.com/kevinkhill/lavacharts)
+LavaJs is the javascript module was developed within [Lavacharts](https://github.com/kevinkhill/lavacharts) but is now it
+is all grown up. I recently learned Typescript so this was a fun exercise to convert the whole module into Typescript and
+add some fun features along the way.
 
-## Standalone
-This is still a work in progress, but as of v4.0, LavaJs can be used independently from Lavacharts.
-
-Clone or download the repo and check out the examples folder to see how easy it can be to make charts.
-
-Documentation will come later...
+## Features
+- [x] [Drawing a single chart](https://lavajs.lavacharts.com)
+- [x] [Drawing multiple charts](https://lavajs.lavacharts.com/multichart.html)
+- [x] [Remote DataQuerys](https://lavajs.lavacharts.com/dataquery.html)
+- [x] [Update Data](https://lavajs.lavacharts.com/async-data.html)
+- [x] [Update Options](https://lavajs.lavacharts.com/options.html)
+- [x] [Formatting data](https://lavajs.lavacharts.com/formats.html)
+- [ ] [Dashboards](https://lavajs.lavacharts.com/dashboard.html) 

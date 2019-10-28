@@ -77,7 +77,7 @@ export default class Drawable extends Eventful {
   /**
    * The initial source of data for the DataTable
    */
-  private readonly initialData: any;
+  private initialData: any;
 
   /**
    * Create a new Drawable
@@ -123,12 +123,16 @@ export default class Drawable extends Eventful {
       throw new ElementIdNotFound(this.elementId);
     }
 
-    const payload =
-      typeof this.initialData === "string"
-        ? new DataQuery(this.initialData)
-        : this.initialData;
+    if (typeof this.initialData !== "undefined") {
+      const data =
+        typeof this.initialData === "string"
+          ? new DataQuery(this.initialData)
+          : this.initialData;
 
-    await this.setData(payload);
+      await this.setData(data);
+
+      delete this.initialData;
+    }
 
     if (this.data instanceof google.visualization.DataTable !== true) {
       throw new DataError(`There was a error setting the data for ${this.id}`);
@@ -191,9 +195,6 @@ export default class Drawable extends Eventful {
     payload: any,
     autoRedraw = true
   ): Promise<ChartUpdateReturn> {
-    this.debug("updatingData()");
-    this.debug(payload);
-
     return this.update({ data: payload }, autoRedraw);
   }
 
@@ -204,9 +205,6 @@ export default class Drawable extends Eventful {
     payload: any,
     autoRedraw = true
   ): Promise<ChartUpdateReturn> {
-    this.debug("updatingOptions()");
-    this.debug(payload);
-
     return this.update({ options: payload }, autoRedraw);
   }
 
@@ -221,15 +219,18 @@ export default class Drawable extends Eventful {
     autoRedraw = true
   ): Promise<ChartUpdateReturn> {
     if (typeof options !== "undefined") {
+      this.debug("Setting options");
+      this.debug(options);
       this.options = Object.assign(this.options, options);
     }
 
     if (typeof data !== "undefined") {
+      this.debug("Setting data");
+      this.debug(data);
       this.setData(data);
     }
 
     if (autoRedraw === true) {
-      // this.debug("Redrawing...");
       await this.draw();
     }
 
@@ -264,9 +265,6 @@ export default class Drawable extends Eventful {
    * Sets the [[DataTable]] for the [[Drawable]].
    */
   protected async setData(payload: any): Promise<void> {
-    this.debug("setData()");
-    this.debug(payload);
-
     this.data = await createDataTable(payload);
 
     if (this.data instanceof google.visualization.DataTable === false) {
@@ -282,12 +280,12 @@ export default class Drawable extends Eventful {
    * Helper method to attach event handlers to `this.googleChart`
    */
   protected registerEventHandler(event: ChartEvents, handler: Function): void {
+    this.debug(`Registering handler for <${event}>`);
+
     google.visualization.events.addListener(
       this.googleChart,
       event,
       (e: any) => {
-        this.debug(`Registering handler for <${event}>`);
-
         handler({
           event: e,
           $this: this,

@@ -15,19 +15,15 @@ const chart = lava.chart({
   }
 });
 
-chart.on("ready", () => {
-  console.log("Ready to start updating...");
-
-  setInterval(() => {
-    console.error("UPDATING!");
-
+jQuery($ => {
+  $("#clicky").click(() => {
     chart.updateData([
       ["Age", "Cash"],
       [r(20, 30), r(100, 300)],
       [r(20, 30), r(100, 300)],
       [r(20, 30), r(100, 300)]
     ]);
-  }, 2000);
+  });
 });
 
 lava.draw();

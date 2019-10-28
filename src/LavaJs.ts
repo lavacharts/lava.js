@@ -226,7 +226,7 @@ export default class LavaJs extends Eventful {
       clearTimeout(debounced);
 
       debounced = setTimeout(() => {
-        this.debug("Window re-sized, redrawing...");
+        this.debug(`Window re-sized, firing <${EVENTS.DRAW}>`);
 
         this.emit(EVENTS.DRAW);
       }, this.options.debounceTimeout);

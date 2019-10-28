@@ -50,8 +50,6 @@ export function addEvent(
 
 /**
  * Sets the data for the chart by creating a new DataTable
- *
- * @param {Object|Function|Array} payload Json representation of a DataTable
  */
 export async function createDataTable(
   payload: any
