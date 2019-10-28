@@ -1,33 +1,3 @@
-import DataQuery from "../DataQuery";
-import { ChartClasses, ChartTypes } from "./chart";
-import { DrawableState } from "./drawable";
-import { SupportedFormatters } from "./formats";
-import {
-  Google,
-  GoogleDataTable,
-  GoogleLoaderOptions,
-  GoogleQueryOptions,
-  QueryTransformer
-} from "./google";
-
-export {
-  ChartClasses,
-  Google,
-  GoogleLoaderOptions,
-  ChartTypes as SupportedCharts,
-  SupportedFormatters
-};
-
-export type LavaState = Record<string, DrawableState>;
-
-export type DataQueryInterface = {
-  url: string;
-  opts?: GoogleQueryOptions;
-  transformer?: QueryTransformer;
-};
-
-export type DataQueryFactory = (payload: DataQueryInterface) => DataQuery;
-
 export interface LavaJsOptions {
   autoloadGoogle?: boolean;
   autodraw?: boolean;
@@ -42,7 +12,7 @@ export interface LavaJsOptions {
 }
 
 export interface ChartUpdateReturn {
-  data: GoogleDataTable;
+  data: google.visualization.DataTable;
   chart: any;
-  options: Record<string, any>;
+  options: LavaJsOptions;
 }

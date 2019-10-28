@@ -82,6 +82,7 @@ module.exports = {
         lava: true,
         LavaJs: true,
         sinon: true,
+        assert: true,
         expect: true
       },
       env: {

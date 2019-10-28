@@ -1,18 +1,11 @@
 import Chart from "./Chart";
 import Dashboard from "./Dashboard";
-import DataQuery from "./DataQuery";
 import DefaultOptions from "./DefaultOptions";
 import Eventful, { EVENTS } from "./Eventful";
 import GoogleLoader from "./GoogleLoader";
 import { addEvent } from "./lib";
 import { ConsoleLogger, getLogger } from "./lib/logger";
-import {
-  DataQueryFactory,
-  DataQueryInterface,
-  Google,
-  LavaJsOptions,
-  LavaState
-} from "./types";
+import { LavaJsOptions } from "./types";
 import { ChartInterface } from "./types/chart";
 import { DrawableInterface } from "./types/drawable";
 
@@ -33,14 +26,12 @@ export default class LavaJs extends Eventful {
   /**
    * Drawables registy
    */
-  public readonly registry: LavaState = {};
+  public readonly registry: Record<string, any> = {};
 
   /**
-   * Loader for appending the google script and making `window.google` available
+   * Loader for adding the google script and making `window.google` available
    */
   private readonly loader: GoogleLoader;
-
-  public google!: Promise<Google>;
 
   /**
    * Create a new instance of the LavaJs library
@@ -71,16 +62,10 @@ export default class LavaJs extends Eventful {
 
     this.loader.on(EVENTS.GOOGLE_READY, (google: Google) => {
       this.emitEvent(EVENTS.GOOGLE_READY, google);
-
-      // if (this.options.autodraw) {
-      //   this.emitEvent(EVENTS.DRAW);
-      // }
     });
 
-    if (this.loader.googleIsDefined === false) {
-      if (this.options.autoloadGoogle) {
-        this.google = this.loader.loadGoogle();
-      }
+    if (!this.loader.googleIsDefined && this.options.autoloadGoogle) {
+      this.loader.loadGoogle();
     }
 
     if (this.options.responsive === true) {
@@ -151,16 +136,6 @@ export default class LavaJs extends Eventful {
   }
 
   /**
-   * Get an instance of a DataQueryFactory
-   *
-   * This can be used to create custom [[DataQuery]]s
-   */
-  public queryFactory(): DataQueryFactory {
-    return (payload: DataQueryInterface): DataQuery =>
-      DataQuery.create(payload);
-  }
-
-  /**
    * Create a new [[Chart]] from an Object
    */
   public chart(payload: ChartInterface): Chart {
@@ -173,7 +148,13 @@ export default class LavaJs extends Eventful {
    * Create a new [[Dashboard]] from an Object
    */
   public dashboard(payload: DrawableInterface): Dashboard {
-    return new Dashboard(payload);
+    const dashboard = new Dashboard(payload);
+
+    return this.register(dashboard);
+  }
+
+  public control(payload: any): google.visualization.ControlWrapper {
+    return new google.visualization.ControlWrapper(payload);
   }
 
   /**
@@ -183,11 +164,9 @@ export default class LavaJs extends Eventful {
    * the event firing through the common interface of `window.lava`
    */
   private register<T extends Chart | Dashboard>(drawable: T): T {
-    this.debug(`Registering ${drawable.id}`);
+    this.debug(`Registering ${drawable.id} packages with the Google Loader`);
 
-    if (drawable.type !== "Dashboard") {
-      this.loader.register(drawable as Chart);
-    }
+    this.loader.register(drawable);
 
     this.registry[drawable.id] = {
       drawn: false,

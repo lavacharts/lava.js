@@ -54,7 +54,6 @@
     "@babel/preset-typescript": "^7.6.0",
     "@babel/runtime": "^7.6.3",
     "@types/debug": "^4.1.5",
-    "@types/google.visualization": "^0.0.48",
     "@types/node": "^12.7.5",
     "@typescript-eslint/eslint-plugin": "^2.3.1",
     "@typescript-eslint/parser": "^2.4.0",

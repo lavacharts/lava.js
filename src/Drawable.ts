@@ -40,14 +40,8 @@ export default class Drawable extends Eventful {
   /**
    * HTMLElement into which the chart will be rendered.
    */
-  public get container(): HTMLElement {
-    const container = document.getElementById(this.containerId);
-
-    if (!container) {
-      throw new ContainerIdNotFound(this.containerId);
-    }
-
-    return container;
+  public get container(): HTMLElement | null {
+    return document.getElementById(this.containerId);
   }
 
   /**

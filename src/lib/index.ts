@@ -1,9 +1,13 @@
+import { Debugger } from "debug";
+
 import DataQuery from "../DataQuery";
 import LavaJs from "../LavaJs";
 import { Google } from "../types";
 import { ConsoleLogger } from "./logger";
 
-export { ConsoleLogger };
+export function getLogger(): Debugger {
+  return ConsoleLogger.getInstance();
+}
 
 export function getGoogle(): Google {
   return window.google;

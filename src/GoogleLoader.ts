@@ -1,7 +1,6 @@
-import Chart from "./Chart";
+import Drawable from "./Drawable";
 import Eventful, { EVENTS } from "./Eventful";
-import { getGoogle } from "./lib";
-import { getLogger } from "./lib/logger";
+import { getGoogle, getLogger } from "./lib";
 import { Google, GoogleLoaderOptions, LavaJsOptions } from "./types";
 import { getChartPackage } from "./VisualizationProperties";
 
@@ -73,8 +72,12 @@ export default class GoogleLoader extends Eventful {
   /**
    * Extract and register the package needed to draw the chart.
    */
-  public register(chart: Chart): void {
-    this.packages.add(getChartPackage(chart));
+  public register<T extends Drawable>(drawable: T): void {
+    if (drawable instanceof Dashboard) {
+      this.packages.add("controls");
+    } else {
+      this.packages.add(getChartPackage(drawable));
+    }
   }
 
   /**
@@ -84,8 +87,6 @@ export default class GoogleLoader extends Eventful {
     this.debug("Loading Google...");
 
     if (this.googleIsDefined) {
-      // this.debug(this.google);
-
       return getGoogle();
     }
 
@@ -103,7 +104,7 @@ export default class GoogleLoader extends Eventful {
 
     return new Promise(resolve => {
       window.google.charts.setOnLoadCallback(() => {
-        this.debug("Loaded!");
+        this.debug(`Google is loaded, firing <${EVENTS.GOOGLE_READY}>`);
         this.emitEvent(EVENTS.GOOGLE_READY, getGoogle());
 
         resolve(getGoogle());
@@ -132,13 +133,13 @@ export default class GoogleLoader extends Eventful {
           /loaded|complete/.test(script.readyState)
         ) {
           script.onload = script.onreadystatechange = null;
-          debug("Ready!");
+          debug("Loaded");
           resolve();
         }
       };
 
       // debug(`Injecting ${script} into ${target}`);
-      debug(`Injecting ${script} into ${target}`);
+      debug(`Injecting ${GoogleLoader.LOADER_URL}`);
 
       target.appendChild(script);
     });

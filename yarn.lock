@@ -784,11 +784,6 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
-"@types/google.visualization@^0.0.48":
-  version "0.0.48"
-  resolved "https://registry.yarnpkg.com/@types/google.visualization/-/google.visualization-0.0.48.tgz#9848e0cf0046784209f97615abd7f5621595f40c"
-  integrity sha512-dK6g23tPWwlWr4W50bk1cv0qhOes/GfPAqadnWdtA96GMqjXeDtb+sTIM3pCd0LxFuXtm4hTgGUOl9xuOoCDnA==
-
 "@types/json-schema@^7.0.3":
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.3.tgz#bdfd69d61e464dcc81b25159c270d75a73c1a636"

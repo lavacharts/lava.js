@@ -1,4 +1,3 @@
-import { SupportedCharts } from ".";
 import { ChartTypes } from "./chart";
 import { Formatter } from "./formats";
 
@@ -7,12 +6,7 @@ export interface OptionDataPayload {
   options?: any;
 }
 
-export interface DrawableState {
-  drawn: boolean;
-  needsRedraw: boolean;
-}
-
-export type DrawableTypes = SupportedCharts | "Dashboard";
+export type DrawableTypes = ChartTypes | "Dashboard";
 
 export interface DrawableInterface {
   data: any;
@@ -22,4 +16,12 @@ export interface DrawableInterface {
   options?: any;
   events?: Record<string, Function>;
   formats?: Formatter[];
+}
+
+export interface DashboardSpec {
+  label: string;
+  containerId: string;
+  data: any;
+  options?: any;
+  events?: Record<string, Function>;
 }

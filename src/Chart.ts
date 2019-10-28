@@ -1,4 +1,6 @@
 import Drawable from "./Drawable";
+import { ContainerIdNotFound } from "./Errors";
+import { getGoogle } from "./lib";
 import { ChartInterface, ChartTypes } from "./types/chart";
 import { getChartClass } from "./VisualizationProperties";
 
@@ -35,9 +37,17 @@ export default class Chart extends Drawable {
    * Actions to perform before `chart.draw()`
    */
   public async draw(): Promise<void> {
-    const chartClass = getChartClass(this);
+    const google = getGoogle();
 
-    this.googleChart = new google.visualization[chartClass](this.container);
+    const container = document.getElementById(this.containerId);
+
+    if (!container) {
+      throw new ContainerIdNotFound(this.containerId);
+    }
+
+    this.googleChart = new google.visualization[getChartClass(this)](
+      this.container
+    );
 
     await super.draw();
 
