@@ -3,7 +3,7 @@ const f = (min, max) => Math.random() * (max - min) + min;
 lava.chart({
   label: "Lavachart",
   type: "AreaChart",
-  elementId: "chart_div",
+  containerId: "chart_div",
   data: [
     ["Hours Past", "Temp. (C)"],
     [1, f(500, 600)],

@@ -1,7 +1,7 @@
 const chart = lava.chart({
   label: "MyFancyChart",
   type: "ScatterChart",
-  elementId: "chart_div",
+  containerId: "chart_div",
   data: [["Age", "Cash"], [12, 101], [15, 240], [37, 80], [32, 324]],
   options: {
     legend: "none"

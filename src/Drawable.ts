@@ -1,5 +1,5 @@
 import DataQuery from "./DataQuery";
-import { DataError, ElementIdNotFound } from "./Errors";
+import { ContainerIdNotFound, DataError } from "./Errors";
 import Eventful, { EVENTS } from "./Eventful";
 import LavaJs from "./LavaJs";
 import { createDataTable, getLava } from "./lib";
@@ -40,14 +40,20 @@ export default class Drawable extends Eventful {
   /**
    * HTMLElement into which the chart will be rendered.
    */
-  public get container(): HTMLElement | null {
-    return document.getElementById(this.elementId);
+  public get container(): HTMLElement {
+    const container = document.getElementById(this.containerId);
+
+    if (!container) {
+      throw new ContainerIdNotFound(this.containerId);
+    }
+
+    return container;
   }
 
   /**
    * Element ID of the DOM node for the container
    */
-  public readonly elementId: string;
+  public readonly containerId: string;
 
   /**
    * Unique label for the [[Chart]] / [[Dashboard]].
@@ -90,7 +96,7 @@ export default class Drawable extends Eventful {
     this.type = drawable.type;
     this.label = drawable.label;
     this.initialData = drawable.data;
-    this.elementId = drawable.elementId;
+    this.containerId = drawable.containerId;
 
     this.options = drawable.options || {};
     this.formats = drawable.formats || [];
@@ -120,7 +126,7 @@ export default class Drawable extends Eventful {
     this.debug("Drawing...");
 
     if (!this.container) {
-      throw new ElementIdNotFound(this.elementId);
+      throw new ContainerIdNotFound(this.containerId);
     }
 
     if (typeof this.initialData !== "undefined") {

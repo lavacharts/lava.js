@@ -3,12 +3,6 @@ import { Formatter } from "./formats";
 
 export type ChartFactory = (type: ChartClasses) => NewChartConstructor;
 
-export enum VisualizationProps {
-  "CLASS" = 0,
-  "PACKAGE" = 1,
-  "VERSION" = 2
-}
-
 export enum CHART_EVENTS {
   READY = "ready",
   SELECT = "select",

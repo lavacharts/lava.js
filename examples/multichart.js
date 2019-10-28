@@ -2,7 +2,7 @@ lava.draw([
   {
     label: "Chart1",
     type: "AreaChart",
-    elementId: "chart_div1",
+    containerId: "chart_div1",
     data: [
       ["Hours", "Temp. (C)"],
       [1, Math.random()],
@@ -20,7 +20,7 @@ lava.draw([
   {
     label: "Chart2",
     type: "BarChart",
-    elementId: "chart_div2",
+    containerId: "chart_div2",
     data: [
       ["Hours", "Temp. (C)"],
       [1, Math.random()],

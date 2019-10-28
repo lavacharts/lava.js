@@ -1,7 +1,7 @@
 const chart = lava.chart({
   label: "Test",
   type: "ScatterChart",
-  elementId: "chart_div",
+  containerId: "chart_div",
   data: [
     ["Age", "Cash"],
     [12, 101],

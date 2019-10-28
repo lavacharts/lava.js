@@ -1,7 +1,7 @@
 const chart = lava.chart({
   label: "Test",
   type: "PieChart",
-  elementId: "chart_div",
+  containerId: "chart_div",
   data: data => {
     data.addColumn("string", "Topping");
     data.addColumn("number", "Pizzas");
@@ -28,5 +28,5 @@ chart.on("select", ({ chart, data }) => {
     alert("The user selected " + topping);
   }
 });
-  
+
 lava.draw();

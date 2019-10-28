@@ -18,7 +18,7 @@ export interface DrawableInterface {
   data: any;
   label: any;
   type: ChartTypes;
-  elementId: string;
+  containerId: string;
   options?: any;
   events?: Record<string, Function>;
   formats?: Formatter[];

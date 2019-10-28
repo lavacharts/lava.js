@@ -10,7 +10,7 @@ export class LavaJsError extends Error {
 }
 
 /**
- * ElementIdNotFound Error
+ * ContainerIdNotFound Error
  *
  * Thrown when the given ID for an HTMLElement is not found in the DOM.
  */
@@ -21,11 +21,11 @@ export class DataError extends LavaJsError {
 }
 
 /**
- * ElementIdNotFound Error
+ * ContainerIdNotFound Error
  *
  * Thrown when the given ID for an HTMLElement is not found in the DOM.
  */
-export class ElementIdNotFound extends LavaJsError {
+export class ContainerIdNotFound extends LavaJsError {
   constructor(elemId: string) {
     super(`[lava.js] DOM node where id="${elemId}" was not found.`);
   }

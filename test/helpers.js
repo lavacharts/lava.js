@@ -18,7 +18,7 @@ function getPieChartJson() {
   return {
     label: "MyCoolChart",
     type: "PieChart",
-    elementId: "test-chart",
+    containerId: "test-chart",
     datatable: [
       ["Task", "Hours per Day"],
       ["Work", 11],

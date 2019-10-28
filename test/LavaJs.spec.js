@@ -24,7 +24,7 @@ describe("LavaJs", function() {
       expect(chart.container).to.be.instanceOf(HTMLElement);
 
       expect(chart._dataSrc).to.exist;
-      expect(chart._elementId).to.equal("test-chart");
+      expect(chart._containerId).to.equal("test-chart");
 
       expect(chart.data).to.be.undefined;
       expect(chart.googleChart).to.be.undefined;
