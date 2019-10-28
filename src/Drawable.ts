@@ -77,7 +77,7 @@ export default class Drawable extends Eventful {
   /**
    * The initial source of data for the DataTable
    */
-  private initialData: any;
+  private dataSourceUrl: any;
 
   /**
    * Create a new Drawable
@@ -89,7 +89,7 @@ export default class Drawable extends Eventful {
 
     this.type = drawable.type;
     this.label = drawable.label;
-    this.initialData = drawable.data;
+    this.dataSourceUrl = drawable.data;
     this.elementId = drawable.elementId;
 
     this.options = drawable.options || {};
@@ -123,15 +123,15 @@ export default class Drawable extends Eventful {
       throw new ElementIdNotFound(this.elementId);
     }
 
-    if (typeof this.initialData !== "undefined") {
+    if (typeof this.dataSourceUrl !== "undefined") {
       const data =
-        typeof this.initialData === "string"
-          ? new DataQuery(this.initialData)
-          : this.initialData;
+        typeof this.dataSourceUrl === "string"
+          ? new DataQuery(this.dataSourceUrl)
+          : this.dataSourceUrl;
 
       await this.setData(data);
 
-      delete this.initialData;
+      delete this.dataSourceUrl;
     }
 
     if (this.data instanceof google.visualization.DataTable !== true) {
@@ -170,13 +170,16 @@ export default class Drawable extends Eventful {
   /**
    * Convenience method for setting options dynamicly
    */
-  public async set(optionRef: string, value: any): Promise<ChartUpdateReturn> {
-    // if (optionRef.includes(".")) {
-    //   const options = optionRef.split(".");
+  public async setOption(
+    option: string,
+    value: any
+  ): Promise<ChartUpdateReturn> {
+    // if (option.includes(".")) {
+    //   const options = option.split(".");
     // }
 
     const payload = {
-      [optionRef]: value
+      [option]: value
     };
 
     this.updateOptions(payload);

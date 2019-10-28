@@ -71,10 +71,6 @@ export default class LavaJs extends Eventful {
 
     this.loader.on(EVENTS.GOOGLE_READY, (google: Google) => {
       this.emitEvent(EVENTS.GOOGLE_READY, google);
-
-      // if (this.options.autodraw) {
-      //   this.emitEvent(EVENTS.DRAW);
-      // }
     });
 
     if (this.loader.googleIsDefined === false) {
@@ -173,7 +169,9 @@ export default class LavaJs extends Eventful {
    * Create a new [[Dashboard]] from an Object
    */
   public dashboard(payload: DrawableInterface): Dashboard {
-    return new Dashboard(payload);
+    const dashboard = new Dashboard(payload);
+
+    return this.register(dashboard);
   }
 
   /**

@@ -1,15 +1,12 @@
 import Drawable from "./Drawable";
-/**
- * Dashboard Class
- *
- * @class
- * @module    module:LavaJs/Dashboard
- * @author    Kevin Hill <kevinkhill@gmail.com>
- * @copyright (c) 2019, Kevin Hill
- * @license   MIT
- */
+
+type WrapperType = "control" | "chart";
+
 export default class Dashboard extends Drawable {
-  bindings: any;
+  /**
+   * Control to Chart bindings
+   */
+  protected bindings: any;
 
   /**
    * Create a new Dashboard
@@ -21,33 +18,47 @@ export default class Dashboard extends Drawable {
 
     super(json);
 
+    this.bindings = json.bindings;
+
+    this.attachBindings();
+  }
+
+  public async draw(): Promise<void> {
     this.googleChart = new window.google.visualization.Dashboard(this
       .container as HTMLElement);
 
-    this.bindings = json.bindings;
+    this.googleChart.draw(this.data);
 
-    // this._attachBindings();
+    return super.draw();
   }
+
+  // public static wapper(wrapper: WrapperType, payload: any) {
+  //   return new google.visualization.ControlWrapper(payload);
+  // }
+
+  // protected createWrapper(payload: any): google.visualization.ChartWrapper {
+  //   return new google.visualization.ChartWrapper(payload);
+  // }
 
   /**
    * Process and attach the bindings to the dashboard.
    *
    * @TODO: Needs to be modified and tested for the other types of bindings.
    */
-  // private _attachBindings(): void {
-  //   for (const binding of this.bindings) {
-  //     const controlWraps = [];
-  //     const chartWraps = [];
+  private attachBindings(): void {
+    for (const binding of this.bindings) {
+      const controlWraps = [];
+      const chartWraps = [];
 
-  //     for (const controlWrap of binding.controlWrappers) {
-  //       controlWraps.push(new google.visualization.ControlWrapper(controlWrap));
-  //     }
+      for (const controlWrap of binding.controlWrappers) {
+        controlWraps.push(new google.visualization.ControlWrapper(controlWrap));
+      }
 
-  //     for (const chartWrap of binding.chartWrappers) {
-  //       chartWraps.push(new google.visualization.ChartWrapper(chartWrap));
-  //     }
+      for (const chartWrap of binding.chartWrappers) {
+        chartWraps.push(new google.visualization.ChartWrapper(chartWrap));
+      }
 
-  //     this.googleChart.bind(controlWraps, chartWraps);
-  //   }
-  // }
+      this.googleChart.bind(controlWraps, chartWraps);
+    }
+  }
 }
