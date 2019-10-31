@@ -1,23 +1,23 @@
-import DataQuery from "./DataQuery";
+import { DataQuery } from "./DataQuery";
 import { ContainerIdNotFound, DataError } from "./Errors";
-import Eventful, { EVENTS } from "./Eventful";
-import LavaJs from "./LavaJs";
+import { Eventful, Events } from "./Eventful";
 import { createDataTable, getLava } from "./lib";
 import { getLogger } from "./lib/logger";
-import { ChartUpdateReturn, LavaJsOptions } from "./types";
+import { ChartUpdateReturn } from "./types";
 import { ChartEvents, ChartInterface } from "./types/chart";
-import { DrawableInterface, OptionDataPayload } from "./types/drawable";
+import { DashboardSpec } from "./types/dashboard";
+import { OptionDataPayload } from "./types/drawable";
 import { Formatter } from "./types/formats";
 
 /**
  * The [[Drawable]] class is the base for [[Chart]]s and [[Dashboard]]s
  * to share common methods between the two types
  */
-export default class Drawable extends Eventful {
+export class Drawable extends Eventful {
   /**
    * Configurable options
    */
-  public options: LavaJsOptions;
+  public options: Record<string, any>;
 
   /**
    * DataTable for the [[Chart]] / [[Dashboard]]
@@ -35,13 +35,6 @@ export default class Drawable extends Eventful {
    */
   public get id(): string {
     return this.type + ":" + this.label;
-  }
-
-  /**
-   * HTMLElement into which the chart will be rendered.
-   */
-  public get container(): HTMLElement | null {
-    return document.getElementById(this.containerId);
   }
 
   /**
@@ -70,11 +63,6 @@ export default class Drawable extends Eventful {
   protected events: Record<ChartEvents, CallableFunction>;
 
   /**
-   * Reference to the `window.lava` object
-   */
-  protected readonly _lava!: LavaJs;
-
-  /**
    * The initial source of data for the DataTable
    */
   private initialData: any;
@@ -84,7 +72,7 @@ export default class Drawable extends Eventful {
    *
    * @param {Object} json
    */
-  constructor(drawable: ChartInterface | DrawableInterface) {
+  constructor(drawable: ChartInterface | DashboardSpec) {
     super();
 
     this.type = drawable.type;
@@ -101,12 +89,10 @@ export default class Drawable extends Eventful {
     getLogger().extend("Drawable")(`Building new ${drawable.type}`);
     getLogger().extend("Drawable")(this);
 
-    this._lava = getLava();
+    this.debug(`Registering <${Events.DRAW}> event relay.`);
 
-    this.debug(`Registering <${EVENTS.DRAW}> event relay.`);
-
-    this._lava.on(EVENTS.DRAW, () => {
-      this.debug(`<${EVENTS.DRAW}> event recieved.`);
+    getLava().on(Events.DRAW, () => {
+      this.debug(`<${Events.DRAW}> event recieved.`);
       this.draw();
     });
   }
@@ -118,10 +104,6 @@ export default class Drawable extends Eventful {
    */
   public async draw(): Promise<void> {
     this.debug("Drawing...");
-
-    if (!this.container) {
-      throw new ContainerIdNotFound(this.containerId);
-    }
 
     if (typeof this.initialData !== "undefined") {
       const data =
@@ -259,6 +241,19 @@ export default class Drawable extends Eventful {
 
       formatter.format(this.data, format.index);
     }
+  }
+
+  /**
+   * Get the HTMLElement into which the chart will be rendered.
+   */
+  protected getContainer(): HTMLElement {
+    const container = document.getElementById(this.containerId);
+
+    if (container === null) {
+      throw new ContainerIdNotFound(this.containerId);
+    }
+
+    return container;
   }
 
   /**

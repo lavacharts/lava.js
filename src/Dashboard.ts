@@ -1,32 +1,37 @@
-import Drawable from "./Drawable";
-/**
- * Dashboard Class
- *
- * @class
- * @module    module:LavaJs/Dashboard
- * @author    Kevin Hill <kevinkhill@gmail.com>
- * @copyright (c) 2019, Kevin Hill
- * @license   MIT
- */
-export default class Dashboard extends Drawable {
-  bindings: any;
+import { ControlledChartBinding } from "./ControlledChartBinding";
+import { Drawable } from "./Drawable";
+import { GoogleFactory, onGoogleReady } from "./lib";
+import { DashboardSpec } from "./types/dashboard";
+
+export class Dashboard extends Drawable {
+  public bindings: ControlledChartBinding[];
+
+  public needsBindings: boolean;
 
   /**
    * Create a new Dashboard
    *
-   * @param {Object} json JSON object representing a Dashboard.
+   * @param {Object} payload payload object representing a Dashboard.
    */
-  constructor(json: any) {
-    json.type = "Dashboard";
+  constructor(payload: DashboardSpec) {
+    payload.type = "Dashboard";
 
-    super(json);
+    super(payload);
 
-    this.googleChart = new window.google.visualization.Dashboard(this
-      .container as HTMLElement);
+    this.needsBindings = true;
+    this.bindings = payload.bindings;
+  }
 
-    this.bindings = json.bindings;
+  async draw(): Promise<void> {
+    onGoogleReady(() => {
+      this.googleChart = GoogleFactory("Dashboard", this.getContainer());
 
-    // this._attachBindings();
+      if (this.needsBindings) {
+        this.attachBindings();
+      }
+
+      this.googleChart.draw(this.data);
+    });
   }
 
   /**
@@ -34,20 +39,19 @@ export default class Dashboard extends Drawable {
    *
    * @TODO: Needs to be modified and tested for the other types of bindings.
    */
-  // private _attachBindings(): void {
-  //   for (const binding of this.bindings) {
-  //     const controlWraps = [];
-  //     const chartWraps = [];
+  private attachBindings(): void {
+    this.debug(`Attaching bindings to ${this.id}`);
 
-  //     for (const controlWrap of binding.controlWrappers) {
-  //       controlWraps.push(new google.visualization.ControlWrapper(controlWrap));
-  //     }
+    for (const binding of this.bindings) {
+      this.debug(binding);
 
-  //     for (const chartWrap of binding.chartWrappers) {
-  //       chartWraps.push(new google.visualization.ChartWrapper(chartWrap));
-  //     }
+      const controlledChart = binding.toArray();
 
-  //     this.googleChart.bind(controlWraps, chartWraps);
-  //   }
-  // }
+      console.log(controlledChart);
+
+      this.googleChart.bind(...controlledChart);
+    }
+
+    this.googleChart.draw(this.data);
+  }
 }

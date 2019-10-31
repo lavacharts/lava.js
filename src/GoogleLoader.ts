@@ -1,10 +1,13 @@
-import Drawable from "./Drawable";
-import Eventful, { EVENTS } from "./Eventful";
+import { Chart } from "./Chart";
+import { Dashboard } from "./Dashboard";
+import { Drawable } from "./Drawable";
+import { Eventful, Events } from "./Eventful";
 import { getGoogle, getLogger } from "./lib";
-import { Google, GoogleLoaderOptions, LavaJsOptions } from "./types";
+import { LavaJsOptions } from "./types";
+import { Google, GoogleLoaderOptions } from "./types/google";
 import { getChartPackage } from "./VisualizationProperties";
 
-export default class GoogleLoader extends Eventful {
+export class GoogleLoader extends Eventful {
   /**
    * Version of the Google charts API to load
    */
@@ -27,6 +30,10 @@ export default class GoogleLoader extends Eventful {
    */
   constructor(private options: LavaJsOptions) {
     super();
+
+    // if (options.enableEditor) {
+    //   this.packages.add("charteditor");
+    // }
 
     this.debug = getLogger().extend("GoogleLoader");
   }
@@ -72,7 +79,7 @@ export default class GoogleLoader extends Eventful {
   /**
    * Extract and register the package needed to draw the chart.
    */
-  public register<T extends Drawable>(drawable: T): void {
+  public register<T extends Drawable>(drawable: Chart | Dashboard): void {
     if (drawable instanceof Dashboard) {
       this.packages.add("controls");
     } else {
@@ -104,8 +111,8 @@ export default class GoogleLoader extends Eventful {
 
     return new Promise(resolve => {
       window.google.charts.setOnLoadCallback(() => {
-        this.debug(`Google is loaded, firing <${EVENTS.GOOGLE_READY}>`);
-        this.emitEvent(EVENTS.GOOGLE_READY, getGoogle());
+        this.debug(`Google is loaded, firing <${Events.GOOGLE_READY}>`);
+        this.emitEvent(Events.GOOGLE_READY, getGoogle());
 
         resolve(getGoogle());
       });

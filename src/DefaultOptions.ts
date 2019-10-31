@@ -1,6 +1,6 @@
 import { LavaJsOptions } from "./types";
 
-export default {
+export const DefaultOptions = {
   autodraw: true,
   autoloadGoogle: true,
   chartPackages: ["corechart"],

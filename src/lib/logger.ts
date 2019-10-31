@@ -11,6 +11,10 @@ export const ConsoleLogger = {
     return debug;
   },
 
+  setState(isEnabled: boolean): void {
+    debug.enabled = isEnabled;
+  },
+
   enable(): void {
     debug.enabled = true;
   },

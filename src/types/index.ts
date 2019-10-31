@@ -1,3 +1,5 @@
+export type OneOrArrayOf<T> = T | T[];
+
 export interface LavaJsOptions {
   autoloadGoogle?: boolean;
   autodraw?: boolean;

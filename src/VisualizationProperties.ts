@@ -1,4 +1,4 @@
-import Chart from "./Chart";
+import { Chart } from "./Chart";
 import { ChartClasses, ChartTypes } from "./types/chart";
 import {
   VisualizationPropertyEnum,

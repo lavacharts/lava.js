@@ -1,5 +1,11 @@
 export type Google = typeof google;
 
+export type GoogleHandler = (google: Google) => void;
+
+export interface GoogleReadyHandler {
+  googleReady: GoogleHandler;
+}
+
 export type QueryTransformer = (
   query: google.visualization.Query
 ) => google.visualization.Query;

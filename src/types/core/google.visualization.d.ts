@@ -12,28 +12,110 @@ declare namespace google {
   export function arrayToDataTable(data: any[]): google.visualization.DataTable;
 
   // https://developers.google.com/chart/interactive/docs/basic_load_libs
-  namespace charts {
+  export namespace charts {
     function load(version: string, packages: Record<string, any>): void;
     function setOnLoadCallback(handler: Function): void;
   }
 
-  namespace data {
-    export function join(
-      data1: google.visualization.DataTable,
-      data2: google.visualization.DataTable,
-      keys: any,
-      joinMethod: any,
-      dt1Columns: any,
-      dt2Columns: any
-    ): google.visualization.DataTable;
+  // https://developers.google.com/chart/interactive/docs/reference#events_3
+  export namespace events {
+    export function addListener(
+      chart: any,
+      event: string,
+      callback: Function
+    ): void;
+    export function addOneTimeListener(
+      chart: any,
+      event: string,
+      callback: Function
+    ): void;
+    export function removeListener(listener_handler: any): void;
+    export function removeAllListeners(source_visualization: any): void;
+    export function trigger(
+      source_visualization: any,
+      event_name: string,
+      event_args: any
+    ): void;
   }
 
-  namespace events {
-    function addListener(chart: any, event: string, callback: Function): void;
+  // https://developers.google.com/chart/interactive/docs/reference#error-display
+  export namespace errors {
+    type ErrorId = string;
+
+    export function addError(
+      container: Node,
+      message: string,
+      detailedMessage?: string,
+      options?: Partial<{
+        showInTooltip: boolean;
+        type: string;
+        style: string;
+        removable: boolean;
+      }>
+    ): ErrorId;
+    export function addErrorFromQueryResponse(
+      container: Node,
+      response: google.visualization.QueryResponse
+    ): ErrorId | null;
+    export function removeError(id: ErrorId): boolean;
+    export function removeAll(container: Node): void;
+    export function getContainer(errorId: ErrorId): Node;
   }
 
   // https://developers.google.com/chart/interactive/docs/reference
-  namespace visualization {
+  export namespace visualization {
+    export function dataTableToCsv(
+      data: google.visualization.DataTable
+    ): string;
+    export function dataTableToCsv(data: google.visualization.DataView): string;
+
+    // https://developers.google.com/chart/interactive/docs/reference#data-manipulation-methods
+    namespace data {
+      interface DataTableGroupColumn {
+        column: number;
+        type: "number" | "boolean";
+        label?: string;
+        id?: string;
+      }
+
+      interface DataTableKeyColumn extends DataTableGroupColumn {
+        modifier: <T>(val: T) => T;
+      }
+
+      interface DataTableAggregationColumn extends DataTableGroupColumn {
+        aggregation: (val: any[]) => any;
+      }
+
+      // https://developers.google.com/chart/interactive/docs/reference#provided-modifier-functions
+      export function month(dates: Date[]): number;
+
+      // https://developers.google.com/chart/interactive/docs/reference#provided-aggregation-functions
+      type AggregationParamArray = Array<number | string | Date>;
+
+      export function avg(values: AggregationParamArray): number;
+      export function count(values: any[]): number;
+      export function max(values: AggregationParamArray): number;
+      export function min(values: AggregationParamArray): number;
+      export function sum(values: AggregationParamArray): number;
+
+      // https://developers.google.com/chart/interactive/docs/reference#group
+      export function group(
+        data_table: google.visualization.DataTable,
+        keys: Array<number | DataTableKeyColumn>,
+        columns?: DataTableAggregationColumn[]
+      ): google.visualization.DataTable;
+
+      // https://developers.google.com/chart/interactive/docs/reference#join
+      export function join(
+        data1: google.visualization.DataTable,
+        data2: google.visualization.DataTable,
+        keys: [[number, number], [number, number]],
+        joinMethod: "full" | "inner" | "left" | "right",
+        dt1Columns: number[],
+        dt2Columns: number[]
+      ): google.visualization.DataTable;
+    }
+
     export interface ChartSpecs {
       chartType: string;
       container?: HTMLElement;
@@ -1258,6 +1340,21 @@ declare namespace google {
     //#endregion
     //#region ControlWrapper
 
+    // https://developers.google.com/chart/interactive/docs/gallery/controls#controls-gallery
+    export type ControlWrapperType =
+      | "CategoryFilter"
+      | "ChartRangeFilter"
+      | "DateRangeFilter"
+      | "NumberRangeFilter"
+      | "StringFilter";
+
+    export interface ControlWrapperOptions {
+      controlType: ControlWrapperType;
+      containerId: string;
+      options?: Record<string, any>;
+      state?: Record<string, any>;
+    }
+
     // https://developers.google.com/chart/interactive/docs/gallery/controls#controlwrapperobject
     export class ControlWrapper {
       constructor(opt_spec?: ControlWrapperOptions);
@@ -1277,13 +1374,6 @@ declare namespace google {
       setOption(key: string, value: string): void;
       setOptions(options_obj: Record<string, any>): void;
       setState(state_obj: Record<string, any>): void;
-    }
-
-    export interface ControlWrapperOptions {
-      controlType: string;
-      containerId: string;
-      options?: Record<string, any>;
-      state?: Record<string, any>;
     }
 
     //#endregion

@@ -11,17 +11,9 @@ export type DrawableTypes = ChartTypes | "Dashboard";
 export interface DrawableInterface {
   data: any;
   label: any;
-  type: ChartTypes;
+  type: DrawableTypes;
   containerId: string;
-  options?: any;
+  options?: Record<string, any>;
   events?: Record<string, Function>;
   formats?: Formatter[];
-}
-
-export interface DashboardSpec {
-  label: string;
-  containerId: string;
-  data: any;
-  options?: any;
-  events?: Record<string, Function>;
 }

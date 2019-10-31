@@ -1,17 +1,27 @@
-const donutRangeSlider = lava.control({
+const filterColumnLabel = "Donuts Eaten";
+
+const donutRangeSlider = lava.wrapper({
   controlType: "NumberRangeFilter",
   containerId: "filter_div",
+  options: { filterColumnLabel }
+});
+
+const pieChart = lava.wrapper({
+  chartType: "PieChart",
+  containerId: "chart_div",
   options: {
-    filterColumnLabel: "Donuts eaten"
+    width: 300,
+    height: 300,
+    pieSliceText: "value",
+    legend: "right"
   }
 });
 
-const dashboard = lava.dashboard({
+window.dashboard = lava.dashboard({
   label: "Test",
-  type: "PieChart",
-  containerId: "chart_div",
+  containerId: "dashboard_div",
   data: [
-    ["Name", "Donuts eaten"],
+    ["Name", filterColumnLabel],
     ["Michael", 5],
     ["Elisa", 7],
     ["Robert", 3],
@@ -20,14 +30,7 @@ const dashboard = lava.dashboard({
     ["Aaron", 1],
     ["Margareth", 8]
   ],
-  options: {
-    width: 400,
-    height: 240,
-    is3D: true
-  },
-  bindings: [[]]
+  bindings: [lava.bind(donutRangeSlider, pieChart)]
 });
-
-dashboard.bind(donutRangeSlider, pieChart);
 
 lava.draw();

@@ -2,19 +2,14 @@ import { Debugger } from "debug";
 
 import { DataError } from "./Errors";
 import { getLogger } from "./lib/logger";
-import { DataQueryInterface } from "./types";
-import {
-  GoogleQueryOptions,
-  GoogleQueryResponse,
-  QueryTransformer
-} from "./types/google";
+import { DataQueryInterface, QueryTransformer } from "./types/google";
 
 /**
  * Used for loading remote data as a {@link DataTable}
  *
  * @see https://developers.google.com/chart/interactive/docs/reference#Query
  */
-export default class DataQuery {
+export class DataQuery {
   private debug: Debugger;
 
   /**
@@ -24,7 +19,7 @@ export default class DataQuery {
    */
   constructor(
     public url: string,
-    public opts?: GoogleQueryOptions,
+    public opts?: google.visualization.QueryOptions,
     public transformer?: QueryTransformer
   ) {
     this.debug = getLogger().extend("DataQuery");
@@ -70,7 +65,7 @@ export default class DataQuery {
     const query = new DataQuery(payload.url);
 
     if (typeof payload.opts === "object") {
-      query.opts = payload.opts as GoogleQueryOptions;
+      query.opts = payload.opts as google.visualization.QueryOptions;
     }
 
     if (typeof payload.transformer === "function") {
@@ -83,7 +78,7 @@ export default class DataQuery {
   /**
    * Send the DataQuery
    */
-  public send(): Promise<GoogleQueryResponse> {
+  public send(): Promise<google.visualization.QueryResponse> {
     let query = new window.google.visualization.Query(this.url, this.opts);
 
     if (typeof this.transformer === "function") {
@@ -93,7 +88,7 @@ export default class DataQuery {
     return new Promise((resolve, reject) => {
       this.debug(`Requesting ${this.url}`);
 
-      query.send((response: GoogleQueryResponse) => {
+      query.send((response: google.visualization.QueryResponse) => {
         if (response.isError()) {
           reject(response);
         }

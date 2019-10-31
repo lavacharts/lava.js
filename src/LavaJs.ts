@@ -1,13 +1,19 @@
-import Chart from "./Chart";
-import Dashboard from "./Dashboard";
-import DefaultOptions from "./DefaultOptions";
-import Eventful, { EVENTS } from "./Eventful";
-import GoogleLoader from "./GoogleLoader";
-import { addEvent } from "./lib";
+import { Chart } from "./Chart";
+import { ControlledChartBinding } from "./ControlledChartBinding";
+import { Dashboard } from "./Dashboard";
+import { DefaultOptions } from "./DefaultOptions";
+import { Eventful, Events } from "./Eventful";
+import { Filters } from "./filters";
+import { GoogleLoader } from "./GoogleLoader";
+import { addEvent, arrayWrap, hasOwnProp, onGoogleReady } from "./lib";
 import { ConsoleLogger, getLogger } from "./lib/logger";
-import { LavaJsOptions } from "./types";
+import { LavaJsOptions, OneOrArrayOf } from "./types";
 import { ChartInterface } from "./types/chart";
-import { DrawableInterface } from "./types/drawable";
+import { DashboardSpec } from "./types/dashboard";
+import { Google } from "./types/google";
+import { ChartWrapperSpec, ControlWrapperSpec } from "./types/wrapper";
+import { ChartWrapper } from "./wrapper/ChartWrapper";
+import { ControlWrapper } from "./wrapper/ControlWrapper";
 
 /**
  * Google Chart API wrapper library
@@ -15,22 +21,23 @@ import { DrawableInterface } from "./types/drawable";
  * This module can be used as a standalone, browser based library, or in
  * conjunction with the PHP library, <a href="https://github.com/kevinkhill/lavacharts">Lavacharts</a>.
  */
-export default class LavaJs extends Eventful {
+export class LavaJs extends Eventful {
+  /** LavaJs version */
   public static readonly VERSION = "__VERSION__";
 
-  /**
-   * Configurable options for the library
-   */
+  /** Flag for when `window.google !== undefined` */
+  public googleReady = false;
+
+  /** Configurable options for the library */
   public options: LavaJsOptions = DefaultOptions;
 
-  /**
-   * Drawables registy
-   */
+  /** Typed ControlWrapper filter faCtories */
+  public readonly filters = Filters;
+
+  /** Drawables registy */
   public readonly registry: Record<string, any> = {};
 
-  /**
-   * Loader for adding the google script and making `window.google` available
-   */
+  /** Loader for adding the google script and making `window.google` available */
   private readonly loader: GoogleLoader;
 
   /**
@@ -42,6 +49,9 @@ export default class LavaJs extends Eventful {
    *
    * The [[GoogleLoader]] will check the <head> for the
    * gstatic loader and if not found, inject it into the <head>.
+   *
+   * @emits [[Events.GOOGLE_READY]]
+   * @emits [[Events.DRAW]]
    */
   constructor(options?: LavaJsOptions) {
     super();
@@ -52,24 +62,27 @@ export default class LavaJs extends Eventful {
 
     this.debug = getLogger();
 
-    this.options.debug ? ConsoleLogger.enable() : ConsoleLogger.disable();
+    if (this.options.debug) {
+      ConsoleLogger.enable();
+    }
 
     this.debug(`LavaJs v${LavaJs.VERSION}`);
     this.debug("Loaded with options:");
     this.debug(this.options);
 
+    if (this.options.responsive === true) {
+      this.attachResizeHandler();
+    }
+
     this.loader = new GoogleLoader(this.options);
 
-    this.loader.on(EVENTS.GOOGLE_READY, (google: Google) => {
-      this.emitEvent(EVENTS.GOOGLE_READY, google);
+    this.loader.on(Events.GOOGLE_READY, (google: Google) => {
+      this.googleReady = true;
+      this.emitEvent(Events.GOOGLE_READY, google);
     });
 
     if (!this.loader.googleIsDefined && this.options.autoloadGoogle) {
       this.loader.loadGoogle();
-    }
-
-    if (this.options.responsive === true) {
-      this.attachResizeHandler();
     }
   }
 
@@ -95,7 +108,7 @@ export default class LavaJs extends Eventful {
    *
    * You can even pass an array of chart objects!!
    *
-   * @emits [[EVENTS.DRAW]]
+   * @emits [[Events.DRAW]]
    */
   public async draw(
     payload?: ChartInterface | ChartInterface[]
@@ -112,13 +125,9 @@ export default class LavaJs extends Eventful {
       }
     }
 
-    if (this.loader.googleIsDefined) {
-      this.draw();
-    } else {
-      this.loader.once(EVENTS.GOOGLE_READY, () => {
-        this.emitEvent(EVENTS.DRAW);
-      });
-    }
+    onGoogleReady(() => {
+      this.emitEvent(Events.DRAW);
+    });
 
     return charts;
   }
@@ -147,14 +156,50 @@ export default class LavaJs extends Eventful {
   /**
    * Create a new [[Dashboard]] from an Object
    */
-  public dashboard(payload: DrawableInterface): Dashboard {
+  public dashboard(payload: DashboardSpec): Dashboard {
     const dashboard = new Dashboard(payload);
 
     return this.register(dashboard);
   }
 
-  public control(payload: any): google.visualization.ControlWrapper {
-    return new google.visualization.ControlWrapper(payload);
+  /**
+   * Create a new [[ChartWrapper]] or [[ControlWrapper]] from an Object
+   */
+  public wrapper(
+    payload: ChartWrapperSpec | ControlWrapperSpec
+  ): ChartWrapper | ControlWrapper | undefined {
+    const payloadHasProp = hasOwnProp(payload);
+
+    if (payloadHasProp("chartType")) {
+      return new ChartWrapper(payload as ChartWrapperSpec);
+    }
+
+    if (payloadHasProp("controlType")) {
+      return new ControlWrapper(payload as ControlWrapperSpec);
+    }
+
+    throw new Error(
+      "Invalid wrapper definition. The object have one of either properties set: [ chartType | controlType ]"
+    );
+  }
+
+  /**
+   * Create [[Dashboard]] bindings
+   *
+   * This method is curried to allow the easy binding of:
+   * - One to One, `bind(chart)(control)`
+   * - One to Many, `bind(chart)(control[])`
+   * - Many to One, `bind(chart[])(control)`
+   * - Many to Many, `bind(chart[])(control[])`
+   */
+  public bind(
+    controlWraps: OneOrArrayOf<ControlWrapperSpec>,
+    chartWraps: OneOrArrayOf<ChartWrapperSpec>
+  ): ControlledChartBinding {
+    return new ControlledChartBinding(
+      arrayWrap(controlWraps),
+      arrayWrap(chartWraps)
+    );
   }
 
   /**
@@ -179,7 +224,7 @@ export default class LavaJs extends Eventful {
   /**
    * Promise for the DOM to be ready.
    *
-   * @emits [[EVENTS.DOM_READY]]
+   * @emits [[Events.DOM_READY]]
    */
   private async waitForDom(): Promise<void> {
     this.debug("Waiting for the DOM to become ready");
@@ -188,7 +233,7 @@ export default class LavaJs extends Eventful {
       if (["interactive", "complete"].includes(document.readyState)) {
         resolve();
         this.debug("DOM ready");
-        this.emit(EVENTS.DOM_READY);
+        this.emit(Events.DOM_READY);
       } else {
         document.addEventListener("DOMContentLoaded", () => resolve());
       }
@@ -205,9 +250,9 @@ export default class LavaJs extends Eventful {
       clearTimeout(debounced);
 
       debounced = setTimeout(() => {
-        this.debug(`Window re-sized, firing <${EVENTS.DRAW}>`);
+        this.debug(`Window re-sized, firing <${Events.DRAW}>`);
 
-        this.emit(EVENTS.DRAW);
+        this.emit(Events.DRAW);
       }, this.options.debounceTimeout);
     });
   }

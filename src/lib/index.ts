@@ -1,9 +1,14 @@
 import { Debugger } from "debug";
 
-import DataQuery from "../DataQuery";
-import LavaJs from "../LavaJs";
-import { Google } from "../types";
+import { DataQuery } from "../DataQuery";
+import { Events } from "../Eventful";
+import { LavaJs } from "../LavaJs";
+import { Google } from "../types/google";
 import { ConsoleLogger } from "./logger";
+
+export function arrayWrap<T>(data: any): T[] {
+  return Array.isArray(data) ? data : [data];
+}
 
 export function getLogger(): Debugger {
   return ConsoleLogger.getInstance();
@@ -13,8 +18,29 @@ export function getGoogle(): Google {
   return window.google;
 }
 
+export function GoogleFactory(className: string, payload: any): any {
+  getLogger().extend("GoogleFactory")(payload);
+
+  return new (window.google.visualization as any)[className](payload);
+}
+
 export function getLava(): LavaJs {
   return window.lava;
+}
+
+export function hasOwnProp(obj: any): (prop: string) => boolean {
+  return (prop: string) => Object.prototype.hasOwnProperty.call(obj, prop);
+}
+
+export function onGoogleReady(callback: (google: Google) => void): void {
+  const lava = getLava();
+  const google = getGoogle();
+
+  if (lava.googleReady) {
+    callback(google);
+  } else {
+    lava.on(Events.GOOGLE_READY, () => callback(google));
+  }
 }
 
 export function getLocalStorage(): Storage {
