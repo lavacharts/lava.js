@@ -1,11 +1,12 @@
-import { Chart } from "./Chart";
-import { Dashboard } from "./Dashboard";
-import { Drawable } from "./Drawable";
-import { Eventful, Events } from "./Eventful";
-import { getGoogle, getLogger } from "./lib";
-import { LavaJsOptions } from "./types";
-import { Google, GoogleLoaderOptions } from "./types/google";
-import { getChartPackage } from "./VisualizationProperties";
+import { Chart } from "../Chart";
+import { Dashboard } from "../Dashboard";
+import { Drawable } from "../Drawable";
+import { Eventful, Events } from "../Eventful";
+import { getGoogle } from "../google";
+import { getLogger } from "../lib";
+import { LavaJsOptions } from "../types";
+import { Google, GoogleLoaderOptions } from "../types/google";
+import { getChartPackage } from "../VisualizationProperties";
 
 export class GoogleLoader extends Eventful {
   /**
@@ -103,9 +104,7 @@ export class GoogleLoader extends Eventful {
       await this.injectGoogleStaticLoader(document.head);
     }
 
-    this.debug(`Loading API, version '${GoogleLoader.API_VERSION}'`);
-    this.debug("with config");
-    this.debug(this.config);
+    this.debug(`Loading version "${GoogleLoader.API_VERSION}"`, this.config);
 
     window.google.charts.load(GoogleLoader.API_VERSION, this.config);
 
@@ -140,13 +139,13 @@ export class GoogleLoader extends Eventful {
           /loaded|complete/.test(script.readyState)
         ) {
           script.onload = script.onreadystatechange = null;
-          debug("Loaded");
+          debug("Gstatic chart loader is ready");
           resolve();
         }
       };
 
       // debug(`Injecting ${script} into ${target}`);
-      debug(`Injecting ${GoogleLoader.LOADER_URL}`);
+      debug("Injecting", script);
 
       target.appendChild(script);
     });

@@ -1,4 +1,4 @@
-import { ControlledChartBinding } from "../ControlledChartBinding";
+import { Binding } from "../Binding";
 import { ChartEvents } from "./chart";
 import { DrawableInterface } from "./drawable";
 import { Formatter } from "./formats";
@@ -16,5 +16,5 @@ export interface DashboardSpec {
   data: any;
   options?: any;
   events?: Record<string, Function>;
-  bindings: ControlledChartBinding[];
+  bindings: Binding[];
 }

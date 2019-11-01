@@ -2,26 +2,17 @@ import { Debugger } from "debug";
 
 import { DataQuery } from "../DataQuery";
 import { Events } from "../Eventful";
+import { getGoogle } from "../google";
 import { LavaJs } from "../LavaJs";
 import { Google } from "../types/google";
 import { ConsoleLogger } from "./logger";
 
-export function arrayWrap<T>(data: any): T[] {
+export function arrayWrap<T>(data: T | T[]): T[] {
   return Array.isArray(data) ? data : [data];
 }
 
 export function getLogger(): Debugger {
   return ConsoleLogger.getInstance();
-}
-
-export function getGoogle(): Google {
-  return window.google;
-}
-
-export function GoogleFactory(className: string, payload: any): any {
-  getLogger().extend("GoogleFactory")(payload);
-
-  return new (window.google.visualization as any)[className](payload);
 }
 
 export function getLava(): LavaJs {

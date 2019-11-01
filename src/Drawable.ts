@@ -1,7 +1,7 @@
 import { DataQuery } from "./DataQuery";
 import { ContainerIdNotFound, DataError } from "./Errors";
 import { Eventful, Events } from "./Eventful";
-import { createDataTable, getLava } from "./lib";
+import { createDataTable, getLava, hasOwnProp } from "./lib";
 import { getLogger } from "./lib/logger";
 import { ChartUpdateReturn } from "./types";
 import { ChartEvents, ChartInterface } from "./types/chart";
@@ -65,7 +65,7 @@ export class Drawable extends Eventful {
   /**
    * The initial source of data for the DataTable
    */
-  private initialData: any;
+  private initialData: any | null;
 
   /**
    * Create a new Drawable
@@ -77,22 +77,21 @@ export class Drawable extends Eventful {
 
     this.type = drawable.type;
     this.label = drawable.label;
-    this.initialData = drawable.data;
     this.containerId = drawable.containerId;
 
+    this.initialData = drawable.data || null;
     this.options = drawable.options || {};
     this.formats = drawable.formats || [];
     this.events = drawable.events || {};
 
     this.debug = getLogger().extend(this.id);
 
-    getLogger().extend("Drawable")(`Building new ${drawable.type}`);
-    getLogger().extend("Drawable")(this);
+    getLogger().extend("Drawable")(`Building new ${drawable.type}`, this);
 
     this.debug(`Registering <${Events.DRAW}> event relay.`);
 
     getLava().on(Events.DRAW, () => {
-      this.debug(`<${Events.DRAW}> event recieved.`);
+      this.debug(`<${Events.DRAW}> event received.`);
       this.draw();
     });
   }
@@ -105,19 +104,8 @@ export class Drawable extends Eventful {
   public async draw(): Promise<void> {
     this.debug("Drawing...");
 
-    if (typeof this.initialData !== "undefined") {
-      const data =
-        typeof this.initialData === "string"
-          ? new DataQuery(this.initialData)
-          : this.initialData;
-
-      await this.setData(data);
-
-      delete this.initialData;
-    }
-
-    if (this.data instanceof google.visualization.DataTable !== true) {
-      throw new DataError(`There was a error setting the data for ${this.id}`);
+    if (hasOwnProp(this)("initialData")) {
+      await this.processInitialData();
     }
 
     if (this.formats) {
@@ -141,10 +129,11 @@ export class Drawable extends Eventful {
     this.debug(`Attaching <${event}> handler`);
 
     if (ctx) {
-      this.events[event] = handler.bind(ctx);
-    } else {
-      this.events[event] = handler;
+      // eslint-disable-next-line no-param-reassign
+      handler = handler.bind(ctx);
     }
+
+    this.events[event] = handler;
 
     return this;
   }
@@ -201,14 +190,12 @@ export class Drawable extends Eventful {
     autoRedraw = true
   ): Promise<ChartUpdateReturn> {
     if (typeof options !== "undefined") {
-      this.debug("Setting options");
-      this.debug(options);
+      this.debug("Setting options", options);
       this.options = Object.assign(this.options, options);
     }
 
     if (typeof data !== "undefined") {
-      this.debug("Setting data");
-      this.debug(data);
+      this.debug("Setting data", data);
       this.setData(data);
     }
 
@@ -236,8 +223,7 @@ export class Drawable extends Eventful {
         format.options
       );
 
-      this.debug(`Formatting column [${format.index}] with:`);
-      this.debug(format);
+      this.debug(`Formatting column [${format.index}]`, format);
 
       formatter.format(this.data, format.index);
     }
@@ -254,6 +240,28 @@ export class Drawable extends Eventful {
     }
 
     return container;
+  }
+
+  /**
+   * Send the [[DataQuery]] if it is one, otherwise create a DataTable
+   */
+  protected async processInitialData(): Promise<void> {
+    this.debug("Setting initial data", this.initialData);
+
+    if (typeof this.initialData !== "undefined") {
+      const data =
+        typeof this.initialData === "string"
+          ? new DataQuery(this.initialData)
+          : this.initialData;
+
+      await this.setData(data);
+
+      delete this.initialData;
+    }
+
+    if (this.data instanceof google.visualization.DataTable !== true) {
+      throw new DataError(`There was a error setting the data for ${this.id}`);
+    }
   }
 
   /**

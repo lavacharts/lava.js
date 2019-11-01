@@ -1,5 +1,5 @@
 import { Drawable } from "./Drawable";
-import { getGoogle } from "./lib";
+import { getGoogle } from "./google";
 import { ChartInterface, ChartTypes } from "./types/chart";
 import { getChartClass } from "./VisualizationProperties";
 

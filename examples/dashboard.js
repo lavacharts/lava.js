@@ -1,12 +1,12 @@
 const filterColumnLabel = "Donuts Eaten";
 
-const donutRangeSlider = lava.wrapper({
+const donutRangeSlider = {
   controlType: "NumberRangeFilter",
   containerId: "filter_div",
   options: { filterColumnLabel }
-});
+};
 
-const pieChart = lava.wrapper({
+const pieChart = {
   chartType: "PieChart",
   containerId: "chart_div",
   options: {
@@ -15,7 +15,7 @@ const pieChart = lava.wrapper({
     pieSliceText: "value",
     legend: "right"
   }
-});
+};
 
 window.dashboard = lava.dashboard({
   label: "Test",
@@ -30,7 +30,14 @@ window.dashboard = lava.dashboard({
     ["Aaron", 1],
     ["Margareth", 8]
   ],
-  bindings: [lava.bind(donutRangeSlider, pieChart)]
+  bindings: [lava.bind(donutRangeSlider, pieChart)],
+  events: {
+    ready() {
+      console.log("IM REAAAAAADY");
+    }
+  }
 });
+
+// dashboard.bind(donutRangeSlider, pieChart);
 
 lava.draw();

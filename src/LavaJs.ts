@@ -1,19 +1,17 @@
+import { Binding } from "./Binding";
 import { Chart } from "./Chart";
-import { ControlledChartBinding } from "./ControlledChartBinding";
 import { Dashboard } from "./Dashboard";
 import { DefaultOptions } from "./DefaultOptions";
 import { Eventful, Events } from "./Eventful";
 import { Filters } from "./filters";
-import { GoogleLoader } from "./GoogleLoader";
-import { addEvent, arrayWrap, hasOwnProp, onGoogleReady } from "./lib";
+import { GoogleLoader } from "./google/GoogleLoader";
+import { addEvent, hasOwnProp, onGoogleReady } from "./lib";
 import { ConsoleLogger, getLogger } from "./lib/logger";
 import { LavaJsOptions, OneOrArrayOf } from "./types";
 import { ChartInterface } from "./types/chart";
 import { DashboardSpec } from "./types/dashboard";
 import { Google } from "./types/google";
 import { ChartWrapperSpec, ControlWrapperSpec } from "./types/wrapper";
-import { ChartWrapper } from "./wrapper/ChartWrapper";
-import { ControlWrapper } from "./wrapper/ControlWrapper";
 
 /**
  * Google Chart API wrapper library
@@ -27,6 +25,9 @@ export class LavaJs extends Eventful {
 
   /** Flag for when `window.google !== undefined` */
   public googleReady = false;
+
+  /** Flag for when `document.readyState === "complete"` */
+  public domReady = false;
 
   /** Configurable options for the library */
   public options: LavaJsOptions = DefaultOptions;
@@ -66,9 +67,7 @@ export class LavaJs extends Eventful {
       ConsoleLogger.enable();
     }
 
-    this.debug(`LavaJs v${LavaJs.VERSION}`);
-    this.debug("Loaded with options:");
-    this.debug(this.options);
+    this.debug(`Initializing LavaJs v${LavaJs.VERSION}`, this.options);
 
     if (this.options.responsive === true) {
       this.attachResizeHandler();
@@ -113,7 +112,9 @@ export class LavaJs extends Eventful {
   public async draw(
     payload?: ChartInterface | ChartInterface[]
   ): Promise<Chart[]> {
-    await this.waitForDom();
+    if (!this.domReady) {
+      await this.waitForDom();
+    }
 
     const charts: Chart[] = [];
 
@@ -184,22 +185,13 @@ export class LavaJs extends Eventful {
   }
 
   /**
-   * Create [[Dashboard]] bindings
-   *
-   * This method is curried to allow the easy binding of:
-   * - One to One, `bind(chart)(control)`
-   * - One to Many, `bind(chart)(control[])`
-   * - Many to One, `bind(chart[])(control)`
-   * - Many to Many, `bind(chart[])(control[])`
+   * Create [[Dashboard]] [[Binding]]s
    */
   public bind(
     controlWraps: OneOrArrayOf<ControlWrapperSpec>,
     chartWraps: OneOrArrayOf<ChartWrapperSpec>
-  ): ControlledChartBinding {
-    return new ControlledChartBinding(
-      arrayWrap(controlWraps),
-      arrayWrap(chartWraps)
-    );
+  ): Binding {
+    return new Binding(controlWraps, chartWraps);
   }
 
   /**
@@ -213,10 +205,7 @@ export class LavaJs extends Eventful {
 
     this.loader.register(drawable);
 
-    this.registry[drawable.id] = {
-      drawn: false,
-      needsRedraw: false
-    };
+    this.registry[drawable.id] = {};
 
     return drawable;
   }
@@ -232,6 +221,7 @@ export class LavaJs extends Eventful {
     return new Promise(resolve => {
       if (["interactive", "complete"].includes(document.readyState)) {
         resolve();
+        this.domReady = true;
         this.debug("DOM ready");
         this.emit(Events.DOM_READY);
       } else {

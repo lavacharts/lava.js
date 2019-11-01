@@ -1,10 +1,12 @@
-import { ControlledChartBinding } from "./ControlledChartBinding";
+import { Binding } from "./Binding";
 import { Drawable } from "./Drawable";
-import { GoogleFactory, onGoogleReady } from "./lib";
+import { GoogleFactory } from "./google";
+import { getLava, hasOwnProp, onGoogleReady } from "./lib";
+import { ChartEvents } from "./types/chart";
 import { DashboardSpec } from "./types/dashboard";
 
 export class Dashboard extends Drawable {
-  public bindings: ControlledChartBinding[];
+  public bindings: Binding[];
 
   public needsBindings: boolean;
 
@@ -23,12 +25,22 @@ export class Dashboard extends Drawable {
   }
 
   async draw(): Promise<void> {
+    if (hasOwnProp(this)("initialData")) {
+      await this.processInitialData();
+    }
+
     onGoogleReady(() => {
       this.googleChart = GoogleFactory("Dashboard", this.getContainer());
 
-      if (this.needsBindings) {
-        this.attachBindings();
-      }
+      // if (this.needsBindings) {
+      this.attachBindings();
+      // }
+
+      Object.keys(this.events).forEach(event => {
+        const e = event as ChartEvents;
+
+        this.registerEventHandler(e, this.events[e]);
+      });
 
       this.googleChart.draw(this.data);
     });
@@ -40,18 +52,14 @@ export class Dashboard extends Drawable {
    * @TODO: Needs to be modified and tested for the other types of bindings.
    */
   private attachBindings(): void {
-    this.debug(`Attaching bindings to ${this.id}`);
-
     for (const binding of this.bindings) {
-      this.debug(binding);
+      const debug = this.debug.extend("Bindings");
 
-      const controlledChart = binding.toArray();
+      debug(binding.type, binding);
 
-      console.log(controlledChart);
-
-      this.googleChart.bind(...controlledChart);
+      this.googleChart.bind(...binding.toArray());
     }
 
-    this.googleChart.draw(this.data);
+    this.needsBindings = false;
   }
 }
