@@ -75,7 +75,7 @@ module.exports = {
       files: [
         "test/**/*.js",
         "static/**/*.js",
-        "examples/*.js"
+        "examples/**/*.js"
       ],
       globals: {
         M: true,

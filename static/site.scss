@@ -9,23 +9,19 @@
       -ms-transform: translate(-50%,-50%);
           transform: translate(-50%,-50%);
     left:50%;
-    top:220px;
 }
 
 .parallax-container {
   position:absolute;
   height: 300px;
+  top:220px;
   @include center();
-}
-
-#install-blocks {
-  margin-top: 275px;
 }
 
 .title {
   font-weight: 800;
   color: transparent;
-  font-size:140px;
+  font-size:120px;
   background: url("./lava.jpg") repeat;
   background-position: 10% 50%;
   -webkit-background-clip: text;
@@ -48,6 +44,22 @@
 // END PARALLAX
 
 
+.icon-block-header {
+  padding: 20px 0 10px 0;
+
+  h1, h2, h3, h4, h5, h6 {
+    margin-top: 0 !important;
+  }
+}
+
+#install-blocks {
+  margin-top: 275px;
+}
+
+// pre code[class*="language-"] {
+//   left: -60px;
+//   position: relative;
+// }
 
 .page-footer {
   background-color: #654321 !important;

@@ -1,0 +1,92 @@
+<div class="row">
+  <div class="icon-block">
+    <h3 class="center light-blue-text">One to Many</h3>
+    <h6 class="center">One Control, Multiple Charts</h6>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col s12 m6">
+    <div class="icon-block z-depth-1">
+      <h4 class="center amber-text">Script</h2>
+      {{!-- <h5 class="center">thanks google!</h5> --}}
+      <pre class="language-javascript">
+<code>
+const filterColumnLabel = "Donuts Eaten";
+
+const donutRangeSlider = {
+  controlType: "NumberRangeFilter",
+  containerId: "filter_div",
+  options: { filterColumnLabel }
+};
+
+const pieChart = {
+  chartType: "PieChart",
+  containerId: "pieChart_div",
+  options: {
+    width: 300,
+    height: 300,
+    pieSliceText: "value",
+    legend: "right"
+  }
+};
+
+const barChart = {
+  chartType: "BarChart",
+  containerId: "barChart_div",
+  options: {
+    width: 300,
+    height: 300,
+    pieSliceText: "value",
+    legend: "right"
+  }
+};
+
+lava.dashboard({
+  label: "Test",
+  containerId: "dashboard_div",
+  data: [
+    ["Name", filterColumnLabel],
+    ["Michael", 5],
+    ["Elisa", 7],
+    ["Robert", 3],
+    ["John", 2],
+    ["Jessica", 6],
+    ["Aaron", 1],
+    ["Margareth", 8]
+  ],
+  bindings: [
+    lava.bind(donutRangeSlider, [pieChart, barChart])
+  ]
+});
+
+lava.draw();
+</code>
+      </pre>
+    </div>
+  </div>
+
+
+  <div class="col s12 m6">
+    <div class="icon-block z-depth-1">
+      <h4 class="center amber-text">Markup</h2>
+      {{!-- <h5 class="center">thanks google!</h5> --}}
+      <pre class="language-html">
+<code>&lt;!--Div for the dashboard--&gt;
+&lt;div id=&quot;dashboard_div&quot;&gt;
+    &lt;!--Divs for each control and chart--&gt;
+    &lt;div id=&quot;filter_div&quot;&gt;&lt;/div&gt;
+    &lt;div id=&quot;chart_div&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;</code>
+      </pre>
+    </div>
+
+    <div class="icon-block z-depth-1">
+      <h4 class="center amber-text">Result</h2>
+      <div id="dashboard_div">
+        <div id="filter_div"></div>
+        <div id="chart_div"></div>
+      </div>
+    </div>
+  </div>
+</div>

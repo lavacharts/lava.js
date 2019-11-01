@@ -1,7 +1,7 @@
 import { Binding } from "./Binding";
 import { Drawable } from "./Drawable";
 import { GoogleFactory } from "./google";
-import { getLava, hasOwnProp, onGoogleReady } from "./lib";
+import { hasOwnProp, onGoogleReady } from "./lib";
 import { ChartEvents } from "./types/chart";
 import { DashboardSpec } from "./types/dashboard";
 

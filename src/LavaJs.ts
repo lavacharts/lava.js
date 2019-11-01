@@ -3,9 +3,8 @@ import { Chart } from "./Chart";
 import { Dashboard } from "./Dashboard";
 import { DefaultOptions } from "./DefaultOptions";
 import { Eventful, Events } from "./Eventful";
-import { Filters } from "./filters";
 import { GoogleLoader } from "./google/GoogleLoader";
-import { addEvent, hasOwnProp, onGoogleReady } from "./lib";
+import { addEvent, onGoogleReady } from "./lib";
 import { ConsoleLogger, getLogger } from "./lib/logger";
 import { LavaJsOptions, OneOrArrayOf } from "./types";
 import { ChartInterface } from "./types/chart";
@@ -31,9 +30,6 @@ export class LavaJs extends Eventful {
 
   /** Configurable options for the library */
   public options: LavaJsOptions = DefaultOptions;
-
-  /** Typed ControlWrapper filter faCtories */
-  public readonly filters = Filters;
 
   /** Drawables registy */
   public readonly registry: Record<string, any> = {};
@@ -161,27 +157,6 @@ export class LavaJs extends Eventful {
     const dashboard = new Dashboard(payload);
 
     return this.register(dashboard);
-  }
-
-  /**
-   * Create a new [[ChartWrapper]] or [[ControlWrapper]] from an Object
-   */
-  public wrapper(
-    payload: ChartWrapperSpec | ControlWrapperSpec
-  ): ChartWrapper | ControlWrapper | undefined {
-    const payloadHasProp = hasOwnProp(payload);
-
-    if (payloadHasProp("chartType")) {
-      return new ChartWrapper(payload as ChartWrapperSpec);
-    }
-
-    if (payloadHasProp("controlType")) {
-      return new ControlWrapper(payload as ControlWrapperSpec);
-    }
-
-    throw new Error(
-      "Invalid wrapper definition. The object have one of either properties set: [ chartType | controlType ]"
-    );
   }
 
   /**
