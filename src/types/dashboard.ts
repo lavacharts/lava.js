@@ -14,6 +14,7 @@ export interface DashboardSpec {
   label: string;
   containerId: string;
   data: any;
+  formats?: any;
   options?: any;
   events?: Record<string, Function>;
   bindings: Binding[];
