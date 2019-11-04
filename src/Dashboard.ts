@@ -1,7 +1,7 @@
 import { Binding } from "./Binding";
 import { Drawable } from "./Drawable";
 import { GoogleFactory } from "./google";
-import { hasOwnProp, onGoogleReady } from "./lib";
+import { getContainer, hasOwnProp, onGoogleReady } from "./lib";
 import { ChartEvents } from "./types/chart";
 import { DashboardSpec } from "./types/dashboard";
 
@@ -30,7 +30,10 @@ export class Dashboard extends Drawable {
     }
 
     onGoogleReady(() => {
-      this.googleChart = GoogleFactory("Dashboard", this.getContainer());
+      this.googleChart = GoogleFactory(
+        "Dashboard",
+        getContainer(this.containerId)
+      );
 
       // if (this.needsBindings) {
       this.attachBindings();

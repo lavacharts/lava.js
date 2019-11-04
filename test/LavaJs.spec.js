@@ -47,8 +47,6 @@ describe("LavaJs", function() {
           new google.visualization.DataTable()
         );
 
-        // console.log(Object.keys(chart.googleChart));
-
         expect(chart.googleChart.container).to.equal(
           new google.visualization.PieChart(testdiv).container
         );

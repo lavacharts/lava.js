@@ -13,7 +13,7 @@
     <div class="container">
       <h1 class="header center orange-text">Dashboards</h1>
       <div class="row center">
-        <h5 class="header col s12 light">Filter your data with interactive controls</h5>
+        <h5 class="header col s12 light">Filter data with interactive controls</h5>
       </div>
     </div>
   </div>
@@ -31,23 +31,17 @@
         </div>
 
         <div id="one-to-one" class="col s12">
-          {{> dashboard/one-to-one }}
+          {{> dashboards/one-to-one }}
         </div>
         <div id="one-to-many" class="col s12">
-          {{> dashboard/one-to-many }}
+          {{> dashboards/one-to-many }}
         </div>
         <div id="many-to-one" class="col s12">
-          {{> dashboard/many-to-one }}
+          {{> dashboards/many-to-one }}
         </div>
         <div id="many-to-many" class="col s12">
-          {{> dashboard/many-to-many }}
+          {{> dashboards/many-to-many }}
         </div>
-      </div>
-
-
-    <div class="section">
-      <div class="row">
-        <br />
       </div>
     </div>
   </div>
@@ -55,5 +49,23 @@
   <footer class="page-footer">
       {{> partials/footer }}
   </footer>
+  <script>
+    lava.draw();
+
+    jQuery($ => {
+      const dashTypes = [
+        "one-to-one",
+        "one-to-many",
+        "many-to-one",
+        "many-to-many"
+      ];
+
+      dashTypes.forEach(dashType => {
+        $.get(`${dashType}.js?callback=?`, data => {
+          $(`#${dashType}`).text(data.result);
+        });
+      });
+    })
+  </script>
 </body>
 </html>

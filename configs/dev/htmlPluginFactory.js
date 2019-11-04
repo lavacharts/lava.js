@@ -5,7 +5,7 @@ const HtmlPlugin = require("html-webpack-plugin");
 const PATHS = require("../paths");
 const { version } = require("../../package.json");
 
-function htmlPluginFactory(page) {
+function htmlPluginFactory(entry, page) {
   return new HtmlPlugin({
     inject: "head",
     title: page === "index" ? "LavaJs" : `LavaJs | ${page}`,
@@ -17,7 +17,7 @@ function htmlPluginFactory(page) {
       let exampleCode = "";
 
       try {
-        exampleCode = fs.readFileSync(PATHS.join.examples(`${page}.js`));
+        exampleCode = fs.readFileSync(entry);
       } catch (e) {
         exampleCode = e.toString();
       }
@@ -31,7 +31,7 @@ function htmlPluginFactory(page) {
     alwaysWriteToDisk: true,
     chunks: ["runtime", "site", page],
     // chunksSortMode: "manual",
-    template: PATHS.join.templates(`${page}.hbs`),
+    template: entry.replace("examples", "templates").replace(/js$/, "hbs"),
     filename: PATHS.join.public(`${page}.html`)
   });
 }

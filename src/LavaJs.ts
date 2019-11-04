@@ -4,8 +4,8 @@ import { Dashboard } from "./Dashboard";
 import { DefaultOptions } from "./DefaultOptions";
 import { Eventful, Events } from "./Eventful";
 import { GoogleLoader } from "./google/GoogleLoader";
-import { addEvent, onGoogleReady } from "./lib";
-import { ConsoleLogger, getLogger } from "./lib/logger";
+import { addEvent, getLogger, onGoogleReady } from "./lib";
+import { ConsoleLogger } from "./lib/logger";
 import { LavaJsOptions, OneOrArrayOf } from "./types";
 import { ChartInterface } from "./types/chart";
 import { DashboardSpec } from "./types/dashboard";
@@ -166,6 +166,8 @@ export class LavaJs extends Eventful {
     controlWraps: OneOrArrayOf<ControlWrapperSpec>,
     chartWraps: OneOrArrayOf<ChartWrapperSpec>
   ): Binding {
+    console.log(controlWraps, chartWraps);
+
     return new Binding(controlWraps, chartWraps);
   }
 

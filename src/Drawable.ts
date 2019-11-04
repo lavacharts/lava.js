@@ -1,8 +1,7 @@
 import { DataQuery } from "./DataQuery";
-import { ContainerIdNotFound, DataError } from "./Errors";
+import { DataError } from "./Errors";
 import { Eventful, Events } from "./Eventful";
-import { createDataTable, getLava, hasOwnProp } from "./lib";
-import { getLogger } from "./lib/logger";
+import { createDataTable, getLava, getLogger, hasOwnProp } from "./lib";
 import { ChartUpdateReturn } from "./types";
 import { ChartEvents, ChartInterface } from "./types/chart";
 import { DashboardSpec } from "./types/dashboard";
@@ -227,19 +226,6 @@ export class Drawable extends Eventful {
 
       formatter.format(this.data, format.index);
     }
-  }
-
-  /**
-   * Get the HTMLElement into which the chart will be rendered.
-   */
-  protected getContainer(): HTMLElement {
-    const container = document.getElementById(this.containerId);
-
-    if (container === null) {
-      throw new ContainerIdNotFound(this.containerId);
-    }
-
-    return container;
   }
 
   /**

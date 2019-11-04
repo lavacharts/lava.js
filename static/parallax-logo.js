@@ -10,7 +10,7 @@ jQuery($ => {
   $(document).on("mousemove", ({ pageX: mouseX, pageY: mouseY }) => {
     const traX = (4 * mouseX) / 570 + 40;
     const traY = (4 * mouseY) / 570 + 50;
-    // console.log(traX);
+
     $(".title").css({ "background-position": traX + "%" + traY + "%" });
     $(".subtitle").css({ "background-position": traX + "%" + traY + "%" });
   });

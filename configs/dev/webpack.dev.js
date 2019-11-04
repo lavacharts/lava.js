@@ -1,6 +1,8 @@
+const _ = require("lodash");
 const ErrorNotificationPlugin = require("webpack-error-notification");
 const HtmlHarddiskPlugin = require("html-webpack-harddisk-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 const merge = require("webpack-merge");
 const { DefinePlugin } = require("webpack");
 
@@ -14,7 +16,7 @@ module.exports = merge(require("../webpack.common.js"), {
   devtool: "inline-source-map",
   entry: {
     site: PATHS.join.static("site.js"),
-    ...Object.assign(templateEntries, {
+    ...Object.assign(_.clone(templateEntries), {
       index: [
         PATHS.join.static("parallax-logo.js"),
         PATHS.join.examples("index.js")
@@ -95,9 +97,16 @@ module.exports = merge(require("../webpack.common.js"), {
         DEBUG: JSON.stringify("LavaJs*")
       }
     }),
+    new CopyPlugin([
+      {
+        from: PATHS.join.examples("**/*.js"),
+        to: PATHS.public,
+        flatten: true
+      }
+    ]),
     new MiniCssExtractPlugin(),
     new ErrorNotificationPlugin(),
-    ...Object.keys(templateEntries).map(htmlPluginFactory),
+    ..._.map(templateEntries, htmlPluginFactory),
     new HtmlHarddiskPlugin()
   ],
   optimization: {

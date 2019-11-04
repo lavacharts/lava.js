@@ -1,5 +1,6 @@
 import { Drawable } from "./Drawable";
 import { getGoogle } from "./google";
+import { getContainer } from "./lib";
 import { ChartInterface, ChartTypes } from "./types/chart";
 import { getChartClass } from "./VisualizationProperties";
 
@@ -35,7 +36,7 @@ export class Chart extends Drawable {
     const google = getGoogle();
 
     this.googleChart = new google.visualization[getChartClass(this)](
-      this.getContainer()
+      getContainer(this.containerId)
     );
 
     await super.draw();
@@ -51,7 +52,7 @@ export class Chart extends Drawable {
    * @see https://developers.google.com/chart/interactive/docs/printing
    */
   private drawPng(): void {
-    const container = this.getContainer();
+    const container = getContainer(this.containerId);
     const img = document.createElement("img");
 
     img.src = this.googleChart.getImageURI();
