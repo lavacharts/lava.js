@@ -3,7 +3,7 @@
 <head>
   <title></title>
   <meta charset="UTF-8">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="site.css" rel="stylesheet"><script type="text/javascript" src="runtime.js"></script><script type="text/javascript" src="site.js"></script><script type="text/javascript" src="formats.js"></script></head>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="site.css" rel="stylesheet"><script type="text/javascript" src="runtime.js"></script><script type="text/javascript" src="site.js"></script><script type="text/javascript" src="multichart.js"></script></head>
 
 <body>
   <nav class="light-blue lighten-1" role="navigation">
@@ -47,78 +47,98 @@
   </nav>
 
   <div class="section no-pad-bot" id="index-banner">
-    <div class="container">
-      <h1 class="header center orange-text">Formats</h1>
-      <div class="row center">
-        <h5 class="header col s12 light">customize your data</h5>
+    <div class="container center">
+      <h1 class="header orange-text">Multiple Charts</h1>
+      <div class="row">
+        <h5 class="header col s12 light">and data as a function</h5>
       </div>
     </div>
   </div>
 
   <div class="container">
+
     <div class="section">
       <div class="row">
+        <div class="card col s12">
+          <h5>Data Functions</h5>
+          <p>This demo also showcases that the data parameter can be a function that will be passed an empty <a target="_blank" href="https://developers.google.com/chart/interactive/docs/reference#methods">google.visualization.DataTable()</a> giving complete control over the creation of the data</p>
+        </div>
+      </div>
+    </div>
 
+    <div class="section">
+      <div class="row">
         <div class="col s12 m6">
           <div class="icon-block center  z-depth-1">
             <div class="icon-block-header">
-              <h2 class="light-blue-text">Apply</h2>
-              <h5>stylistic formats</h5>
+              <h2 class="light-blue-text">Quickly Build</h2>
+              <h5>with explicit objects</h5>
             </div>
             <pre class="language-javascript">
               <code>
-lava.chart({
-  type: &quot;SteppedAreaChart&quot;,
-  containerId: &quot;chart_div&quot;,
-  data: [
-    [&quot;Director (Year)&quot;, &quot;Rotten Tomatoes&quot;, &quot;IMDB&quot;],
-    [&quot;Alfred Hitchcock (1935)&quot;, 8.4, 7.9],
-    [&quot;Ralph Thomas (1959)&quot;, 6.9, 6.5],
-    [&quot;Don Sharp (1978)&quot;, 6.5, 6.4],
-    [&quot;James Hawes (2008)&quot;, 4.4, 6.2]
-  ],
-  options: {
-    title: &quot;The decline of &#x27;The 39 Steps&#x27;&quot;,
-    vAxis: { title: &quot;Accumulated Rating&quot; },
-    isStacked: true
-  },
-  formats: [
-    {
-      type: &quot;NumberFormat&quot;,
-      index: 1, // DataTable Column
-      options: {
-        pattern: &quot;#.#&quot;,
-        suffix: &quot; / 10&quot;
-      }
-    },
-    {
-      type: &quot;NumberFormat&quot;,
-      index: 2, // DataTable Column
-      options: {
-        pattern: &quot;#.#&quot;,
-        suffix: &quot; out of 10&quot;
-      }
+function randomData(data) {
+  data.addColumn(&quot;number&quot;, &quot;Hours&quot;);
+  data.addColumn(&quot;number&quot;, &quot;Temp. (C)&quot;);
+
+  for (let i &#x3D; 1; i &lt;&#x3D; 25; i++) {
+    data.addRow([i, Math.random()]);
+  }
+
+  return data;
+}
+
+lava.charts([
+  {
+    // label: &quot;This prop is optional&quot;,
+    type: &quot;AreaChart&quot;,
+    containerId: &quot;chart_div1&quot;,
+    data: randomData,
+    options: {
+      legend: &quot;none&quot;,
+      colors: [&quot;red&quot;]
     }
-  ]
-});
+  },
+  {
+    // default label if omitted, &#x60;containerId&#x60;,
+    type: &quot;BarChart&quot;,
+    containerId: &quot;chart_div2&quot;,
+    data: randomData,
+    options: {
+      legend: &quot;none&quot;,
+      colors: [&quot;orange&quot;]
+    }
+  },
+  {
+    type: &quot;ScatterChart&quot;,
+    containerId: &quot;chart_div3&quot;,
+    data: randomData,
+    options: {
+      legend: &quot;none&quot;,
+      colors: [&quot;grey&quot;]
+    }
+  }
+]);
 
 lava.draw();
 </code>
             </pre>
           </div>
         </div>
-
         <div class="col s12 m6">
-          <div class="icon-block center   z-depth-1">
+          <div class="icon-block center z-depth-1">
             <div class="icon-block-header">
-              <h2 class="light-blue-text">Control</h2>
-              <h5>the display</h5>
+              <h2 class="light-blue-text">As Many</h2>
+              <h5>as you need!</h5>
             </div>
-<pre class="language-html">
-<code>
-&lt;div id=&quot;chart_div1&quot;&gt;&lt;/div&gt;</code>
-</pre>
-<div id="chart_div"></div>
+            <pre class="language-html">
+            <code>
+&lt;div id=&quot;chart_div1&quot;&gt;&lt;/div&gt;
+&lt;div id=&quot;chart_div2&quot;&gt;&lt;/div&gt;
+&lt;div id=&quot;chart_div3&quot;&gt;&lt;/div&gt;</code>
+            </pre>
+            <div id="chart_div1"></div>
+            <div id="chart_div2"></div>
+            <div id="chart_div3"></div>
           </div>
         </div>
       </div>

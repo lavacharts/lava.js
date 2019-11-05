@@ -3,8 +3,7 @@
 <head>
   <title></title>
   <meta charset="UTF-8">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="site.css" rel="stylesheet"><script type="text/javascript" src="runtime.js"></script><script type="text/javascript" src="site.js"></script><script type="text/javascript" src="index.js"></script></head>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="site.css" rel="stylesheet"><script type="text/javascript" src="runtime.js"></script><script type="text/javascript" src="site.js"></script><script type="text/javascript" src="index.js"></script></head>
 
 <body>
   <nav class="light-blue lighten-1" role="navigation">
@@ -13,9 +12,13 @@
         <a id="logo-container" href="#" class="brand-logo"></a>
         <ul class="right hide-on-med-and-down">
           <li><a href="index.html">Home</a></li>
-          <li><a href="events.html">Events</a></li>
+          <li><a href="multichart.html">Multiple</a></li>
+          <li><a href="async-data.html">Async Data</a></li>
           <li><a href="options.html">Options</a></li>
+          <li><a href="events.html">Events</a></li>
+          <li><a href="formats.html">Formats</a></li>
           <li><a href="dataquery.html">DataQuery</a></li>
+          <li><a href="dashboards.html">Dashboards</a></li>
           <li><a href="history.html">Why</a></li>
           <li><a href="api/index.html">API</a></li>
           <li><a href="https://github.com/lavacharts/lava.js">Github</a></li>
@@ -24,9 +27,13 @@
         <div id="nav-mobile" class="sidenav">
           <ul>
             <li><a href="index.html">Home</a></li>
-            <li><a href="events.html">Events</a></li>
+            <li><a href="multichart.html">Multiple</a></li>
+            <li><a href="async-data.html">Async Data</a></li>
             <li><a href="options.html">Options</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="formats.html">Formats</a></li>
             <li><a href="dataquery.html">DataQuery</a></li>
+            <li><a href="dashboards.html">Dashboards</a></li>
             <li><a href="history.html">Why</a></li>
             <li><a href="api/index.html">API</a></li>
             <li><a href="https://github.com/lavacharts/lava.js">Github</a></li>
@@ -38,6 +45,7 @@
       </div>
     </nav>
   </nav>
+
   <div class="section no-pad-bot" id="index-banner">
     <div class="container">
       <div class="parallax-container">
@@ -65,31 +73,44 @@
       </div>
     </div>
   </div>
+
   <div class="container">
     <div class="section">
       <div class="row">
         <div class="col s12 m6">
-          <div class="icon-block">
-            <h2 class="center light-blue-text">
-                Easy Syntax
-            </h2>
-            <h5 class="center">clean & consise</h5>
+          <div class="icon-block z-depth-1">
+            <div class="icon-block-header">
+              <h3 class="center light-blue-text">Tiny API</h3>
+              <h5 class="center">Clean & Consise</h5>
+            </div>
             <pre class="language-javascript">
               <code>
+function r(n, x) {
+  return Math.random() * (x - n) + n;
+}
+
 lava.chart({
-  label: &quot;Test&quot;,
-  type: &quot;PieChart&quot;,
-  elementId: &quot;chart_div&quot;,
+  label: &quot;Lavachart&quot;,
+  type: &quot;AreaChart&quot;,
+  containerId: &quot;chart_div&quot;,
   data: [
-    [&quot;Task&quot;, &quot;Hours per Day&quot;],
-    [&quot;Work&quot;, 11],
-    [&quot;Eat&quot;, 2],
-    [&quot;Commute&quot;, 2],
-    [&quot;Watch TV&quot;, 2],
-    [&quot;Sleep&quot;, 7]
+    [&quot;series&quot;, &quot;volcano&quot;, &quot;lava&quot;],
+    [1, r(0, 100), r(0, 100)],
+    [2, r(100, 200), r(100, 200)],
+    [3, r(200, 300), r(200, 300)],
+    [4, r(300, 400), r(300, 400)],
+    [5, r(400, 500), r(400, 500)],
+    [6, r(500, 600), r(500, 600)],
+    [7, r(400, 500), r(400, 500)],
+    [8, r(300, 400), r(300, 400)],
+    [9, r(200, 300), r(200, 300)],
+    [10, r(100, 200), r(100, 200)],
+    [11, r(0, 100), r(0, 100)]
   ],
   options: {
-    title: &quot;My Daily Activities&quot;
+    title: &quot;Let your data flow&quot;,
+    legend: &quot;bottom&quot;,
+    colors: [&quot;#8c470b&quot;, &quot;red&quot;]
   }
 });
 
@@ -99,11 +120,11 @@ lava.draw();
           </div>
         </div>
         <div class="col s12 m6">
-          <div class="icon-block">
-            <h2 class="center light-blue-text">
-                Quick Charts
-            </h2>
-            <h5 class="center">thanks google!</h5>
+          <div class="icon-block z-depth-1">
+            <div class="icon-block-header">
+              <h3 class="center light-blue-text">Easy Charts</h3>
+              <h5 class="center">Thanks Google!</h5>
+            </div>
             <pre class="language-html">
               <code>
 &#x3C;div id=&#x22;chart_div&#x22;&#x3E;&#x3C;/div&#x3E;</code>
@@ -113,12 +134,8 @@ lava.draw();
         </div>
       </div>
     </div>
-    <div class="section">
-      <div class="row">
-        <br />
-      </div>
-    </div>
   </div>
+
   <footer class="page-footer">
       <div class="container">
         <div class="row">
@@ -134,9 +151,13 @@ lava.draw();
             <h5 class="orange-text">Pages</h5>
             <ul>
               <li><a href="index.html">Home</a></li>
-              <li><a href="events.html">Events</a></li>
+              <li><a href="multichart.html">Multiple</a></li>
+              <li><a href="async-data.html">Async Data</a></li>
               <li><a href="options.html">Options</a></li>
+              <li><a href="events.html">Events</a></li>
+              <li><a href="formats.html">Formats</a></li>
               <li><a href="dataquery.html">DataQuery</a></li>
+              <li><a href="dashboards.html">Dashboards</a></li>
               <li><a href="history.html">Why</a></li>
               <li><a href="api/index.html">API</a></li>
               <li><a href="https://github.com/lavacharts/lava.js">Github</a></li>

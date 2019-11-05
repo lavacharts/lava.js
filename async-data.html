@@ -1,9 +1,10 @@
 <!doctype html>
 <html>
+
 <head>
   <title></title>
   <meta charset="UTF-8">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="site.css" rel="stylesheet"><script type="text/javascript" src="runtime.js"></script><script type="text/javascript" src="site.js"></script><script type="text/javascript" src="events.js"></script></head>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="site.css" rel="stylesheet"><script type="text/javascript" src="runtime.js"></script><script type="text/javascript" src="site.js"></script><script type="text/javascript" src="async-data.js"></script></head>
 
 <body>
   <nav class="light-blue lighten-1" role="navigation">
@@ -45,12 +46,11 @@
       </div>
     </nav>
   </nav>
-
   <div class="section no-pad-bot" id="index-banner">
     <div class="container">
-      <h1 class="header center orange-text">Events</h1>
+      <h1 class="header center orange-text">Dynamic Data</h1>
       <div class="row center">
-        <h5 class="header col s12 light">lets get interactive</h5>
+        <h5 class="header col s12 light">asynchronously update charts</h5>
       </div>
     </div>
   </div>
@@ -58,44 +58,44 @@
   <div class="container">
     <div class="section">
       <div class="row">
-
         <div class="col s12 m6">
           <div class="icon-block z-depth-1">
             <div class="icon-block-header">
-              <h2 class="center light-blue-text">Listen</h2>
-              <h5 class="center">for events</h5>
+              <h2 class="center light-blue-text">Update</h2>
+              <h5 class="center">with easy setters</h5>
             </div>
             <pre class="language-javascript">
               <code>
-const chart &#x3D; lava.chart({
-  label: &quot;Test&quot;,
-  type: &quot;PieChart&quot;,
-  containerId: &quot;chart_div&quot;,
-  data: data &#x3D;&gt; {
-    data.addColumn(&quot;string&quot;, &quot;Topping&quot;);
-    data.addColumn(&quot;number&quot;, &quot;Pizzas&quot;);
-    data.addRows([[&quot;Mushroom &amp; Olive&quot;, 2], [&quot;Pepperoni&quot;, 5]]);
+const r &#x3D; (a, b) &#x3D;&gt; Math.floor(Math.random() * (b - a + 1) + a);
 
-    return data;
-  },
-  events: {
-    // Events can be defined upon creation
-    ready() {
-      // chart.id is just a getter for &#x60;${this.type}:${this.label}&#x60;
-      alert(chart.id + &quot; is ready!&quot;);
-    }
+const chart &#x3D; lava.chart({
+  label: &quot;MyFancyChart&quot;,
+  type: &quot;ScatterChart&quot;,
+  containerId: &quot;chart_div&quot;,
+  data: [
+    [&quot;Age&quot;, &quot;Cash&quot;],
+    [25, 312],
+    [27, 232],
+    [22, 612],
+    [23, 178],
+    [29, 613]
+  ],
+  options: {
+    legend: &quot;none&quot;
   }
 });
 
-// Or attached after the fact
-chart.on(&quot;select&quot;, ({ chart, data }) &#x3D;&gt; {
-  const selectedItem &#x3D; chart.getSelection()[0];
-
-  if (selectedItem) {
-    const topping &#x3D; data.getValue(selectedItem.row, 0);
-
-    alert(&quot;The user selected &quot; + topping);
-  }
+jQuery($ &#x3D;&gt; {
+  $(&quot;#clicky&quot;).click(() &#x3D;&gt; {
+    chart.updateData([
+      [&quot;Age&quot;, &quot;Cash&quot;],
+      [r(20, 30), r(100, 300)],
+      [r(20, 30), r(100, 300)],
+      [r(20, 30), r(100, 300)],
+      [r(20, 30), r(100, 300)],
+      [r(20, 30), r(100, 300)]
+    ]);
+  });
 });
 
 lava.draw();
@@ -105,16 +105,17 @@ lava.draw();
         </div>
 
         <div class="col s12 m6">
-          <div class="icon-block z-depth-1">
+          <div class="icon-block center z-depth-1">
             <div class="icon-block-header">
-              <h2 class="center light-blue-text">React</h2>
-              <h5 class="center">get info</h5>
+              <h2 class="light-blue-text">Redraw</h2>
+              <h5>with easy setters</h5>
             </div>
-<pre class="language-html">
-<code>
+            <pre class="language-html">
+            <code>
 &lt;div id=&quot;chart_div1&quot;&gt;&lt;/div&gt;</code>
-</pre>
-<div id="chart_div"></div>
+            </pre>
+            <div id="chart_div"></div>
+            <h5 id="clicky" class="waves-effect waves-light btn">Update Data</h5>
           </div>
         </div>
       </div>

@@ -3,8 +3,7 @@
 <head>
   <title></title>
   <meta charset="UTF-8">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="site.css" rel="stylesheet"><script type="text/javascript" src="runtime.js"></script><script type="text/javascript" src="site.js"></script><script type="text/javascript" src="options.js"></script></head>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="site.css" rel="stylesheet"><script type="text/javascript" src="runtime.js"></script><script type="text/javascript" src="site.js"></script><script type="text/javascript" src="options.js"></script></head>
 
 <body>
   <nav class="light-blue lighten-1" role="navigation">
@@ -13,9 +12,13 @@
         <a id="logo-container" href="#" class="brand-logo"></a>
         <ul class="right hide-on-med-and-down">
           <li><a href="index.html">Home</a></li>
-          <li><a href="events.html">Events</a></li>
+          <li><a href="multichart.html">Multiple</a></li>
+          <li><a href="async-data.html">Async Data</a></li>
           <li><a href="options.html">Options</a></li>
+          <li><a href="events.html">Events</a></li>
+          <li><a href="formats.html">Formats</a></li>
           <li><a href="dataquery.html">DataQuery</a></li>
+          <li><a href="dashboards.html">Dashboards</a></li>
           <li><a href="history.html">Why</a></li>
           <li><a href="api/index.html">API</a></li>
           <li><a href="https://github.com/lavacharts/lava.js">Github</a></li>
@@ -24,9 +27,13 @@
         <div id="nav-mobile" class="sidenav">
           <ul>
             <li><a href="index.html">Home</a></li>
-            <li><a href="events.html">Events</a></li>
+            <li><a href="multichart.html">Multiple</a></li>
+            <li><a href="async-data.html">Async Data</a></li>
             <li><a href="options.html">Options</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="formats.html">Formats</a></li>
             <li><a href="dataquery.html">DataQuery</a></li>
+            <li><a href="dashboards.html">Dashboards</a></li>
             <li><a href="history.html">Why</a></li>
             <li><a href="api/index.html">API</a></li>
             <li><a href="https://github.com/lavacharts/lava.js">Github</a></li>
@@ -39,9 +46,9 @@
     </nav>
   </nav>
   <div class="section no-pad-bot" id="index-banner">
-    <div class="container">
-      <h1 class="header center orange-text">Dynamic Options</h1>
-      <div class="row center">
+    <div class="container center ">
+      <h1 class="header orange-text">Dynamic Options</h1>
+      <div class="row">
         <h5 class="header col s12 light">make changes, on the fly</h5>
       </div>
     </div>
@@ -50,18 +57,24 @@
     <div class="section">
       <div class="row">
         <div class="col s12 m6">
-          <div class="icon-block">
-            <h2 class="center light-blue-text">
-                Update
-            </h2>
-            <h5 class="center">with easy setters</h5>
+          <div class="icon-block center z-depth-1">
+            <div class="icon-block-header">
+              <h2 class="light-blue-text">Update</h2>
+              <h5>with easy setters</h5>
+            </div>
             <pre class="language-javascript">
               <code>
 const chart &#x3D; lava.chart({
-  label: &quot;MyFancyChart&quot;,
-  type: &quot;ScatterChart&quot;,
-  elementId: &quot;chart_div&quot;,
-  data: [[&quot;Age&quot;, &quot;Cash&quot;], [12, 101], [15, 240], [37, 80], [32, 324]],
+  type: &quot;AreaChart&quot;,
+  containerId: &quot;chart_div&quot;,
+  data: [
+    [&quot;Series&quot;, &quot;Random&quot;],
+    [1, Math.random()],
+    [2, Math.random()],
+    [3, Math.random()],
+    [4, Math.random()],
+    [5, Math.random()]
+  ],
   options: {
     legend: &quot;none&quot;
   }
@@ -73,20 +86,9 @@ setInterval(() &#x3D;&gt; {
       .toString(16)
       .substr(-6)}&#x60;
   ]);
-}, 1000);
 
-// eslint-disable-next-line no-mixed-operators
-// const r &#x3D; (mn, mx) &#x3D;&gt; Math.floor(Math.random() * (mx - mn + 1) + mn);
-
-// setInterval(async () &#x3D;&gt; {
-//   await chart.updateData([
-//     [&quot;Age&quot;, &quot;Cash&quot;],
-//     [r(20, 40), r(100, 400)],
-//     [r(20, 40), r(100, 400)],
-//     [r(20, 40), r(100, 400)],
-//     [r(20, 40), r(100, 400)]
-//   ]);
-// }, 750);
+  chart.set(&quot;areaOpacity&quot;, Math.random());
+}, 2000);
 
 lava.draw();
 </code>
@@ -94,26 +96,22 @@ lava.draw();
           </div>
         </div>
         <div class="col s12 m6">
-          <div class="icon-block">
-            <h2 class="center light-blue-text">
-                Redraw
-            </h2>
-            <h5 class="center">with each change</h5>
-            <pre class="language-html">
-              <code>
-&#x3C;div id=&#x22;chart_div1&#x22;&#x3E;&#x3C;/div&#x3E;</code>
-            </pre>
-            <div id="chart_div"></div>
+          <div class="icon-block center z-depth-1">
+            <div class="icon-block-header">
+              <h2 class="light-blue-text">Redraw</h2>
+              <h5>with each change</h5>
+            </div>
+<pre class="language-html">
+<code>
+&lt;div id=&quot;chart_div1&quot;&gt;&lt;/div&gt;</code>
+</pre>
+<div id="chart_div"></div>
           </div>
         </div>
       </div>
     </div>
-    <div class="section">
-      <div class="row">
-        <br />
-      </div>
-    </div>
   </div>
+
   <footer class="page-footer">
       <div class="container">
         <div class="row">
@@ -129,9 +127,13 @@ lava.draw();
             <h5 class="orange-text">Pages</h5>
             <ul>
               <li><a href="index.html">Home</a></li>
-              <li><a href="events.html">Events</a></li>
+              <li><a href="multichart.html">Multiple</a></li>
+              <li><a href="async-data.html">Async Data</a></li>
               <li><a href="options.html">Options</a></li>
+              <li><a href="events.html">Events</a></li>
+              <li><a href="formats.html">Formats</a></li>
               <li><a href="dataquery.html">DataQuery</a></li>
+              <li><a href="dashboards.html">Dashboards</a></li>
               <li><a href="history.html">Why</a></li>
               <li><a href="api/index.html">API</a></li>
               <li><a href="https://github.com/lavacharts/lava.js">Github</a></li>
