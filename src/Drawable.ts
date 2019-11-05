@@ -7,10 +7,10 @@ import { ChartEvents, ChartInterface } from "./types/chart";
 import { DashboardSpec } from "./types/dashboard";
 import { OptionDataPayload } from "./types/drawable";
 import { Formatter } from "./types/formats";
+import { instanceOfRangeQuery } from "./types/guards";
 
 /**
- * The [[Drawable]] class is the base for [[Chart]]s and [[Dashboard]]s
- * to share common methods between the two types
+ * Base class for [[Chart]]s and [[Dashboard]]s
  */
 export class Drawable extends Eventful {
   /**
@@ -19,18 +19,18 @@ export class Drawable extends Eventful {
   public options: Record<string, any>;
 
   /**
-   * DataTable for the [[Chart]] / [[Dashboard]]
+   * DataTable for the [[Drawable]]
    */
   public data!: google.visualization.DataTable;
 
   /**
-   * Google chart object created once the [[Chart]] / [[Dashboard]]
+   * Google chart object created once the [[Drawable]]
    * has been rendered
    */
   public googleChart!: any;
 
   /**
-   * Unique identifier for the [[Chart]] / [[Dashboard]].
+   * Unique identifier for the [[Drawable]]
    */
   public get id(): string {
     return this.type + ":" + this.label;
@@ -42,7 +42,7 @@ export class Drawable extends Eventful {
   public readonly containerId: string;
 
   /**
-   * Unique label for the [[Chart]] / [[Dashboard]].
+   * Unique label for the [[Drawable]]
    */
   public readonly label: string;
 
@@ -73,12 +73,23 @@ export class Drawable extends Eventful {
    */
   constructor(drawable: ChartInterface | DashboardSpec) {
     super();
+    const drawableHasProp = hasOwnProp(drawable);
 
-    this.type = drawable.type;
-    this.label = drawable.label;
     this.containerId = drawable.containerId;
+    this.type = drawable.type;
 
-    this.initialData = drawable.data || null;
+    if (drawableHasProp("label")) {
+      this.label = drawable.label;
+    } else {
+      this.label = this.containerId;
+    }
+
+    if (instanceOfRangeQuery(drawable.data)) {
+      this.initialData = DataQuery.createFromSheetRange(drawable.data);
+    } else {
+      this.initialData = drawable.data;
+    }
+
     this.options = drawable.options || {};
     this.formats = drawable.formats || [];
     this.events = drawable.events || {};
@@ -96,7 +107,7 @@ export class Drawable extends Eventful {
   }
 
   /**
-   * Draws the [[Chart]] / [[Dashboard]] with the predefined data and options.
+   * Draws the [[Drawable]] with the predefined data and options.
    *
    * @public
    */

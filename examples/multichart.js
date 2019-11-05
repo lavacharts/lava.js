@@ -1,38 +1,44 @@
-lava.draw([
+function randomData(data) {
+  data.addColumn("number", "Hours");
+  data.addColumn("number", "Temp. (C)");
+
+  for (let i = 1; i <= 25; i++) {
+    data.addRow([i, Math.random()]);
+  }
+
+  return data;
+}
+
+lava.charts([
   {
-    label: "Chart1",
+    // label: "This prop is optional",
     type: "AreaChart",
     containerId: "chart_div1",
-    data: [
-      ["Hours", "Temp. (C)"],
-      [1, Math.random()],
-      [2, Math.random()],
-      [3, Math.random()],
-      [4, Math.random()],
-      [5, Math.random()],
-      [6, Math.random()]
-    ],
+    data: randomData,
     options: {
       legend: "none",
       colors: ["red"]
     }
   },
   {
-    label: "Chart2",
+    // default label if omitted, `containerId`,
     type: "BarChart",
     containerId: "chart_div2",
-    data: [
-      ["Hours", "Temp. (C)"],
-      [1, Math.random()],
-      [2, Math.random()],
-      [3, Math.random()],
-      [4, Math.random()],
-      [5, Math.random()],
-      [6, Math.random()]
-    ],
+    data: randomData,
     options: {
       legend: "none",
-      colors: ["blue"]
+      colors: ["orange"]
+    }
+  },
+  {
+    type: "ScatterChart",
+    containerId: "chart_div3",
+    data: randomData,
+    options: {
+      legend: "none",
+      colors: ["grey"]
     }
   }
 ]);
+
+lava.draw();

@@ -13,8 +13,9 @@ export enum CHART_EVENTS {
 
 export interface ChartInterface extends DrawableInterface {
   png?: boolean;
-  events?: Record<ChartEvents, CallableFunction>;
   formats?: Formatter[];
+  rangeQuery?: [string, string];
+  events?: Record<ChartEvents, CallableFunction>;
 }
 
 export interface NewChartConstructor {

@@ -2,6 +2,7 @@ import { Debugger } from "debug";
 
 import { DataError } from "./Errors";
 import { getLogger } from "./lib/logger";
+import { RangeQuery } from "./types/datasources";
 import { DataQueryInterface, QueryTransformer } from "./types/google";
 
 /**
@@ -11,6 +12,46 @@ import { DataQueryInterface, QueryTransformer } from "./types/google";
  */
 export class DataQuery {
   private debug: Debugger;
+
+  /**
+   * Compose a DataQuery based on a URL to a Google Sheet
+   *
+   * Pass a Google Sheet ID and range in A1 notation
+   * to create a URL to use with a [[DataQuery]]
+   */
+  public static createFromSheetRange({
+    sheetId,
+    range
+  }: RangeQuery): DataQuery {
+    const base = "https://docs.google.com/spreadsheets/d";
+
+    return new DataQuery(`${base}/${sheetId}/gviz/tq?range=${range}`);
+  }
+
+  /**
+   * create a new DataQuery based on the given payload
+   *
+   * @throws {DataError}
+   */
+  public static create(payload: DataQueryInterface): DataQuery {
+    if (!payload.url) {
+      throw new DataError(
+        '"url" is a mandatory parameter for creating a DataQuery.'
+      );
+    }
+
+    const query = new DataQuery(payload.url);
+
+    if (typeof payload.opts === "object") {
+      query.opts = payload.opts as google.visualization.QueryOptions;
+    }
+
+    if (typeof payload.transformer === "function") {
+      query.transformer = payload.transformer as QueryTransformer;
+    }
+
+    return query;
+  }
 
   /**
    * Create a new DataQuery for a DataTable
@@ -48,31 +89,6 @@ export class DataQuery {
     this.debug(response);
 
     return response.getDataTable();
-  }
-
-  /**
-   * create a new DataQuery based on the given payload
-   *
-   * @throws {DataError}
-   */
-  public static create(payload: DataQueryInterface): DataQuery {
-    if (!payload.url) {
-      throw new DataError(
-        '"url" is a mandatory parameter for creating a DataQuery.'
-      );
-    }
-
-    const query = new DataQuery(payload.url);
-
-    if (typeof payload.opts === "object") {
-      query.opts = payload.opts as google.visualization.QueryOptions;
-    }
-
-    if (typeof payload.transformer === "function") {
-      query.transformer = payload.transformer as QueryTransformer;
-    }
-
-    return query;
   }
 
   /**

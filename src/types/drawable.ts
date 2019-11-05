@@ -9,8 +9,8 @@ export interface OptionDataPayload {
 export type DrawableTypes = ChartTypes | "Dashboard";
 
 export interface DrawableInterface {
-  data: any;
-  label: any;
+  data?: any;
+  label?: any;
   type: DrawableTypes;
   containerId: string;
   options?: Record<string, any>;

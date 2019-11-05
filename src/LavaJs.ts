@@ -5,9 +5,10 @@ import { DefaultOptions } from "./DefaultOptions";
 import { Eventful, Events } from "./Eventful";
 import { GoogleLoader } from "./google/GoogleLoader";
 import { addEvent, getLogger, onGoogleReady } from "./lib";
+import { createChartFactory } from "./lib/chartFactory";
 import { ConsoleLogger } from "./lib/logger";
 import { LavaJsOptions, OneOrArrayOf } from "./types";
-import { ChartInterface } from "./types/chart";
+import { ChartInterface, ChartTypes } from "./types/chart";
 import { DashboardSpec } from "./types/dashboard";
 import { Google } from "./types/google";
 import { ChartWrapperSpec, ControlWrapperSpec } from "./types/wrapper";
@@ -130,15 +131,11 @@ export class LavaJs extends Eventful {
   }
 
   /**
-   * Compose a URL to a Google Sheet
-   *
-   * Pass a Google Sheet ID and range in A1 notation to create a URL
-   * to use with a [[DataQuery]].
+   * Create a new [[Chart]] Factory for quickly
+   * creating multiple charts of the same type.
    */
-  public rangeQuery(id: string, range: string): string {
-    const base = "https://docs.google.com/spreadsheets/d";
-
-    return `${base}/${id}/gviz/tq?range=${range}`;
+  public factory(chartType: ChartTypes): (containerId: string) => Chart {
+    return createChartFactory(chartType);
   }
 
   /**
@@ -148,6 +145,13 @@ export class LavaJs extends Eventful {
     const chart = new Chart(payload);
 
     return this.register(chart);
+  }
+
+  /**
+   * Create multiple [[Chart]]s from an array of Objects
+   */
+  public charts(charts: ChartInterface[]): Chart[] {
+    return charts.map(this.chart, this);
   }
 
   /**
