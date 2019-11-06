@@ -65,7 +65,7 @@ module.exports = {
         node: true
       },
       rules: {
-        "simple-import-sort/sort": "off",
+        // "simple-import-sort/sort": "off",
         "@typescript-eslint/no-var-requires": "off",
         "@typescript-eslint/explicit-function-return-type": "off",
         "import/order": ["error", { "newlines-between": "always" }]
@@ -74,8 +74,7 @@ module.exports = {
     {
       files: [
         "test/**/*.js",
-        "static/**/*.js",
-        "examples/**/*.js"
+        "site/**/*.js"
       ],
       globals: {
         M: true,

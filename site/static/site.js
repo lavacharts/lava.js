@@ -8,8 +8,8 @@ import "materialize-css";
 import "materialize-css/dist/css/materialize.css";
 // import "materialize-css/sass/componentsmaterialize.scss";
 
-import "../static/site.scss"
-import "../src/lava";
+import "./site.scss"
+import "../../src/lava";
 /* eslint-enable */
 
 window.lava.options.debug = false;

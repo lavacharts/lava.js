@@ -1,10 +1,10 @@
-const _ = require("lodash");
-const ErrorNotificationPlugin = require("webpack-error-notification");
-const HtmlHarddiskPlugin = require("html-webpack-harddisk-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
-const merge = require("webpack-merge");
+const HtmlHarddiskPlugin = require("html-webpack-harddisk-plugin");
+const { map, clone } = require("lodash");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { DefinePlugin } = require("webpack");
+const ErrorNotificationPlugin = require("webpack-error-notification");
+const merge = require("webpack-merge");
 
 const PATHS = require("../paths");
 
@@ -13,10 +13,11 @@ const templateEntries = require("./templateEntries");
 
 module.exports = merge(require("../webpack.common.js"), {
   mode: "development",
+  stats: "minimal",
   devtool: "inline-source-map",
   entry: {
     site: PATHS.join.static("site.js"),
-    ...Object.assign(_.clone(templateEntries), {
+    ...Object.assign(clone(templateEntries), {
       index: [
         PATHS.join.static("parallax-logo.js"),
         PATHS.join.examples("index.js")
@@ -35,7 +36,7 @@ module.exports = merge(require("../webpack.common.js"), {
     stats: "errors-only",
     overlay: { errors: true },
     watchContentBase: true,
-    contentBase: [PATHS.public, PATHS.examples, PATHS.static]
+    contentBase: [PATHS.site]
   },
   module: {
     rules: [
@@ -58,12 +59,7 @@ module.exports = merge(require("../webpack.common.js"), {
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
-            options: {
-              // you can specify a publicPath here
-              // by default it uses publicPath in webpackOptions.output
-              // publicPath: "/",
-              hmr: process.env.NODE_ENV === "development"
-            }
+            options: { hmr: process.env.NODE_ENV === "development" }
           },
           "css-loader"
         ]
@@ -106,23 +102,11 @@ module.exports = merge(require("../webpack.common.js"), {
     ]),
     new MiniCssExtractPlugin(),
     new ErrorNotificationPlugin(),
-    ..._.map(templateEntries, htmlPluginFactory),
+    ...map(templateEntries, htmlPluginFactory),
     new HtmlHarddiskPlugin()
   ],
   optimization: {
-    splitChunks: {
-      cacheGroups: {
-        // vendor: {
-        //   test: /node_modules/,
-        //   chunks: "initial",
-        //   name: "vendor",
-        //   enforce: true
-        // },
-        chunks: "all"
-      }
-    },
-    runtimeChunk: {
-      name: "runtime"
-    }
+    splitChunks: { cacheGroups: { chunks: "all" } },
+    runtimeChunk: { name: "runtime" }
   }
 });
