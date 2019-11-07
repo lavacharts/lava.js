@@ -8,7 +8,7 @@ const PATHS = {
   join: {}
 };
 
-["src", "dist", "public"].forEach(dir => {
+["src", "dist", "public", "lavacharts"].forEach(dir => {
   PATHS[dir] = path.join(PATHS.root, dir);
   PATHS.join[dir] = (...args) => path.join(PATHS[dir], ...args);
 });

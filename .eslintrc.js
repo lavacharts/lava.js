@@ -1,9 +1,9 @@
 module.exports = {
   root: true,
   env: {
-    es2017: true,
+    // es2017: true,
     browser: true,
-    commonjs: true
+    es6: true
   },
   parser: "@typescript-eslint/parser",
   parserOptions: {
@@ -21,6 +21,7 @@ module.exports = {
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
+    "plugin:json/recommended",
     "prettier/@typescript-eslint",
     "prettier"
   ],
@@ -55,7 +56,7 @@ module.exports = {
   overrides: [
     {
       files: [
-        ".eslintrc.js",
+        ".eslintrc.*",
         "karma.conf.js",
         "configs/**/*.js"
       ],

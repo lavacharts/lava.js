@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "strict": true,
-    "target": "es6",
+    "target": "esnext",
     "sourceMap": true,
     "module": "commonjs",
     "noImplicitAny": true,
@@ -18,7 +18,7 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts", "lavacharts.ts"
   ],
   "exclude": [
     "node_modules"

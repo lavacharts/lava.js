@@ -1,22 +1,12 @@
 module.exports = {
   "presets": [
-    // [
-      "@babel/preset-env",
-    //   {
-    //     "targets": {
-    //       "browsers": [
-    //         "last 2 versions"
-    //       ]
-    //     },
-    //     "corejs": 3,
-    //     "useBuiltIns": "entry"
-    //   }
-    // ],
-    "@babel/typescript"
+    "@babel/typescript",
+    "@babel/preset-env"
   ],
   "plugins": [
-    "@babel/plugin-transform-runtime",
-    "@babel/proposal-class-properties",
-    "@babel/proposal-object-rest-spread"
+    ["@babel/plugin-transform-runtime", {
+      useESModules: true
+    }],
+    "@babel/proposal-class-properties"
   ]
 }
