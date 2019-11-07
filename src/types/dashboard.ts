@@ -1,4 +1,4 @@
-import { Binding } from "../Binding";
+import { BindingTuple } from "../Binding";
 import { ChartEvents } from "./chart";
 import { RangeQuery } from "./datasources";
 import { DrawableInterface } from "./drawable";
@@ -14,7 +14,7 @@ export interface DashboardSpec {
   type: "Dashboard";
   containerId: string;
   data: RangeQuery | any;
-  bindings: Binding[];
+  bindings: BindingTuple[]; //Binding[];
   label?: string;
   formats?: any;
   options?: any;

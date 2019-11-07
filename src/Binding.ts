@@ -2,10 +2,16 @@ import { GoogleFactory } from "./google";
 import { OneOrArrayOf } from "./types";
 import { ChartWrapperSpec, ControlWrapperSpec } from "./types/wrapper";
 
-type BindingType = "OneToOne" | "OneToMany" | "ManyToOne" | "ManyToMany";
+export type BindingType = "OneToOne" | "OneToMany" | "ManyToOne" | "ManyToMany";
+
+export type BindingTuple = [ControlWrapperSpec, ChartWrapperSpec];
 
 export class Binding {
   public type: BindingType;
+
+  public static createFromTuple(binding: BindingTuple): Binding {
+    return new Binding(binding[0], binding[1]);
+  }
 
   constructor(
     private controlWraps: OneOrArrayOf<ControlWrapperSpec>,

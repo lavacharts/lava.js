@@ -1,4 +1,4 @@
-import { Binding } from "./Binding";
+import { Binding, BindingTuple } from "./Binding";
 import { Drawable } from "./Drawable";
 import { GoogleFactory, onGoogleReady } from "./google";
 import { getContainer, hasOwnProp, makeDebugger } from "./lib";
@@ -8,7 +8,7 @@ import { DashboardSpec } from "./types/dashboard";
 const debug = makeDebugger("Dashboard");
 
 export class Dashboard extends Drawable {
-  public bindings: Binding[];
+  public bindings: BindingTuple[];
 
   public needsBindings: boolean;
 
@@ -37,9 +37,9 @@ export class Dashboard extends Drawable {
         getContainer(this.containerId)
       );
 
-      // if (this.needsBindings) {
-      this.attachBindings();
-      // }
+      if (this.needsBindings) {
+        this.attachBindings();
+      }
 
       Object.keys(this.events).forEach(event => {
         const e = event as ChartEvents;
@@ -57,11 +57,11 @@ export class Dashboard extends Drawable {
    * @TODO: Needs to be modified and tested for the other types of bindings.
    */
   private attachBindings(): void {
-    for (const binding of this.bindings) {
+    this.bindings.map(Binding.createFromTuple).forEach(binding => {
       debug(binding.type, binding);
 
       this.googleChart.bind(...binding.toArray());
-    }
+    });
 
     this.needsBindings = false;
   }

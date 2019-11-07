@@ -6,14 +6,10 @@ import "prismjs/themes/prism.css";
 
 import "materialize-css";
 import "materialize-css/dist/css/materialize.css";
-// import "materialize-css/sass/componentsmaterialize.scss";
 
 import "./site.scss"
 import "../../src/lava";
 /* eslint-enable */
-
-window.lava.options.debug = false;
-window.lava.options.autodraw = false;
 
 window.$ = window.jQuery = jQuery;
 

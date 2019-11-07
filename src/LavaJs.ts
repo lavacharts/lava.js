@@ -189,7 +189,7 @@ export class LavaJs extends TinyEmitter {
     controlWraps: OneOrArrayOf<ControlWrapperSpec>,
     chartWraps: OneOrArrayOf<ChartWrapperSpec>
   ): Binding {
-    console.log(controlWraps, chartWraps);
+    // debug(controlWraps, chartWraps);
 
     return new Binding(controlWraps, chartWraps);
   }

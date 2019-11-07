@@ -14,4 +14,4 @@ add some fun features along the way.
 - [x] [Update Data](https://lavajs.lavacharts.com/async-data.html)
 - [x] [Update Options](https://lavajs.lavacharts.com/options.html)
 - [x] [Formatting data](https://lavajs.lavacharts.com/formats.html)
-- [ ] [Dashboards](https://lavajs.lavacharts.com/dashboard.html) 
+- [ ] [Dashboards](https://lavajs.lavacharts.com/dashboard.html)

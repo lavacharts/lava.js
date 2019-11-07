@@ -3,13 +3,13 @@
 
   const donutRangeSlider = {
     controlType: "NumberRangeFilter",
-    containerId: "filter_div",
+    containerId: "one-to-many_filter_div",
     options: { filterColumnLabel }
   };
 
   const pieChart = {
     chartType: "PieChart",
-    containerId: "pieChart_div",
+    containerId: "one-to-many_pieChart_div",
     options: {
       width: 300,
       height: 300,
@@ -20,7 +20,7 @@
 
   const barChart = {
     chartType: "BarChart",
-    containerId: "barChart_div",
+    containerId: "one-to-many_barChart_div",
     options: {
       width: 300,
       height: 300,
@@ -30,8 +30,7 @@
   };
 
   lava.dashboard({
-    label: "Test",
-    containerId: "dashboard_div",
+    containerId: "one-to-many_dashboard_div",
     data: [
       ["Name", filterColumnLabel],
       ["Michael", 5],

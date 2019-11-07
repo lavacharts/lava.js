@@ -3,19 +3,19 @@
 
   const donutRangeSlider = {
     controlType: "NumberRangeFilter",
-    containerId: "donut_slider_div",
+    containerId: "many-to-many_donut_slider_div",
     options: { filterColumnLabel }
   };
 
   const coffeeRangeSlider = {
     controlType: "NumberRangeFilter",
-    containerId: "coffee_slider_div",
+    containerId: "many-to-many_coffee_slider_div",
     options: { filterColumnIndex: 2 }
   };
 
   const scatterChart = {
     chartType: "ScatterChart",
-    containerId: "chart_div",
+    containerId: "many-to-many_chart_div",
     options: {
       width: 300,
       height: 300,
@@ -25,7 +25,7 @@
 
   const barChart = {
     chartType: "BarChart",
-    containerId: "barChart_div",
+    containerId: "many-to-many_barChart_div",
     options: {
       width: 300,
       height: 300,
@@ -35,8 +35,7 @@
   };
 
   lava.dashboard({
-    label: "CoffeeDonuts",
-    containerId: "dashboard_div",
+    containerId: "many-to-many_dashboard_div",
     data: [
       ["Name", filterColumnLabel, "Coffees Drank"],
       ["Michael", 5, 2],
