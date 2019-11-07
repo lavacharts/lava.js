@@ -23,20 +23,15 @@
     "not dead"
   ],
   "scripts": {
+    "prod": "yarn run webpack --config ./configs/webpack.prod.js",
     "dev": "yarn run webpack-dev-server --config ./configs/dev/webpack.dev.js",
+    "build": "yarn run clean-public && yarn run concurrently npm:build:site:*",
     "deploy": "yarn run build && yarn run gh-pages -d public/",
-    "prod": "yarn run clean:dist && yarn run build:prod",
-    "build": "yarn run build:prod:lavajs",
-    "build-all": "yarn run clean-all && yarn run concurrently npm:build-*",
-    "clean-all": "yarn run concurrently npm:clean:*",
-    "build-site": "yarn run concurrently npm:build:site:*",
     "build:site:pages": "yarn run webpack --config ./configs/dev/webpack.dev.js",
     "build:site:api": "yarn run typedoc --out ./public/api ./src",
-    "build:prod": "yarn run webpack --config ./configs/webpack.prod.js",
-    "clean:public": "yarn run rimraf ./public/*",
-    "clean:dist": "yarn run rimraf ./dist/*",
     "lint": "yarn run eslint --ext=.ts src/",
-    "test": "yarn run karma start --singleRun"
+    "test": "yarn run karma start --singleRun",
+    "clean-public": "yarn run rimraf ./public/*"
   },
   "lint-staged": {
     "./src/**/*.ts": [

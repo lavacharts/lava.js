@@ -2,6 +2,7 @@ const path = require("path");
 
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const CopyPlugin = require("copy-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const StripLoader = require("strip-loader");
 const { DefinePlugin, NormalModuleReplacementPlugin } = require("webpack");
 const merge = require("webpack-merge");
@@ -28,6 +29,7 @@ const config = {
     ]
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new DefinePlugin({
       "process.env": {
         NODE_ENV: JSON.stringify("production"),
