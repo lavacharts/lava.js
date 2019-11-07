@@ -1,14 +1,17 @@
+import { TinyEmitter } from "tiny-emitter";
+
 import { Chart } from "../Chart";
 import { Dashboard } from "../Dashboard";
 import { Drawable } from "../Drawable";
-import { Eventful, Events } from "../Eventful";
+import { Events } from "../Events";
 import { getGoogle } from "../google";
-import { getLogger } from "../lib";
-import { LavaJsOptions } from "../types";
+import { makeDebugger } from "../lib";
 import { Google, GoogleLoaderOptions } from "../types/google";
 import { getChartPackage } from "../VisualizationProperties";
 
-export class GoogleLoader extends Eventful {
+const debug = makeDebugger("GoogleLoader");
+
+export class GoogleLoader extends TinyEmitter {
   /**
    * Version of the Google charts API to load
    */
@@ -20,23 +23,34 @@ export class GoogleLoader extends Eventful {
   public static LOADER_URL = "https://www.gstatic.com/charts/loader.js";
 
   /**
+   * Language to load
+   */
+  private language: string;
+
+  /**
+   * API Key if using GeoCharts
+   */
+  private mapsApiKey: string;
+
+  /**
    * Packages to load
    */
-  private readonly packages: Set<string> = new Set();
+  private packages: Set<string> = new Set(["corechart"]);
 
   /**
    * Create a new instance of the GoogleLoader
    *
    * @param options LavaJsOptions
    */
-  constructor(private options: LavaJsOptions) {
+  constructor({ language = "en", mapsApiKey = "" }: GoogleLoaderOptions) {
     super();
+
+    this.language = language;
+    this.mapsApiKey = mapsApiKey;
 
     // if (options.enableEditor) {
     //   this.packages.add("charteditor");
     // }
-
-    this.debug = getLogger().extend("GoogleLoader");
   }
 
   /**
@@ -66,12 +80,12 @@ export class GoogleLoader extends Eventful {
    */
   public get config(): GoogleLoaderOptions {
     const config: GoogleLoaderOptions = {
-      language: this.options.language || "en",
+      language: this.language,
       packages: Array.from(this.packages)
     };
 
-    if (this.options.mapsApiKey !== "") {
-      config.mapsApiKey = this.options.mapsApiKey;
+    if (this.mapsApiKey !== "") {
+      config.mapsApiKey = this.mapsApiKey;
     }
 
     return config;
@@ -92,26 +106,27 @@ export class GoogleLoader extends Eventful {
    * Load the Google Static Loader and resolve the promise when ready.
    */
   public async loadGoogle(): Promise<Google> {
-    this.debug("Loading Google...");
+    debug("Loading Google...");
 
     if (this.googleIsDefined) {
       return getGoogle();
     }
 
     if (this.scriptTagInPage === false) {
-      this.debug("Static loader not found");
+      debug("Static loader not found");
 
       await this.injectGoogleStaticLoader(document.head);
     }
 
-    this.debug(`Loading version "${GoogleLoader.API_VERSION}"`, this.config);
+    debug(`Loading version "${GoogleLoader.API_VERSION}"`, this.config);
 
-    window.google.charts.load(GoogleLoader.API_VERSION, this.config);
+    getGoogle().charts.load(GoogleLoader.API_VERSION, this.config);
 
     return new Promise(resolve => {
-      window.google.charts.setOnLoadCallback(() => {
-        this.debug(`Google is loaded, firing <${Events.GOOGLE_READY}>`);
-        this.emitEvent(Events.GOOGLE_READY, getGoogle());
+      getGoogle().charts.setOnLoadCallback(() => {
+        debug(`Google is loaded, firing <${Events.GOOGLE_READY}>`);
+
+        this.emit(Events.GOOGLE_READY, getGoogle());
 
         resolve(getGoogle());
       });
@@ -122,8 +137,6 @@ export class GoogleLoader extends Eventful {
    * Create a new script tag for the Google Static Loader
    */
   private injectGoogleStaticLoader(target: Node): Promise<void> {
-    const debug = this.debug.extend("StaticLoader");
-
     return new Promise(resolve => {
       const script = document.createElement("script") as ScriptElement;
 
@@ -144,7 +157,6 @@ export class GoogleLoader extends Eventful {
         }
       };
 
-      // debug(`Injecting ${script} into ${target}`);
       debug("Injecting", script);
 
       target.appendChild(script);

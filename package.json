@@ -6,6 +6,7 @@
   "private": false,
   "main": "dist/lava.js",
   "unpkg": "dist/lava.js",
+  "browser": "dist/lava.js",
   "jsdelivr": "dist/lava.js",
   "files": [
     "src",

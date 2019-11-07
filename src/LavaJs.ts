@@ -1,17 +1,20 @@
+import { TinyEmitter } from "tiny-emitter";
+
 import { Binding } from "./Binding";
 import { Chart } from "./Chart";
 import { Dashboard } from "./Dashboard";
 import { DefaultOptions } from "./DefaultOptions";
-import { Eventful, Events } from "./Eventful";
-import { GoogleLoader } from "./google/GoogleLoader";
-import { addEvent, getLogger, onGoogleReady } from "./lib";
+import { Events } from "./Events";
+import { GoogleLoader, onGoogleReady } from "./google";
+import { addEvent, makeDebugger } from "./lib";
 import { createChartFactory } from "./lib/chartFactory";
-import { ConsoleLogger } from "./lib/logger";
 import { LavaJsOptions, OneOrArrayOf } from "./types";
 import { ChartInterface, ChartTypes } from "./types/chart";
 import { DashboardSpec } from "./types/dashboard";
 import { Google } from "./types/google";
 import { ChartWrapperSpec, ControlWrapperSpec } from "./types/wrapper";
+
+const debug = makeDebugger();
 
 /**
  * Google Chart API wrapper library
@@ -19,7 +22,7 @@ import { ChartWrapperSpec, ControlWrapperSpec } from "./types/wrapper";
  * This module can be used as a standalone, browser based library, or in
  * conjunction with the PHP library, <a href="https://github.com/kevinkhill/lavacharts">Lavacharts</a>.
  */
-export class LavaJs extends Eventful {
+export class LavaJs extends TinyEmitter {
   /** LavaJs version */
   public static readonly VERSION = "__VERSION__";
 
@@ -58,23 +61,24 @@ export class LavaJs extends Eventful {
       this.configure(options);
     }
 
-    this.debug = getLogger();
+    // if (this.options.debug) {
+    //   ConsoleLogger.enable();
+    // }
 
-    if (this.options.debug) {
-      ConsoleLogger.enable();
-    }
-
-    this.debug(`Initializing LavaJs v${LavaJs.VERSION}`, this.options);
+    debug(`Initializing LavaJs v${LavaJs.VERSION}`, this.options);
 
     if (this.options.responsive === true) {
       this.attachResizeHandler();
     }
 
-    this.loader = new GoogleLoader(this.options);
+    this.loader = new GoogleLoader({
+      language: this.options.language
+    });
 
     this.loader.on(Events.GOOGLE_READY, (google: Google) => {
       this.googleReady = true;
-      this.emitEvent(Events.GOOGLE_READY, google);
+
+      this.emit(Events.GOOGLE_READY, google);
     });
 
     if (!this.loader.googleIsDefined && this.options.autoloadGoogle) {
@@ -87,6 +91,21 @@ export class LavaJs extends Eventful {
    */
   public getLoader(): GoogleLoader {
     return this.loader;
+  }
+
+  /**
+   * Get the value of an option from the library
+   */
+  public getOption(option: keyof LavaJsOptions, def: any): any {
+    if (typeof this.options[option] === "undefined") {
+      if (typeof def !== "undefined") {
+        return def;
+      } else {
+        throw new Error(`${option} is not a valid option`);
+      }
+    }
+
+    return this.options[option];
   }
 
   /**
@@ -124,7 +143,7 @@ export class LavaJs extends Eventful {
     }
 
     onGoogleReady(() => {
-      this.emitEvent(Events.DRAW);
+      this.emit(Events.DRAW);
     });
 
     return charts;
@@ -182,7 +201,7 @@ export class LavaJs extends Eventful {
    * the event firing through the common interface of `window.lava`
    */
   private register<T extends Chart | Dashboard>(drawable: T): T {
-    this.debug(`Registering ${drawable.id} packages with the Google Loader`);
+    debug(`Registering ${drawable.id} packages with the Google Loader`);
 
     this.loader.register(drawable);
 
@@ -197,13 +216,13 @@ export class LavaJs extends Eventful {
    * @emits [[Events.DOM_READY]]
    */
   private async waitForDom(): Promise<void> {
-    this.debug("Waiting for the DOM to become ready");
+    debug("Waiting for the DOM to become ready");
 
     return new Promise(resolve => {
       if (["interactive", "complete"].includes(document.readyState)) {
         resolve();
         this.domReady = true;
-        this.debug("DOM ready");
+        debug("DOM ready");
         this.emit(Events.DOM_READY);
       } else {
         document.addEventListener("DOMContentLoaded", () => resolve());
@@ -221,7 +240,7 @@ export class LavaJs extends Eventful {
       clearTimeout(debounced);
 
       debounced = setTimeout(() => {
-        this.debug(`Window re-sized, firing <${Events.DRAW}>`);
+        debug(`Window re-sized, firing <${Events.DRAW}>`);
 
         this.emit(Events.DRAW);
       }, this.options.debounceTimeout);

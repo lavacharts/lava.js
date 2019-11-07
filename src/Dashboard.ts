@@ -1,9 +1,11 @@
 import { Binding } from "./Binding";
 import { Drawable } from "./Drawable";
-import { GoogleFactory } from "./google";
-import { getContainer, hasOwnProp, onGoogleReady } from "./lib";
+import { GoogleFactory, onGoogleReady } from "./google";
+import { getContainer, hasOwnProp, makeDebugger } from "./lib";
 import { ChartEvents } from "./types/chart";
 import { DashboardSpec } from "./types/dashboard";
+
+const debug = makeDebugger("Dashboard");
 
 export class Dashboard extends Drawable {
   public bindings: Binding[];
@@ -56,8 +58,6 @@ export class Dashboard extends Drawable {
    */
   private attachBindings(): void {
     for (const binding of this.bindings) {
-      const debug = this.debug.extend("Bindings");
-
       debug(binding.type, binding);
 
       this.googleChart.bind(...binding.toArray());

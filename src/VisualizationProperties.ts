@@ -1,11 +1,17 @@
 import { Chart } from "./Chart";
 import { ChartClasses, ChartTypes } from "./types/chart";
-import {
-  VisualizationPropertyEnum,
-  VisualizationPropertyMap
-} from "./types/visualization-properties";
 
-export const CHART_PROPS = {
+enum VisualizationPropertyEnum {
+  "CLASS",
+  "PACKAGE",
+  "VERSION"
+}
+
+type VisualizationPropertyMap = {
+  [K in ChartTypes]: [ChartClasses, string, number];
+};
+
+const CHART_PROPS = {
   AnnotationChart: ["AnnotationChart", "annotationchart", 1],
   AreaChart: ["AreaChart", "corechart", 1],
   BarChart: ["BarChart", "corechart", 1],

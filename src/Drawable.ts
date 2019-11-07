@@ -1,7 +1,9 @@
+import { Debugger } from "debug";
+import { TinyEmitter } from "tiny-emitter";
+
 import { DataQuery } from "./DataQuery";
-import { DataError } from "./Errors";
-import { Eventful, Events } from "./Eventful";
-import { createDataTable, getLava, getLogger, hasOwnProp } from "./lib";
+import { Events } from "./Events";
+import { createDataTable, getLava, hasOwnProp, makeDebugger } from "./lib";
 import { ChartUpdateReturn } from "./types";
 import { ChartEvents, ChartInterface } from "./types/chart";
 import { DashboardSpec } from "./types/dashboard";
@@ -12,7 +14,7 @@ import { instanceOfRangeQuery } from "./types/guards";
 /**
  * Base class for [[Chart]]s and [[Dashboard]]s
  */
-export class Drawable extends Eventful {
+export class Drawable extends TinyEmitter {
   /**
    * Configurable options
    */
@@ -66,6 +68,8 @@ export class Drawable extends Eventful {
    */
   private initialData: any | null;
 
+  private debug: Debugger;
+
   /**
    * Create a new Drawable
    *
@@ -94,9 +98,7 @@ export class Drawable extends Eventful {
     this.formats = drawable.formats || [];
     this.events = drawable.events || {};
 
-    this.debug = getLogger().extend(this.id);
-
-    getLogger().extend("Drawable")(`Building new ${drawable.type}`, this);
+    this.debug = makeDebugger(this.id);
 
     this.debug(`Registering <${Events.DRAW}> event relay.`);
 
@@ -255,10 +257,6 @@ export class Drawable extends Eventful {
 
       delete this.initialData;
     }
-
-    if (this.data instanceof google.visualization.DataTable !== true) {
-      throw new DataError(`There was a error setting the data for ${this.id}`);
-    }
   }
 
   /**
@@ -268,7 +266,7 @@ export class Drawable extends Eventful {
     this.data = await createDataTable(payload);
 
     if (this.data instanceof google.visualization.DataTable === false) {
-      throw new DataError(`There was a error setting the data for ${this.id}`);
+      throw new Error(`There was a error setting the data for ${this.id}`);
     }
 
     if (payload.formats) {

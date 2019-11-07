@@ -1,9 +1,8 @@
-import { Debugger } from "debug";
-
-import { DataError } from "./Errors";
-import { getLogger } from "./lib/logger";
+import { makeDebugger } from "./lib";
 import { RangeQuery } from "./types/datasources";
 import { DataQueryInterface, QueryTransformer } from "./types/google";
+
+const debug = makeDebugger("DataQuery");
 
 /**
  * Used for loading remote data as a {@link DataTable}
@@ -11,8 +10,6 @@ import { DataQueryInterface, QueryTransformer } from "./types/google";
  * @see https://developers.google.com/chart/interactive/docs/reference#Query
  */
 export class DataQuery {
-  private debug: Debugger;
-
   /**
    * Compose a DataQuery based on a URL to a Google Sheet
    *
@@ -35,7 +32,7 @@ export class DataQuery {
    */
   public static create(payload: DataQueryInterface): DataQuery {
     if (!payload.url) {
-      throw new DataError(
+      throw new Error(
         '"url" is a mandatory parameter for creating a DataQuery.'
       );
     }
@@ -63,8 +60,6 @@ export class DataQuery {
     public opts?: google.visualization.QueryOptions,
     public transformer?: QueryTransformer
   ) {
-    this.debug = getLogger().extend("DataQuery");
-
     this.opts = { sendMethod: "auto" };
     this.transformer = query => query;
 
@@ -81,12 +76,12 @@ export class DataQuery {
    * Send the query and fetch the DataTable
    */
   public async getDataTable(): Promise<google.visualization.DataTable> {
-    this.debug("Sending DataQuery");
+    debug("Sending DataQuery");
 
     const response = await this.send();
 
-    this.debug("Response received");
-    this.debug(response);
+    debug("Response received");
+    debug(response);
 
     return response.getDataTable();
   }
@@ -102,7 +97,7 @@ export class DataQuery {
     }
 
     return new Promise((resolve, reject) => {
-      this.debug(`Requesting ${this.url}`);
+      debug(`Requesting ${this.url}`);
 
       query.send((response: google.visualization.QueryResponse) => {
         if (response.isError()) {

@@ -21,7 +21,7 @@ export type DataQueryFactory = (
 ) => google.visualization.Query;
 
 export interface GoogleLoaderOptions {
-  language: string;
-  packages: string[];
+  language?: string;
+  packages?: string[];
   mapsApiKey?: string;
 }
