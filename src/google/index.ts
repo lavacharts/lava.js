@@ -25,10 +25,16 @@ export function onGoogleReady(callback: GoogleHandler): void {
   }
 }
 
-export function GoogleFactory(className: string, payload: any): any {
+export function GoogleFactory(className: string, ...restArgs: any[]): any {
   const debug = makeDebugger("GoogleFactory");
 
-  debug(`Creating new ${className} from payload`, payload);
+  debug(`Creating new ${className}`, restArgs);
 
-  return new (window.google.visualization as any)[className](payload);
+  const googleClass = (window.google.visualization as any)[className];
+
+  if (restArgs) {
+    return new googleClass(...restArgs);
+  } else {
+    return new googleClass();
+  }
 }

@@ -1,6 +1,7 @@
+import { GoogleFactory } from "./google";
 import { makeDebugger } from "./lib";
 import { RangeQuery } from "./types/datasources";
-import { DataQueryInterface, QueryTransformer } from "./types/google";
+import { QueryTransformer } from "./types/google";
 
 const debug = makeDebugger("DataQuery");
 
@@ -26,49 +27,20 @@ export class DataQuery {
   }
 
   /**
-   * create a new DataQuery based on the given payload
-   *
-   * @throws {DataError}
-   */
-  public static create(payload: DataQueryInterface): DataQuery {
-    if (!payload.url) {
-      throw new Error(
-        '"url" is a mandatory parameter for creating a DataQuery.'
-      );
-    }
-
-    const query = new DataQuery(payload.url);
-
-    if (typeof payload.opts === "object") {
-      query.opts = payload.opts as google.visualization.QueryOptions;
-    }
-
-    if (typeof payload.transformer === "function") {
-      query.transformer = payload.transformer as QueryTransformer;
-    }
-
-    return query;
-  }
-
-  /**
    * Create a new DataQuery for a DataTable
    *
-   * @throws {DataError}
+   * @throws {Error}
    */
   constructor(
     public url: string,
-    public opts?: google.visualization.QueryOptions,
+    public opts: google.visualization.QueryOptions = { sendMethod: "auto" },
     public transformer?: QueryTransformer
   ) {
-    this.opts = { sendMethod: "auto" };
-    this.transformer = query => query;
+    this.url = url;
+    this.opts = opts;
 
-    if (typeof transformer === "function") {
+    if (transformer) {
       this.transformer = transformer;
-    }
-
-    if (opts) {
-      this.opts = opts;
     }
   }
 
@@ -90,9 +62,9 @@ export class DataQuery {
    * Send the DataQuery
    */
   public send(): Promise<google.visualization.QueryResponse> {
-    let query = new window.google.visualization.Query(this.url, this.opts);
+    let query = GoogleFactory("Query", this.url, this.opts);
 
-    if (typeof this.transformer === "function") {
+    if (this.transformer) {
       query = this.transformer(query);
     }
 

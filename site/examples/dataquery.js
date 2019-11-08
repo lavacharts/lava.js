@@ -1,5 +1,4 @@
 lava.chart({
-  label: "Test",
   type: "PieChart",
   containerId: "chart_div",
   data: {
