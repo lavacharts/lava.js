@@ -14,14 +14,24 @@ const chart = lava.chart({
   }
 });
 
-setInterval(() => {
-  chart.set("colors", [
-    `#${Math.random()
-      .toString(16)
-      .substr(-6)}`
-  ]);
+// This will return a random hex color
+function randomColor() {
+  return `#${Math.random()
+    .toString(16)
+    .substr(-6)}`;
+}
 
-  chart.set("areaOpacity", Math.random());
-}, 2000);
+// Set individual options
+setInterval(() => {
+  chart.set("backgroundColor", randomColor());
+}, 1500);
+
+// Or set many
+setInterval(() => {
+  chart.updateOptions({
+    areaOpacity: Math.random(),
+    colors: [randomColor()]
+  });
+}, 2500);
 
 lava.draw();

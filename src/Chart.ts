@@ -1,6 +1,6 @@
 import { getChartClass } from "./ChartProps";
 import { Drawable } from "./Drawable";
-import { GoogleFactory } from "./google";
+import { GoogleFactory, onGoogleReady } from "./google";
 import { getContainer } from "./lib";
 import { ChartTypes } from "./types/chart";
 
@@ -27,17 +27,19 @@ export class Chart extends Drawable {
 
     this.type = chart.type;
     this.png = Boolean(chart.png);
+
+    onGoogleReady(() => {
+      this.googleChart = GoogleFactory(
+        getChartClass(this),
+        getContainer(this.containerId)
+      );
+    });
   }
 
   /**
    * Draw the chart
    */
   public async draw(): Promise<void> {
-    this.googleChart = GoogleFactory(
-      getChartClass(this),
-      getContainer(this.containerId)
-    );
-
     await super.draw();
 
     if (this.png) this.replaceWithPng();

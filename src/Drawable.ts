@@ -3,6 +3,7 @@ import { TinyEmitter } from "tiny-emitter";
 
 import { DataQuery } from "./DataQuery";
 import { Events } from "./Events";
+import { onGoogleReady } from "./google";
 import { createDataTable, getLava, hasOwnProp, makeDebugger } from "./lib";
 import { ChartUpdateReturn } from "./types";
 import { ChartEvents } from "./types/chart";
@@ -105,6 +106,18 @@ export class Drawable extends TinyEmitter {
       this.debug(`<${Events.DRAW}> event received.`);
       this.draw();
     });
+
+    onGoogleReady(() => {
+      if (this.formats) {
+        this.applyFormats();
+      }
+
+      Object.keys(this.events).forEach(event => {
+        const e = event as ChartEvents;
+
+        this.registerEventHandler(e, this.events[e]);
+      });
+    });
   }
 
   /**
@@ -118,16 +131,6 @@ export class Drawable extends TinyEmitter {
     if (hasOwnProp(this)("initialData")) {
       await this.processInitialData();
     }
-
-    if (this.formats) {
-      this.applyFormats();
-    }
-
-    Object.keys(this.events).forEach(event => {
-      const e = event as ChartEvents;
-
-      this.registerEventHandler(e, this.events[e]);
-    });
 
     this.googleChart.draw(this.data, this.options);
   }

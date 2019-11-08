@@ -1,6 +1,6 @@
 import { Events } from "../Events";
 import { getLava, makeDebugger } from "../lib";
-import { Google } from "../types/google";
+import { Google, GoogleHandler } from "../types/google";
 import { GoogleLoader } from "./GoogleLoader";
 
 export { GoogleLoader };
@@ -14,7 +14,7 @@ export function getGoogle(): Google {
  *
  * If google is not ready, then the callback will wait until it is.
  */
-export function onGoogleReady(callback: (google: Google) => void): void {
+export function onGoogleReady(callback: GoogleHandler): void {
   const lava = getLava();
   const google = getGoogle();
 

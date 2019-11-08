@@ -21,12 +21,6 @@ export class Dashboard extends Drawable {
 
     this.needsBindings = true;
     this.bindings = payload.bindings;
-  }
-
-  async draw(): Promise<void> {
-    if (hasOwnProp(this)("initialData")) {
-      await this.processInitialData();
-    }
 
     onGoogleReady(() => {
       this.googleChart = GoogleFactory(
@@ -43,9 +37,15 @@ export class Dashboard extends Drawable {
 
         this.registerEventHandler(e, this.events[e]);
       });
-
-      this.googleChart.draw(this.data);
     });
+  }
+
+  async draw(): Promise<void> {
+    if (hasOwnProp(this)("initialData")) {
+      await this.processInitialData();
+    }
+
+    this.googleChart.draw(this.data);
   }
 
   /**
