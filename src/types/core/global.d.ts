@@ -1,5 +1,5 @@
 import { LavaJsOptions } from "..";
-import { LavaJs } from "../../LavaJs";
+import { LavaJs } from "../..";
 
 declare global {
   interface Window {

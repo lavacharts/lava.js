@@ -1,8 +1,8 @@
+import { getChartClass } from "./ChartProps";
 import { Drawable } from "./Drawable";
-import { getGoogle } from "./google";
+import { GoogleFactory } from "./google";
 import { getContainer } from "./lib";
-import { ChartInterface, ChartTypes } from "./types/chart";
-import { getChartClass } from "./VisualizationProperties";
+import { ChartTypes } from "./types/chart";
 
 export class Chart extends Drawable {
   /**
@@ -15,35 +15,32 @@ export class Chart extends Drawable {
   public readonly type: ChartTypes;
 
   /** Static creation method */
-  static create(drawable: ChartInterface): Chart {
-    return new Chart(drawable);
+  static create(chart: Chart): Chart {
+    return new Chart(chart);
   }
 
   /**
    * Create a new [[Chart]]
    */
-  constructor(drawable: ChartInterface) {
-    super(drawable);
+  constructor(chart: Chart) {
+    super(chart);
 
-    this.type = drawable.type as ChartTypes;
-    this.png = Boolean(drawable.png);
+    this.type = chart.type;
+    this.png = Boolean(chart.png);
   }
 
   /**
    * Draw the chart
    */
   public async draw(): Promise<void> {
-    const google = getGoogle();
-
-    this.googleChart = new google.visualization[getChartClass(this)](
+    this.googleChart = GoogleFactory(
+      getChartClass(this),
       getContainer(this.containerId)
     );
 
     await super.draw();
 
-    if (this.png) {
-      this.drawPng();
-    }
+    if (this.png) this.replaceWithPng();
   }
 
   /**
@@ -51,7 +48,7 @@ export class Chart extends Drawable {
    *
    * @see https://developers.google.com/chart/interactive/docs/printing
    */
-  private drawPng(): void {
+  private replaceWithPng(): void {
     const container = getContainer(this.containerId);
     const img = document.createElement("img");
 

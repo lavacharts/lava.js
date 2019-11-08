@@ -1,7 +1,4 @@
-import { DrawableInterface } from "./drawable";
-import { Formatter } from "./formats";
-
-export type ChartFactory = (type: ChartClasses) => NewChartConstructor;
+import { Drawable } from "../Drawable";
 
 export enum CHART_EVENTS {
   READY = "ready",
@@ -11,15 +8,9 @@ export enum CHART_EVENTS {
   ON_MOUSE_OUT = "onmouseout"
 }
 
-export interface ChartInterface extends DrawableInterface {
+export interface ChartInterface extends Drawable {
   png?: boolean;
-  formats?: Formatter[];
   rangeQuery?: [string, string];
-  events?: Record<ChartEvents, CallableFunction>;
-}
-
-export interface NewChartConstructor {
-  new (container: HTMLElement): any;
 }
 
 export type ChartEvents =

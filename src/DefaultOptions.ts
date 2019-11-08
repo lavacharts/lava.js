@@ -1,14 +1,14 @@
 import { LavaJsOptions } from "./types";
 
 export const DefaultOptions = {
-  autodraw: true,
+  autodraw: false,
   autoloadGoogle: true,
-  chartPackages: ["corechart"],
-  datetimeFormat: "",
-  debounceTimeout: 250,
   debug: false,
   language: "en",
   mapsApiKey: "",
   responsive: true,
+  // datetimeFormat: "",
+  debounceTimeout: 250,
+  chartPackages: ["corechart"],
   timezone: "America/Los_Angeles"
 } as LavaJsOptions;

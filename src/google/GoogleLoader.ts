@@ -1,13 +1,13 @@
 import { TinyEmitter } from "tiny-emitter";
 
 import { Chart } from "../Chart";
+import { getChartPackage } from "../ChartProps";
 import { Dashboard } from "../Dashboard";
 import { Drawable } from "../Drawable";
 import { Events } from "../Events";
 import { getGoogle } from "../google";
 import { makeDebugger } from "../lib";
 import { Google, GoogleLoaderOptions } from "../types/google";
-import { getChartPackage } from "../VisualizationProperties";
 
 const debug = makeDebugger("GoogleLoader");
 

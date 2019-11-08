@@ -1,14 +1,5 @@
 import { BindingTuple } from "../Binding";
-import { ChartEvents } from "./chart";
 import { RangeQuery } from "./datasources";
-import { DrawableInterface } from "./drawable";
-import { Formatter } from "./formats";
-
-export interface DashboardInterface extends DrawableInterface {
-  png?: boolean;
-  events?: Record<ChartEvents, CallableFunction>;
-  formats?: Formatter[];
-}
 
 export interface DashboardSpec {
   type: "Dashboard";

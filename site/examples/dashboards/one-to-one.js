@@ -17,6 +17,8 @@ const pieChart = {
   }
 };
 
+const binding = lava.bind(donutRangeSlider, pieChart);
+
 lava.dashboard({
   containerId: "one-to-one_dashboard_div",
   data: [
@@ -29,5 +31,7 @@ lava.dashboard({
     ["Aaron", 1],
     ["Margareth", 8]
   ],
-  bindings: [lava.bind(donutRangeSlider, pieChart)]
+  bindings: [binding]
 });
+
+lava.draw();

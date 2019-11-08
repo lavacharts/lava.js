@@ -28,7 +28,7 @@ export function onGoogleReady(callback: (google: Google) => void): void {
 export function GoogleFactory(className: string, payload: any): any {
   const debug = makeDebugger("GoogleFactory");
 
-  debug(`Creating new ${className}()`, payload);
+  debug(`Creating new ${className} from payload`, payload);
 
   return new (window.google.visualization as any)[className](payload);
 }

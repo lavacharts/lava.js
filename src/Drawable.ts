@@ -5,8 +5,7 @@ import { DataQuery } from "./DataQuery";
 import { Events } from "./Events";
 import { createDataTable, getLava, hasOwnProp, makeDebugger } from "./lib";
 import { ChartUpdateReturn } from "./types";
-import { ChartEvents, ChartInterface } from "./types/chart";
-import { DashboardSpec } from "./types/dashboard";
+import { ChartEvents } from "./types/chart";
 import { OptionDataPayload } from "./types/drawable";
 import { Formatter } from "./types/formats";
 import { instanceOfRangeQuery } from "./types/guards";
@@ -75,7 +74,7 @@ export class Drawable extends TinyEmitter {
    *
    * @param {Object} json
    */
-  constructor(drawable: ChartInterface | DashboardSpec) {
+  constructor(drawable: Drawable) {
     super();
     const drawableHasProp = hasOwnProp(drawable);
 

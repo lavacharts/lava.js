@@ -1,3 +1,4 @@
+import { Events } from "./Events";
 import { LavaJs } from "./LavaJs";
 
-window.LavaJs = LavaJs;
+export { LavaJs, Events };

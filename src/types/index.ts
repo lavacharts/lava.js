@@ -16,5 +16,5 @@ export interface LavaJsOptions {
 export interface ChartUpdateReturn {
   data: google.visualization.DataTable;
   chart: any;
-  options: LavaJsOptions;
+  options: Record<string, any>;
 }

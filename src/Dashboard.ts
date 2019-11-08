@@ -3,7 +3,6 @@ import { Drawable } from "./Drawable";
 import { GoogleFactory, onGoogleReady } from "./google";
 import { getContainer, hasOwnProp, makeDebugger } from "./lib";
 import { ChartEvents } from "./types/chart";
-import { DashboardSpec } from "./types/dashboard";
 
 const debug = makeDebugger("Dashboard");
 
@@ -17,9 +16,7 @@ export class Dashboard extends Drawable {
    *
    * @param {Object} payload payload object representing a Dashboard.
    */
-  constructor(payload: DashboardSpec) {
-    payload.type = "Dashboard";
-
+  constructor(payload: Dashboard) {
     super(payload);
 
     this.needsBindings = true;

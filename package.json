@@ -1,7 +1,7 @@
 {
   "name": "lava.js",
   "title": "LavaJs",
-  "version": "4.0.0-alpha1",
+  "version": "4.0.0-alpha2",
   "description": "Wrapper library for the Google Chart API",
   "private": false,
   "main": "dist/lava.js",
@@ -10,8 +10,7 @@
   "jsdelivr": "dist/lava.js",
   "files": [
     "src",
-    "dist/*.js",
-    "types/*.d.ts"
+    "dist/*.js"
   ],
   "directories": {
     "test": "test"
@@ -23,15 +22,17 @@
     "not dead"
   ],
   "scripts": {
-    "prod": "yarn run webpack --config ./configs/webpack.prod.js",
-    "dev": "yarn run webpack-dev-server --config ./configs/dev/webpack.dev.js",
-    "build": "yarn run clean-public && yarn run concurrently npm:build:site:*",
-    "deploy": "yarn run build && yarn run gh-pages -d public/",
-    "build:site:pages": "yarn run webpack --config ./configs/dev/webpack.dev.js",
-    "build:site:api": "yarn run typedoc --out ./public/api ./src",
-    "lint": "yarn run eslint --ext=.ts src/",
     "test": "yarn run karma start --singleRun",
-    "clean-public": "yarn run rimraf ./public/*"
+    "lint": "yarn run eslint --ext=.ts src/",
+    "dev": "yarn run webpack-dev-server --config ./configs/dev/webpack.dev.js",
+    "prod": "yarn run webpack --config ./configs/webpack.prod.js",
+    "publish": "yarn run build && yarn run publish:github",
+    "build": "yarn run clean-public && yarn run build-site",
+    "clean-public": "yarn run rimraf ./public/*",
+    "build-site": "yarn run concurrently npm:build:*",
+    "build:api": "yarn run typedoc --out ./public/api ./src",
+    "build:docs": "yarn run webpack --config ./configs/dev/webpack.dev.js",
+    "publish:github": "yarn run gh-pages -d public/"
   },
   "lint-staged": {
     "./src/**/*.ts": [
@@ -63,17 +64,17 @@
   },
   "homepage": "http://lavajs.lavacharts.com",
   "devDependencies": {
-    "@babel/core": "^7.6.4",
+    "@babel/core": "^7.7.2",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
     "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.6.3",
-    "@babel/preset-typescript": "^7.6.0",
+    "@babel/preset-typescript": "^7.7.2",
     "@babel/runtime": "^7.6.3",
     "@types/debug": "^4.1.5",
     "@types/node": "^12.7.5",
-    "@typescript-eslint/eslint-plugin": "^2.3.1",
-    "@typescript-eslint/parser": "^2.4.0",
+    "@typescript-eslint/eslint-plugin": "^2.6.1",
+    "@typescript-eslint/parser": "^2.6.1",
     "babel-eslint": "^10.0.3",
     "babel-loader": "^8.0.6",
     "chai": "^4.2.0",
@@ -101,9 +102,9 @@
     "html-webpack-harddisk-plugin": "^1.0.1",
     "html-webpack-inline-source-plugin": "^0.0.10",
     "html-webpack-plugin": "^3.2.0",
-    "husky": "^3.0.8",
+    "husky": "^3.0.9",
     "jquery": "^3.4.1",
-    "karma": "^4.3.0",
+    "karma": "^4.4.1",
     "karma-chrome-launcher": "^2.2.0",
     "karma-jasmine": "^1.1.0",
     "karma-mocha": "^1.3.0",
@@ -135,9 +136,8 @@
     "thread-loader": "^2.1.3",
     "tiny-emitter": "^2.1.0",
     "typedoc": "^0.15.0",
-    "typedoc-webpack-plugin": "^1.1.4",
-    "typescript": "^3.6.3",
-    "webpack": "^4.41.0",
+    "typescript": "^3.7.2",
+    "webpack": "^4.41.2",
     "webpack-bundle-analyzer": "^3.6.0",
     "webpack-cli": "^3.3.9",
     "webpack-dev-server": "^3.8.1",

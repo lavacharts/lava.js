@@ -1,3 +1,3 @@
-import "./";
+import { LavaJs } from "./LavaJs";
 
-window.lava = new window.LavaJs();
+window.lava = new LavaJs();

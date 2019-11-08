@@ -7,10 +7,7 @@ import { DefaultOptions } from "./DefaultOptions";
 import { Events } from "./Events";
 import { GoogleLoader, onGoogleReady } from "./google";
 import { addEvent, makeDebugger } from "./lib";
-import { createChartFactory } from "./lib/chartFactory";
 import { LavaJsOptions, OneOrArrayOf } from "./types";
-import { ChartInterface, ChartTypes } from "./types/chart";
-import { DashboardSpec } from "./types/dashboard";
 import { Google } from "./types/google";
 import { ChartWrapperSpec, ControlWrapperSpec } from "./types/wrapper";
 
@@ -26,14 +23,17 @@ export class LavaJs extends TinyEmitter {
   /** LavaJs version */
   public static readonly VERSION = "__VERSION__";
 
+  /** Default options for the library */
+  public static defaults = DefaultOptions;
+
+  /** Configurable options for the library */
+  public options: LavaJsOptions;
+
   /** Flag for when `window.google !== undefined` */
   public googleReady = false;
 
   /** Flag for when `document.readyState === "complete"` */
   public domReady = false;
-
-  /** Configurable options for the library */
-  public options: LavaJsOptions = DefaultOptions;
 
   /** Drawables registy */
   public readonly registry: Record<string, any> = {};
@@ -54,16 +54,10 @@ export class LavaJs extends TinyEmitter {
    * @emits [[Events.GOOGLE_READY]]
    * @emits [[Events.DRAW]]
    */
-  constructor(options?: LavaJsOptions) {
+  constructor(options = DefaultOptions) {
     super();
 
-    if (options) {
-      this.configure(options);
-    }
-
-    // if (this.options.debug) {
-    //   ConsoleLogger.enable();
-    // }
+    this.options = options;
 
     debug(`Initializing LavaJs v${LavaJs.VERSION}`, this.options);
 
@@ -125,9 +119,7 @@ export class LavaJs extends TinyEmitter {
    *
    * @emits [[Events.DRAW]]
    */
-  public async draw(
-    payload?: ChartInterface | ChartInterface[]
-  ): Promise<Chart[]> {
+  public async draw(payload?: Chart | Chart[]): Promise<Chart[]> {
     if (!this.domReady) {
       await this.waitForDom();
     }
@@ -150,17 +142,9 @@ export class LavaJs extends TinyEmitter {
   }
 
   /**
-   * Create a new [[Chart]] Factory for quickly
-   * creating multiple charts of the same type.
-   */
-  public factory(chartType: ChartTypes): (containerId: string) => Chart {
-    return createChartFactory(chartType);
-  }
-
-  /**
    * Create a new [[Chart]] from an Object
    */
-  public chart(payload: ChartInterface): Chart {
+  public chart(payload: Chart): Chart {
     const chart = new Chart(payload);
 
     return this.register(chart);
@@ -169,14 +153,14 @@ export class LavaJs extends TinyEmitter {
   /**
    * Create multiple [[Chart]]s from an array of Objects
    */
-  public charts(charts: ChartInterface[]): Chart[] {
+  public charts(charts: Chart[]): Chart[] {
     return charts.map(this.chart, this);
   }
 
   /**
    * Create a new [[Dashboard]] from an Object
    */
-  public dashboard(payload: DashboardSpec): Dashboard {
+  public dashboard(payload: Dashboard): Dashboard {
     const dashboard = new Dashboard(payload);
 
     return this.register(dashboard);
