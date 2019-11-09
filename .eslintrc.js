@@ -81,11 +81,14 @@ module.exports = {
         M: true,
         lava: true,
         LavaJs: true,
+        jQuery: true,
         sinon: true,
         assert: true,
         expect: true
       },
+      parser: "babel-eslint",
       env: {
+        // browser: true,
         mocha: true
       },
       rules: {

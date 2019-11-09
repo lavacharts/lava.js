@@ -14,5 +14,5 @@ import "../../src/lava";
 window.$ = window.jQuery = jQuery;
 
 jQuery(() => {
-  M.AutoInit();
+  // M.AutoInit();
 });
