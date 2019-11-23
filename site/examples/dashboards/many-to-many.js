@@ -1,18 +1,16 @@
-const filterColumnLabel = "Donuts Eaten";
-
-const donutRangeSlider = {
+const m2mDonutRangeSlider = {
   controlType: "NumberRangeFilter",
   containerId: "many-to-many_donut_slider_div",
-  options: { filterColumnLabel }
+  options: { filterColumnLabel: "Donuts Eaten" }
 };
 
-const coffeeRangeSlider = {
+const m2mCoffeeRangeSlider = {
   controlType: "NumberRangeFilter",
   containerId: "many-to-many_coffee_slider_div",
   options: { filterColumnIndex: 2 }
 };
 
-const scatterChart = {
+const m2mScatterChart = {
   chartType: "ScatterChart",
   containerId: "many-to-many_chart_div",
   options: {
@@ -22,7 +20,7 @@ const scatterChart = {
   }
 };
 
-const barChart = {
+const m2mBarChart = {
   chartType: "BarChart",
   containerId: "many-to-many_barChart_div",
   options: {
@@ -36,7 +34,7 @@ const barChart = {
 lava.dashboard({
   containerId: "many-to-many_dashboard_div",
   data: [
-    ["Name", filterColumnLabel, "Coffees Drank"],
+    ["Name", "Donuts Eaten", "Coffees Drank"],
     ["Michael", 5, 2],
     ["Elisa", 7, 1],
     ["Robert", 3, 3],
@@ -46,7 +44,10 @@ lava.dashboard({
     ["Margareth", 8, 0]
   ],
   bindings: [
-    lava.bind([coffeeRangeSlider, donutRangeSlider], [barChart, scatterChart])
+    lava.bind(
+      [m2mCoffeeRangeSlider, m2mDonutRangeSlider],
+      [m2mBarChart, m2mScatterChart]
+    )
   ]
 });
 

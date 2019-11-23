@@ -30,11 +30,30 @@ export function GoogleFactory(className: string, ...restArgs: any[]): any {
 
   debug(`Creating new ${className}`, restArgs);
 
-  const googleClass = (window.google.visualization as any)[className];
+  const google = getGoogle();
+  const googleClass = (google.visualization as any)[className];
 
   if (restArgs) {
     return new googleClass(...restArgs);
   } else {
     return new googleClass();
   }
+}
+
+export function AsyncGoogleFactory(className: string, ...restArgs: any[]): any {
+  return new Promise(resolve => {
+    const debug = makeDebugger("AsyncGoogleFactory");
+
+    debug(`Creating new ${className}`, restArgs);
+
+    onGoogleReady(google => {
+      const googleClass = (google.visualization as any)[className];
+
+      if (restArgs) {
+        resolve(new googleClass(...restArgs));
+      } else {
+        resolve(new googleClass());
+      }
+    });
+  });
 }

@@ -2,7 +2,7 @@ import { getChartClass } from "./ChartProps";
 import { Drawable } from "./Drawable";
 import { GoogleFactory, onGoogleReady } from "./google";
 import { getContainer } from "./lib";
-import { ChartTypes } from "./types/chart";
+import { ChartClasses, ChartTypes } from "./types/chart";
 
 export class Chart extends Drawable {
   /**
@@ -19,9 +19,6 @@ export class Chart extends Drawable {
     return new Chart(chart);
   }
 
-  /**
-   * Create a new [[Chart]]
-   */
   constructor(chart: Chart) {
     super(chart);
 
@@ -30,10 +27,17 @@ export class Chart extends Drawable {
 
     onGoogleReady(() => {
       this.googleChart = GoogleFactory(
-        getChartClass(this),
+        this.getGoogleConstructor(),
         getContainer(this.containerId)
       );
     });
+  }
+
+  /**
+   * Get the Google Class for creating a new {@link Chart} instance
+   */
+  public getGoogleConstructor(): ChartClasses {
+    return getChartClass(this);
   }
 
   /**

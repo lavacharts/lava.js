@@ -1,65 +1,52 @@
-import { Binding, BindingTuple } from "./Binding";
+import { Binding } from "./Binding";
 import { Drawable } from "./Drawable";
-import { GoogleFactory, onGoogleReady } from "./google";
-import { getContainer, hasOwnProp, makeDebugger } from "./lib";
-import { ChartEvents } from "./types/chart";
+import { AsyncGoogleFactory } from "./google";
+import { getContainer, makeDebugger } from "./lib";
 
 const debug = makeDebugger("Dashboard");
 
+function bind(binding: Binding);
+
 export class Dashboard extends Drawable {
-  public bindings: BindingTuple[];
+  public bindings: Binding[];
 
-  public needsBindings: boolean;
+  public needsBindings = true;
 
-  /**
-   * Create a new Dashboard
-   *
-   * @param {Object} payload payload object representing a Dashboard.
-   */
   constructor(payload: Dashboard) {
     super(payload);
 
-    this.needsBindings = true;
     this.bindings = payload.bindings;
-
-    onGoogleReady(() => {
-      this.googleChart = GoogleFactory(
-        "Dashboard",
-        getContainer(this.containerId)
-      );
-
-      if (this.needsBindings) {
-        this.attachBindings();
-      }
-
-      Object.keys(this.events).forEach(event => {
-        const e = event as ChartEvents;
-
-        this.registerEventHandler(e, this.events[e]);
-      });
-    });
-  }
-
-  async draw(): Promise<void> {
-    if (hasOwnProp(this)("initialData")) {
-      await this.processInitialData();
-    }
-
-    this.googleChart.draw(this.data);
   }
 
   /**
-   * Process and attach the bindings to the dashboard.
-   *
-   * @TODO: Needs to be modified and tested for the other types of bindings.
+   * Get the Google Class for creating a new {@link Dashboard} instance
    */
-  private attachBindings(): void {
-    this.bindings.map(Binding.createFromTuple).forEach(binding => {
-      debug(binding.type, binding);
+  public getGoogleConstructor(): "Dashboard" {
+    return "Dashboard";
+  }
 
-      this.googleChart.bind(...binding.toArray());
-    });
+  /**
+   * Draw the {@link Dashboard}
+   */
+  async draw(): Promise<void> {
+    if ("initialData" in this) {
+      await this.processInitialData();
+    }
 
-    this.needsBindings = false;
+    this.googleChart = await AsyncGoogleFactory(
+      this.getGoogleConstructor(),
+      getContainer(this.containerId)
+    );
+
+    if (this.bindings.length > 0) {
+      for (const binding of this.bindings) {
+        this.googleChart.bind(
+          await binding.getControlWraps(),
+          await binding.getChartWraps()
+        );
+      }
+    }
+
+    this.googleChart.draw(this.data);
   }
 }

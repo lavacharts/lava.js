@@ -14,7 +14,7 @@ import { instanceOfRangeQuery } from "./types/guards";
 /**
  * Base class for [[Chart]]s and [[Dashboard]]s
  */
-export class Drawable extends TinyEmitter {
+export abstract class Drawable extends TinyEmitter {
   /**
    * Configurable options
    */
@@ -70,19 +70,15 @@ export class Drawable extends TinyEmitter {
 
   private debug: Debugger;
 
-  /**
-   * Create a new Drawable
-   *
-   * @param {Object} json
-   */
+  abstract getGoogleConstructor(): string;
+
   constructor(drawable: Drawable) {
     super();
-    const drawableHasProp = hasOwnProp(drawable);
 
     this.containerId = drawable.containerId;
     this.type = drawable.type;
 
-    if (drawableHasProp("label")) {
+    if ("label" in drawable) {
       this.label = drawable.label;
     } else {
       this.label = this.containerId;
@@ -98,7 +94,7 @@ export class Drawable extends TinyEmitter {
     this.formats = drawable.formats || [];
     this.events = drawable.events || {};
 
-    this.debug = makeDebugger(this.id);
+    this.debug = makeDebugger(`${this.type}:${this.label}`);
 
     this.debug(`Registering <${Events.DRAW}> event relay.`);
 
@@ -122,8 +118,6 @@ export class Drawable extends TinyEmitter {
 
   /**
    * Draws the [[Drawable]] with the predefined data and options.
-   *
-   * @public
    */
   public async draw(): Promise<void> {
     this.debug("Drawing...");

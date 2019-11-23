@@ -1,12 +1,12 @@
-const filterColumnLabel = "Donuts Eaten";
-
-const donutRangeSlider = {
+const o2oDonutRangeSlider = {
   controlType: "NumberRangeFilter",
   containerId: "one-to-one_filter_div",
-  options: { filterColumnLabel }
+  options: {
+    filterColumnLabel: "Donuts Eaten"
+  }
 };
 
-const pieChart = {
+const o2oPieChart = {
   chartType: "PieChart",
   containerId: "one-to-one_chart_div",
   options: {
@@ -17,12 +17,12 @@ const pieChart = {
   }
 };
 
-const binding = lava.bind(donutRangeSlider, pieChart);
+const oneToOneBinding = lava.bind(o2oDonutRangeSlider, o2oPieChart);
 
 lava.dashboard({
   containerId: "one-to-one_dashboard_div",
   data: [
-    ["Name", filterColumnLabel],
+    ["Name", "Donuts Eaten"],
     ["Michael", 5],
     ["Elisa", 7],
     ["Robert", 3],
@@ -31,7 +31,7 @@ lava.dashboard({
     ["Aaron", 1],
     ["Margareth", 8]
   ],
-  bindings: [binding]
+  bindings: [oneToOneBinding]
 });
 
 lava.draw();

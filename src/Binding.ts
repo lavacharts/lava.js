@@ -1,6 +1,9 @@
-import { GoogleFactory } from "./google";
+import { AsyncGoogleFactory } from "./google";
 import { OneOrArrayOf } from "./types";
 import { ChartWrapperSpec, ControlWrapperSpec } from "./types/wrapper";
+
+const ControlWrapperFactory = AsyncGoogleFactory.bind(null, "ControlWrapper");
+const ChartWrapperFactory = AsyncGoogleFactory.bind(null, "ChartWrapper");
 
 export type BindingType = "OneToOne" | "OneToMany" | "ManyToOne" | "ManyToMany";
 
@@ -17,6 +20,9 @@ export class Binding {
     private controlWraps: OneOrArrayOf<ControlWrapperSpec>,
     private chartWraps: OneOrArrayOf<ChartWrapperSpec>
   ) {
+    this.controlWraps = controlWraps;
+    this.chartWraps = chartWraps;
+
     const manyControlWraps = Array.isArray(this.controlWraps);
     const oneControlWrap = !manyControlWraps;
 
@@ -29,30 +35,34 @@ export class Binding {
     else this.type = "ManyToMany";
   }
 
-  public toArray(): [
-    OneOrArrayOf<google.visualization.ControlWrapper>,
-    OneOrArrayOf<google.visualization.ChartWrapper>
-  ] {
-    return [this.getControlWraps(), this.getChartWraps()];
+  public async toArray(): Promise<
+    [
+      OneOrArrayOf<google.visualization.ControlWrapper>,
+      OneOrArrayOf<google.visualization.ChartWrapper>
+    ]
+  > {
+    return [await this.getControlWraps(), await this.getChartWraps()];
   }
 
-  public getControlWraps(): OneOrArrayOf<google.visualization.ControlWrapper> {
+  public async getControlWraps(): Promise<
+    OneOrArrayOf<google.visualization.ControlWrapper>
+  > {
     if (Array.isArray(this.controlWraps)) {
       return this.controlWraps.map(wrapperSpec => {
-        return GoogleFactory("ControlWrapper", wrapperSpec);
+        return ControlWrapperFactory(wrapperSpec);
       });
     }
 
-    return GoogleFactory("ControlWrapper", this.controlWraps);
+    return ControlWrapperFactory(this.controlWraps);
   }
 
-  public getChartWraps(): OneOrArrayOf<google.visualization.ChartWrapper> {
+  public async getChartWraps(): Promise<
+    OneOrArrayOf<google.visualization.ChartWrapper>
+  > {
     if (Array.isArray(this.chartWraps)) {
-      return this.chartWraps.map(wrapperSpec => {
-        return GoogleFactory("ChartWrapper", wrapperSpec);
-      });
+      return this.chartWraps.map(ChartWrapperFactory);
     }
 
-    return GoogleFactory("ChartWrapper", this.chartWraps);
+    return ChartWrapperFactory(this.chartWraps);
   }
 }

@@ -168,6 +168,12 @@ export class LavaJs extends TinyEmitter {
 
   /**
    * Create [[Dashboard]] [[Binding]]s
+   *
+   * Depending on the parameters, 4 different bindings can be produced:
+   * - bind(control  , chart  ) => OneToOne Binding
+   * - bind(control[], chart  ) => ManyToOne Binding
+   * - bind(control  , chart[]) => OneToMany Binding
+   * - bind(control[], chart[]) => ManyToMany Binding
    */
   public bind(
     controlWraps: OneOrArrayOf<ControlWrapperSpec>,

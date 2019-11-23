@@ -1,18 +1,16 @@
-const filterColumnLabel = "Donuts Eaten";
-
-const donutRangeSlider = {
+const m2oDonutRangeSlider = {
   controlType: "NumberRangeFilter",
   containerId: "many-to-one_donut_slider_div",
-  options: { filterColumnLabel }
+  options: { filterColumnLabel: "Donuts Eaten" }
 };
 
-const coffeeRangeSlider = {
+const m2oCoffeeRangeSlider = {
   controlType: "NumberRangeFilter",
   containerId: "many-to-one_coffee_slider_div",
   options: { filterColumnIndex: 2 }
 };
 
-const scatterChart = {
+const m2oScatterChart = {
   chartType: "ScatterChart",
   containerId: "many-to-one_chart_div",
   options: {
@@ -25,7 +23,7 @@ const scatterChart = {
 lava.dashboard({
   containerId: "many-to-one_dashboard_div",
   data: [
-    ["Name", filterColumnLabel, "Coffees Drank"],
+    ["Name", "Donuts Eaten", "Coffees Drank"],
     ["Michael", 5, 2],
     ["Elisa", 7, 1],
     ["Robert", 3, 3],
@@ -34,7 +32,10 @@ lava.dashboard({
     ["Aaron", 1, 6],
     ["Margareth", 8, 0]
   ],
-  bindings: [lava.bind([coffeeRangeSlider, donutRangeSlider], scatterChart)]
+  bindings: [
+    // lava#bind(control[], chart) => ManyToOne Binding
+    lava.bind([m2oCoffeeRangeSlider, m2oDonutRangeSlider], m2oScatterChart)
+  ]
 });
 
 lava.draw();
