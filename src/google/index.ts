@@ -1,5 +1,5 @@
 import { Events } from "../Events";
-import { getLava, makeDebugger } from "../lib";
+import { getLava } from "../lib";
 import { Google, GoogleHandler } from "../types/google";
 import { GoogleLoader } from "./GoogleLoader";
 
@@ -25,27 +25,8 @@ export function onGoogleReady(callback: GoogleHandler): void {
   }
 }
 
-export function GoogleFactory(className: string, ...restArgs: any[]): any {
-  const debug = makeDebugger("GoogleFactory");
-
-  debug(`Creating new ${className}`, restArgs);
-
-  const google = getGoogle();
-  const googleClass = (google.visualization as any)[className];
-
-  if (restArgs) {
-    return new googleClass(...restArgs);
-  } else {
-    return new googleClass();
-  }
-}
-
 export function AsyncGoogleFactory(className: string, ...restArgs: any[]): any {
   return new Promise(resolve => {
-    const debug = makeDebugger("AsyncGoogleFactory");
-
-    debug(`Creating new ${className}`, restArgs);
-
     onGoogleReady(google => {
       const googleClass = (google.visualization as any)[className];
 

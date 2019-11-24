@@ -18,10 +18,6 @@ export function getLava(): LavaJs {
   return window.lava;
 }
 
-export function hasOwnProp(obj: any): (prop: string) => boolean {
-  return (prop: string) => Object.prototype.hasOwnProperty.call(obj, prop);
-}
-
 /**
  * Get the HTMLElement into which the chart will be rendered.
  */

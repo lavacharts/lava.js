@@ -1,6 +1,5 @@
 import { DataQuery } from "../DataQuery";
-import { GoogleFactory } from "../google";
-import { hasOwnProp } from ".";
+import { AsyncGoogleFactory } from "../google";
 
 /**
  * Sets the data for the chart by creating a new DataTable
@@ -8,8 +7,6 @@ import { hasOwnProp } from ".";
 export async function createDataTable(
   payload: any
 ): Promise<google.visualization.DataTable> {
-  const payloadHasProp = hasOwnProp(payload);
-
   // If this is a DataQuery, then send it!
   if (payload instanceof DataQuery) {
     return payload.getDataTable();
@@ -18,7 +15,7 @@ export async function createDataTable(
   // If a function is received, then create an new DataTable and pass it to the
   // function for user modifications.
   if (typeof payload === "function") {
-    return payload(GoogleFactory("DataTable"));
+    return payload(await AsyncGoogleFactory("DataTable"));
   }
 
   // If an Array is received, then attempt to use parse with arrayToDataTable.
@@ -35,7 +32,7 @@ export async function createDataTable(
 
   // If the payload is from the php class JoinedDataTable->toJson(), then create
   // two new DataTables and join them with the defined options.
-  if (payloadHasProp("data")) {
+  if ("data" in payload) {
     if (Array.isArray(payload.data)) {
       return window.google.visualization.data.join(
         new window.google.visualization.DataTable(payload.data[0]),
@@ -55,5 +52,5 @@ export async function createDataTable(
   }
 
   // If we reach here, then it must be standard JSON for creating a DataTable.
-  return GoogleFactory("DataTable", payload);
+  return AsyncGoogleFactory("DataTable", payload);
 }

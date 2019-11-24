@@ -1,4 +1,4 @@
-import { GoogleFactory } from "./google";
+import { AsyncGoogleFactory } from "./google";
 import { makeDebugger } from "./lib";
 import { RangeQuery } from "./types/datasources";
 import { QueryTransformer } from "./types/google";
@@ -61,8 +61,8 @@ export class DataQuery {
   /**
    * Send the DataQuery
    */
-  public send(): Promise<google.visualization.QueryResponse> {
-    let query = GoogleFactory("Query", this.url, this.opts);
+  public async send(): Promise<google.visualization.QueryResponse> {
+    let query = await AsyncGoogleFactory("Query", this.url, this.opts);
 
     if (this.transformer) {
       query = this.transformer(query);

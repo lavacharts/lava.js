@@ -1,4 +1,5 @@
 import { AsyncGoogleFactory } from "./google";
+import { arrayWrap } from "./lib";
 import { ChartWrapperSpec, ControlWrapperSpec } from "./types/wrapper";
 
 export class Binding {
@@ -21,13 +22,8 @@ export class Binding {
     else if (manyControlWraps && oneChartWrap) this.type = "ManyToOne";
     else this.type = "ManyToMany";
 
-    this.controlWraps = (oneControlWrap
-      ? [controlWraps]
-      : controlWraps) as ControlWrapperSpec[];
-
-    this.chartWraps = (oneChartWrap
-      ? [chartWraps]
-      : chartWraps) as ChartWrapperSpec[];
+    this.controlWraps = arrayWrap(controlWraps);
+    this.chartWraps = arrayWrap(chartWraps);
   }
 
   public async getControlWraps(): Promise<
