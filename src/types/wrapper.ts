@@ -17,14 +17,6 @@ export type ControlWrapperType =
   | "NumberRangeFilter"
   | "StringFilter";
 
-// export interface ControlWrapperOptions {
-//   filterColumnLabel: string;
-// }
-
-// export interface ChartWrapperOptions {
-//   chartType: string;
-// }
-
 interface GoogleChartWrapperBase extends google.visualization.ChartSpecs {
   containerId: string;
 }
@@ -39,5 +31,3 @@ export interface ControlWrapperSpec
   extends google.visualization.ControlWrapperOptions {
   controlType: ControlWrapperType;
 }
-
-export type ChartOrControlWrapperSpec = ChartWrapperSpec | ControlWrapperSpec;

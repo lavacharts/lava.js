@@ -1,68 +1,54 @@
 import { AsyncGoogleFactory } from "./google";
-import { OneOrArrayOf } from "./types";
 import { ChartWrapperSpec, ControlWrapperSpec } from "./types/wrapper";
 
-const ControlWrapperFactory = AsyncGoogleFactory.bind(null, "ControlWrapper");
-const ChartWrapperFactory = AsyncGoogleFactory.bind(null, "ChartWrapper");
-
-export type BindingType = "OneToOne" | "OneToMany" | "ManyToOne" | "ManyToMany";
-
-export type BindingTuple = [ControlWrapperSpec, ChartWrapperSpec];
-
 export class Binding {
-  public type: BindingType;
-
-  public static createFromTuple(binding: BindingTuple): Binding {
-    return new Binding(binding[0], binding[1]);
-  }
+  public type: "OneToOne" | "OneToMany" | "ManyToOne" | "ManyToMany";
+  private controlWraps: ControlWrapperSpec[];
+  private chartWraps: ChartWrapperSpec[];
 
   constructor(
-    private controlWraps: OneOrArrayOf<ControlWrapperSpec>,
-    private chartWraps: OneOrArrayOf<ChartWrapperSpec>
+    controlWraps: ControlWrapperSpec | ControlWrapperSpec[],
+    chartWraps: ChartWrapperSpec | ChartWrapperSpec[]
   ) {
-    this.controlWraps = controlWraps;
-    this.chartWraps = chartWraps;
-
-    const manyControlWraps = Array.isArray(this.controlWraps);
+    const manyControlWraps = Array.isArray(controlWraps);
     const oneControlWrap = !manyControlWraps;
 
-    const manyChartWraps = Array.isArray(this.chartWraps);
+    const manyChartWraps = Array.isArray(chartWraps);
     const oneChartWrap = !manyChartWraps;
 
     if (oneControlWrap && oneChartWrap) this.type = "OneToOne";
     else if (oneControlWrap && manyChartWraps) this.type = "OneToMany";
     else if (manyControlWraps && oneChartWrap) this.type = "ManyToOne";
     else this.type = "ManyToMany";
-  }
 
-  public async toArray(): Promise<
-    [
-      OneOrArrayOf<google.visualization.ControlWrapper>,
-      OneOrArrayOf<google.visualization.ChartWrapper>
-    ]
-  > {
-    return [await this.getControlWraps(), await this.getChartWraps()];
+    this.controlWraps = (oneControlWrap
+      ? [controlWraps]
+      : controlWraps) as ControlWrapperSpec[];
+
+    this.chartWraps = (oneChartWrap
+      ? [chartWraps]
+      : chartWraps) as ChartWrapperSpec[];
   }
 
   public async getControlWraps(): Promise<
-    OneOrArrayOf<google.visualization.ControlWrapper>
+    google.visualization.ControlWrapper[]
   > {
-    if (Array.isArray(this.controlWraps)) {
-      return this.controlWraps.map(wrapperSpec => {
-        return ControlWrapperFactory(wrapperSpec);
-      });
+    if (this.controlWraps.length === 1) {
+      return AsyncGoogleFactory("ControlWrapper", ...this.controlWraps);
     }
 
-    return ControlWrapperFactory(this.controlWraps);
+    return this.controlWraps.map(control =>
+      AsyncGoogleFactory("ControlWrapper", control)
+    );
   }
 
-  public async getChartWraps(): Promise<
-    OneOrArrayOf<google.visualization.ChartWrapper>
-  > {
-    if (Array.isArray(this.chartWraps)) {
-      return this.chartWraps.map(ChartWrapperFactory);
+  public async getChartWraps(): Promise<google.visualization.ChartWrapper[]> {
+    if (this.chartWraps.length === 1) {
+      return AsyncGoogleFactory("ChartWrapper", ...this.chartWraps);
     }
 
-    return ChartWrapperFactory(this.chartWraps);
+    return this.chartWraps.map(chart =>
+      AsyncGoogleFactory("ChartWrapper", chart)
+    );
   }
 }

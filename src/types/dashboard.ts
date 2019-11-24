@@ -1,11 +1,13 @@
-import { BindingTuple } from "../Binding";
 import { RangeQuery } from "./datasources";
+import { ChartWrapperSpec, ControlWrapperSpec } from "./wrapper";
+
+type BindingTuple = [ControlWrapperSpec, ChartWrapperSpec];
 
 export interface DashboardSpec {
   type: "Dashboard";
   containerId: string;
   data: RangeQuery | any;
-  bindings: BindingTuple[]; //Binding[];
+  bindings: BindingTuple[];
   label?: string;
   formats?: any;
   options?: any;

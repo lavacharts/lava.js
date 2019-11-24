@@ -5,4 +5,4 @@ export interface OptionDataPayload {
   options?: any;
 }
 
-export type DrawableTypes = ChartTypes | "Dashboard";
+export type DrawableType = ChartTypes | "Dashboard";

@@ -4,10 +4,10 @@ import { TinyEmitter } from "tiny-emitter";
 import { DataQuery } from "./DataQuery";
 import { Events } from "./Events";
 import { onGoogleReady } from "./google";
-import { createDataTable, getLava, hasOwnProp, makeDebugger } from "./lib";
+import { createDataTable, getLava, makeDebugger } from "./lib";
 import { ChartUpdateReturn } from "./types";
 import { ChartEvents } from "./types/chart";
-import { OptionDataPayload } from "./types/drawable";
+import { DrawableType, OptionDataPayload } from "./types/drawable";
 import { Formatter } from "./types/formats";
 import { instanceOfRangeQuery } from "./types/guards";
 
@@ -51,7 +51,7 @@ export abstract class Drawable extends TinyEmitter {
   /**
    * Type of [[Drawable]]
    */
-  public readonly type: string;
+  public readonly type: DrawableType;
 
   /**
    * Formatters for the DataTable
@@ -76,7 +76,7 @@ export abstract class Drawable extends TinyEmitter {
     super();
 
     this.containerId = drawable.containerId;
-    this.type = drawable.type;
+    this.type = drawable.type || "Dashboard";
 
     if ("label" in drawable) {
       this.label = drawable.label;
@@ -122,7 +122,7 @@ export abstract class Drawable extends TinyEmitter {
   public async draw(): Promise<void> {
     this.debug("Drawing...");
 
-    if (hasOwnProp(this)("initialData")) {
+    if ("initialData" in this) {
       await this.processInitialData();
     }
 

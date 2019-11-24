@@ -1,12 +1,12 @@
 import { Drawable } from "../Drawable";
 
-export enum CHART_EVENTS {
-  READY = "ready",
-  SELECT = "select",
-  ERROR = "error",
-  ON_MOUSE_OVER = "onmouseover",
-  ON_MOUSE_OUT = "onmouseout"
-}
+// export enum CHART_EVENTS {
+//   READY = "ready",
+//   SELECT = "select",
+//   ERROR = "error",
+//   ON_MOUSE_OVER = "onmouseover",
+//   ON_MOUSE_OUT = "onmouseout"
+// }
 
 export interface ChartInterface extends Drawable {
   png?: boolean;
