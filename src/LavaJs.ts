@@ -5,7 +5,7 @@ import { Chart } from "./Chart";
 import { Dashboard } from "./Dashboard";
 import { DefaultOptions } from "./DefaultOptions";
 import { Events } from "./Events";
-import { GoogleLoader, onGoogleReady } from "./google";
+import { domLoading, GoogleLoader, googleLoading } from "./google";
 import { addEvent, makeDebugger } from "./lib";
 import { LavaJsOptions, OneOrArrayOf } from "./types";
 import { Google } from "./types/google";
@@ -14,7 +14,7 @@ import { ChartWrapperSpec, ControlWrapperSpec } from "./types/wrapper";
 const debug = makeDebugger();
 
 /**
- * Google Chart API wrapper library
+ * Google Chart API library
  *
  * This module can be used as a standalone, browser based library, or in
  * conjunction with the PHP library, <a href="https://github.com/kevinkhill/lavacharts">Lavacharts</a>.
@@ -90,10 +90,10 @@ export class LavaJs extends TinyEmitter {
   /**
    * Get the value of an option from the library
    */
-  public getOption(option: keyof LavaJsOptions, def: any): any {
+  public getOption(option: keyof LavaJsOptions, whenUndefined: any): any {
     if (typeof this.options[option] === "undefined") {
-      if (typeof def !== "undefined") {
-        return def;
+      if (typeof whenUndefined !== "undefined") {
+        return whenUndefined;
       } else {
         throw new Error(`${option} is not a valid option`);
       }
@@ -119,26 +119,11 @@ export class LavaJs extends TinyEmitter {
    *
    * @emits [[Events.DRAW]]
    */
-  public async draw(payload?: Chart | Chart[]): Promise<Chart[]> {
-    if (!this.domReady) {
-      await this.waitForDom();
-    }
+  public async draw(): Promise<void> {
+    await domLoading();
+    await googleLoading();
 
-    const charts: Chart[] = [];
-
-    if (typeof payload !== "undefined") {
-      if (Array.isArray(payload)) {
-        charts.push(...payload.map(this.chart, this));
-      } else {
-        charts.push(this.chart(payload));
-      }
-    }
-
-    onGoogleReady(() => {
-      this.emit(Events.DRAW);
-    });
-
-    return charts;
+    this.emit(Events.DRAW);
   }
 
   /**
@@ -198,26 +183,6 @@ export class LavaJs extends TinyEmitter {
     this.registry[drawable.id] = {};
 
     return drawable;
-  }
-
-  /**
-   * Promise for the DOM to be ready.
-   *
-   * @emits [[Events.DOM_READY]]
-   */
-  private async waitForDom(): Promise<void> {
-    debug("Waiting for the DOM to become ready");
-
-    return new Promise(resolve => {
-      if (["interactive", "complete"].includes(document.readyState)) {
-        resolve();
-        this.domReady = true;
-        debug("DOM ready");
-        this.emit(Events.DOM_READY);
-      } else {
-        document.addEventListener("DOMContentLoaded", () => resolve());
-      }
-    });
   }
 
   /**

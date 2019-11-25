@@ -3,7 +3,7 @@ import { TinyEmitter } from "tiny-emitter";
 
 import { DataQuery } from "./DataQuery";
 import { Events } from "./Events";
-import { onGoogleReady } from "./google";
+import { getGoogle, onGoogleReady } from "./google";
 import { createDataTable, getLava, makeDebugger } from "./lib";
 import { ChartUpdateReturn } from "./types";
 import { ChartEvents } from "./types/chart";
@@ -96,8 +96,6 @@ export abstract class Drawable extends TinyEmitter {
 
     this.debug = makeDebugger(`${this.type}:${this.label}`);
 
-    this.debug(`Registering <${Events.DRAW}> event relay.`);
-
     getLava().on(Events.DRAW, () => {
       this.debug(`<${Events.DRAW}> event received.`);
       this.draw();
@@ -108,10 +106,23 @@ export abstract class Drawable extends TinyEmitter {
         this.applyFormats();
       }
 
-      Object.keys(this.events).forEach(event => {
-        const e = event as ChartEvents;
+      const definedEvents = Object.keys(this.events) as ChartEvents[];
 
-        this.registerEventHandler(e, this.events[e]);
+      definedEvents.forEach(eventType => {
+        this.debug(`Registering handler for <${eventType}>`);
+
+        getGoogle().visualization.events.addListener(
+          this.googleChart,
+          eventType,
+          (event: any) => {
+            this.events[eventType]({
+              event,
+              $this: this,
+              data: this.data,
+              chart: this.googleChart
+            });
+          }
+        );
       });
     });
   }
@@ -268,25 +279,5 @@ export abstract class Drawable extends TinyEmitter {
     if (payload.formats) {
       this.applyFormats(payload.formats);
     }
-  }
-
-  /**
-   * Helper method to attach event handlers to `this.googleChart`
-   */
-  protected registerEventHandler(event: ChartEvents, handler: Function): void {
-    this.debug(`Registering handler for <${event}>`);
-
-    google.visualization.events.addListener(
-      this.googleChart,
-      event,
-      (e: any) => {
-        handler({
-          event: e,
-          $this: this,
-          data: this.data,
-          chart: this.googleChart
-        });
-      }
-    );
   }
 }

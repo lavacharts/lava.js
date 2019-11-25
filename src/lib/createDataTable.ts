@@ -1,5 +1,5 @@
 import { DataQuery } from "../DataQuery";
-import { AsyncGoogleFactory } from "../google";
+import { AsyncGoogleFactory, getGoogle } from "../google";
 
 /**
  * Sets the data for the chart by creating a new DataTable
@@ -20,7 +20,7 @@ export async function createDataTable(
 
   // If an Array is received, then attempt to use parse with arrayToDataTable.
   if (Array.isArray(payload)) {
-    return window.google.visualization.arrayToDataTable(payload);
+    return getGoogle().visualization.arrayToDataTable(payload);
   }
 
   // Since Google compiles their classes, we can't use instanceof to check since
