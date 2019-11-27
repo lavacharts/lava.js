@@ -1,7 +1,5 @@
 import { Binding } from "./Binding";
 import { Drawable } from "./Drawable";
-import { AsyncGoogleFactory } from "./google";
-import { getContainer } from "./lib";
 
 export class Dashboard extends Drawable {
   public bindings: Binding[];
@@ -29,10 +27,10 @@ export class Dashboard extends Drawable {
       await this.processInitialData();
     }
 
-    this.googleChart = await AsyncGoogleFactory(
-      this.getGoogleConstructor(),
-      getContainer(this.containerId)
-    );
+    // this.googleChart = await AsyncGoogleFactory(
+    //   this.getGoogleConstructor(),
+    //   getContainer(this.containerId)
+    // );
 
     if (this.bindings.length > 0) {
       for (const binding of this.bindings) {

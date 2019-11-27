@@ -1,5 +1,7 @@
 export type Google = typeof google;
 
+export type GoogleChart = any;
+
 export type GoogleHandler = (google: Google) => void;
 
 export interface GoogleReadyHandler {

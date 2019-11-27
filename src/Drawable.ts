@@ -3,12 +3,13 @@ import { TinyEmitter } from "tiny-emitter";
 
 import { DataQuery } from "./DataQuery";
 import { Events } from "./Events";
-import { getGoogle, onGoogleReady } from "./google";
-import { createDataTable, getLava, makeDebugger } from "./lib";
+import { AsyncGoogleFactory, onGoogleReady } from "./google";
+import { createDataTable, getContainer, getLava, makeDebugger } from "./lib";
 import { ChartUpdateReturn } from "./types";
 import { ChartEvents } from "./types/chart";
 import { DrawableType, OptionDataPayload } from "./types/drawable";
 import { Formatter } from "./types/formats";
+import { Google } from "./types/google";
 import { instanceOfRangeQuery } from "./types/guards";
 
 /**
@@ -101,29 +102,43 @@ export abstract class Drawable extends TinyEmitter {
       this.draw();
     });
 
-    onGoogleReady(() => {
-      if (this.formats) {
-        this.applyFormats();
-      }
+    onGoogleReady(async google => {
+      await this.handleGoogle(google);
+    });
+  }
 
-      const definedEvents = Object.keys(this.events) as ChartEvents[];
+  async handleGoogle(google: Google): Promise<void> {
+    this.googleChart = await AsyncGoogleFactory(
+      this.getGoogleConstructor(),
+      getContainer(this.containerId)
+    );
 
-      definedEvents.forEach(eventType => {
-        this.debug(`Registering handler for <${eventType}>`);
+    console.log("google ready in drawable");
 
-        getGoogle().visualization.events.addListener(
-          this.googleChart,
-          eventType,
-          (event: any) => {
-            this.events[eventType]({
-              event,
-              $this: this,
-              data: this.data,
-              chart: this.googleChart
-            });
-          }
-        );
-      });
+    if (this.formats) {
+      this.applyFormats();
+    }
+
+    const definedEvents = Object.keys(this.events) as ChartEvents[];
+
+    definedEvents.forEach(eventType => {
+      this.debug(`Registering handler for <${eventType}>`);
+
+      console.log(this.events);
+      console.log(this.googleChart);
+
+      google.visualization.events.addListener(
+        this.googleChart,
+        eventType,
+        (event: any) => {
+          this.events[eventType]({
+            event,
+            $this: this,
+            data: this.data,
+            chart: this.googleChart
+          });
+        }
+      );
     });
   }
 

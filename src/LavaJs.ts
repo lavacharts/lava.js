@@ -105,8 +105,10 @@ export class LavaJs extends TinyEmitter {
   /**
    * Override the default options of the module.
    */
-  public configure(options: LavaJsOptions): void {
+  public configure(options: LavaJsOptions): this {
     this.options = Object.assign(this.options, options);
+
+    return this;
   }
 
   /**

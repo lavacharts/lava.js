@@ -41,12 +41,11 @@ export async function googleLoading(): Promise<void> {
  */
 export function onGoogleReady(callback: GoogleHandler): void {
   const lava = getLava();
-  const google = getGoogle();
 
   if (lava.googleReady) {
-    callback(google);
+    callback(window.google);
   } else {
-    lava.on(Events.GOOGLE_READY, () => callback(google));
+    lava.on(Events.GOOGLE_READY, () => callback(window.google));
   }
 }
 

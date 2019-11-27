@@ -1,6 +1,5 @@
 import { getChartClass } from "./ChartProps";
 import { Drawable } from "./Drawable";
-import { AsyncGoogleFactory, onGoogleReady } from "./google";
 import { getContainer } from "./lib";
 import { ChartClasses, ChartTypes } from "./types/chart";
 
@@ -24,13 +23,6 @@ export class Chart extends Drawable {
 
     this.type = chart.type;
     this.png = Boolean(chart.png);
-
-    onGoogleReady(async () => {
-      this.googleChart = await AsyncGoogleFactory(
-        this.getGoogleConstructor(),
-        getContainer(this.containerId)
-      );
-    });
   }
 
   /**
