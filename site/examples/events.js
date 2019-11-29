@@ -12,7 +12,6 @@ const chart = lava.chart({
   events: {
     // Events can be defined upon creation
     ready() {
-      // chart.id is just a getter for `${this.type}:${this.label}`
       alert(chart.id + " is ready!");
     }
   }

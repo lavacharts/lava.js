@@ -122,11 +122,6 @@ export abstract class Drawable extends TinyEmitter {
     const definedEvents = Object.keys(this.events) as ChartEvents[];
 
     definedEvents.forEach(eventType => {
-      this.debug(`Registering handler for <${eventType}>`);
-
-      console.log(this.events);
-      console.log(this.googleChart);
-
       google.visualization.events.addListener(
         this.googleChart,
         eventType,
@@ -152,11 +147,15 @@ export abstract class Drawable extends TinyEmitter {
       await this.processInitialData();
     }
 
+    if (this.formats) {
+      this.applyFormats();
+    }
+
     this.googleChart.draw(this.data, this.options);
   }
 
   /**
-   * Overidding the `on()` method from the [[TinyEmitter]] to
+   * Overidding the `on()` method from [[TinyEmitter]] to
    * register the handlers to our own map.
    */
   public on(event: ChartEvents, handler: Function, ctx?: any): this {
@@ -173,7 +172,7 @@ export abstract class Drawable extends TinyEmitter {
   }
 
   /**
-   * Convenience method for setting options dynamicly
+   * Sugar method for setting options via string reference
    */
   public async set(optionRef: string, value: any): Promise<ChartUpdateReturn> {
     // if (optionRef.includes(".")) {

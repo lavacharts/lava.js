@@ -1,6 +1,4 @@
-function r(n, x) {
-  return Math.random() * (x - n) + n;
-}
+const r = (a, b) => Math.floor(Math.random() * (b - a + 1) + a);
 
 lava.chart({
   label: "Lavachart",
