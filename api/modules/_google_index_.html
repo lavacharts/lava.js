@@ -73,8 +73,10 @@
 						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_google_index_.html#googlefactory" class="tsd-kind-icon">Google<wbr>Factory</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_google_index_.html#asyncgooglefactory" class="tsd-kind-icon">Async<wbr>Google<wbr>Factory</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_google_index_.html#domloading" class="tsd-kind-icon">dom<wbr>Loading</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_google_index_.html#getgoogle" class="tsd-kind-icon">get<wbr>Google</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_google_index_.html#googleloading" class="tsd-kind-icon">google<wbr>Loading</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_google_index_.html#ongoogleready" class="tsd-kind-icon">on<wbr>Google<wbr>Ready</a></li>
 							</ul>
 						</section>
@@ -84,16 +86,16 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
-					<a name="googlefactory" class="tsd-anchor"></a>
-					<h3>Google<wbr>Factory</h3>
+					<a name="asyncgooglefactory" class="tsd-anchor"></a>
+					<h3>Async<wbr>Google<wbr>Factory</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">Google<wbr>Factory<span class="tsd-signature-symbol">(</span>className<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, payload<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+						<li class="tsd-signature tsd-kind-icon">Async<wbr>Google<wbr>Factory<span class="tsd-signature-symbol">(</span>className<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, <span class="tsd-signature-symbol">...</span>restArgs<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/5ad5270/src/google/index.ts#L28">google/index.ts:28</a></li>
+									<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/479b40b/src/google/index.ts#L52">google/index.ts:52</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -102,10 +104,32 @@
 									<h5>className: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5>payload: <span class="tsd-signature-type">any</span></h5>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>restArgs: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
+					<a name="domloading" class="tsd-anchor"></a>
+					<h3>dom<wbr>Loading</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
+						<li class="tsd-signature tsd-kind-icon">dom<wbr>Loading<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/479b40b/src/google/index.ts#L15">google/index.ts:15</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Promise for the DOM to be ready.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -119,7 +143,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/5ad5270/src/google/index.ts#L8">google/index.ts:8</a></li>
+									<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/479b40b/src/google/index.ts#L8">google/index.ts:8</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_types_google_.html#google" class="tsd-signature-type">Google</a></h4>
@@ -127,16 +151,33 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
-					<a name="ongoogleready" class="tsd-anchor"></a>
-					<h3>on<wbr>Google<wbr>Ready</h3>
+					<a name="googleloading" class="tsd-anchor"></a>
+					<h3>google<wbr>Loading</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">on<wbr>Google<wbr>Ready<span class="tsd-signature-symbol">(</span>callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">google<wbr>Loading<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/5ad5270/src/google/index.ts#L17">google/index.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/479b40b/src/google/index.ts#L25">google/index.ts:25</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
+					<a name="ongoogleready" class="tsd-anchor"></a>
+					<h3>on<wbr>Google<wbr>Ready</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
+						<li class="tsd-signature tsd-kind-icon">on<wbr>Google<wbr>Ready<span class="tsd-signature-symbol">(</span>callback<span class="tsd-signature-symbol">: </span><a href="_types_google_.html#googlehandler" class="tsd-signature-type">GoogleHandler</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/479b40b/src/google/index.ts#L42">google/index.ts:42</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -148,25 +189,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>callback: <span class="tsd-signature-type">function</span></h5>
-									<ul class="tsd-parameters">
-										<li class="tsd-parameter-siganture">
-											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>google<span class="tsd-signature-symbol">: </span><a href="_types_google_.html#google" class="tsd-signature-type">Google</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-											</ul>
-											<ul class="tsd-descriptions">
-												<li class="tsd-description">
-													<h4 class="tsd-parameters-title">Parameters</h4>
-													<ul class="tsd-parameters">
-														<li>
-															<h5>google: <a href="_types_google_.html#google" class="tsd-signature-type">Google</a></h5>
-														</li>
-													</ul>
-													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-												</li>
-											</ul>
-										</li>
-									</ul>
+									<h5>callback: <a href="_types_google_.html#googlehandler" class="tsd-signature-type">GoogleHandler</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -181,18 +204,93 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_binding_.html">"<wbr>Binding"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_chart_.html">"<wbr>Chart"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_chartprops_.html">"<wbr>Chart<wbr>Props"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_dashboard_.html">"<wbr>Dashboard"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_dataquery_.html">"<wbr>Data<wbr>Query"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_defaultoptions_.html">"<wbr>Default<wbr>Options"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_drawable_.html">"<wbr>Drawable"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_events_.html">"<wbr>Events"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_lavajs_.html">"<wbr>Lava<wbr>Js"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_google_googleloader_.html">"google/<wbr>Google<wbr>Loader"</a>
+					</li>
 					<li class="current tsd-kind-external-module">
 						<a href="_google_index_.html">"google/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_index_.html">"index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_lava_.html">"lava"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_lib_createdatatable_.html">"lib/create<wbr>Data<wbr>Table"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_lib_index_.html">"lib/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_types_chart_.html">"types/chart"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_types_dashboard_.html">"types/dashboard"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_types_datasources_.html">"types/datasources"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_types_drawable_.html">"types/drawable"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_types_formats_.html">"types/formats"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_types_google_.html">"types/google"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_types_guards_.html">"types/guards"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_types_index_.html">"types/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_types_wrapper_.html">"types/wrapper"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
-						<a href="_google_index_.html#googlefactory" class="tsd-kind-icon">Google<wbr>Factory</a>
+						<a href="_google_index_.html#asyncgooglefactory" class="tsd-kind-icon">Async<wbr>Google<wbr>Factory</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="_google_index_.html#domloading" class="tsd-kind-icon">dom<wbr>Loading</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="_google_index_.html#getgoogle" class="tsd-kind-icon">get<wbr>Google</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="_google_index_.html#googleloading" class="tsd-kind-icon">google<wbr>Loading</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="_google_index_.html#ongoogleready" class="tsd-kind-icon">on<wbr>Google<wbr>Ready</a>

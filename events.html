@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 <head>
   <title></title>
   <meta charset="UTF-8">
@@ -81,7 +82,6 @@ const chart &#x3D; lava.chart({
   events: {
     // Events can be defined upon creation
     ready() {
-      // chart.id is just a getter for &#x60;${this.type}:${this.label}&#x60;
       alert(chart.id + &quot; is ready!&quot;);
     }
   }
@@ -108,13 +108,13 @@ lava.draw();
           <div class="icon-block z-depth-1">
             <div class="icon-block-header">
               <h2 class="center light-blue-text">React</h2>
-              <h5 class="center">get info</h5>
+              <h5 class="center">click a slice</h5>
             </div>
-<pre class="language-html">
-<code>
-&lt;div id=&quot;chart_div1&quot;&gt;&lt;/div&gt;</code>
-</pre>
-<div id="chart_div"></div>
+            <pre class="language-html">
+            <code>
+            &lt;div id=&quot;chart_div1&quot;&gt;&lt;/div&gt;</code>
+            </pre>
+            <div id="chart_div"></div>
           </div>
         </div>
       </div>
@@ -157,4 +157,5 @@ lava.draw();
     </div>
   </footer>
 </body>
+
 </html>

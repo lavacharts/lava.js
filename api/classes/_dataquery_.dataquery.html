@@ -112,7 +112,6 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_dataquery_.dataquery.html#getdatatable" class="tsd-kind-icon">get<wbr>Data<wbr>Table</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_dataquery_.dataquery.html#send" class="tsd-kind-icon">send</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_dataquery_.dataquery.html#create" class="tsd-kind-icon">create</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_dataquery_.dataquery.html#createfromsheetrange" class="tsd-kind-icon">create<wbr>From<wbr>Sheet<wbr>Range</a></li>
 							</ul>
 						</section>
@@ -125,13 +124,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Data<wbr>Query<span class="tsd-signature-symbol">(</span>url<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, opts<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">google.visualization.QueryOptions</span>, transformer<span class="tsd-signature-symbol">?: </span><a href="../modules/_types_google_.html#querytransformer" class="tsd-signature-type">QueryTransformer</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_dataquery_.dataquery.html" class="tsd-signature-type">DataQuery</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Data<wbr>Query<span class="tsd-signature-symbol">(</span>url<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, opts<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">QueryOptions</span>, transformer<span class="tsd-signature-symbol">?: </span><a href="../modules/_types_google_.html#querytransformer" class="tsd-signature-type">QueryTransformer</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_dataquery_.dataquery.html" class="tsd-signature-type">DataQuery</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/5ad5270/src/DataQuery.ts#L51">DataQuery.ts:51</a></li>
+									<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/479b40b/src/DataQuery.ts#L27">DataQuery.ts:27</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -140,7 +139,7 @@
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>throws</dt>
-									<dd><p>{DataError}</p>
+									<dd><p>{Error}</p>
 									</dd>
 								</dl>
 							</div>
@@ -150,7 +149,7 @@
 									<h5>url: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <span class="tsd-signature-type">google.visualization.QueryOptions</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <span class="tsd-signature-type">QueryOptions</span><span class="tsd-signature-symbol"> =&nbsp;{ sendMethod: &quot;auto&quot; }</span></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> transformer: <a href="../modules/_types_google_.html#querytransformer" class="tsd-signature-type">QueryTransformer</a></h5>
@@ -165,11 +164,11 @@
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="opts" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> opts</h3>
-					<div class="tsd-signature tsd-kind-icon">opts<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">google.visualization.QueryOptions</span></div>
+					<h3>opts</h3>
+					<div class="tsd-signature tsd-kind-icon">opts<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">QueryOptions</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/5ad5270/src/DataQuery.ts#L60">DataQuery.ts:60</a></li>
+							<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/479b40b/src/DataQuery.ts#L36">DataQuery.ts:36</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -179,7 +178,7 @@
 					<div class="tsd-signature tsd-kind-icon">transformer<span class="tsd-signature-symbol">:</span> <a href="../modules/_types_google_.html#querytransformer" class="tsd-signature-type">QueryTransformer</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/5ad5270/src/DataQuery.ts#L61">DataQuery.ts:61</a></li>
+							<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/479b40b/src/DataQuery.ts#L37">DataQuery.ts:37</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -189,7 +188,7 @@
 					<div class="tsd-signature tsd-kind-icon">url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/5ad5270/src/DataQuery.ts#L59">DataQuery.ts:59</a></li>
+							<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/479b40b/src/DataQuery.ts#L35">DataQuery.ts:35</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -206,7 +205,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/5ad5270/src/DataQuery.ts#L78">DataQuery.ts:78</a></li>
+									<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/479b40b/src/DataQuery.ts#L50">DataQuery.ts:50</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -228,7 +227,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/5ad5270/src/DataQuery.ts#L92">DataQuery.ts:92</a></li>
+									<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/479b40b/src/DataQuery.ts#L64">DataQuery.ts:64</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -237,39 +236,6 @@
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">QueryResponse</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="create" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> create</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">(</span>payload<span class="tsd-signature-symbol">: </span><a href="../modules/_types_google_.html#dataqueryinterface" class="tsd-signature-type">DataQueryInterface</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_dataquery_.dataquery.html" class="tsd-signature-type">DataQuery</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/5ad5270/src/DataQuery.ts#L33">DataQuery.ts:33</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>create a new DataQuery based on the given payload</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>{DataError}</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>payload: <a href="../modules/_types_google_.html#dataqueryinterface" class="tsd-signature-type">DataQueryInterface</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_dataquery_.dataquery.html" class="tsd-signature-type">DataQuery</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -283,7 +249,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/5ad5270/src/DataQuery.ts#L19">DataQuery.ts:19</a></li>
+									<li>Defined in <a href="https://github.com/lavacharts/lava.js/blob/479b40b/src/DataQuery.ts#L20">DataQuery.ts:20</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -319,8 +285,77 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_binding_.html">"<wbr>Binding"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_chart_.html">"<wbr>Chart"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_chartprops_.html">"<wbr>Chart<wbr>Props"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_dashboard_.html">"<wbr>Dashboard"</a>
+					</li>
 					<li class="current tsd-kind-external-module">
 						<a href="../modules/_dataquery_.html">"<wbr>Data<wbr>Query"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_defaultoptions_.html">"<wbr>Default<wbr>Options"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_drawable_.html">"<wbr>Drawable"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_events_.html">"<wbr>Events"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_lavajs_.html">"<wbr>Lava<wbr>Js"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_google_googleloader_.html">"google/<wbr>Google<wbr>Loader"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_google_index_.html">"google/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_index_.html">"index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_lava_.html">"lava"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_lib_createdatatable_.html">"lib/create<wbr>Data<wbr>Table"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_lib_index_.html">"lib/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_types_chart_.html">"types/chart"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_types_dashboard_.html">"types/dashboard"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_types_datasources_.html">"types/datasources"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_types_drawable_.html">"types/drawable"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_types_formats_.html">"types/formats"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_types_google_.html">"types/google"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_types_guards_.html">"types/guards"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_types_index_.html">"types/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_types_wrapper_.html">"types/wrapper"</a>
 					</li>
 				</ul>
 			</nav>
@@ -348,9 +383,6 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_dataquery_.dataquery.html#send" class="tsd-kind-icon">send</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="_dataquery_.dataquery.html#create" class="tsd-kind-icon">create</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_dataquery_.dataquery.html#createfromsheetrange" class="tsd-kind-icon">create<wbr>From<wbr>Sheet<wbr>Range</a>

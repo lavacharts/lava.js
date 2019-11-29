@@ -80,15 +80,25 @@ const chart &#x3D; lava.chart({
   }
 });
 
-setInterval(() &#x3D;&gt; {
-  chart.set(&quot;colors&quot;, [
-    &#x60;#${Math.random()
-      .toString(16)
-      .substr(-6)}&#x60;
-  ]);
+// This will return a random hex color
+function randomColor() {
+  return &#x60;#${Math.random()
+    .toString(16)
+    .substr(-6)}&#x60;;
+}
 
-  chart.set(&quot;areaOpacity&quot;, Math.random());
-}, 2000);
+// Set individual options
+setInterval(() &#x3D;&gt; {
+  chart.set(&quot;backgroundColor&quot;, randomColor());
+}, 1500);
+
+// Or set many
+setInterval(() &#x3D;&gt; {
+  chart.updateOptions({
+    areaOpacity: Math.random(),
+    colors: [randomColor()]
+  });
+}, 2500);
 
 lava.draw();
 </code>

@@ -85,9 +85,7 @@
             </div>
             <pre class="language-javascript">
               <code>
-function r(n, x) {
-  return Math.random() * (x - n) + n;
-}
+const r &#x3D; (a, b) &#x3D;&gt; Math.floor(Math.random() * (b - a + 1) + a);
 
 lava.chart({
   label: &quot;Lavachart&quot;,
