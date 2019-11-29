@@ -33,8 +33,10 @@ export class Binding {
       return AsyncGoogleFactory("ControlWrapper", ...this.controlWraps);
     }
 
-    return this.controlWraps.map(control =>
-      AsyncGoogleFactory("ControlWrapper", control)
+    return Promise.all(
+      this.controlWraps.map(control =>
+        AsyncGoogleFactory("ControlWrapper", control)
+      )
     );
   }
 
@@ -43,8 +45,8 @@ export class Binding {
       return AsyncGoogleFactory("ChartWrapper", ...this.chartWraps);
     }
 
-    return this.chartWraps.map(chart =>
-      AsyncGoogleFactory("ChartWrapper", chart)
+    return Promise.all(
+      this.chartWraps.map(chart => AsyncGoogleFactory("ChartWrapper", chart))
     );
   }
 }
