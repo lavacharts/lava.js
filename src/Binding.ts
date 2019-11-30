@@ -1,29 +1,57 @@
 import { AsyncGoogleFactory } from "./google";
 import { arrayWrap } from "./lib";
+import { OneOrArrayOf } from "./types";
 import { ChartWrapperSpec, ControlWrapperSpec } from "./types/wrapper";
 
-export class Binding {
-  public type: "OneToOne" | "OneToMany" | "ManyToOne" | "ManyToMany";
-  private controlWraps: ControlWrapperSpec[];
-  private chartWraps: ChartWrapperSpec[];
+type BindingType = "OneToOne" | "OneToMany" | "ManyToOne" | "ManyToMany";
 
-  constructor(
-    controlWraps: ControlWrapperSpec | ControlWrapperSpec[],
-    chartWraps: ChartWrapperSpec | ChartWrapperSpec[]
-  ) {
-    const manyControlWraps = Array.isArray(controlWraps);
+export class Binding {
+  private controlWraps: ControlWrapperSpec[] = [];
+  private chartWraps: ChartWrapperSpec[] = [];
+
+  static create(
+    controlWraps: OneOrArrayOf<ControlWrapperSpec>,
+    chartWraps: OneOrArrayOf<ChartWrapperSpec>
+  ): Binding {
+    return new Binding(controlWraps, chartWraps);
+  }
+
+  get type(): BindingType {
+    const manyControlWraps = Array.isArray(this.controlWraps);
     const oneControlWrap = !manyControlWraps;
 
-    const manyChartWraps = Array.isArray(chartWraps);
+    const manyChartWraps = Array.isArray(this.chartWraps);
     const oneChartWrap = !manyChartWraps;
 
-    if (oneControlWrap && oneChartWrap) this.type = "OneToOne";
-    else if (oneControlWrap && manyChartWraps) this.type = "OneToMany";
-    else if (manyControlWraps && oneChartWrap) this.type = "ManyToOne";
-    else this.type = "ManyToMany";
+    if (oneControlWrap && oneChartWrap) return "OneToOne";
+    else if (oneControlWrap && manyChartWraps) return "OneToMany";
+    else if (manyControlWraps && oneChartWrap) return "ManyToOne";
+    else return "ManyToMany";
+  }
 
-    this.controlWraps = arrayWrap(controlWraps);
-    this.chartWraps = arrayWrap(chartWraps);
+  constructor(
+    controlWraps?: ControlWrapperSpec | ControlWrapperSpec[],
+    chartWraps?: ChartWrapperSpec | ChartWrapperSpec[]
+  ) {
+    if (controlWraps) {
+      this.controlWraps.push(...arrayWrap(controlWraps));
+    }
+
+    if (chartWraps) {
+      this.chartWraps.push(...arrayWrap(chartWraps));
+    }
+  }
+
+  public addControl(controlDef: ControlWrapperSpec): this {
+    this.controlWraps.push(controlDef);
+
+    return this;
+  }
+
+  public addChart(chartDef: ChartWrapperSpec): this {
+    this.chartWraps.push(chartDef);
+
+    return this;
   }
 
   public async getControlWraps(): Promise<

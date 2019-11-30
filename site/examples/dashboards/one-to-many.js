@@ -28,6 +28,8 @@ const o2mBarChart = {
   }
 };
 
+const oneToMany = lava.bind(o2mDonutRangeSlider, [o2mPieChart, o2mBarChart]);
+
 lava.dashboard({
   containerId: "one-to-many_dashboard_div",
   data: [
@@ -40,7 +42,7 @@ lava.dashboard({
     ["Aaron", 1],
     ["Margareth", 8]
   ],
-  bindings: [lava.bind(o2mDonutRangeSlider, [o2mPieChart, o2mBarChart])]
+  bindings: [oneToMany]
 });
 
 lava.draw();

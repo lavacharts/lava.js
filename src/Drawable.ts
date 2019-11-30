@@ -113,8 +113,6 @@ export abstract class Drawable extends TinyEmitter {
       getContainer(this.containerId)
     );
 
-    console.log("google ready in drawable");
-
     if (this.formats) {
       this.applyFormats();
     }

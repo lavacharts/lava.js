@@ -1,35 +1,34 @@
-const many-to-manyDonutRangeSlider = {
-  controlType: "NumberRangeFilter",
-  containerId: "many-to-many_donut_slider_div",
-  options: { filterColumnLabel: "Donuts Eaten" }
-};
-
-const many-to-manyCoffeeRangeSlider = {
-  controlType: "NumberRangeFilter",
-  containerId: "many-to-many_coffee_slider_div",
-  options: { filterColumnIndex: 2 }
-};
-
-const many-to-manyBarChart = {
-  chartType: "BarChart",
-  containerId: "many-to-many_barchart_div",
-  options: {
-    width: 300,
-    height: 300,
-    pieSliceText: "value",
-    legend: "right"
-  }
-};
-
-const many-to-manyScatterChart = {
-  chartType: "PieChart",
-  containerId: "many-to-many_piechart_div",
-  options: {
-    width: 300,
-    height: 300,
-    legend: "right"
-  }
-};
+const manyToMany = lava
+  .binding()
+  .addControl({
+    controlType: "NumberRangeFilter",
+    containerId: "many-to-many_donut_slider_div",
+    options: { filterColumnLabel: "Donuts Eaten" }
+  })
+  .addControl({
+    controlType: "NumberRangeFilter",
+    containerId: "many-to-many_coffee_slider_div",
+    options: { filterColumnIndex: 2 }
+  })
+  .addChart({
+    chartType: "BarChart",
+    containerId: "many-to-many_barchart_div",
+    options: {
+      width: 300,
+      height: 300,
+      pieSliceText: "value",
+      legend: "right"
+    }
+  })
+  .addChart({
+    chartType: "PieChart",
+    containerId: "many-to-many_piechart_div",
+    options: {
+      width: 300,
+      height: 300,
+      legend: "right"
+    }
+  });
 
 lava.dashboard({
   containerId: "many-to-many_dashboard_div",
@@ -43,12 +42,7 @@ lava.dashboard({
     ["Aaron", 1, 6],
     ["Margareth", 8, 0]
   ],
-  bindings: [
-    lava.bind(
-      [many-to-manyCoffeeRangeSlider, many-to-manyDonutRangeSlider],
-      [many-to-manyBarChart, many-to-manyScatterChart]
-    )
-  ]
+  bindings: [manyToMany]
 });
 
 lava.draw();

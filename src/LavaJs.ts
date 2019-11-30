@@ -166,9 +166,22 @@ export class LavaJs extends TinyEmitter {
     controlWraps: OneOrArrayOf<ControlWrapperSpec>,
     chartWraps: OneOrArrayOf<ChartWrapperSpec>
   ): Binding {
-    // debug(controlWraps, chartWraps);
+    return Binding.create(controlWraps, chartWraps);
+  }
 
-    return new Binding(controlWraps, chartWraps);
+  /**
+   * Create an empty [[Binding]] to use as a builder.
+   *
+   * The binding provides the methods which both return `this` for chaining
+   *  - addChart() to push a chartWrapper into the binding
+   *  - addControl() to push a controlWrapper into the binding
+   *
+   *  @example ```
+   * const oneToOneBinding = lava.binding().addControl({}).addChart({});
+   * ```
+   */
+  public binding(): Binding {
+    return new Binding();
   }
 
   /**
