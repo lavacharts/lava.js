@@ -12,7 +12,7 @@ const m2oCoffeeRangeSlider = {
 
 const m2oScatterChart = {
   chartType: "ScatterChart",
-  containerId: "many-to-one_chart_div",
+  containerId: "many-to-one_scatterchart_div",
   options: {
     width: 300,
     height: 300,
