@@ -1,18 +1,18 @@
-const m2oDonutRangeSlider = {
+const many-to-oneDonutRangeSlider = {
   controlType: "NumberRangeFilter",
   containerId: "many-to-one_donut_slider_div",
   options: { filterColumnLabel: "Donuts Eaten" }
 };
 
-const m2oCoffeeRangeSlider = {
+const many-to-oneCoffeeRangeSlider = {
   controlType: "NumberRangeFilter",
   containerId: "many-to-one_coffee_slider_div",
   options: { filterColumnIndex: 2 }
 };
 
-const m2oScatterChart = {
+const many-to-oneScatterChart = {
   chartType: "ScatterChart",
-  containerId: "many-to-one_chart_div",
+  containerId: "many-to-one_scatterchart_div",
   options: {
     width: 300,
     height: 300,
@@ -34,7 +34,7 @@ lava.dashboard({
   ],
   bindings: [
     // lava#bind(control[], chart) => ManyToOne Binding
-    lava.bind([m2oCoffeeRangeSlider, m2oDonutRangeSlider], m2oScatterChart)
+    lava.bind([many-to-oneCoffeeRangeSlider, many-to-oneDonutRangeSlider], many-to-oneScatterChart)
   ]
 });
 

@@ -8,7 +8,7 @@ const o2mDonutRangeSlider = {
 
 const o2mPieChart = {
   chartType: "PieChart",
-  containerId: "one-to-many_pieChart_div",
+  containerId: "one-to-many_piechart_div",
   options: {
     width: 300,
     height: 300,
@@ -19,7 +19,7 @@ const o2mPieChart = {
 
 const o2mBarChart = {
   chartType: "BarChart",
-  containerId: "one-to-many_barChart_div",
+  containerId: "one-to-many_barchart_div",
   options: {
     width: 300,
     height: 300,
