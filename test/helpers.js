@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 before(function() {
   window["__LAVAJS__TEST_DIV"] = document.createElement("div");
-
   window["__LAVAJS__TEST_DIV"].id = "test-chart";
 
   document.body.appendChild(window["__LAVAJS__TEST_DIV"]);

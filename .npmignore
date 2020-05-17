@@ -1,12 +1,19 @@
+.editorconfig
 .eslintignore
 .eslintrc.*
+.mailmap
+.prettierrc.*
+karma.conf.js
+tsconfig.json
+yarn*
 
-/.editorconfig
-/.gitattributes
-/.mailmap
-/.travis.yml
 
+/.vscode
 /configs
-/site
+/cypress
+/docs
+/lavacharts
 /public
+/site
+/src
 /test

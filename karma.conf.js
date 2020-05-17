@@ -5,8 +5,9 @@ module.exports = config => {
       "./node_modules/chai-shallow-deep-equal/chai-shallow-deep-equal.js",
       "./test/helpers.js",
       "./dist/lava.js",
-      "./test/LavaJs.spec.js",
-      "./test/DataQuery.spec.js"
+      "./test/lava-api.spec.js"
+      // "./test/LavaJs.spec.js",
+      // "./test/DataQuery.spec.js"
     ],
     client: {
       chai: {
@@ -16,22 +17,26 @@ module.exports = config => {
         reporter: "html"
       }
     },
+    mochaReporter: {
+      showDiff: true
+    },
     singleRun: false,
-    reporters: ["dots"],
+    reporters: ["mocha"],
     port: 9876,
     colors: true,
     logLevel: config.LOG_ERROR,
     autoWatch: true,
-    //browsers: [(process.env.TRAVIS ? 'PhantomJS' : 'Chrome')],
-    browsers: ["PhantomJS"],
+    // browsers: ["ChromeHeadless"],
     plugins: [
       "karma-mocha",
       "karma-sinon",
       "karma-sinon-chai",
       "karma-viewport",
+      "karma-mocha-reporter",
       //'karma-nightmare',
-      "karma-phantomjs-launcher",
-      "karma-chrome-launcher"
+      "karma-chrome-launcher",
+      "karma-firefox-launcher",
+      "karma-phantomjs-launcher"
     ],
     nightmareOptions: {
       width: 800,

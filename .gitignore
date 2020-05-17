@@ -1,6 +1,7 @@
 .vscode/
 .idea/
 node_modules/
+cypress/
 
 public/*
 !public/.gitkeep

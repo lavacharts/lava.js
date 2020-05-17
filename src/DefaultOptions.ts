@@ -1,6 +1,6 @@
 import { LavaJsOptions } from "./types";
 
-export const DefaultOptions = {
+export const DefaultOptions: LavaJsOptions = {
   autodraw: false,
   autoloadGoogle: true,
   debug: false,
@@ -11,4 +11,4 @@ export const DefaultOptions = {
   debounceTimeout: 250,
   chartPackages: ["corechart"],
   timezone: "America/Los_Angeles"
-} as LavaJsOptions;
+};

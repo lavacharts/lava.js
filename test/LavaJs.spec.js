@@ -1,9 +1,17 @@
 /** @test {LavaJs} */
 describe("LavaJs", function() {
+  it("should be defined as a class on the window", function() {
+    expect(window.LavaJs).to.not.be.undefined;
+  });
+
+  it("lava should be initialized to the window", function() {
+    expect(window.lava).to.not.be.undefined;
+  });
+
   /** @test {LavaJs#init} */
   describe("init", function() {
     it("should load Google to the window.", function() {
-      return lava.init().then(function() {
+      return lava.init().then(() => {
         expect(window.google).to.not.be.undefined;
       });
     });

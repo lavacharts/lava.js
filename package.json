@@ -1,7 +1,7 @@
 {
-  "name": "lava.js",
+  "name": "@lavacharts/lava.js",
   "title": "LavaJs",
-  "version": "4.0.0-alpha2",
+  "version": "4.0.0-beta1",
   "description": "Wrapper library for the Google Chart API",
   "private": false,
   "main": "dist/lava.js",
@@ -23,16 +23,20 @@
   ],
   "scripts": {
     "start": "yarn run build && yarn run publish:github",
-    "test": "yarn run karma start --singleRun",
-    "lint": "yarn run eslint --ext=.ts src/",
-    "dev": "yarn run webpack-dev-server --config ./configs/dev/webpack.dev.js",
-    "prod": "yarn run webpack --config ./configs/webpack.prod.js",
+    "test": "karma start --singleRun",
+    "test:chrome": "yarn test --browsers Chrome",
+    "test:firefox": "yarn test --browsers Firefox",
+    "test:chromeheadless": "yarn test --browsers ChromeHeadless",
+    "lint": "eslint \"./src/**/*.ts\"",
+    "lint:fix": "yarn lint --fix",
+    "dev": "webpack-dev-server --config ./configs/dev/webpack.dev.js",
+    "prod": "webpack --config ./configs/webpack.prod.js",
     "build": "yarn run clean-public && yarn run build-site",
     "clean-public": "yarn run rimraf ./public/*",
-    "build-site": "yarn run concurrently npm:build:*",
-    "build:api": "yarn run typedoc --out ./public/api ./src",
-    "build:docs": "yarn run webpack --config ./configs/dev/webpack.dev.js",
-    "publish:github": "yarn run gh-pages -d public/"
+    "build-site": "concurrently npm:build:*",
+    "build:api": "typedoc --out ./public/api ./src",
+    "build:docs": "webpack --config ./configs/dev/webpack.dev.js",
+    "publish:github": "gh-pages -d public/"
   },
   "lint-staged": {
     "./src/**/*.ts": [
@@ -45,10 +49,7 @@
       "pre-commit": "lint-staged"
     }
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lavacharts/lava.js.git"
-  },
+  "repository": "git+https://github.com/lavacharts/lava.js.git",
   "keywords": [
     "google",
     "charts",
@@ -62,7 +63,7 @@
   "bugs": {
     "url": "https://github.com/lavacharts/lava.js/issues"
   },
-  "homepage": "http://lavajs.lavacharts.com",
+  "homepage": "https://lavacharts.github.io/lava.js/",
   "devDependencies": {
     "@babel/core": "^7.7.2",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
@@ -84,6 +85,7 @@
     "copy-webpack-plugin": "^5.0.4",
     "core-js": "3",
     "css-loader": "^3.2.0",
+    "cypress": "^4.5.0",
     "debug": "^4.1.1",
     "eslint": "^6.6.0",
     "eslint-config-prettier": "^6.3.0",
@@ -104,10 +106,11 @@
     "html-webpack-plugin": "^3.2.0",
     "husky": "^3.0.9",
     "jquery": "^3.4.1",
-    "karma": "^4.4.1",
+    "karma": "^5.0.7",
     "karma-chrome-launcher": "^2.2.0",
-    "karma-jasmine": "^1.1.0",
+    "karma-firefox-launcher": "^1.3.0",
     "karma-mocha": "^1.3.0",
+    "karma-mocha-reporter": "^2.2.5",
     "karma-nightmare": "^0.4.10",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-sinon": "^1.0.5",
@@ -119,6 +122,7 @@
     "mini-css-extract-plugin": "^0.8.0",
     "mocha": "^6.2.1",
     "mocha-sinon": "^2.0.0",
+    "mochapack": "^2.0.0",
     "nightmare": "^3.0.2",
     "node-sass": "^4.12.0",
     "prettier": "^1.18.2",
@@ -136,7 +140,7 @@
     "tiny-emitter": "^2.1.0",
     "typedoc": "^0.15.0",
     "typescript": "^3.7.2",
-    "webpack": "^4.41.2",
+    "webpack": "^4.43.0",
     "webpack-bundle-analyzer": "^3.6.0",
     "webpack-cli": "^3.3.9",
     "webpack-dev-server": "^3.8.1",

@@ -1,11 +1,13 @@
-# LavaJs
+# @lavacharts/lava.js
 
-[![Build Status](https://travis-ci.org/lavacharts/lava.js.svg?branch=master)](https://travis-ci.org/lavacharts/lava.js)
+[![buddy pipeline](https://app.buddy.works/kevinkhill/lava-js/pipelines/pipeline/256945/badge.svg?token=ff726afda598251a69bd3b8cbc937b952f64176bcb1b42bd63e936f21caf8a61 "buddy pipeline")](https://app.buddy.works/kevinkhill/lava-js/pipelines/pipeline/256945)
 [![Maintainability](https://api.codeclimate.com/v1/badges/96b0c79fddc76585ac58/maintainability)](https://codeclimate.com/github/lavacharts/lava.js/maintainability)
 
-LavaJs is the javascript module was developed within [Lavacharts](https://github.com/kevinkhill/lavacharts) but is now it
-is all grown up. I recently learned Typescript so this was a fun exercise to convert the whole module into Typescript and
-add some fun features along the way.
+LavaJs is the javascript module that was developed within [Lavacharts](https://github.com/kevinkhill/lavacharts) but now it
+is all grown up. I have been learning Typescript so this was a fun exercise to convert the whole module into TS and
+add some features along the way.
+
+[Full Documentation with Examples](https://lavacharts.github.io/lava.js/)
 
 ## Features
 - [x] [Drawing a single chart](https://lavajs.lavacharts.com)
