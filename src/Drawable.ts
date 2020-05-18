@@ -4,13 +4,15 @@ import { TinyEmitter } from "tiny-emitter";
 import { DataQuery } from "./DataQuery";
 import { Events } from "./Events";
 import { AsyncGoogleFactory, onGoogleReady } from "./google";
-import { createDataTable, getContainer, getLava, makeDebugger } from "./lib";
+import { makeDebugger } from "./lib";
+import { createDataTable } from "./lib/createDataTable";
+import { getContainer } from "./lib/getContainer";
+import { instanceOfRangeQuery } from "./lib/guards";
 import { ChartUpdateReturn } from "./types";
 import { ChartEvents } from "./types/chart";
 import { DrawableType, OptionDataPayload } from "./types/drawable";
 import { Formatter } from "./types/formats";
 import { Google } from "./types/google";
-import { instanceOfRangeQuery } from "./types/guards";
 
 /**
  * Base class for [[Chart]]s and [[Dashboard]]s
@@ -71,11 +73,14 @@ export abstract class Drawable extends TinyEmitter {
 
   private debug: Debugger;
 
+  private $window: Window & typeof globalThis;
+
   abstract getGoogleConstructor(): string;
 
   constructor(drawable: Drawable) {
     super();
 
+    this.$window = window;
     this.containerId = drawable.containerId;
     this.type = drawable.type || "Dashboard";
 
@@ -97,12 +102,12 @@ export abstract class Drawable extends TinyEmitter {
 
     this.debug = makeDebugger(`${this.type}:${this.label}`);
 
-    getLava().on(Events.DRAW, () => {
+    this.$window.lava.on(Events.DRAW, () => {
       this.debug(`<${Events.DRAW}> event received.`);
       this.draw();
     });
 
-    onGoogleReady(async google => {
+    onGoogleReady(async (google: Google) => {
       await this.handleGoogle(google);
     });
   }
@@ -284,9 +289,14 @@ export abstract class Drawable extends TinyEmitter {
   protected async setData(payload: any): Promise<void> {
     this.data = await createDataTable(payload);
 
-    if (this.data instanceof google.visualization.DataTable === false) {
-      throw new Error(`There was a error setting the data for ${this.id}`);
-    }
+    /**
+     * Instead of checking and re-throwing, lets let Google fail...
+     *
+     * @TODO does this work?
+     */
+    // if (this.data instanceof google.visualization.DataTable === false) {
+    //   throw new Error(`There was a error setting the data for ${this.id}`);
+    // }
 
     if (payload.formats) {
       this.applyFormats(payload.formats);

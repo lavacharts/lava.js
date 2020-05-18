@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
     "strict": true,
-    "target": "esnext",
+    "target": "es6",
     "sourceMap": true,
+    "outDir": "lib",
+    "declaration": true,
     "module": "commonjs",
     "noImplicitAny": true,
     "removeComments": true,
@@ -17,10 +19,6 @@
     "strictPropertyInitialization": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
 }

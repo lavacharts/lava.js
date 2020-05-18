@@ -5,8 +5,7 @@ import { getChartPackage } from "../ChartProps";
 import { Dashboard } from "../Dashboard";
 import { Drawable } from "../Drawable";
 import { Events } from "../Events";
-import { getGoogle } from "../google";
-import { makeDebugger } from "../lib";
+import { instanceOfDashboard, makeDebugger } from "../lib";
 import { Google, GoogleLoaderOptions } from "../types/google";
 
 const debug = makeDebugger("GoogleLoader");
@@ -15,12 +14,12 @@ export class GoogleLoader extends TinyEmitter {
   /**
    * Version of the Google charts API to load
    */
-  public static API_VERSION = "current";
+  static API_VERSION = "current";
 
   /**
    * Url to Google's static loader
    */
-  public static LOADER_URL = "https://www.gstatic.com/charts/loader.js";
+  static LOADER_URL = "https://www.gstatic.com/charts/loader.js";
 
   /**
    * Language to load
@@ -38,6 +37,11 @@ export class GoogleLoader extends TinyEmitter {
   private packages: Set<string> = new Set(["corechart"]);
 
   /**
+   * Reference to the window
+   */
+  private $window: Window & typeof globalThis;
+
+  /**
    * Create a new instance of the GoogleLoader
    *
    * @param options LavaJsOptions
@@ -45,6 +49,7 @@ export class GoogleLoader extends TinyEmitter {
   constructor({ language = "en", mapsApiKey = "" }: GoogleLoaderOptions) {
     super();
 
+    this.$window = window;
     this.language = language;
     this.mapsApiKey = mapsApiKey;
 
@@ -56,14 +61,14 @@ export class GoogleLoader extends TinyEmitter {
   /**
    * Flag that will be true once window.google is available in page.
    */
-  public get googleIsDefined(): boolean {
-    return typeof window.google !== "undefined";
+  get googleIsDefined(): boolean {
+    return typeof this.$window.google !== "undefined";
   }
 
   /**
    * Flag that will be true once Google's Static Loader is in page.
    */
-  public get scriptTagInPage(): boolean {
+  get scriptTagInPage(): boolean {
     const scripts = document.getElementsByTagName("script");
 
     for (const script of Array.from(scripts)) {
@@ -78,7 +83,7 @@ export class GoogleLoader extends TinyEmitter {
   /**
    * Get the options for the google loader.
    */
-  public get config(): GoogleLoaderOptions {
+  get config(): GoogleLoaderOptions {
     const config: GoogleLoaderOptions = {
       language: this.language,
       packages: Array.from(this.packages)
@@ -94,8 +99,8 @@ export class GoogleLoader extends TinyEmitter {
   /**
    * Extract and register the package needed to draw the chart.
    */
-  public register<T extends Drawable>(drawable: Chart | Dashboard): void {
-    if (drawable instanceof Dashboard) {
+  register<T extends Drawable>(drawable: Chart | Dashboard): void {
+    if (instanceOfDashboard(drawable)) {
       this.packages.add("controls");
     } else {
       this.packages.add(getChartPackage(drawable));
@@ -105,11 +110,11 @@ export class GoogleLoader extends TinyEmitter {
   /**
    * Load the Google Static Loader and resolve the promise when ready.
    */
-  public async loadGoogle(): Promise<Google> {
+  async loadGoogle(): Promise<Google> {
     debug("Loading Google...");
 
     if (this.googleIsDefined) {
-      return getGoogle();
+      return this.$window.google;
     }
 
     if (this.scriptTagInPage === false) {
@@ -120,15 +125,15 @@ export class GoogleLoader extends TinyEmitter {
 
     debug(`Loading version "${GoogleLoader.API_VERSION}"`, this.config);
 
-    getGoogle().charts.load(GoogleLoader.API_VERSION, this.config);
+    this.$window.google.charts.load(GoogleLoader.API_VERSION, this.config);
 
     return new Promise(resolve => {
-      getGoogle().charts.setOnLoadCallback(() => {
+      this.$window.google.charts.setOnLoadCallback(() => {
         debug(`Google is loaded, firing <${Events.GOOGLE_READY}>`);
 
-        this.emit(Events.GOOGLE_READY, getGoogle());
+        this.emit(Events.GOOGLE_READY, this.$window.google);
 
-        resolve(getGoogle());
+        resolve(this.$window.google);
       });
     });
   }

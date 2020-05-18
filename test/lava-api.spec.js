@@ -14,8 +14,7 @@ describe("lava.js", function() {
 
   it("should have the default options set", () => {
     const { options } = lava;
-
-    expect(options.autodraw).to.be.true;
+    window.expect(options.autodraw).to.be.true;
     expect(options.autoloadGoogle).to.be.true;
     expect(options.chartPackages).to.contain("corechart");
     expect(options.datetimeFormat).to.equal("");

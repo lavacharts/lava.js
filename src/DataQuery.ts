@@ -1,4 +1,4 @@
-import { AsyncGoogleFactory } from "./google";
+import { AsyncGoogleFactory } from "./google/AsyncGoogleFactory";
 import { makeDebugger } from "./lib";
 import { RangeQuery } from "./types/datasources";
 import { QueryTransformer } from "./types/google";

@@ -3,11 +3,14 @@ import { TinyEmitter } from "tiny-emitter";
 import { Binding } from "./Binding";
 import { Chart } from "./Chart";
 import { Dashboard } from "./Dashboard";
+import { DataQuery } from "./DataQuery";
 import { DefaultOptions } from "./DefaultOptions";
 import { Events } from "./Events";
 import { domLoading, GoogleLoader, googleLoading } from "./google";
-import { addEvent, makeDebugger } from "./lib";
-import { LavaJsOptions, OneOrArrayOf } from "./types";
+import { makeDebugger } from "./lib";
+import { addEvent } from "./lib/addEvent";
+import { LavaJsOptions, OneOrArrayOf, RangeQuery } from "./types";
+import { DataQueryOptions } from "./types/data";
 import { Google } from "./types/google";
 import { ChartWrapperSpec, ControlWrapperSpec } from "./types/wrapper";
 
@@ -21,22 +24,22 @@ const debug = makeDebugger();
  */
 export class LavaJs extends TinyEmitter {
   /** LavaJs version */
-  public static readonly VERSION = "__VERSION__";
+  static readonly VERSION = "__VERSION__";
 
   /** Default options for the library */
-  public static defaults = DefaultOptions;
+  static defaults = DefaultOptions;
 
   /** Configurable options for the library */
-  public options: LavaJsOptions;
+  options: LavaJsOptions;
 
   /** Flag for when `window.google !== undefined` */
-  public googleReady = false;
+  googleReady = false;
 
   /** Flag for when `document.readyState === "complete"` */
-  public domReady = false;
+  domReady = false;
 
   /** Drawables registy */
-  public readonly registry: Record<string, any> = {};
+  readonly registry: Record<string, any> = {};
 
   /** Loader for adding the google script and making `window.google` available */
   private readonly loader: GoogleLoader;
@@ -83,19 +86,19 @@ export class LavaJs extends TinyEmitter {
   /**
    * Get the instance of the GoogleLoader
    */
-  public getLoader(): GoogleLoader {
+  getLoader(): GoogleLoader {
     return this.loader;
   }
 
   /**
    * Get the value of an option from the library
    */
-  public getOption(option: keyof LavaJsOptions, whenUndefined: any): any {
+  getOption(option: keyof LavaJsOptions, whenUndefined: any): any {
     if (typeof this.options[option] === "undefined") {
       if (typeof whenUndefined !== "undefined") {
         return whenUndefined;
       } else {
-        throw new Error(`${option} is not a valid option`);
+        throw new Error(`${String(option)} is not a valid option`);
       }
     }
 
@@ -105,7 +108,7 @@ export class LavaJs extends TinyEmitter {
   /**
    * Override the default options of the module.
    */
-  public configure(options: LavaJsOptions): this {
+  configure(options: LavaJsOptions): this {
     this.options = Object.assign(this.options, options);
 
     return this;
@@ -121,7 +124,7 @@ export class LavaJs extends TinyEmitter {
    *
    * @emits [[Events.DRAW]]
    */
-  public async draw(): Promise<void> {
+  async draw(): Promise<void> {
     await domLoading();
     await googleLoading();
 
@@ -131,7 +134,7 @@ export class LavaJs extends TinyEmitter {
   /**
    * Create a new [[Chart]] from an Object
    */
-  public chart(payload: Chart): Chart {
+  chart(payload: Chart): Chart {
     const chart = new Chart(payload);
 
     return this.register(chart);
@@ -140,14 +143,14 @@ export class LavaJs extends TinyEmitter {
   /**
    * Create multiple [[Chart]]s from an array of Objects
    */
-  public charts(charts: Chart[]): Chart[] {
+  charts(charts: Chart[]): Chart[] {
     return charts.map(this.chart, this);
   }
 
   /**
    * Create a new [[Dashboard]] from an Object
    */
-  public dashboard(payload: Dashboard): Dashboard {
+  dashboard(payload: Dashboard): Dashboard {
     const dashboard = new Dashboard(payload);
 
     return this.register(dashboard);
@@ -162,7 +165,7 @@ export class LavaJs extends TinyEmitter {
    * - bind(control  , chart[]) => OneToMany Binding
    * - bind(control[], chart[]) => ManyToMany Binding
    */
-  public bind(
+  bind(
     controlWraps: OneOrArrayOf<ControlWrapperSpec>,
     chartWraps: OneOrArrayOf<ChartWrapperSpec>
   ): Binding {
@@ -180,8 +183,12 @@ export class LavaJs extends TinyEmitter {
    * const oneToOneBinding = lava.binding().addControl({}).addChart({});
    * ```
    */
-  public binding(): Binding {
+  binding(): Binding {
     return new Binding();
+  }
+
+  query(query: RangeQuery): DataQuery {
+    return DataQuery.createFromSheetRange(query);
   }
 
   /**
