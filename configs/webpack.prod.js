@@ -12,7 +12,7 @@ const common = require("./webpack.common.js");
 
 const config = {
   mode: "production",
-  stats: "minimal",
+  stats: "errors-only",
   entry: PATHS.join.src("lava.ts"),
   output: {
     path: PATHS.dist,

@@ -8,8 +8,10 @@ describe("DataQuery", () => {
 
   /** @test {DataQuery#constructor} */
   describe("constructor", () => {
+    const { lava } = window;
+
     it("Should create a new DataQuery from a sheet ID and range.", () => {
-      const dataQuery = window.lava.query({
+      const dataQuery = lava.query({
         sheetId: "1NrwfHVE0qn3O8HcLDFd71_LepjSDIbrJMglkHZIEifI",
         range: "A1:B6"
       });

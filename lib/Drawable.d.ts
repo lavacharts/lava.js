@@ -1,0 +1,32 @@
+import { TinyEmitter } from "tiny-emitter";
+import { ChartUpdateReturn } from "./types";
+import { ChartEvents } from "./types/chart";
+import { DrawableType, OptionDataPayload } from "./types/drawable";
+import { Formatter } from "./types/formats";
+import { Google } from "./types/google";
+export declare abstract class Drawable extends TinyEmitter {
+    options: Record<string, any>;
+    data: google.visualization.DataTable;
+    googleChart: any;
+    get id(): string;
+    readonly containerId: string;
+    readonly label: string;
+    readonly type: DrawableType;
+    protected formats: Formatter[];
+    protected events: Record<ChartEvents, CallableFunction>;
+    private initialData;
+    private debug;
+    private $window;
+    abstract getGoogleConstructor(): string;
+    constructor(drawable: Drawable);
+    handleGoogle(google: Google): Promise<void>;
+    draw(): Promise<void>;
+    on(event: ChartEvents, handler: Function, ctx?: any): this;
+    set(optionRef: string, value: any): Promise<ChartUpdateReturn>;
+    updateData(payload: any, autoRedraw?: boolean): Promise<ChartUpdateReturn>;
+    updateOptions(payload: any, autoRedraw?: boolean): Promise<ChartUpdateReturn>;
+    update({ data, options }: OptionDataPayload, autoRedraw?: boolean): Promise<ChartUpdateReturn>;
+    applyFormats(formats?: Formatter[]): void;
+    protected processInitialData(): Promise<void>;
+    protected setData(payload: any): Promise<void>;
+}

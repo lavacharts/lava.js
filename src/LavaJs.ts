@@ -3,24 +3,24 @@ import { TinyEmitter } from "tiny-emitter";
 import { Binding } from "./Binding";
 import { Chart } from "./Chart";
 import { Dashboard } from "./Dashboard";
-import { DataQuery } from "./DataQuery";
 import { DefaultOptions } from "./DefaultOptions";
 import { Events } from "./Events";
 import { domLoading, GoogleLoader, googleLoading } from "./google";
 import { makeDebugger } from "./lib";
 import { addEvent } from "./lib/addEvent";
-import { LavaJsOptions, OneOrArrayOf, RangeQuery } from "./types";
-import { DataQueryOptions } from "./types/data";
+import { LavaJsOptions, OneOrArrayOf } from "./types";
 import { Google } from "./types/google";
 import { ChartWrapperSpec, ControlWrapperSpec } from "./types/wrapper";
 
 const debug = makeDebugger();
 
 /**
- * Google Chart API library
+ * LavaJs - Google Chart API
  *
  * This module can be used as a standalone, browser based library, or in
- * conjunction with the PHP library, <a href="https://github.com/kevinkhill/lavacharts">Lavacharts</a>.
+ * conjunction with the PHP library Lavacharts
+ *
+ * @link https://github.com/kevinkhill/lavacharts
  */
 export class LavaJs extends TinyEmitter {
   /** LavaJs version */
@@ -185,10 +185,6 @@ export class LavaJs extends TinyEmitter {
    */
   binding(): Binding {
     return new Binding();
-  }
-
-  query(query: RangeQuery): DataQuery {
-    return DataQuery.createFromSheetRange(query);
   }
 
   /**

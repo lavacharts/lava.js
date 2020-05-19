@@ -1,8 +1,12 @@
+const webpackConfig = require("./configs/webpack.prod.js");
+
+webpackConfig.stats = {};
+
 module.exports = config => {
   config.set({
     files: [
       "./dist/lava.js",
-      "./node_modules/chai-shallow-deep-equal/chai-shallow-deep-equal.js",
+      // "./node_modules/chai-shallow-deep-equal/chai-shallow-deep-equal.js",
       "./tests/utils/*.js",
       // "./tests/*.spec.js",
       { pattern: "tests/*.spec.js", watched: false }
@@ -12,12 +16,10 @@ module.exports = config => {
       "tests/*.spec.js": ["webpack"]
     },
 
-    webpack: {
-      ...require("./configs/webpack.prod.js")
-      // karma watches the test entry points
-      // (you don't need to specify the entry option)
-      // webpack watches dependencies
-      // webpack configuration
+    webpack: webpackConfig,
+
+    webpackMiddleware: {
+      noInfo: true
     },
 
     client: {
@@ -35,21 +37,12 @@ module.exports = config => {
 
     singleRun: false,
 
-    reporters: ["mocha"],
+    reporters: ["dots"],
 
     logLevel: config.LOG_ERROR,
 
     browsers: ["ChromeHeadless"],
 
-    frameworks: ["mocha", "chai", "viewport"],
-
-    plugins: [
-      "karma-mocha",
-      "karma-chai",
-      "karma-webpack",
-      "karma-viewport",
-      "karma-mocha-reporter",
-      "karma-chrome-launcher"
-    ]
+    frameworks: ["mocha", "chai", "viewport"]
   });
 };

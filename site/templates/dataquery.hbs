@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 <head>
   {{> partials/head }}
 </head>
@@ -26,7 +27,13 @@
           <div class="valign-wrapper">
             <h5><i class="left material-icons">insert_chart</i>Range Querys</h5>
           </div>
-          <p>If the <code>data</code> parameter of your chart object follows the interface of <code>{ sheetId, range }</code> with <code>sheetId</code> as a Google Sheet id and <code>range</code> as a <a target="_blank" href="https://developers.google.com/chart/interactive/docs/spreadsheets#query-source-ranges">Query Source Range</a>, then a <a target="_blank" href="https://developers.google.com/chart/interactive/docs/reference#Query">Query</a> object will be created. The query will be sent automatically and update the chart with the data.</p>
+          <p>If the <code>data</code> parameter of your chart object follows the interface of
+            <code>{ sheetId, range }</code> with <code>sheetId</code> as a Google Sheet id and <code>range</code> as a
+            <a target="_blank"
+              href="https://developers.google.com/chart/interactive/docs/spreadsheets#query-source-ranges">Query Source
+              Range</a>, then a <a target="_blank"
+              href="https://developers.google.com/chart/interactive/docs/reference#Query">Query</a> object will be
+            created. The query will be sent automatically and update the chart with the data.</p>
         </div>
       </div>
     </div>
@@ -53,7 +60,7 @@
               <h2 class="light-blue-text">Integration</h2>
               <h5>lets get it!</h5>
             </div>
-{{> partials/chart-div }}
+            {{> partials/chart-div }}
           </div>
         </div>
       </div>
@@ -61,7 +68,8 @@
   </div>
 
   <footer class="page-footer">
-      {{> partials/footer }}
+    {{> partials/footer }}
   </footer>
 </body>
+
 </html>
