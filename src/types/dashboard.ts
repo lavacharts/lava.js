@@ -1,4 +1,4 @@
-import { RangeQuery } from "./datasources";
+import { RangeQuery } from "./data";
 import { ChartWrapperSpec, ControlWrapperSpec } from "./wrapper";
 
 type BindingTuple = [ControlWrapperSpec, ChartWrapperSpec];
@@ -11,5 +11,5 @@ export interface DashboardSpec {
   label?: string;
   formats?: any;
   options?: any;
-  events?: Record<string, Function>;
+  events?: Record<string, () => unknown>;
 }

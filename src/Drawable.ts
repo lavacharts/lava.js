@@ -1,23 +1,26 @@
-import { Debugger } from "debug";
-import { TinyEmitter } from "tiny-emitter";
-
 import { DataQuery } from "./DataQuery";
-import { Events } from "./Events";
-import { AsyncGoogleFactory, onGoogleReady } from "./google";
-import { makeDebugger } from "./lib";
-import { createDataTable } from "./lib/createDataTable";
-import { getContainer } from "./lib/getContainer";
-import { instanceOfRangeQuery } from "./lib/guards";
-import { ChartUpdateReturn } from "./types";
-import { ChartEvents } from "./types/chart";
-import { DrawableType, OptionDataPayload } from "./types/drawable";
-import { Formatter } from "./types/formats";
-import { Google } from "./types/google";
+import { createDataTable } from "./lib/datatable";
+import {
+  getContainer,
+  instanceOfRangeQuery,
+  makeDebugger,
+  newGoogleClass
+} from "./lib/utils";
+
+import type {
+  ChartDefinition,
+  ChartEvents,
+  ChartUpdateReturn,
+  ConsoleLog,
+  DrawableType,
+  Formatter,
+  OptionDataPayload
+} from "./types";
 
 /**
  * Base class for [[Chart]]s and [[Dashboard]]s
  */
-export abstract class Drawable extends TinyEmitter {
+export abstract class Drawable {
   /**
    * Configurable options
    */
@@ -38,7 +41,7 @@ export abstract class Drawable extends TinyEmitter {
    * Unique identifier for the [[Drawable]]
    */
   public get id(): string {
-    return this.type + ":" + this.label;
+    return `${this.type}#${this.label}`;
   }
 
   /**
@@ -71,16 +74,11 @@ export abstract class Drawable extends TinyEmitter {
    */
   private initialData: any | null;
 
-  private debug: Debugger;
-
-  private $window: Window & typeof globalThis;
+  private debug: ConsoleLog;
 
   abstract getGoogleConstructor(): string;
 
-  constructor(drawable: Drawable) {
-    super();
-
-    this.$window = window;
+  constructor(drawable: ChartDefinition) {
     this.containerId = drawable.containerId;
     this.type = drawable.type || "Dashboard";
 
@@ -100,23 +98,16 @@ export abstract class Drawable extends TinyEmitter {
     this.formats = drawable.formats || [];
     this.events = drawable.events || {};
 
-    this.debug = makeDebugger(`${this.type}:${this.label}`);
-
-    this.$window.lava.on(Events.DRAW, () => {
-      this.debug(`<${Events.DRAW}> event received.`);
-      this.draw();
-    });
-
-    onGoogleReady(async (google: Google) => {
-      await this.handleGoogle(google);
-    });
+    this.debug = makeDebugger(`${this.id}`);
   }
 
-  async handleGoogle(google: Google): Promise<void> {
-    this.googleChart = await AsyncGoogleFactory(
-      this.getGoogleConstructor(),
-      getContainer(this.containerId)
-    );
+  async handleGoogle(): Promise<void> {
+    const google = window.google;
+
+    const chartClass = this.getGoogleConstructor();
+    const container = getContainer(this);
+
+    this.googleChart = newGoogleClass(google, chartClass, container);
 
     if (this.formats) {
       this.applyFormats();
@@ -125,18 +116,22 @@ export abstract class Drawable extends TinyEmitter {
     const definedEvents = Object.keys(this.events) as ChartEvents[];
 
     definedEvents.forEach(eventType => {
-      google.visualization.events.addListener(
-        this.googleChart,
-        eventType,
-        (event: any) => {
-          this.events[eventType]({
-            event,
-            $this: this,
-            data: this.data,
-            chart: this.googleChart
-          });
-        }
-      );
+      const handler = this.events[eventType];
+
+      if (typeof handler === "function") {
+        google.visualization.events.addListener(
+          this.googleChart,
+          eventType,
+          (event: unknown) => {
+            handler({
+              event,
+              $this: this,
+              data: this.data,
+              chart: this.googleChart
+            });
+          }
+        );
+      }
     });
   }
 
@@ -144,7 +139,9 @@ export abstract class Drawable extends TinyEmitter {
    * Draws the [[Drawable]] with the predefined data and options.
    */
   public async draw(): Promise<void> {
-    this.debug("Drawing...");
+    this.debug(`in super.draw()`);
+
+    this.handleGoogle();
 
     if ("initialData" in this) {
       await this.processInitialData();
@@ -158,10 +155,10 @@ export abstract class Drawable extends TinyEmitter {
   }
 
   /**
-   * Overidding the `on()` method from [[TinyEmitter]] to
+   * Overriding the `on()` method from [[TinyEmitter]] to
    * register the handlers to our own map.
    */
-  public on(event: ChartEvents, handler: Function, ctx?: any): this {
+  public on(event: ChartEvents, handler: () => unknown, ctx?: any): this {
     this.debug(`Attaching <${event}> handler`);
 
     if (ctx) {
@@ -286,7 +283,9 @@ export abstract class Drawable extends TinyEmitter {
   /**
    * Sets the [[DataTable]] for the [[Drawable]].
    */
-  protected async setData(payload: any): Promise<void> {
+  protected async setData(
+    payload: Parameters<typeof createDataTable>[0]
+  ): Promise<void> {
     this.data = await createDataTable(payload);
 
     /**

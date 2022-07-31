@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>lava.ts demo</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+
+    .container>div {
+      height: 250px;
+      width: 400px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div id="area"></div>
+    <div id="bar"></div>
+    <!-- <div id="bubble"></div> -->
+    <div id="column"></div>
+    <div id="combo"></div>
+    <div id="gauge"></div>
+    <div id="line"></div>
+    <div id="pie"></div>
+    <div id="geo"></div>
+    <div id="scatter"></div>
+  </div>
+
+  <!-- Load the lavacharts library -->
+  <script type="module" src="../src/lava.ts"></script>
+
+  <!-- Load the demo charts -->
+  <script type="module" src="./area.js"></script>
+  <script type="module" src="./bar.js"></script>
+  <script type="module" src="./column.js"></script>
+  <script type="module" src="./combo.js"></script>
+  <script type="module" src="./gauge.js"></script>
+  <script type="module" src="./geo.js"></script>
+  <script type="module" src="./line.js"></script>
+  <script type="module" src="./pie.js"></script>
+  <script type="module" src="./scatter.js"></script>
+</body>
+
+</html>

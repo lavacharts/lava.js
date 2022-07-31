@@ -1,7 +1,7 @@
-import { AsyncGoogleFactory } from "./google/AsyncGoogleFactory";
-import { makeDebugger } from "./lib";
-import { RangeQuery } from "./types/datasources";
-import { QueryTransformer } from "./types/google";
+import { lava } from "./LavaJs";
+import { makeDebugger, newGoogleClass } from "./lib/utils";
+
+import type { QueryTransformer, RangeQuery } from "./types";
 
 const debug = makeDebugger("DataQuery");
 
@@ -62,7 +62,9 @@ export class DataQuery {
    * Send the DataQuery
    */
   public async send(): Promise<google.visualization.QueryResponse> {
-    let query = await AsyncGoogleFactory("Query", this.url, this.opts);
+    const google = await lava.getLoader().loadGoogle();
+
+    let query = await newGoogleClass(google, "Query", this.url, this.opts);
 
     if (this.transformer) {
       query = this.transformer(query);

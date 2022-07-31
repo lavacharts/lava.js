@@ -1,4 +1,5 @@
-import { Drawable } from "../Drawable";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { Drawable } from "../Drawable";
 
 export interface ChartInterface extends Drawable {
   png?: boolean;
@@ -59,3 +60,9 @@ export type ChartClasses =
   | "Timeline"
   | "TreeMap"
   | "WordTree";
+
+export interface ChartUpdateReturn {
+  data: google.visualization.DataTable;
+  chart: any;
+  options: Record<string, any>;
+}

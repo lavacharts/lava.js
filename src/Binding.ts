@@ -1,7 +1,8 @@
-import { AsyncGoogleFactory } from "./google";
-import { arrayWrap } from "./lib";
-import { OneOrArrayOf } from "./types";
+import { lava } from "./LavaJs";
+import { box, newGoogleClass } from "./lib/utils";
 import { ChartWrapperSpec, ControlWrapperSpec } from "./types/wrapper";
+
+import type { OneOrArrayOf } from "./types";
 
 type BindingType = "OneToOne" | "OneToMany" | "ManyToOne" | "ManyToMany";
 
@@ -34,11 +35,11 @@ export class Binding {
     chartWraps?: ChartWrapperSpec | ChartWrapperSpec[]
   ) {
     if (controlWraps) {
-      this.controlWraps.push(...arrayWrap(controlWraps));
+      this.controlWraps.push(...box(controlWraps));
     }
 
     if (chartWraps) {
-      this.chartWraps.push(...arrayWrap(chartWraps));
+      this.chartWraps.push(...box(chartWraps));
     }
   }
 
@@ -57,24 +58,30 @@ export class Binding {
   public async getControlWraps(): Promise<
     google.visualization.ControlWrapper[]
   > {
+    const google = await lava.getLoader().loadGoogle();
+
     if (this.controlWraps.length === 1) {
-      return AsyncGoogleFactory("ControlWrapper", ...this.controlWraps);
+      return newGoogleClass(google, "ControlWrapper", ...this.controlWraps);
     }
 
     return Promise.all(
       this.controlWraps.map(control =>
-        AsyncGoogleFactory("ControlWrapper", control)
+        newGoogleClass(google, "ControlWrapper", control)
       )
     );
   }
 
   public async getChartWraps(): Promise<google.visualization.ChartWrapper[]> {
+    const google = await lava.getLoader().loadGoogle();
+
     if (this.chartWraps.length === 1) {
-      return AsyncGoogleFactory("ChartWrapper", ...this.chartWraps);
+      return newGoogleClass(google, "ChartWrapper", ...this.chartWraps);
     }
 
     return Promise.all(
-      this.chartWraps.map(chart => AsyncGoogleFactory("ChartWrapper", chart))
+      this.chartWraps.map(chart =>
+        newGoogleClass(google, "ChartWrapper", chart)
+      )
     );
   }
 }

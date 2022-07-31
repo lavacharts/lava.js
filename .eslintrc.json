@@ -1,0 +1,64 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "project": [
+      "./tsconfig.json",
+      "./tsconfig.node.json",
+      "./tsconfig.docs.json"
+    ]
+  },
+  "plugins": [
+    "import",
+    "prettier",
+    "simple-import-sort",
+    "@typescript-eslint"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:json/recommended",
+    "prettier",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "sort-imports": "off",
+    "import/order": "off",
+    "import/first": "error",
+    "import/no-duplicates": "error",
+    "import/newline-after-import": "error",
+    "simple-import-sort/imports": [
+      "error",
+      {
+        "groups": [
+          [
+            "^\\u0000"
+          ],
+          [
+            "^@?\\w"
+          ],
+          [
+            "^"
+          ],
+          [
+            "^\\."
+          ],
+          [
+            "^.+\\u0000$"
+          ]
+        ]
+      }
+    ],
+    "simple-import-sort/exports": "error",
+    "prettier/prettier": "error"
+  },
+  "overrides": [
+    {
+      "env": {
+        "node": true
+      },
+      "files": [
+        "demo/*.js"
+      ]
+    }
+  ]
+}

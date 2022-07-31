@@ -1,7 +1,8 @@
 import { getChartClass } from "./ChartProps";
 import { Drawable } from "./Drawable";
-import { getContainer } from "./lib/getContainer";
-import { ChartClasses, ChartTypes } from "./types/chart";
+import { getContainer } from "./lib/utils";
+
+import type { ChartClasses, ChartDefinition, ChartTypes } from "./types";
 
 export class Chart extends Drawable {
   /**
@@ -14,11 +15,11 @@ export class Chart extends Drawable {
   public readonly type: ChartTypes;
 
   /** Static creation method */
-  static create(chart: Chart): Chart {
+  static create(chart: ChartDefinition): Chart {
     return new Chart(chart);
   }
 
-  constructor(chart: Chart) {
+  constructor(chart: ChartDefinition) {
     super(chart);
 
     this.type = chart.type;
@@ -47,7 +48,7 @@ export class Chart extends Drawable {
    * @see https://developers.google.com/chart/interactive/docs/printing
    */
   private replaceWithPng(): void {
-    const container = getContainer(this.containerId);
+    const container = getContainer(this);
     const img = document.createElement("img");
 
     img.src = this.googleChart.getImageURI();

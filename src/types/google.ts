@@ -1,8 +1,8 @@
 export type Google = typeof google;
 
-export type GoogleChart = any;
-
 export type GoogleHandler = (google: Google) => void;
+
+export type gvDataTable = google.visualization.DataTable;
 
 export interface GoogleReadyHandler {
   googleReady: GoogleHandler;

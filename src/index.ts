@@ -1,4 +1,4 @@
-import { Events } from "./Events";
-import { LavaJs } from "./LavaJs";
+import LavaJs, { lava } from "./LavaJs";
 
-export { LavaJs, Events };
+export { lava, LavaJs };
+export * from "./lib/chart-fns";

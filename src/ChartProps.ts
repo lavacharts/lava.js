@@ -1,5 +1,6 @@
 import { Chart } from "./Chart";
-import { ChartClasses, ChartTypes } from "./types/chart";
+
+import type { ChartClasses, ChartTypes } from "./types/chart";
 
 enum VisualizationPropertyEnum {
   "CLASS",

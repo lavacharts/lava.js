@@ -1,3 +1,6 @@
-import { LavaJs } from "./LavaJs";
+import { lava } from "./LavaJs";
 
-window.lava = new LavaJs();
+/**
+ * Assign the module instance to the window
+ */
+window.lava = lava;

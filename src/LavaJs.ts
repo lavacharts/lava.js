@@ -1,18 +1,29 @@
-import { TinyEmitter } from "tiny-emitter";
+import {
+  action,
+  makeObservable,
+  observable,
+  reaction,
+  trace,
+  when
+} from "mobx";
 
+import pkg from "../package.json";
 import { Binding } from "./Binding";
 import { Chart } from "./Chart";
 import { Dashboard } from "./Dashboard";
 import { DefaultOptions } from "./DefaultOptions";
-import { Events } from "./Events";
-import { domLoading, GoogleLoader, googleLoading } from "./google";
-import { makeDebugger } from "./lib";
-import { addEvent } from "./lib/addEvent";
-import { LavaJsOptions, OneOrArrayOf } from "./types";
-import { Google } from "./types/google";
-import { ChartWrapperSpec, ControlWrapperSpec } from "./types/wrapper";
+import { GoogleLoader } from "./lib/GoogleLoader";
+import { box, debounce, domReady, makeDebugger } from "./lib/utils";
 
-const debug = makeDebugger();
+import type {
+  ChartDefinition,
+  ChartWrapperSpec,
+  ControlWrapperSpec,
+  LavaJsOptions,
+  OneOrArrayOf
+} from "./types";
+
+const debug = makeDebugger("MainInstance");
 
 /**
  * LavaJs - Google Chart API
@@ -22,9 +33,9 @@ const debug = makeDebugger();
  *
  * @link https://github.com/kevinkhill/lavacharts
  */
-export class LavaJs extends TinyEmitter {
+export default class LavaJs {
   /** LavaJs version */
-  static readonly VERSION = "__VERSION__";
+  static readonly VERSION = pkg.version;
 
   /** Default options for the library */
   static defaults = DefaultOptions;
@@ -38,8 +49,11 @@ export class LavaJs extends TinyEmitter {
   /** Flag for when `document.readyState === "complete"` */
   domReady = false;
 
-  /** Drawables registy */
-  readonly registry: Record<string, any> = {};
+  /** Flag for when all resources are loaded to draw */
+  readyToDraw = false;
+
+  /** Chart registry */
+  readonly registry: Record<string, Chart | Dashboard> = {};
 
   /** Loader for adding the google script and making `window.google` available */
   private readonly loader: GoogleLoader;
@@ -52,35 +66,69 @@ export class LavaJs extends TinyEmitter {
    * start the [[GoogleLoader]].
    *
    * The [[GoogleLoader]] will check the <head> for the
-   * gstatic loader and if not found, inject it into the <head>.
+   * google static loader and if not found, inject it into the <head>.
    *
    * @emits [[Events.GOOGLE_READY]]
    * @emits [[Events.DRAW]]
    */
-  constructor(options = DefaultOptions) {
-    super();
+  constructor(options?: Partial<LavaJsOptions>) {
+    makeObservable(this, {
+      domReady: observable,
+      readyToDraw: observable,
+      toggleDomReady: action,
+      toggleReadyToDraw: action
+    });
 
-    this.options = options;
+    this.options = {
+      ...DefaultOptions,
+      ...options
+    };
 
-    debug(`Initializing LavaJs v${LavaJs.VERSION}`, this.options);
+    debug(`Initializing LavaJs`, this.options);
+
+    this.loader = new GoogleLoader({ language: this.options.language });
 
     if (this.options.responsive === true) {
       this.attachResizeHandler();
     }
 
-    this.loader = new GoogleLoader({
-      language: this.options.language
-    });
-
-    this.loader.on(Events.GOOGLE_READY, (google: Google) => {
-      this.googleReady = true;
-
-      this.emit(Events.GOOGLE_READY, google);
-    });
-
-    if (!this.loader.googleIsDefined && this.options.autoloadGoogle) {
+    if (this.options.autoloadGoogle) {
+      reaction(
+        () => this.loader.googleIsDefined,
+        () => {
+          trace();
+          debug("this.loader.googleIsDefined");
+          this.toggleReadyToDraw();
+        }
+      );
       this.loader.loadGoogle();
     }
+
+    const disposer = when(
+      () => this.loader.googleReady && this.domReady,
+      () => {
+        if (this.options.autodraw) {
+          debug("reacting to this.readyToDraw.");
+          this.draw();
+          disposer();
+        }
+      }
+    );
+
+    domReady().then(() => {
+      debug(`DOM Ready.`);
+      this.toggleDomReady();
+    });
+  }
+
+  // mobx Action
+  toggleDomReady() {
+    this.domReady = !this.domReady;
+  }
+
+  // mobx Action
+  toggleReadyToDraw() {
+    this.readyToDraw = !this.readyToDraw;
   }
 
   /**
@@ -93,13 +141,9 @@ export class LavaJs extends TinyEmitter {
   /**
    * Get the value of an option from the library
    */
-  getOption(option: keyof LavaJsOptions, whenUndefined: any): any {
+  getOption<T extends keyof LavaJsOptions>(option: T): LavaJsOptions[T] {
     if (typeof this.options[option] === "undefined") {
-      if (typeof whenUndefined !== "undefined") {
-        return whenUndefined;
-      } else {
-        throw new Error(`${String(option)} is not a valid option`);
-      }
+      throw new Error(`${String(option)} is not a valid option`);
     }
 
     return this.options[option];
@@ -109,7 +153,10 @@ export class LavaJs extends TinyEmitter {
    * Override the default options of the module.
    */
   configure(options: LavaJsOptions): this {
-    this.options = Object.assign(this.options, options);
+    this.options = {
+      ...this.options,
+      ...options
+    };
 
     return this;
   }
@@ -124,18 +171,26 @@ export class LavaJs extends TinyEmitter {
    *
    * @emits [[Events.DRAW]]
    */
-  async draw(): Promise<void> {
-    await domLoading();
-    await googleLoading();
+  async draw(charts?: ChartDefinition | ChartDefinition[]): Promise<void> {
+    if (charts) {
+      box(charts).forEach(chartDef => this.chart(chartDef));
+    }
 
-    this.emit(Events.DRAW);
+    await domReady();
+
+    Object.values(this.registry).forEach(chart => {
+      debug(`Drawing ${chart.id}`);
+      chart.draw();
+    });
   }
 
   /**
    * Create a new [[Chart]] from an Object
    */
-  chart(payload: Chart): Chart {
+  chart(payload: ChartDefinition): Chart {
     const chart = new Chart(payload);
+
+    debug(`Registering ${chart.id}`);
 
     return this.register(chart);
   }
@@ -143,8 +198,8 @@ export class LavaJs extends TinyEmitter {
   /**
    * Create multiple [[Chart]]s from an array of Objects
    */
-  charts(charts: Chart[]): Chart[] {
-    return charts.map(this.chart, this);
+  charts(charts: ChartDefinition[]): void {
+    charts.forEach(def => this.chart(def));
   }
 
   /**
@@ -198,7 +253,7 @@ export class LavaJs extends TinyEmitter {
 
     this.loader.register(drawable);
 
-    this.registry[drawable.id] = {};
+    this.registry[drawable.id] = drawable;
 
     return drawable;
   }
@@ -206,17 +261,15 @@ export class LavaJs extends TinyEmitter {
   /**
    * Attach a listener to the window resize event for redrawing the charts.
    */
-  private attachResizeHandler(): void {
-    let debounced: any;
-
-    addEvent(window, "resize", () => {
-      clearTimeout(debounced);
-
-      debounced = setTimeout(() => {
-        debug(`Window re-sized, firing <${Events.DRAW}>`);
-
-        this.emit(Events.DRAW);
-      }, this.options.debounceTimeout);
-    });
+  private attachResizeHandler() {
+    window.addEventListener(
+      "resize",
+      debounce(() => {
+        debug(`Window re-sized, redrawing...`);
+        this.draw();
+      }, this.options.debounceTimeout)
+    );
   }
 }
+
+export const lava = new LavaJs();

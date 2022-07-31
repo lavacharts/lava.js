@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
-import { ChartTypes } from "./chart";
+import type { ChartTypes } from "./chart";
 
 export type WrapperType = "ControlWrapper" | "ChartWrapper";
 
